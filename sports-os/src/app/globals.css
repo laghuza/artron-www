@@ -1,0 +1,275 @@
+@import "tailwindcss";
+
+:root {
+  --background: #121418;
+  --foreground: #f5f5f7;
+}
+
+@theme {
+  --color-iron: #121418;
+  --color-iron-surface: #1A1D23;
+  --color-iron-border: #232730;
+  
+  --color-emerald-core: #00E676;
+  --color-sapphire: #0F52BA;
+  --color-gold-raw: #D4AF37;
+  --color-copper: #D97736;
+  --color-ruby: #FF3D00;
+  
+  --color-silver-structure: #9CA3AF;
+  --color-bone-light: #F5F5F7;
+  
+  --font-sans: var(--font-outfit), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html,
+body,
+#__next,
+body > div:first-child {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Custom Hide Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Schematic Grid Background with Ambient Vignette */
+.schematic-grid {
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  background-image: 
+    linear-gradient(to right, rgba(156, 163, 175, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(156, 163, 175, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at center, #16191e 0%, #121418 80%);
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Scan laser animation */
+@keyframes laser-scan {
+  0% { top: 0%; opacity: 0; }
+  5% { opacity: 0.8; }
+  95% { opacity: 0.8; }
+  100% { top: 100%; opacity: 0; }
+}
+.animate-laser {
+  animation: laser-scan 1.8s cubic-bezier(0.15, 0.85, 0.45, 1) forwards;
+}
+
+/* Float animation for biomechanical dots */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-6px) scale(1.1); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Premium tactile kinetic overrides */
+.transition,
+.transition-all,
+.transition-colors,
+.transition-opacity,
+.transition-shadow,
+.transition-transform {
+  transition-duration: 600ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Vector Subpixel Geometric Precision */
+svg line,
+svg path,
+svg polyline,
+svg circle {
+  shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Micro-Typography & Optical Kerning */
+h1.uppercase,
+h2.uppercase,
+h3.uppercase,
+h4.uppercase {
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.font-mono {
+  letter-spacing: 0.18em;
+}
+
+/* Fast secure authorization pulses */
+@keyframes pulse-fast {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.85; }
+}
+.animate-pulse-fast {
+  animation: pulse-fast 0.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes ping-fast {
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+.animate-ping-fast {
+  animation: ping-fast 0.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Cinematic Radial Sweep Effect */
+@keyframes radial-sweep {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.9;
+    box-shadow: 0 0 30px 10px rgba(0, 230, 118, 0.6), inset 0 0 20px 5px rgba(0, 230, 118, 0.4);
+  }
+  100% {
+    width: 2500px;
+    height: 2500px;
+    opacity: 0;
+    box-shadow: 0 0 120px 40px rgba(0, 230, 118, 0), inset 0 0 100px 30px rgba(0, 230, 118, 0);
+  }
+}
+.radial-sweep-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(0, 230, 118, 0.35);
+  background: radial-gradient(circle, rgba(0, 230, 118, 0.08) 0%, transparent 75%);
+  pointer-events: none;
+  z-index: 10;
+  animation: radial-sweep 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Linear input styles */
+.line-input-core {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(156, 163, 175, 0.2);
+  border-radius: 0;
+  padding: 8px 0;
+  color: #fff;
+  outline: none;
+  transition: border-bottom-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.line-input-core:focus {
+  border-bottom-color: #00E676;
+}
+
+.line-input-centered {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(192, 192, 192, 0.35); /* 1px Antique Silver style */
+  border-radius: 0;
+  padding: 8px 0;
+  color: #fff;
+  outline: none;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  width: 100%;
+  max-width: 480px;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.2em;
+}
+.line-input-centered:focus {
+  border-bottom-color: #00E676;
+  box-shadow: 0 1px 0 0 #00E676;
+}
+.line-input-centered::placeholder {
+  color: rgba(192, 192, 192, 0.25);
+  text-align: center;
+}
+
+/* Cinematic Fade-to-black overlay */
+.fade-to-black-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fade-to-black-overlay.active {
+  opacity: 1;
+}
+
+/* Core bright validation flash */
+@keyframes core-flash {
+  0% {
+    transform: scale(1);
+    filter: brightness(3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.65);
+    filter: brightness(1);
+    opacity: 0.15;
+  }
+}
+.animate-core-flash {
+  animation: core-flash 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Grandiose Core Pulsation */
+@keyframes core-grandiose-pulse {
+  0%, 100% {
+    transform: translate(200px, 200px) scale(1);
+    filter: drop-shadow(0 0 12px rgba(0, 230, 118, 0.3));
+  }
+  50% {
+    transform: translate(200px, 200px) scale(1.22);
+    filter: drop-shadow(0 0 35px rgba(0, 230, 118, 0.85));
+  }
+}
+.animate-core-grandiose {
+  transform-origin: 200px 200px;
+  animation: core-grandiose-pulse 3s ease-in-out infinite;
+}
+
+/* GATE_A Hover Slow Emerald Pulsation */
+@keyframes gate-a-pulse {
+  0%, 100% {
+    transform: translate(200px, 200px) scale(1);
+    filter: drop-shadow(0 0 12px rgba(0, 230, 118, 0.3));
+  }
+  50% {
+    transform: translate(200px, 200px) scale(1.16);
+    filter: drop-shadow(0 0 30px rgba(0, 230, 118, 0.8));
+  }
+}
+.animate-core-gate-a-hover {
+  transform-origin: 200px 200px;
+  animation: gate-a-pulse 2.2s ease-in-out infinite;
+}
+
