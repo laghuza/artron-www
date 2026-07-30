@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 
-export default function SystemRegistryFooter() {
+interface SystemRegistryFooterProps {
+  onDataPurgeTrigger?: () => void;
+}
+
+export default function SystemRegistryFooter({ onDataPurgeTrigger }: SystemRegistryFooterProps = {}) {
   return (
     <footer className="fixed bottom-0 left-0 w-full bg-[#1A1D23]/90 backdrop-blur-[15px] border-t border-silver-structure/10 select-none z-50 transform translate-y-[calc(100%-24px)] hover:translate-y-0 transition-transform duration-500 ease-out group">
       {/* Drawer Handle Header */}
@@ -19,10 +23,36 @@ export default function SystemRegistryFooter() {
           <div className="space-y-1.5 font-sans text-[13px] text-silver-structure/80">
             <div><span className="text-silver-structure/50">[ CORPORATE_ENTITY ]:</span> ARTRON Consortium LLC</div>
             <div><span className="text-silver-structure/50">[ REGISTRY_CODE ]:</span> 405XXXXXX</div>
-            <div>
-              <span className="text-silver-structure/50">[ SYSTEM_PROTOCOLS ]:</span>{" "}
-              <Link href="/sla" className="text-silver-structure/80 hover:text-emerald-core underline transition-colors">[ SLA ]</Link>{" "}
-              <Link href="/privacy" className="text-silver-structure/80 hover:text-emerald-core underline transition-colors">[ PRIVACY ]</Link>
+            <div className="space-y-1">
+              <div className="text-[10px] tracking-widest text-[#9CA3AF]/40 uppercase">
+                [ SYSTEM_PROTOCOLS ]:
+              </div>
+              <div className="grid grid-cols-[auto_auto] w-fit gap-x-6 gap-y-1 font-mono text-[10px] tracking-wider text-silver-structure/45 mt-1">
+                <Link 
+                  href="/privacy" 
+                  className="hover:text-[#00E676] transition-colors duration-200 whitespace-nowrap block"
+                >
+                  [ PRIVACY ]
+                </Link>
+                <Link 
+                  href="/terms" 
+                  className="hover:text-[#00E676] transition-colors duration-200 whitespace-nowrap block"
+                >
+                  [ TERMS ]
+                </Link>
+                <Link 
+                  href="/sla" 
+                  className="hover:text-[#00E676] transition-colors duration-200 whitespace-nowrap block"
+                >
+                  [ SLA ]
+                </Link>
+                <button 
+                  onClick={onDataPurgeTrigger} 
+                  className="hover:text-[#FF3D00] text-left transition-colors duration-200 cursor-pointer block whitespace-nowrap"
+                >
+                  [ DATA_PURGE ]
+                </button>
+              </div>
             </div>
             <div><span className="text-silver-structure/50">[ COMPLIANCE ]:</span> GDPR · ISO 27001</div>
           </div>

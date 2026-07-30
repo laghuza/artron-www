@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { audioManager } from "@/utils/audioManager";
 
 interface ModuleDetail {
   id: string;
@@ -76,7 +77,10 @@ export default function ProfessionalsModulesNarrative({ onBack }: ProfessionalsM
         {Object.values(modules).map((m) => (
           <button
             key={m.id}
-            onClick={() => setActiveTab(m.id)}
+            onClick={() => {
+              audioManager.playClick();
+              setActiveTab(m.id);
+            }}
             className={`text-left px-2 py-1.5 border rounded-[3px] transition-all flex items-center justify-between cursor-pointer ${
               activeTab === m.id
                 ? "bg-iron border-silver-structure/30 text-white font-bold"
@@ -118,7 +122,10 @@ export default function ProfessionalsModulesNarrative({ onBack }: ProfessionalsM
 
       <div>
         <button
-          onClick={onBack}
+          onClick={() => {
+            audioManager.playClick();
+            onBack();
+          }}
           className="font-mono text-[12px] text-silver-structure hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
         >
           ← Return to Core
@@ -127,3 +134,4 @@ export default function ProfessionalsModulesNarrative({ onBack }: ProfessionalsM
     </div>
   );
 }
+

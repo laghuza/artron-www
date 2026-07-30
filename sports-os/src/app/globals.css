@@ -6,23 +6,42 @@
 }
 
 @theme {
+  /* ==========================================
+     MINERAL PALETTE (With Aliases for Legacy Classes)
+     ========================================== */
+  
+  /* Base & Surfaces */
+  --color-base-iron: #121418;
   --color-iron: #121418;
-  --color-iron-surface: #1A1D23;
-  --color-iron-border: #232730;
-  
-  --color-emerald-core: #00E676;
-  --color-sapphire: #0F52BA;
-  --color-gold-raw: #D4AF37;
-  --color-copper: #D97736;
-  --color-ruby: #FF3D00;
-  
-  --color-silver-structure: #9CA3AF;
-  --color-bone-light: #F5F5F7;
-  
-  --font-sans: var(--font-outfit), sans-serif;
-  --font-mono: var(--font-jetbrains-mono), monospace;
-  
-  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --color-iron-surface: #16191e; /* Used in EnneaCore for node surface background */
+
+  /* Emerald Core Accents */
+  --color-signal-emerald: #00E676;
+  --color-emerald-core: #00E676;   /* Alias to map with legacy text-emerald-core & fill-emerald-core */
+
+  /* Sapphire Accents */
+  --color-signal-sapphire: #0F52BA;
+
+  /* Gold Accents */
+  --color-signal-gold: #D4AF37;
+
+  /* Copper Accents */
+  --color-signal-copper: #D97736;
+
+  /* Ruby/Lava Accents */
+  --color-signal-ruby: #FF3D00;
+
+  /* Structural Colors */
+  --color-structure-silver: #9CA3AF;
+  --color-silver-structure: #9CA3AF; /* Alias to map with text-silver-structure & stroke-silver-structure */
+
+  /* Typography */
+  --color-typography-bone: #F5F5F7;
+  --color-bone-light: #F5F5F7;       /* Alias to map with text-bone-light */
+
+  /* Typography System Fonts */
+  --font-sans: "Outfit", "FiraGO", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
 html,
@@ -37,10 +56,13 @@ body > div:first-child {
   box-sizing: border-box;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+@layer base {
+  body {
+    background-color: var(--color-base-iron);
+    color: var(--color-typography-bone);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 /* Custom Hide Scrollbar Utility */
@@ -273,3 +295,48 @@ h4.uppercase {
   animation: gate-a-pulse 2.2s ease-in-out infinite;
 }
 
+/* Telemetry Marquee Animation */
+@keyframes telemetry-marquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+.animate-telemetry-marquee {
+  display: inline-flex;
+  animation: telemetry-marquee 35s linear infinite;
+}
+
+/* Audio Wave Visualizer Styles */
+.audio-wave {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 10px;
+}
+.audio-bar {
+  width: 2px;
+  background-color: #00E676;
+  border-radius: 1px;
+  transition: height 0.3s ease, background-color 0.3s ease;
+}
+.audio-wave.playing .audio-bar {
+  animation: audio-bounce 0.8s ease-in-out infinite alternate;
+}
+.audio-wave.playing .audio-bar:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.audio-wave.playing .audio-bar:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.audio-wave.playing .audio-bar:nth-child(3) {
+  animation-delay: 0.25s;
+}
+
+@keyframes audio-bounce {
+  0% {
+    height: 3px;
+  }
+  100% {
+    height: 10px;
+  }
+}

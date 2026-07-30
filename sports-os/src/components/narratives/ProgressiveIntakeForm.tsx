@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { audioManager } from "@/utils/audioManager";
 
 interface ProgressiveIntakeFormProps {
   onCancel: () => void;
@@ -22,11 +23,13 @@ export default function ProgressiveIntakeForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    audioManager.playClick();
     if (step < 3) setStep((prev) => prev + 1);
     else onSubmitComplete();
   };
 
   const handleBack = () => {
+    audioManager.playClick();
     if (step > 1) setStep((prev) => prev - 1);
     else onCancel();
   };
@@ -48,7 +51,10 @@ export default function ProgressiveIntakeForm({
             <label className="block text-emerald-core mb-1">ENTITY TYPE:</label>
             <select
               value={entityType}
-              onChange={(e) => setEntityType(e.target.value)}
+              onChange={(e) => {
+                audioManager.playClick();
+                setEntityType(e.target.value);
+              }}
               className="w-full bg-iron-surface border border-silver-structure/25 focus:border-emerald-core py-1 px-2 rounded text-white outline-none cursor-pointer text-[11px]"
             >
               <option value="Sovereign Federation">Sovereign Federation (ფედერაცია)</option>
@@ -99,7 +105,15 @@ export default function ProgressiveIntakeForm({
                 { id: "game", label: "Gamification & Coins (გეიმიფიკაცია)", val: gamification, set: setGamification }
               ].map((item) => (
                 <label key={item.id} className="flex items-center gap-2 cursor-pointer text-white">
-                  <input type="checkbox" checked={item.val} onChange={(e) => item.set(e.target.checked)} className="accent-emerald-core w-4 h-4 animate-fadeIn" />
+                  <input
+                    type="checkbox"
+                    checked={item.val}
+                    onChange={(e) => {
+                      audioManager.playClick();
+                      item.set(e.target.checked);
+                    }}
+                    className="accent-emerald-core w-4 h-4 animate-fadeIn"
+                  />
                   <span className="text-[11.5px] uppercase tracking-wider font-mono">{item.label}</span>
                 </label>
               ))}
@@ -125,3 +139,4 @@ export default function ProgressiveIntakeForm({
     </div>
   );
 }
+

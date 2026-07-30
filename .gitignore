@@ -1,0 +1,18 @@
+# Dependencies & Build
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Backups
+_backups/
+backups/
+
+# Logs and temporary inspection files
+*.log
+*.txt
+.DS_Store
+
+# Environment
+.env*

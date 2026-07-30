@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function SlaSecurityNarrative() {
+export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPurgeTrigger?: () => void }) {
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
       <div className="space-y-1">
@@ -32,13 +32,31 @@ export default function SlaSecurityNarrative() {
         სერვისების SLA და პერსონალურ მონაცემთა დაცვის მკაცრი რეგულაციები. სისტემა სრულად შეესაბამება ISO 27001-ისა და GDPR-ის მოთხოვნებს.
       </p>
 
-      <div className="flex gap-2 font-mono text-[11px]">
-        <Link href="/sla" className="flex-1 py-1.5 bg-silver-structure/5 hover:bg-silver-structure/10 border border-silver-structure/15 text-center text-silver-structure hover:text-white rounded uppercase transition-colors">
-          [ VIEW_SLA ]
-        </Link>
-        <Link href="/privacy" className="flex-1 py-1.5 bg-silver-structure/5 hover:bg-silver-structure/10 border border-silver-structure/15 text-center text-silver-structure hover:text-white rounded uppercase transition-colors">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-4 font-mono text-[10px] tracking-wider">
+        <Link 
+          href="/privacy" 
+          className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
+        >
           [ PRIVACY_TERMS ]
         </Link>
+        <Link 
+          href="/terms" 
+          className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
+        >
+          [ TERMS_OF_SERVICE ]
+        </Link>
+        <Link 
+          href="/sla" 
+          className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
+        >
+          [ VIEW_SLA ]
+        </Link>
+        <button 
+          onClick={onDataPurgeTrigger}
+          className="border border-[#FF3D00]/40 text-[#FF3D00] hover:bg-[#FF3D00] hover:text-[#121418] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap cursor-pointer block"
+        >
+          [ DATA_PURGE ]
+        </button>
       </div>
     </div>
   );
