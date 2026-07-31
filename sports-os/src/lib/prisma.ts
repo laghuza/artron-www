@@ -1,21 +1,27 @@
 import { PrismaClient } from '@prisma/client';
 
 /**
- * Global Prisma Client Singleton for Artron Sports OS.
- * Prevents multiple instances of Prisma Client during Next.js HMR (Hot Module Replacement).
+ * Global Lazy Prisma Client Singleton for Artron Sports OS.
+ * Defers PrismaClient instantiation until first query execution to prevent build-time database connection errors.
  */
-const prismaClientSingleton = () => {
-  return new PrismaClient();
-};
+let prismaInstance: PrismaClient | null = null;
 
-declare const globalThis: {
-  prismaGlobal: ReturnType<typeof prismaClientSingleton> | undefined;
-} & typeof global;
-
-export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
-
-if (process.env.NODE_ENV !== 'production') {
-  globalThis.prismaGlobal = prisma;
+function getPrismaClient(): PrismaClient {
+  if (!prismaInstance) {
+    prismaInstance = new PrismaClient();
+  }
+  return prismaInstance;
 }
+
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop: keyof PrismaClient) {
+    const client = getPrismaClient();
+    const value = client[prop];
+    if (typeof value === 'function') {
+      return value.bind(client);
+    }
+    return value;
+  },
+});
 
 export default prisma;
