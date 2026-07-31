@@ -1,0 +1,117 @@
+// Prisma Schema for Artron Multi-Tenant Architecture
+// PostgreSQL Database Provider
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  FEDERATION_ADMIN
+  CLUB_ADMIN
+  ATHLETE
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  plan      String   @default("ENTERPRISE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  federations Federation[]
+  clubs       Club[]
+  athletes    Athlete[]
+  auditLogs   AuditLog[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  email        String   @unique
+  role         Role     @default(CLUB_ADMIN)
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  auditLogs AuditLog[]
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+model Federation {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name      String
+  code      String   @unique
+  country   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  clubs Club[]
+
+  @@index([tenantId])
+  @@map("federations")
+}
+
+model Club {
+  id           String      @id @default(uuid())
+  tenantId     String
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  federationId String?
+  federation   Federation? @relation(fields: [federationId], references: [id], onDelete: SetNull)
+  name         String
+  academyType  String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  athletes Athlete[]
+
+  @@index([tenantId])
+  @@index([federationId])
+  @@map("clubs")
+}
+
+model Athlete {
+  id             String   @id @default(uuid())
+  tenantId       String
+  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  clubId         String?
+  club           Club?    @relation(fields: [clubId], references: [id], onDelete: SetNull)
+  firstName      String
+  lastName       String
+  biometricsJson Json?
+  piiEncrypted   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([clubId])
+  @@map("athletes")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  ipAddress String?
+  timestamp DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("audit_logs")
+}
