@@ -1,6 +1,7 @@
 # Dependencies & Build
 node_modules/
 .next/
+.next_old/
 out/
 build/
 dist/
@@ -12,7 +13,11 @@ backups/
 # Logs and temporary inspection files
 *.log
 *.txt
+eslint_output.txt
+compile_errors.txt
 .DS_Store
 
 # Environment
+.env
+.env*.local
 .env*

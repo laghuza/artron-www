@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import OfflineGuard from "@/components/OfflineGuard";
+import OfflineGuard from "@/components/ui/OfflineGuard";
 
 const outfit = Outfit({
   subsets: ["latin"],
