@@ -16,19 +16,34 @@ All incoming requests to `/api/*` or Server Actions must undergo tenant context 
 
 ---
 
-## 2. API ENDPOINT MATRIX
+## 2. API V1 ENDPOINT SPECIFICATIONS
 
-### Authentication & Tenant Auth
-- `POST /api/auth/login` — Authenticate user and issue scoped session JWT.
-- `GET /api/auth/me` — Retrieve active tenant profile and role capabilities.
+### `/api/v1/auth`
+- `POST /api/v1/auth/login`: Authenticate user and issue scoped session JWT.
+  - **Body**: `{ "email": "string", "password": "string" }`
+  - **Response**: `{ "token": "string", "user": { "id": "string", "role": "Role" } }`
+- `GET /api/v1/auth/me`: Retrieve active tenant profile and role capabilities.
+  - **Headers**: `Authorization: Bearer <jwt>`
+  - **Response**: `{ "user": User, "tenant": Tenant }`
 
-### Multi-Tenant Core Entities
-- `GET /api/tenants/[tenantId]/clubs` — Fetch clubs within tenant boundary.
-- `POST /api/tenants/[tenantId]/athletes` — Create athlete profile with AES-256 encrypted PII.
-- `GET /api/tenants/[tenantId]/athletes/[id]` — Fetch athlete performance & biometric data.
+### `/api/v1/federations`
+- `GET /api/v1/federations`: List all federations (Super Admin / Admin scoped).
+  - **Query**: `?page=1&limit=20`
+  - **Response**: `{ "federations": Federation[], "total": number }`
+- `POST /api/v1/federations`: Create a new federation instance.
+  - **Body**: `{ "name": "string", "code": "string", "tenantId": "string" }`
 
-### IoT Telemetry & Real-Time Edge
-- `WSS /api/telemetry/stream` — WebSocket edge feed for RFID turnstile scans & biometric telemetry.
+### `/api/v1/clubs`
+- `GET /api/v1/clubs`: Fetch clubs within tenant boundary.
+  - **Headers**: `X-Tenant-ID: <tenantId>`
+  - **Response**: `{ "clubs": Club[] }`
+- `POST /api/v1/clubs`: Register new sports club under active tenant.
+  - **Body**: `{ "name": "string", "federationId": "string" }`
+
+### `/api/v1/telemetry`
+- `POST /api/v1/telemetry/ingest`: Receive RFID/NFC biometric telemetry edge data payload.
+  - **Body**: `{ "deviceId": "string", "athleteId": "string", "metrics": object }`
+- `WSS /api/v1/telemetry/stream`: Real-time WebSocket feed for RFID turnstile scans & EnneaCore telemetry.
 
 ---
 
@@ -44,7 +59,7 @@ Standardized API response JSON payload:
 }
 ```
 
-Error payload must never leak stack traces in production:
+Error payload (Zero-Leak Policy):
 ```json
 {
   "success": false,
