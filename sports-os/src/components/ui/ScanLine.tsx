@@ -1,10 +1,10 @@
 "use client";
 
 interface ScanLineProps {
-  trigger: number;
+  trigger?: number;
 }
 
-export default function ScanLine({ trigger }: ScanLineProps) {
+export default function ScanLine({ trigger = 0 }: ScanLineProps) {
   return (
     <div
       key={trigger}

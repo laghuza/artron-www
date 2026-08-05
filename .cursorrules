@@ -1,0 +1,24 @@
+# Artron AI Agent Constitution & IDE Rules (.cursorrules)
+
+## 🚨 MANDATORY CORE LAWS (NON-NEGOTIABLE)
+
+1. **150-LINE COMPONENT LIMIT LAW:**
+   - No single TypeScript/JSX file in `sports-os/src/` may exceed **150 lines of code**.
+   - Split large components into smaller, modular sub-components or custom hooks when approaching 120 lines.
+
+2. **NEXT.JS `@/` PATH ALIAS LAW:**
+   - ALWAYS use absolute Next.js `@/` path aliases (e.g. `@/components/ui/ArtronLogo`, `@/lib/prisma`).
+   - Relative imports (`../`, `../../`) are strictly FORBIDDEN.
+
+3. **STRICT COMPILATION CHECK LAW:**
+   - Run `npx tsc --noEmit` inside `sports-os` before submitting code or making git commits.
+   - Zero compilation errors, missing type declarations, or unhandled imports allowed.
+
+4. **VISUAL IDENTITY & DESIGN SYSTEM LAW:**
+   - **Obsidian Dark Background:** `#05070a`
+   - **Emerald Neon Primary Accent:** `#00ff87`
+   - **Cyan Teal Secondary Accent:** `#00e5ff`
+   - **Zero Stock Photos Policy:** Use interactive SVG vector maps, HUD diagnostic grids, Canvas telemetry visualizers, and code micro-demos instead of generic photos.
+
+5. **MULTI-TENANT ISOLATION LAW:**
+   - All database queries and server actions must strictly scope data using tenant identifiers (`tenantId`, `federationId`, `clubId`).
