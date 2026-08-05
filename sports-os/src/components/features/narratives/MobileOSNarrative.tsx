@@ -1,14 +1,18 @@
 "use client";
 
+import { useI18n } from "@/context/I18nContext";
+
 export default function MobileOSNarrative() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
       <div className="space-y-1">
         <div className="font-mono text-[12px] text-emerald-core uppercase tracking-[0.15em]">
-          [ NODE_04 // MOBILE_ATHLETE_OS ]
+          {t("nodes.node_4.tag")}
         </div>
         <h2 className="text-xl font-bold tracking-tight text-white uppercase">
-          ATHLETE MOBILE APP
+          {t("nodes.node_4.name")}
         </h2>
       </div>
 
@@ -41,7 +45,7 @@ export default function MobileOSNarrative() {
       </div>
 
       <p className="text-[15px] text-bone-light/85 leading-relaxed font-sans">
-        NativeWind-ზე დაშენებული მობილური აპლიკაცია მოვარჯიშეებისა და მშობლებისთვის. რეალურ დროში ტრენინგების განრიგი, ბიომეტრიული მონაცემები და Push შეტყობინებები.
+        {t("nodes.node_4.description")}
       </p>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "@/context/I18nContext";
 
 interface InteractiveEnneaCoreProps {
   activeNode: number;
@@ -13,7 +14,6 @@ interface InteractiveEnneaCoreProps {
 }
 
 const COLORS: Record<number, string> = { 1: "#0F52BA", 2: "#00E676", 3: "#D97736", 4: "#00E676", 5: "#D4AF37", 6: "#D4AF37", 9: "#00E676", 7: "#9CA3AF", 8: "#9CA3AF" };
-const LABELS = ["01 // FEDERATIONS", "02 // CLUBS & ACADEMIES", "03 // PROFESSIONALS", "04 // ATHLETE MOBILE OS", "05 // COINS & BADGES", "06 // MARKETPLACE", "07 // TELEMETRY", "08 // SECURITY & SLA"];
 const COORDS = [
   { x: 200, y: 50,  align: "middle" as const, tx: 200, ty: 30 },
   { x: 350, y: 50,  align: "start" as const,  tx: 364, ty: 45 }, { x: 350, y: 200, align: "start" as const,  tx: 364, ty: 203 },
@@ -25,11 +25,17 @@ const COORDS = [
 export default function InteractiveEnneaCore({
   activeNode, onNodeSelect, onNodeHover, isScaledUp = false, transitionStep = "idle", isFlashActive = false, gateHover = null
 }: InteractiveEnneaCoreProps) {
+  const { t } = useI18n();
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const handleLeave = () => { setHoveredNode(null); onNodeHover(null); };
   
+  const labels = [
+    t("labels.node_1"), t("labels.node_2"), t("labels.node_3"), t("labels.node_4"),
+    t("labels.node_5"), t("labels.node_6"), t("labels.node_7"), t("labels.node_8")
+  ];
+
   const nodes = COORDS.map((coord, i) => ({
-    id: i + 1, ...coord, label: LABELS[i], active: activeNode === i + 1, color: COLORS[i + 1] || "#9CA3AF"
+    id: i + 1, ...coord, label: labels[i], active: activeNode === i + 1, color: COLORS[i + 1] || "#9CA3AF"
   }));
   
   const isCenterActive = activeNode === 9 || hoveredNode === 9;
@@ -101,7 +107,7 @@ export default function InteractiveEnneaCore({
             <circle r="6" fill="#00E676" />
           </g>
           <text y="-22" textAnchor="middle" className={`font-mono text-[6px] tracking-wider fill-[#00E676] transition-opacity duration-300 cursor-pointer ${isCenterActive && showOuter ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-            09 // REQUEST ACCESS
+            {t("labels.node_9")}
           </text>
         </g>
 

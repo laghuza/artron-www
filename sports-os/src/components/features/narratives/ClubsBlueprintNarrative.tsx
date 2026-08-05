@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
+import { useI18n } from "@/context/I18nContext";
 
 interface NodeData {
   id: string;
@@ -29,6 +30,7 @@ const BLUEPRINT_DEVICES: NodeData[] = [
 ];
 
 export default function ClubsBlueprintNarrative({ onBack, onSelectSubItem }: ClubsBlueprintNarrativeProps) {
+  const { t } = useI18n();
   const [selectedNode, setSelectedNode] = useState<NodeData>(BLUEPRINT_DEVICES[0]);
   const [hoveredNode, setHoveredNode] = useState<NodeData | null>(null);
 
@@ -58,8 +60,8 @@ export default function ClubsBlueprintNarrative({ onBack, onSelectSubItem }: Clu
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
       <div className="space-y-1">
-        <div className="font-mono text-[12px] text-gold-raw uppercase tracking-[0.15em]">[ NODE_02 // CLUB_DIGITAL_TWIN ]</div>
-        <h2 className="text-xl font-bold tracking-tight text-white uppercase">FACILITY BLUEPRINT</h2>
+        <div className="font-mono text-[12px] text-gold-raw uppercase tracking-[0.15em]">{t("nodes.node_2.tag")}</div>
+        <h2 className="text-xl font-bold tracking-tight text-white uppercase">{t("nodes.node_2.name")}</h2>
       </div>
 
       <div className="bg-iron-surface/40 border border-silver-structure/10 p-2 rounded relative flex justify-center">
@@ -102,13 +104,13 @@ export default function ClubsBlueprintNarrative({ onBack, onSelectSubItem }: Clu
         </div>
         <p className="text-bone-light/85 font-sans leading-relaxed text-[12px]">{selectedNode.desc}</p>
         <button onClick={() => handleSelectDevice(selectedNode)} className="text-sapphire-light text-[10px] hover:underline cursor-pointer">
-          &gt; Open 60% Telemetry Inspector →
+          {t("nodes.node_2.open_inspector")}
         </button>
       </div>
 
       <div>
         <button onClick={() => { audioManager.playClick(); if (onSelectSubItem) onSelectSubItem(null); onBack(); }} className="font-mono text-[12px] text-silver-structure hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer">
-          ← Return to Core
+          {t("system.return_to_core")}
         </button>
       </div>
     </div>

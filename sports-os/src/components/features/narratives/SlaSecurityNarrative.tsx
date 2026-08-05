@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useI18n } from "@/context/I18nContext";
 
 export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPurgeTrigger?: () => void }) {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
       <div className="space-y-1">
         <div className="font-mono text-[12px] text-silver-structure/70 uppercase tracking-[0.15em]">
-          [ NODE_08 // COMPLIANCE_AND_SECURITY ]
+          {t("nodes.node_8.tag")}
         </div>
         <h2 className="text-xl font-bold tracking-tight text-white uppercase">
-          SECURITY & PRIVACY
+          {t("nodes.node_8.name")}
         </h2>
       </div>
 
@@ -29,7 +32,7 @@ export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPur
       </div>
 
       <p className="text-[15px] text-bone-light/85 leading-relaxed font-sans">
-        სერვისების SLA და პერსონალურ მონაცემთა დაცვის მკაცრი რეგულაციები. სისტემა სრულად შეესაბამება ISO 27001-ისა და GDPR-ის მოთხოვნებს.
+        {t("nodes.node_8.description")}
       </p>
 
       <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-4 font-mono text-[10px] tracking-wider">
@@ -37,25 +40,25 @@ export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPur
           href="/privacy" 
           className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
         >
-          [ PRIVACY_TERMS ]
+          [ {t("system.privacy")} ]
         </Link>
         <Link 
           href="/terms" 
           className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
         >
-          [ TERMS_OF_SERVICE ]
+          [ {t("system.terms")} ]
         </Link>
         <Link 
           href="/sla" 
           className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
         >
-          [ VIEW_SLA ]
+          [ {t("system.sla")} ]
         </Link>
         <button 
           onClick={onDataPurgeTrigger}
           className="border border-[#FF3D00]/40 text-[#FF3D00] hover:bg-[#FF3D00] hover:text-[#121418] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap cursor-pointer block"
         >
-          [ DATA_PURGE ]
+          [ {t("system.data_purge")} ]
         </button>
       </div>
     </div>

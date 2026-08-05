@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "@/context/I18nContext";
 
 export default function LiveTelemetryFeed() {
+  const { t } = useI18n();
   const [latency, setLatency] = useState(12);
   const [scanId, setScanId] = useState("A-90421");
   const [cpu, setCpu] = useState(24);
@@ -38,15 +40,15 @@ export default function LiveTelemetryFeed() {
       <span>·</span>
       <span>[ ATHLETE_SCAN: <span className="text-emerald-core/60">{scanId}</span> ]</span>
       <span>·</span>
-      <span>[ LATENCY: <span className="text-emerald-core/60">{latency}ms</span> ]</span>
+      <span>[ {t("system.secure_tunnel") || "SECURE_TUNNEL"}: <span className="text-emerald-core/60">{t("system.established") || "ESTABLISHED"}</span> ]</span>
       <span>·</span>
-      <span>[ CPU_LOAD: <span className="text-emerald-core/60">{cpu}%</span> ]</span>
+      <span>[ {t("system.db_pool") || "DB_POOL"}: <span className="text-emerald-core/60">{t("system.active") || "ACTIVE"}</span> ]</span>
       <span>·</span>
-      <span>[ SECURE_TUNNEL: <span className="text-emerald-core/60">ESTABLISHED</span> ]</span>
+      <span>[ {t("system.ping") || "PING"} / {t("system.latency") || "LATENCY"}: <span className="text-emerald-core/60">{latency}ms</span> ]</span>
       <span>·</span>
-      <span>[ DB_POOL: <span className="text-emerald-core/60">ACTIVE</span> ]</span>
+      <span>[ {t("system.cpu_load") || "CPU_LOAD"}: <span className="text-emerald-core/60">{cpu}%</span> ]</span>
       <span>·</span>
-      <span>[ BLOCK: <span className="text-emerald-core/60">{blockHeight}</span> ]</span>
+      <span>[ {t("system.block") || "BLOCK"}: <span className="text-emerald-core/60">{blockHeight}</span> ]</span>
       <span className="mr-4">·</span>
     </span>
   );

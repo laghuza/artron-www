@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "@/context/I18nContext";
 
 interface HoveredItem {
   name: string;
@@ -10,16 +11,17 @@ interface HoveredItem {
 }
 
 export default function GamificationNarrative() {
+  const { t } = useI18n();
   const [hoveredItem, setHoveredItem] = useState<HoveredItem | null>(null);
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
       <div className="space-y-1">
         <div className="font-mono text-[12px] text-gold-raw uppercase tracking-[0.15em]">
-          [ NODE_05 // GAMIFICATION_ENGINE ]
+          {t("nodes.node_5.tag")}
         </div>
         <h2 className="text-xl font-bold tracking-tight text-white uppercase">
-          COINS & ACHIEVEMENTS
+          {t("nodes.node_5.name")}
         </h2>
       </div>
 
@@ -90,7 +92,7 @@ export default function GamificationNarrative() {
       </div>
 
       <p className="text-[15px] text-bone-light/85 leading-relaxed font-sans">
-        ათლეტების წახალისების გეიმიფიცირებული სისტემა. Artron Coin-ები და ციფრული ბეიჯები, რომლებიც გაიცემა მიღწეული შედეგებისა და დასწრების აქტივობებისთვის.
+        {t("nodes.node_5.description")}
       </p>
     </div>
   );

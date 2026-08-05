@@ -1,14 +1,18 @@
 "use client";
 
+import { useI18n } from "@/context/I18nContext";
+
 export default function MarketplaceNarrative() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
       <div className="space-y-1">
         <div className="font-mono text-[12px] text-gold-raw uppercase tracking-[0.15em]">
-          [ NODE_06 // MODULE_MARKETPLACE ]
+          {t("nodes.node_6.tag")}
         </div>
         <h2 className="text-xl font-bold tracking-tight text-white uppercase">
-          SYSTEM MARKETPLACE
+          {t("nodes.node_6.name")}
         </h2>
       </div>
 
@@ -37,7 +41,7 @@ export default function MarketplaceNarrative() {
       </div>
 
       <p className="text-[15px] text-bone-light/85 leading-relaxed font-sans">
-        დამატებითი ფუნქციონალური მოდულების მაღაზია. მყისიერი ინტეგრაცია (Plug-and-Play) საინსტიტუციო განრიგებისთვის, ონლაინ გადახდებისთვის და უსაფრთხოების კარიბჭეებისთვის.
+        {t("nodes.node_6.description")}
       </p>
     </div>
   );
