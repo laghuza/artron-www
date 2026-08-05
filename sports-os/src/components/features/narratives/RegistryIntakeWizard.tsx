@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import FederationIntakeSteps from './wizard/FederationIntakeSteps';
-import ClubIntakeSteps from './wizard/ClubIntakeSteps';
+import FederationIntakeSteps from '@/components/features/narratives/wizard/FederationIntakeSteps';
+import ClubIntakeSteps from '@/components/features/narratives/wizard/ClubIntakeSteps';
 
 interface RegistryIntakeWizardProps {
   onReset: () => void;

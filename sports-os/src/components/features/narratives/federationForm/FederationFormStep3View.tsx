@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import DiagnosticCell from "@/components/ui/DiagnosticCell";
-import { formatPhone } from "../wizard/wizardUtils";
-import ExecutiveEncryptionKeyInput from "./ExecutiveEncryptionKeyInput";
+import { formatPhone } from "@/components/features/narratives/wizard/wizardUtils";
+import ExecutiveEncryptionKeyInput from "@/components/features/narratives/federationForm/ExecutiveEncryptionKeyInput";
 
 interface FederationFormStep3ViewProps {
   firstName: string; setFirstName: (v: string) => void;

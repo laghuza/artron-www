@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import TenantPurgeForm from "./purge/TenantPurgeForm";
-import AthletePurgeForm from "./purge/AthletePurgeForm";
+import TenantPurgeForm from "@/components/features/narratives/purge/TenantPurgeForm";
+import AthletePurgeForm from "@/components/features/narratives/purge/AthletePurgeForm";
 
 interface PurgeNarrativeProps {
   purgeState: "selection" | "tenant" | "athlete" | "tenant-success" | "athlete-success";

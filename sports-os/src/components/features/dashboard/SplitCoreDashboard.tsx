@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { audioManager } from "@/lib/audioManager";
-import { SubItemData } from "./NodeDetailStage";
+import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import SystemRegistryFooter from "@/components/layout/SystemRegistryFooter";
-import GhostTrigger from "./GhostTrigger";
+import GhostTrigger from "@/components/features/dashboard/GhostTrigger";
 import ScanLine from "@/components/ui/ScanLine";
 import LiveTelemetryFeed from "@/components/features/telemetry/LiveTelemetryFeed";
-import MuteAudioButton from "./MuteAudioButton";
-import DashboardLeftPanel from "./DashboardLeftPanel";
-import DashboardMainStage from "./DashboardMainStage";
-import { GLOW_COLORS } from "./dashboardConstants";
+import MuteAudioButton from "@/components/features/dashboard/MuteAudioButton";
+import DashboardLeftPanel from "@/components/features/dashboard/DashboardLeftPanel";
+import DashboardMainStage from "@/components/features/dashboard/DashboardMainStage";
+import { GLOW_COLORS } from "@/components/features/dashboard/dashboardConstants";
 import { useDashboardEffects } from "@/hooks/useDashboardEffects";
 
 export default function SplitCoreDashboard() {

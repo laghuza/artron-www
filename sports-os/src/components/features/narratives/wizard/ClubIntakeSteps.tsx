@@ -1,8 +1,8 @@
 "use client";
 
-import ClubIntakeStep1View from "./ClubIntakeStep1View";
-import ClubIntakeStep2View from "./ClubIntakeStep2View";
-import ClubIntakeStep3View from "./ClubIntakeStep3View";
+import ClubIntakeStep1View from "@/components/features/narratives/wizard/ClubIntakeStep1View";
+import ClubIntakeStep2View from "@/components/features/narratives/wizard/ClubIntakeStep2View";
+import ClubIntakeStep3View from "@/components/features/narratives/wizard/ClubIntakeStep3View";
 
 interface ClubIntakeStepsProps {
   step: number;

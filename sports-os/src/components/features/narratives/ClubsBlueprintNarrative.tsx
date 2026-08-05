@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { audioManager } from "@/lib/audioManager";
-import { SubItemData } from "../dashboard/NodeDetailStage";
+import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 
 interface NodeData {
   id: string;

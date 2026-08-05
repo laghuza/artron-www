@@ -1,9 +1,9 @@
 "use client";
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import InteractiveEnneaCore from "./InteractiveEnneaCore";
-import CinematicLoginConsole from "../narratives/CinematicLoginConsole";
-import NodeDetailStage, { SubItemData } from "./NodeDetailStage";
+import InteractiveEnneaCore from "@/components/features/dashboard/InteractiveEnneaCore";
+import CinematicLoginConsole from "@/components/features/narratives/CinematicLoginConsole";
+import NodeDetailStage, { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 
 interface DashboardMainStageProps {
   activeNode: number;

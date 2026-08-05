@@ -1,8 +1,8 @@
 "use client";
 
-import FederationIntakeStep1View from "./FederationIntakeStep1View";
-import FederationIntakeStep2View from "./FederationIntakeStep2View";
-import FederationIntakeStep3View from "./FederationIntakeStep3View";
+import FederationIntakeStep1View from "@/components/features/narratives/wizard/FederationIntakeStep1View";
+import FederationIntakeStep2View from "@/components/features/narratives/wizard/FederationIntakeStep2View";
+import FederationIntakeStep3View from "@/components/features/narratives/wizard/FederationIntakeStep3View";
 
 interface FederationIntakeStepsProps {
   step: number;

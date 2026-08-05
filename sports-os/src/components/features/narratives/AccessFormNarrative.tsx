@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import FederationIntakeForm from "./FederationIntakeForm";
+import FederationIntakeForm from "@/components/features/narratives/FederationIntakeForm";
 
 interface AccessFormNarrativeProps {
   onCancel: () => void;

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import FederationFormStep1View from './federationForm/FederationFormStep1View';
-import FederationFormStep2View from './federationForm/FederationFormStep2View';
-import FederationFormStep3View from './federationForm/FederationFormStep3View';
+import FederationFormStep1View from '@/components/features/narratives/federationForm/FederationFormStep1View';
+import FederationFormStep2View from '@/components/features/narratives/federationForm/FederationFormStep2View';
+import FederationFormStep3View from '@/components/features/narratives/federationForm/FederationFormStep3View';
 
 export default function FederationIntakeForm() {
   const [step, setStep] = useState(1);

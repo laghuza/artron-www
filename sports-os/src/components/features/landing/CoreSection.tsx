@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import BootSequenceConsole from "./core/BootSequenceConsole";
-import CoreCanvas from "./core/CoreCanvas";
+import BootSequenceConsole from "@/components/features/landing/core/BootSequenceConsole";
+import CoreCanvas from "@/components/features/landing/core/CoreCanvas";
 
 const BOOT_LOGS = [
   "[ INIT ] LOADING SPORTS OS KERNEL V1.0.42...",

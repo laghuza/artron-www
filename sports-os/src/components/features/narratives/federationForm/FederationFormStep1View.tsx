@@ -2,7 +2,7 @@
 
 import CustomSelect from "@/components/ui/CustomSelect";
 import DiagnosticCell from "@/components/ui/DiagnosticCell";
-import { formatFedCode } from "../wizard/wizardUtils";
+import { formatFedCode } from "@/components/features/narratives/wizard/wizardUtils";
 
 interface FederationFormStep1ViewProps {
   fedName: string; setFedName: (v: string) => void;

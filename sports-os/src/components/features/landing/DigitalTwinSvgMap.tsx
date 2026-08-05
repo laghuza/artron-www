@@ -1,6 +1,6 @@
 "use client";
 
-import { NodeData } from "./DigitalTwinInfoPanel";
+import { NodeData } from "@/components/features/landing/DigitalTwinInfoPanel";
 
 interface DigitalTwinSvgMapProps {
   selectedNode: NodeData;

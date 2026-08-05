@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import DigitalTwinInfoPanel, { NodeData } from "./DigitalTwinInfoPanel";
-import DigitalTwinSvgMap from "./DigitalTwinSvgMap";
+import DigitalTwinInfoPanel, { NodeData } from "@/components/features/landing/DigitalTwinInfoPanel";
+import DigitalTwinSvgMap from "@/components/features/landing/DigitalTwinSvgMap";
 
 const NODES: NodeData[] = [
   {

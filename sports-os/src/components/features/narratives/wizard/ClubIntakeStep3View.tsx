@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import DiagnosticCell from "@/components/ui/DiagnosticCell";
-import ExecutiveEncryptionKeyInput from "../federationForm/ExecutiveEncryptionKeyInput";
-import { formatPhone } from "./wizardUtils";
+import ExecutiveEncryptionKeyInput from "@/components/features/narratives/federationForm/ExecutiveEncryptionKeyInput";
+import { formatPhone } from "@/components/features/narratives/wizard/wizardUtils";
 
 interface ClubIntakeStep3ViewProps {
   clubFirstName: string; setClubFirstName: (v: string) => void;

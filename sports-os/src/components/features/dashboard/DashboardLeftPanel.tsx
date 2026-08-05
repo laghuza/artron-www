@@ -1,17 +1,17 @@
 "use client";
 
-import { SubItemData } from "./NodeDetailStage";
-import DefaultNarrative from "../narratives/DefaultNarrative";
-import FederationsNarrative from "../narratives/FederationsNarrative";
-import ClubsBlueprintNarrative from "../narratives/ClubsBlueprintNarrative";
-import ProfessionalsModulesNarrative from "../narratives/ProfessionalsModulesNarrative";
-import MobileOSNarrative from "../narratives/MobileOSNarrative";
-import GamificationNarrative from "../narratives/GamificationNarrative";
-import MarketplaceNarrative from "../narratives/MarketplaceNarrative";
-import AnalyticsNarrative from "../narratives/AnalyticsNarrative";
-import SlaSecurityNarrative from "../narratives/SlaSecurityNarrative";
-import PurgeNarrative from "../narratives/PurgeNarrative";
-import AccessFormNarrative from "../narratives/AccessFormNarrative";
+import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
+import DefaultNarrative from "@/components/features/narratives/DefaultNarrative";
+import FederationsNarrative from "@/components/features/narratives/FederationsNarrative";
+import ClubsBlueprintNarrative from "@/components/features/narratives/ClubsBlueprintNarrative";
+import ProfessionalsModulesNarrative from "@/components/features/narratives/ProfessionalsModulesNarrative";
+import MobileOSNarrative from "@/components/features/narratives/MobileOSNarrative";
+import GamificationNarrative from "@/components/features/narratives/GamificationNarrative";
+import MarketplaceNarrative from "@/components/features/narratives/MarketplaceNarrative";
+import AnalyticsNarrative from "@/components/features/narratives/AnalyticsNarrative";
+import SlaSecurityNarrative from "@/components/features/narratives/SlaSecurityNarrative";
+import PurgeNarrative from "@/components/features/narratives/PurgeNarrative";
+import AccessFormNarrative from "@/components/features/narratives/AccessFormNarrative";
 
 interface DashboardLeftPanelProps {
   currentDisplayNode: number;

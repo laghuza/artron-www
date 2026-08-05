@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { audioManager } from "@/lib/audioManager";
-import { SubItemData } from "../dashboard/NodeDetailStage";
-import { FEDERATION_LIST } from "./federation/federationData";
+import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
+import { FEDERATION_LIST } from "@/components/features/narratives/federation/federationData";
 
 interface FederationsNarrativeProps {
   onBack: () => void;

@@ -1,4 +1,4 @@
-import { SubItemData } from "../../dashboard/NodeDetailStage";
+import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 
 export const FEDERATION_LIST: SubItemData[] = [
   {
