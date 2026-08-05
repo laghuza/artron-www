@@ -9,6 +9,7 @@ import GhostTrigger from "@/components/features/dashboard/GhostTrigger";
 import ScanLine from "@/components/ui/ScanLine";
 import LiveTelemetryFeed from "@/components/features/telemetry/LiveTelemetryFeed";
 import MuteAudioButton from "@/components/features/dashboard/MuteAudioButton";
+import LanguageToggle from "@/components/ui/LanguageToggle";
 import DashboardLeftPanel from "@/components/features/dashboard/DashboardLeftPanel";
 import DashboardMainStage from "@/components/features/dashboard/DashboardMainStage";
 import { GLOW_COLORS } from "@/components/features/dashboard/dashboardConstants";
@@ -64,6 +65,7 @@ export default function SplitCoreDashboard() {
           : "bg-iron schematic-grid"
       }`}>
       <MuteAudioButton isMuted={isMuted} transitionStep={transitionStep} />
+      <LanguageToggle />
       <ScanLine trigger={scanTrigger} />
       <div className={`fade-to-black-overlay ${isFadeToBlack ? "active" : ""}`} />
 

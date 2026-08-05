@@ -1,0 +1,81 @@
+{
+  "system": {
+    "title": "ARTRON SPORTS OS",
+    "subtitle": "EnneaCore 9-Node Athletic Operating System",
+    "status": "SYSTEM ACTIVE",
+    "registry": "SYSTEM REGISTRY",
+    "version": "v2.4.0-PROD",
+    "mode": "PROD_MODE",
+    "live": "LIVE",
+    "telemetry": "REAL-TIME TELEMETRY"
+  },
+  "hud": {
+    "audio_on": "AUDIO_ON",
+    "audio_muted": "AUDIO_MUTED",
+    "lang_ge": "LANG: GE",
+    "lang_en": "LANG: EN",
+    "scan": "SCAN",
+    "ghost_trigger": "GHOST_TRIGGER"
+  },
+  "nodes": {
+    "node_0": {
+      "name": "EnneaCore",
+      "subtitle": "Core Architecture",
+      "description": "Central core for 9-node athletic telemetry and SaaS operations management."
+    },
+    "node_1": {
+      "name": "Biometrics",
+      "subtitle": "Sports Telemetry",
+      "description": "Real-time monitoring of athlete heart rate, fatigue, and metabolic metrics."
+    },
+    "node_2": {
+      "name": "Access Control",
+      "subtitle": "IoT Turnstiles & RFID",
+      "description": "Edge IoT streaming for turnstiles, NFC scanners, and biometric access control."
+    },
+    "node_3": {
+      "name": "Multi-Tenant",
+      "subtitle": "Federations & Clubs",
+      "description": "Strict RLS data isolation for sports federations, leagues, and clubs."
+    },
+    "node_4": {
+      "name": "GPS Tracking",
+      "subtitle": "Motion Analytics",
+      "description": "Sensor-based physical load and positioning trajectory analytics for athletes."
+    },
+    "node_5": {
+      "name": "AI RAG Engine",
+      "subtitle": "Neural Assistant",
+      "description": "Vector search and LLM pipelines for injury prevention and tactical insights."
+    },
+    "node_6": {
+      "name": "Billing & Stripe",
+      "subtitle": "Financial Gateway",
+      "description": "Automated SaaS subscriptions, Stripe/TBC/BOG payment processing, and tier management."
+    },
+    "node_7": {
+      "name": "Compliance & GDPR",
+      "subtitle": "Data Security",
+      "description": "AES-256 encryption, GDPR/COPPA compliance, and 14-day automated Data Purge."
+    },
+    "node_8": {
+      "name": "System Diagnostics",
+      "subtitle": "Health Monitoring",
+      "description": "Continuous monitoring of server clusters, WebSocket feeds, and database performance."
+    },
+    "node_9": {
+      "name": "SaaS Gateway",
+      "subtitle": "Auth & Onboarding",
+      "description": "Secure authentication, tenant organization setup, and onboarding portal."
+    }
+  },
+  "actions": {
+    "login": "Login",
+    "register": "Register",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "purge_data": "Purge Data",
+    "access_console": "Access Console",
+    "back": "Back"
+  }
+}

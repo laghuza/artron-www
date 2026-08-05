@@ -39,3 +39,11 @@
   - [x] Step 4: Create Component Registry (`docs/COMPONENT_REGISTRY.md`)
   - [x] Step 5: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub
 
+- [x] **Phase 7: Global i18n System & HUD Language Toggle**
+  - [x] Step 1: Create Dictionary Files (`sports-os/src/dictionaries/ge.json` & `en.json`)
+  - [x] Step 2: Create i18n Context & Provider (`sports-os/src/context/I18nContext.tsx`)
+  - [x] Step 3: Create Dark-Futurist HUD Language Toggle (`sports-os/src/components/ui/LanguageToggle.tsx`)
+  - [x] Step 4: Integrate into Root Layout & HUD (`layout.tsx` & `SplitCoreDashboard.tsx`)
+  - [x] Step 5: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub
+
+
