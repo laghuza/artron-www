@@ -46,4 +46,11 @@
   - [x] Step 4: Integrate into Root Layout & HUD (`layout.tsx` & `SplitCoreDashboard.tsx`)
   - [x] Step 5: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub
 
+- [x] **Phase 7.1: i18n Dynamic Component Binding & Narrative Localization**
+  - [x] Step 1: Expand dictionaries (`ge.json` & `en.json`) with system, telemetry, and node strings
+  - [x] Step 2: Wire `useI18n()` into `InteractiveEnneaCore.tsx`, `LiveTelemetryFeed.tsx`, and `SystemRegistryFooter.tsx`
+  - [x] Step 3: Wire `useI18n()` into all 9 EnneaCore node narratives & default view
+  - [x] Step 4: Verify build (`npx tsc --noEmit` & `npm run build`) & commit/push to `main`
+
+
 
