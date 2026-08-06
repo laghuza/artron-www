@@ -43,7 +43,6 @@ export default function DashboardLeftPanel({
 }: DashboardLeftPanelProps) {
   const orchestrator = useStageOrchestrator();
   const effectiveNode = (orchestrator?.activeNodeId && orchestrator.activeNodeId > 0) ? orchestrator.activeNodeId : currentDisplayNode;
-  const isNodeOrSubActive = (orchestrator?.activeNodeId && orchestrator.activeNodeId > 0) || Boolean(orchestrator?.activeSubModuleId) || effectiveNode > 0;
 
   const renderNarrative = () => {
     switch (effectiveNode) {
@@ -101,16 +100,6 @@ export default function DashboardLeftPanel({
 
   return (
     <div className="w-full max-w-full overflow-y-auto overflow-x-hidden scrollbar-thin">
-      {isNodeOrSubActive && (
-        <div className="lg:hidden sticky top-0 z-30 pb-3 pt-1 bg-[#101216]/90 backdrop-blur-md">
-          <button
-            onClick={() => orchestrator?.setMobileStage("canvas")}
-            className="w-full py-2 px-3 text-[11px] font-mono rounded bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/50 hover:bg-[#00F0FF]/25 shadow-[0_0_12px_rgba(0,240,255,0.25)] flex items-center justify-center gap-2 transition-all cursor-pointer font-bold tracking-wider uppercase"
-          >
-            [ ⬅️ BACK TO GRAPH / გრაფიკზე დაბრუნება ]
-          </button>
-        </div>
-      )}
       {renderNarrative()}
     </div>
   );

@@ -11,6 +11,7 @@ import ScanLine from "@/components/ui/ScanLine";
 import LiveTelemetryFeed from "@/components/features/telemetry/LiveTelemetryFeed";
 import MuteAudioButton from "@/components/features/dashboard/MuteAudioButton";
 import LanguageToggle from "@/components/ui/LanguageToggle";
+import ArtronCyberMenu from "@/components/layout/ArtronCyberMenu";
 import DashboardLeftPanel from "@/components/features/dashboard/DashboardLeftPanel";
 import DashboardMainStage from "@/components/features/dashboard/DashboardMainStage";
 import { GLOW_COLORS } from "@/components/features/dashboard/dashboardConstants";
@@ -53,6 +54,7 @@ export default function SplitCoreDashboard() {
     }`}>
       <MuteAudioButton isMuted={isMuted} transitionStep={transitionStep} />
       <LanguageToggle />
+      <ArtronCyberMenu isMuted={isMuted} transitionStep={transitionStep} onDataPurgeTrigger={() => { setActiveNode(8); setPurgeState("selection"); setMobileStage("system"); }} />
       <ScanLine trigger={scanTrigger} />
       <MobileStageDock />
       <div className={`fade-to-black-overlay ${isFadeToBlack ? "active" : ""}`} />

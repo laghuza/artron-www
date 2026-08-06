@@ -21,7 +21,7 @@ export default function CoreCanvas({ isBooted }: CoreCanvasProps) {
     let h = (canvas.height = window.innerHeight);
 
     const particles: Array<{ x: number; y: number; tx: number; ty: number; r: number; a: number }> = [];
-    const cx = w / 2, cy = h / 2, gap = Math.min(w, h) * 0.15;
+    const cx = w / 2, cy = h / 2, gap = Math.min(w, h) * (w < 640 ? 0.22 : 0.15);
     const nodes = Array.from({ length: 9 }, (_, idx) => ({
       x: cx + ((idx % 3) - 1) * gap,
       y: cy + (Math.floor(idx / 3) - 1) * gap,

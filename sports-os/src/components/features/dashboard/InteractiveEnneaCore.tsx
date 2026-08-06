@@ -100,20 +100,20 @@ export default function InteractiveEnneaCore({
           className={!showOuter ? "animate-core-grandiose" : gateHover === "gate_a" ? "animate-core-gate-a-hover" : "transition-transform duration-300"}
           style={showOuter && gateHover !== "gate_a" ? { transform: `translate(200px, 200px)` } : {}}
         >
-          <circle r="40" fill="transparent" className="cursor-pointer" />
+          <circle r="44" fill="transparent" className="cursor-pointer" />
           <circle r="48" fill="url(#core-glow)" className="pointer-events-none" />
           {isFlashActive && <circle r="48" fill="#00E676" className="pointer-events-none animate-core-flash" />}
           
           {[38, 28].map((r) => (
-            <circle key={r} r={r} className={`fill-none stroke-[#00E676] stroke-[0.8] opacity-20 pointer-events-none ${effectiveActiveNode === 9 ? "animate-pulse-fast" : "animate-pulse"}`} />
+            <circle key={r} r={r} className={`fill-none stroke-[#00E676] stroke-[0.8] opacity-25 pointer-events-none ${effectiveActiveNode === 9 ? "animate-pulse-fast" : "animate-pulse"}`} />
           ))}
-          <circle r="22" fill="none" stroke="#00E676" strokeWidth="0.8" className={`opacity-15 pointer-events-none ${effectiveActiveNode === 9 ? "animate-ping-fast" : "animate-ping"}`} />
+          <circle r="22" fill="none" stroke="#00E676" strokeWidth="0.8" className={`opacity-20 pointer-events-none ${effectiveActiveNode === 9 ? "animate-ping-fast" : "animate-ping"}`} />
           
           <g className="transition-transform duration-300" style={{ transform: isCenterActive ? "scale(1.2)" : "scale(1)" }}>
-            <circle r="16" className="fill-iron-surface stroke-[#00E676] stroke-[1.2] transition-colors duration-300" style={{ fillOpacity: isCenterActive ? 0.9 : 0.4 }} />
+            <circle r="16" className="fill-iron-surface stroke-[#00E676] stroke-[1.2] transition-colors duration-300" style={{ fillOpacity: isCenterActive ? 0.95 : 0.5 }} />
             <circle r="6" fill="#00E676" />
           </g>
-          <text y="-22" textAnchor="middle" className={`font-mono text-[6px] tracking-wider fill-[#00E676] transition-opacity duration-300 cursor-pointer ${isCenterActive && showOuter ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+          <text y="-22" textAnchor="middle" className={`font-mono text-[8px] tracking-wider fill-[#00E676] transition-opacity duration-300 cursor-pointer font-bold ${isCenterActive && showOuter ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
             {t("labels.node_9")}
           </text>
         </g>
@@ -129,12 +129,12 @@ export default function InteractiveEnneaCore({
               onMouseLeave={() => { setHoveredNode(null); onNodeHover(null); }}
               className={`transition-opacity duration-1000 ${showOuter ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             >
-              <circle r="20" fill="transparent" className="cursor-pointer" />
-              <circle r={isAct ? 14 : 7} fill="none" stroke={node.color} strokeWidth={isAct ? 0.8 : 0.5} className={`${isAct ? "animate-ping opacity-25" : "animate-pulse opacity-15"} pointer-events-none`} />
-              <g className="transition-transform duration-300" style={{ transform: isAct ? "scale(1.25)" : "scale(1)" }}>
-                <circle r="2.4" fill={isAct ? node.color : "#121418"} stroke={isAct ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct ? 1.0 : 0.4 }} className="transition-all duration-300" />
+              <circle r="30" fill="transparent" className="cursor-pointer" />
+              <circle r={isAct ? 15 : 8} fill="none" stroke={node.color} strokeWidth={isAct ? 0.9 : 0.6} className={`${isAct ? "animate-ping opacity-35" : "animate-pulse opacity-20"} pointer-events-none`} />
+              <g className="transition-transform duration-300" style={{ transform: isAct ? "scale(1.28)" : "scale(1)" }}>
+                <circle r="3" fill={isAct ? node.color : "#121418"} stroke={isAct ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct ? 1.0 : 0.6 }} className="transition-all duration-300" />
               </g>
-              <text x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct ? "#F5F5F7" : "#9CA3AF"} className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300 cursor-pointer" style={{ fillOpacity: isAct ? 1.0 : 0.35 }}>
+              <text x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct ? "#FFFFFF" : "#9CA3AF"} className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300 cursor-pointer font-medium" style={{ fillOpacity: isAct ? 1.0 : 0.65 }}>
                 {node.label}
               </text>
             </g>
