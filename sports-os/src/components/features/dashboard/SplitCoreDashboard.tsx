@@ -6,7 +6,7 @@ import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import SystemRegistryFooter from "@/components/layout/SystemRegistryFooter";
 import MobileStageDock from "@/components/layout/MobileStageDock";
-import GhostTrigger from "@/components/features/dashboard/GhostTrigger";
+import DesktopLogoMenu from "@/components/layout/DesktopLogoMenu";
 import ScanLine from "@/components/ui/ScanLine";
 import LiveTelemetryFeed from "@/components/features/telemetry/LiveTelemetryFeed";
 import MuteAudioButton from "@/components/features/dashboard/MuteAudioButton";
@@ -61,7 +61,7 @@ export default function SplitCoreDashboard() {
       {transitionStep === "sweeping" && <div key={`sweep-${sweepTrigger}`} className="radial-sweep-ring" />}
       {transitionStep === "idle" && (
         <div className="absolute top-4 right-4 z-40 animate-fadeIn hidden lg:block">
-          <GhostTrigger onAccessClick={() => handleNodeSelect(9)} />
+          <DesktopLogoMenu onEnterCore={() => handleNodeSelect(9)} />
         </div>
       )}
 
