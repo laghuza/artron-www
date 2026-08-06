@@ -58,3 +58,10 @@
   - [x] Step 3: Connect 40% System Stage (`DashboardLeftPanel.tsx` & 9 Node Narratives)
   - [x] Step 4: Wrap Dashboard Layout with `<StageOrchestratorProvider>`
   - [x] Step 5: Verify build (`npx tsc --noEmit` & `npm run build`) & commit/push to `main`
+
+- [x] **Phase 9.1: Mobile Floating Dock, Header Collision Fix & Back Navigation**
+  - [x] Step 1: Create Floating Mobile Stage Dock (`MobileStageDock.tsx`)
+  - [x] Step 2: Fix Header Collision & Padding (`SplitCoreDashboard.tsx`)
+  - [x] Step 3: Add Mobile Back-Navigation Button (`DashboardLeftPanel.tsx`)
+  - [x] Step 4: Auto-Scale 60% Interactive Canvas (`InteractiveEnneaCore.tsx`)
+  - [x] Step 5: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub

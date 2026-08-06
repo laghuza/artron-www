@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import SystemRegistryFooter from "@/components/layout/SystemRegistryFooter";
+import MobileStageDock from "@/components/layout/MobileStageDock";
 import GhostTrigger from "@/components/features/dashboard/GhostTrigger";
 import ScanLine from "@/components/ui/ScanLine";
 import LiveTelemetryFeed from "@/components/features/telemetry/LiveTelemetryFeed";
@@ -14,9 +15,11 @@ import DashboardLeftPanel from "@/components/features/dashboard/DashboardLeftPan
 import DashboardMainStage from "@/components/features/dashboard/DashboardMainStage";
 import { GLOW_COLORS } from "@/components/features/dashboard/dashboardConstants";
 import { useDashboardEffects } from "@/hooks/useDashboardEffects";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 export default function SplitCoreDashboard() {
   const router = useRouter();
+  const { mobileStage, setMobileStage } = useStageOrchestrator();
   const [activeNode, setActiveNode] = useState<number>(0);
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const [scanTrigger, setScanTrigger] = useState<number>(0);
@@ -29,7 +32,6 @@ export default function SplitCoreDashboard() {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [purgeState, setPurgeState] = useState<"none" | "selection" | "tenant" | "athlete" | "tenant-success" | "athlete-success">("none");
   const [selectedSubItem, setSelectedSubItem] = useState<SubItemData | null>(null);
-  const [mobileStage, setMobileStage] = useState<"canvas" | "system">("canvas");
 
   const currentDisplayNode = hoveredNode !== null ? hoveredNode : activeNode;
 
@@ -45,9 +47,6 @@ export default function SplitCoreDashboard() {
   };
   const handleAccessTabChange = (tab: "login" | "request" | "choice") => { audioManager.playClick(); setAccessTab(tab); };
 
-  const activeBtn = "bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/60 shadow-[0_0_10px_rgba(0,240,255,0.3)] font-bold";
-  const idleBtn = "bg-black/50 text-gray-400 border border-gray-800 hover:text-white";
-
   return (
     <div className={`relative h-screen w-screen max-h-screen max-w-screen overflow-hidden flex flex-col lg:flex-row select-none transition-all duration-[1000ms] ease-expo-out box-border ${
       (transitionStep === "sweeping" || transitionStep === "console") ? "bg-black" : transitionStep === "zooming" ? "bg-[#090A0C]" : "bg-iron schematic-grid"
@@ -55,6 +54,7 @@ export default function SplitCoreDashboard() {
       <MuteAudioButton isMuted={isMuted} transitionStep={transitionStep} />
       <LanguageToggle />
       <ScanLine trigger={scanTrigger} />
+      <MobileStageDock />
       <div className={`fade-to-black-overlay ${isFadeToBlack ? "active" : ""}`} />
       {transitionStep === "sweeping" && <div key={`sweep-${sweepTrigger}`} className="radial-sweep-ring" />}
       {transitionStep === "idle" && (
@@ -62,16 +62,6 @@ export default function SplitCoreDashboard() {
           <GhostTrigger onAccessClick={() => handleNodeSelect(9)} />
         </div>
       )}
-
-      {/* Mobile Stage Toggle Header (< lg) */}
-      <div className="lg:hidden flex items-center justify-center gap-2 p-2 bg-[#101216]/95 border-b border-[rgba(156,163,175,0.15)] z-40 w-full shrink-0">
-        <button onClick={() => setMobileStage("canvas")} className={`flex-1 max-w-[180px] py-1.5 px-3 text-[11px] font-mono rounded uppercase transition-all duration-200 cursor-pointer text-center ${mobileStage === "canvas" ? activeBtn : idleBtn}`}>
-          [ 📊 CANVAS (60%) ]
-        </button>
-        <button onClick={() => setMobileStage("system")} className={`flex-1 max-w-[180px] py-1.5 px-3 text-[11px] font-mono rounded uppercase transition-all duration-200 cursor-pointer text-center ${mobileStage === "system" ? activeBtn : idleBtn}`}>
-          [ ⚙️ SYSTEM (40%) ]
-        </button>
-      </div>
 
       <div className={`h-full flex flex-col justify-center relative overflow-hidden transition-all duration-[1000ms] ease-expo-out bg-[#1A1D23]/55 box-border ${
         transitionStep !== "idle"

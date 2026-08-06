@@ -49,7 +49,7 @@ export default function InteractiveEnneaCore({
   const showOuter = transitionStep !== "sweeping" && transitionStep !== "console";
 
   return (
-    <div className={`w-full flex items-center justify-center relative transition-all duration-1000 ${
+    <div className={`w-full aspect-square max-w-[92vw] sm:max-w-[80vw] lg:max-w-full mx-auto flex items-center justify-center relative transition-all duration-1000 ${
       transitionStep === "console" ? "h-[160px] md:h-[185px]" : "h-full"
     }`}>
       <svg
