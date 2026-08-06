@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import { FEDERATION_LIST } from "@/components/features/narratives/federation/federationData";
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface FederationsNarrativeProps {
   onBack: () => void;
@@ -14,18 +15,23 @@ interface FederationsNarrativeProps {
 
 export default function FederationsNarrative({ onBack, onSelectSubItem, selectedSubId }: FederationsNarrativeProps) {
   const { t } = useI18n();
-  const [activeId, setActiveId] = useState<string | null>(selectedSubId || null);
+  const orchestrator = useStageOrchestrator();
+  const [activeId, setActiveId] = useState<string | null>(orchestrator?.activeSubModuleId || selectedSubId || null);
+
+  useEffect(() => {
+    if (orchestrator?.activeSubModuleId !== undefined) {
+      setActiveId(orchestrator.activeSubModuleId);
+    }
+  }, [orchestrator?.activeSubModuleId]);
 
   const handleSelect = (item: SubItemData) => {
     audioManager.playClick();
-    if (activeId === item.id) {
-      setActiveId(null);
-      if (onSelectSubItem) onSelectSubItem(null);
-    } else {
-      setActiveId(item.id);
-      if (onSelectSubItem) onSelectSubItem(item);
-    }
+    const nextId = activeId === item.id ? null : item.id;
+    setActiveId(nextId);
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule(nextId);
+    if (onSelectSubItem) onSelectSubItem(nextId ? item : null);
   };
+
 
   return (
     <div className="space-y-5 font-sans select-none animate-fadeIn">

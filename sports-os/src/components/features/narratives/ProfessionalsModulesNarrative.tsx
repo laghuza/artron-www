@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface ModuleDetail {
   id: string;
@@ -22,7 +23,15 @@ interface ProfessionalsModulesNarrativeProps {
 
 export default function ProfessionalsModulesNarrative({ onBack, onSelectSubItem }: ProfessionalsModulesNarrativeProps) {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
   const [activeTab, setActiveTab] = useState<string>("scheduling");
+
+  useEffect(() => {
+    if (orchestrator?.activeSubModuleId) {
+      setActiveTab(orchestrator.activeSubModuleId);
+    }
+  }, [orchestrator?.activeSubModuleId]);
+
 
   const modules: Record<string, ModuleDetail> = {
     scheduling: {
@@ -68,6 +77,7 @@ export default function ProfessionalsModulesNarrative({ onBack, onSelectSubItem 
   const handleChannelSelect = (tabKey: string) => {
     audioManager.playClick();
     setActiveTab(tabKey);
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule(tabKey);
     const mod = modules[tabKey];
     if (onSelectSubItem && mod) {
       onSelectSubItem({

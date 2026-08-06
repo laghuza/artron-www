@@ -1,9 +1,15 @@
 "use client";
 
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 export default function AnalyticsNarrative() {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
+
+  const handlePointClick = (pointId: string) => {
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule(pointId);
+  };
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
@@ -33,10 +39,12 @@ export default function AnalyticsNarrative() {
           />
 
           {/* Glowing node point */}
-          <circle cx="150" cy="40" r="3" className="fill-emerald-core" />
-          <circle cx="150" cy="40" r="6" className="stroke-emerald-core/30 animate-pulse" />
+          <g onClick={() => handlePointClick("PEAK_LOAD_ANALYTICS")} className="cursor-pointer">
+            <circle cx="150" cy="40" r="4" className="fill-emerald-core" />
+            <circle cx="150" cy="40" r="8" className="stroke-emerald-core/40 animate-pulse" />
+          </g>
           
-          <text x="110" y="32" className="fill-silver-structure/50 font-mono text-[5px] stroke-none">PEAK_LOAD: 98.4%</text>
+          <text x="110" y="32" className="fill-silver-structure/50 font-mono text-[5px] stroke-none pointer-events-none">PEAK_LOAD: 98.4%</text>
         </svg>
       </div>
 
@@ -46,3 +54,4 @@ export default function AnalyticsNarrative() {
     </div>
   );
 }
+

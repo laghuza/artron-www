@@ -2,9 +2,16 @@
 
 import Link from "next/link";
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPurgeTrigger?: () => void }) {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
+
+  const handlePurge = () => {
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule("data_purge");
+    if (onDataPurgeTrigger) onDataPurgeTrigger();
+  };
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
@@ -38,24 +45,27 @@ export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPur
       <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-4 font-mono text-[10px] tracking-wider">
         <Link 
           href="/privacy" 
+          onClick={() => orchestrator?.selectSubModule("privacy")}
           className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
         >
           [ {t("system.privacy")} ]
         </Link>
         <Link 
           href="/terms" 
+          onClick={() => orchestrator?.selectSubModule("terms")}
           className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
         >
           [ {t("system.terms")} ]
         </Link>
         <Link 
           href="/sla" 
+          onClick={() => orchestrator?.selectSubModule("sla")}
           className="border border-[#9CA3AF]/20 hover:border-[#00E676] hover:text-[#00E676] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap block"
         >
           [ {t("system.sla")} ]
         </Link>
         <button 
-          onClick={onDataPurgeTrigger}
+          onClick={handlePurge}
           className="border border-[#FF3D00]/40 text-[#FF3D00] hover:bg-[#FF3D00] hover:text-[#121418] text-center py-2.5 px-2 rounded transition-all duration-300 whitespace-nowrap cursor-pointer block"
         >
           [ {t("system.data_purge")} ]
@@ -64,3 +74,4 @@ export default function SlaSecurityNarrative({ onDataPurgeTrigger }: { onDataPur
     </div>
   );
 }
+

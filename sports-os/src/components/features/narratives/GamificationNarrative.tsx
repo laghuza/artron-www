@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface HoveredItem {
   name: string;
@@ -12,7 +13,13 @@ interface HoveredItem {
 
 export default function GamificationNarrative() {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
   const [hoveredItem, setHoveredItem] = useState<HoveredItem | null>(null);
+
+  const handleItemClick = (name: string) => {
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule(name);
+  };
+
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
@@ -32,6 +39,7 @@ export default function GamificationNarrative() {
             {/* Gold Coin Group */}
             <g
               className="cursor-pointer"
+              onClick={() => handleItemClick("COIN_DISPENSER_05")}
               onMouseEnter={() => setHoveredItem({
                 name: "COIN_DISPENSER_05",
                 status: "SECURE_ACTIVE",
@@ -49,6 +57,7 @@ export default function GamificationNarrative() {
             {/* Achievement Badge Hexagon Group */}
             <g
               className="cursor-pointer"
+              onClick={() => handleItemClick("BADGE_CREATION_UNIT")}
               onMouseEnter={() => setHoveredItem({
                 name: "BADGE_CREATION_UNIT",
                 status: "PROVISIONED",

@@ -5,6 +5,7 @@ import "./globals.css";
 import OfflineGuard from "@/components/ui/OfflineGuard";
 
 import { I18nProvider } from "@/context/I18nContext";
+import { StageOrchestratorProvider } from "@/context/StageOrchestratorContext";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ka" className="h-full antialiased dark">
       <body className={`${outfit.variable} ${jetbrainsMono.variable} min-h-full bg-iron text-silver-light font-sans`}>
         <I18nProvider>
-          <OfflineGuard>{children}</OfflineGuard>
+          <StageOrchestratorProvider>
+            <OfflineGuard>{children}</OfflineGuard>
+          </StageOrchestratorProvider>
         </I18nProvider>
       </body>
     </html>

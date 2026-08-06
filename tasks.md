@@ -52,5 +52,9 @@
   - [x] Step 3: Wire `useI18n()` into all 9 EnneaCore node narratives & default view
   - [x] Step 4: Verify build (`npx tsc --noEmit` & `npm run build`) & commit/push to `main`
 
-
-
+- [x] **Phase 8: Bi-Directional Split-Stage Orchestration Engine (40% <-> 60%)**
+  - [x] Step 1: Create Stage Orchestrator Context (`sports-os/src/context/StageOrchestratorContext.tsx`)
+  - [x] Step 2: Connect 60% Canvas Stage (`InteractiveEnneaCore.tsx` & `CoreCanvas.tsx`)
+  - [x] Step 3: Connect 40% System Stage (`DashboardLeftPanel.tsx` & 9 Node Narratives)
+  - [x] Step 4: Wrap Dashboard Layout with `<StageOrchestratorProvider>`
+  - [x] Step 5: Verify build (`npx tsc --noEmit` & `npm run build`) & commit/push to `main`

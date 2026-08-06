@@ -12,6 +12,7 @@ import AnalyticsNarrative from "@/components/features/narratives/AnalyticsNarrat
 import SlaSecurityNarrative from "@/components/features/narratives/SlaSecurityNarrative";
 import PurgeNarrative from "@/components/features/narratives/PurgeNarrative";
 import AccessFormNarrative from "@/components/features/narratives/AccessFormNarrative";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface DashboardLeftPanelProps {
   currentDisplayNode: number;
@@ -40,7 +41,10 @@ export default function DashboardLeftPanel({
   setGateHover,
   setIsFlashActive,
 }: DashboardLeftPanelProps) {
-  switch (currentDisplayNode) {
+  const orchestrator = useStageOrchestrator();
+  const effectiveNode = (orchestrator?.activeNodeId && orchestrator.activeNodeId > 0) ? orchestrator.activeNodeId : currentDisplayNode;
+
+  switch (effectiveNode) {
     case 1:
       return (
         <FederationsNarrative

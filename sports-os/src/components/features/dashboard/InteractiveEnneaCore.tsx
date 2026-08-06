@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface InteractiveEnneaCoreProps {
   activeNode: number;
@@ -15,30 +16,36 @@ interface InteractiveEnneaCoreProps {
 
 const COLORS: Record<number, string> = { 1: "#0F52BA", 2: "#00E676", 3: "#D97736", 4: "#00E676", 5: "#D4AF37", 6: "#D4AF37", 9: "#00E676", 7: "#9CA3AF", 8: "#9CA3AF" };
 const COORDS = [
-  { x: 200, y: 50,  align: "middle" as const, tx: 200, ty: 30 },
-  { x: 350, y: 50,  align: "start" as const,  tx: 364, ty: 45 }, { x: 350, y: 200, align: "start" as const,  tx: 364, ty: 203 },
-  { x: 350, y: 350, align: "start" as const,  tx: 364, ty: 358 }, { x: 200, y: 350, align: "middle" as const, tx: 200, ty: 372 },
-  { x: 50,  y: 350, align: "end" as const,    tx: 36,  ty: 358 }, { x: 50,  y: 200, align: "end" as const,    tx: 36,  ty: 203 },
-  { x: 50,  y: 50,  align: "end" as const,    tx: 36,  ty: 45 }
+  { x: 200, y: 50, align: "middle" as const, tx: 200, ty: 30 }, { x: 350, y: 50, align: "start" as const, tx: 364, ty: 45 },
+  { x: 350, y: 200, align: "start" as const, tx: 364, ty: 203 }, { x: 350, y: 350, align: "start" as const, tx: 364, ty: 358 },
+  { x: 200, y: 350, align: "middle" as const, tx: 200, ty: 372 }, { x: 50, y: 350, align: "end" as const, tx: 36, ty: 358 },
+  { x: 50, y: 200, align: "end" as const, tx: 36, ty: 203 }, { x: 50, y: 50, align: "end" as const, tx: 36, ty: 45 }
 ];
 
 export default function InteractiveEnneaCore({
   activeNode, onNodeSelect, onNodeHover, isScaledUp = false, transitionStep = "idle", isFlashActive = false, gateHover = null
 }: InteractiveEnneaCoreProps) {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const handleLeave = () => { setHoveredNode(null); onNodeHover(null); };
-  
-  const labels = [
-    t("labels.node_1"), t("labels.node_2"), t("labels.node_3"), t("labels.node_4"),
-    t("labels.node_5"), t("labels.node_6"), t("labels.node_7"), t("labels.node_8")
-  ];
+
+  const effectiveActiveNode = orchestrator?.activeNodeId || activeNode;
+  const activeSubModuleId = orchestrator?.activeSubModuleId;
+
+  const handleSelectNode = (id: number) => {
+    if (orchestrator?.selectNode) orchestrator.selectNode(id);
+    onNodeSelect(id);
+  };
+
+  const labels = [t("labels.node_1"), t("labels.node_2"), t("labels.node_3"), t("labels.node_4"), t("labels.node_5"), t("labels.node_6"), t("labels.node_7"), t("labels.node_8")];
+
 
   const nodes = COORDS.map((coord, i) => ({
-    id: i + 1, ...coord, label: labels[i], active: activeNode === i + 1, color: COLORS[i + 1] || "#9CA3AF"
+    id: i + 1, ...coord, label: labels[i], active: effectiveActiveNode === i + 1, color: COLORS[i + 1] || "#9CA3AF"
   }));
   
-  const isCenterActive = activeNode === 9 || hoveredNode === 9;
+  const isCenterActive = effectiveActiveNode === 9 || hoveredNode === 9;
   const showOuter = transitionStep !== "sweeping" && transitionStep !== "console";
 
   return (
@@ -65,7 +72,7 @@ export default function InteractiveEnneaCore({
         </g>
 
         {/* Data Packets Flow Animation */}
-        {showOuter && gateHover === "gate_b" && nodes.map((node) => (
+        {showOuter && (gateHover === "gate_b" || Boolean(activeSubModuleId)) && nodes.map((node) => (
           <circle key={`packet-${node.id}`} r="3" fill="#00E676" className="pointer-events-none">
             <animate attributeName="cx" from="200" to={node.x} dur="1.2s" repeatCount="indefinite" />
             <animate attributeName="cy" from="200" to={node.y} dur="1.2s" repeatCount="indefinite" />
@@ -75,7 +82,7 @@ export default function InteractiveEnneaCore({
 
         {/* Node connectors */}
         {nodes.map((node) => {
-          const isActivePath = activeNode === node.id || hoveredNode === node.id;
+          const isActivePath = effectiveActiveNode === node.id || hoveredNode === node.id;
           return (
             <line
               key={`line-${node.id}`} x1="200" y1="200" x2={node.x} y2={node.y}
@@ -87,7 +94,7 @@ export default function InteractiveEnneaCore({
 
         {/* Central Core Element */}
         <g
-          onClick={() => { onNodeSelect(9); onNodeHover(9); }}
+          onClick={() => { handleSelectNode(9); onNodeHover(9); }}
           onMouseEnter={() => { setHoveredNode(9); onNodeHover(9); }}
           onMouseLeave={() => { setHoveredNode(null); onNodeHover(null); }}
           className={!showOuter ? "animate-core-grandiose" : gateHover === "gate_a" ? "animate-core-gate-a-hover" : "transition-transform duration-300"}
@@ -98,9 +105,9 @@ export default function InteractiveEnneaCore({
           {isFlashActive && <circle r="48" fill="#00E676" className="pointer-events-none animate-core-flash" />}
           
           {[38, 28].map((r) => (
-            <circle key={r} r={r} className={`fill-none stroke-[#00E676] stroke-[0.8] opacity-20 pointer-events-none ${activeNode === 9 ? "animate-pulse-fast" : "animate-pulse"}`} />
+            <circle key={r} r={r} className={`fill-none stroke-[#00E676] stroke-[0.8] opacity-20 pointer-events-none ${effectiveActiveNode === 9 ? "animate-pulse-fast" : "animate-pulse"}`} />
           ))}
-          <circle r="22" fill="none" stroke="#00E676" strokeWidth="0.8" className={`opacity-15 pointer-events-none ${activeNode === 9 ? "animate-ping-fast" : "animate-ping"}`} />
+          <circle r="22" fill="none" stroke="#00E676" strokeWidth="0.8" className={`opacity-15 pointer-events-none ${effectiveActiveNode === 9 ? "animate-ping-fast" : "animate-ping"}`} />
           
           <g className="transition-transform duration-300" style={{ transform: isCenterActive ? "scale(1.2)" : "scale(1)" }}>
             <circle r="16" className="fill-iron-surface stroke-[#00E676] stroke-[1.2] transition-colors duration-300" style={{ fillOpacity: isCenterActive ? 0.9 : 0.4 }} />
@@ -117,22 +124,17 @@ export default function InteractiveEnneaCore({
           return (
             <g
               key={node.id} transform={`translate(${node.x}, ${node.y})`}
-              onClick={() => { onNodeSelect(node.id); onNodeHover(node.id); }}
+              onClick={() => { handleSelectNode(node.id); onNodeHover(node.id); }}
               onMouseEnter={() => { setHoveredNode(node.id); onNodeHover(node.id); }}
               onMouseLeave={() => { setHoveredNode(null); onNodeHover(null); }}
               className={`transition-opacity duration-1000 ${showOuter ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             >
               <circle r="20" fill="transparent" className="cursor-pointer" />
               <circle r={isAct ? 14 : 7} fill="none" stroke={node.color} strokeWidth={isAct ? 0.8 : 0.5} className={`${isAct ? "animate-ping opacity-25" : "animate-pulse opacity-15"} pointer-events-none`} />
-              
               <g className="transition-transform duration-300" style={{ transform: isAct ? "scale(1.25)" : "scale(1)" }}>
                 <circle r="2.4" fill={isAct ? node.color : "#121418"} stroke={isAct ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct ? 1.0 : 0.4 }} className="transition-all duration-300" />
               </g>
-              <text
-                x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct ? "#F5F5F7" : "#9CA3AF"}
-                className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300 cursor-pointer"
-                style={{ fillOpacity: isAct ? 1.0 : 0.35 }}
-              >
+              <text x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct ? "#F5F5F7" : "#9CA3AF"} className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300 cursor-pointer" style={{ fillOpacity: isAct ? 1.0 : 0.35 }}>
                 {node.label}
               </text>
             </g>

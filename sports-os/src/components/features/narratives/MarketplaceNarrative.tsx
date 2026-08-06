@@ -1,9 +1,15 @@
 "use client";
 
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 export default function MarketplaceNarrative() {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
+
+  const handleModClick = (modId: string) => {
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule(modId);
+  };
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
@@ -20,17 +26,17 @@ export default function MarketplaceNarrative() {
       <div className="bg-iron-surface/40 border border-silver-structure/10 p-4 rounded flex justify-center">
         <svg viewBox="0 0 200 160" className="w-full max-w-[200px] stroke-silver-structure/20 stroke-[1] fill-none">
           {/* Module 1 */}
-          <rect x="25" y="30" width="60" height="40" rx="3" className="stroke-gold-raw/80" strokeWidth="1.2" />
-          <text x="32" y="45" className="fill-gold-raw font-mono text-[5px] stroke-none">[ MOD_SCHEDULING ]</text>
+          <rect onClick={() => handleModClick("MOD_SCHEDULING")} x="25" y="30" width="60" height="40" rx="3" className="stroke-gold-raw/80 hover:stroke-gold-raw cursor-pointer transition-colors" strokeWidth="1.2" />
+          <text x="32" y="45" className="fill-gold-raw font-mono text-[5px] stroke-none pointer-events-none">[ MOD_SCHEDULING ]</text>
           <line x1="85" y1="50" x2="115" y2="50" className="stroke-gold-raw/30 stroke-dasharray-[2_2]" />
 
           {/* Module 2 */}
-          <rect x="115" y="30" width="60" height="40" rx="3" className="stroke-gold-raw/80" strokeWidth="1.2" />
-          <text x="122" y="45" className="fill-gold-raw font-mono text-[5px] stroke-none">[ MOD_FINANCIAL ]</text>
+          <rect onClick={() => handleModClick("MOD_FINANCIAL")} x="115" y="30" width="60" height="40" rx="3" className="stroke-gold-raw/80 hover:stroke-gold-raw cursor-pointer transition-colors" strokeWidth="1.2" />
+          <text x="122" y="45" className="fill-gold-raw font-mono text-[5px] stroke-none pointer-events-none">[ MOD_FINANCIAL ]</text>
 
           {/* Module 3 */}
-          <rect x="70" y="95" width="60" height="40" rx="3" className="stroke-gold-raw/85" strokeWidth="1.5" />
-          <text x="77" y="110" className="fill-gold-raw font-mono text-[5px] stroke-none">[ CORE_TELEMETRY ]</text>
+          <rect onClick={() => handleModClick("CORE_TELEMETRY")} x="70" y="95" width="60" height="40" rx="3" className="stroke-gold-raw/85 hover:stroke-gold-raw cursor-pointer transition-colors" strokeWidth="1.5" />
+          <text x="77" y="110" className="fill-gold-raw font-mono text-[5px] stroke-none pointer-events-none">[ CORE_TELEMETRY ]</text>
           
           {/* Pin connections */}
           <circle cx="85" cy="50" r="2.5" className="fill-gold-raw" />
@@ -46,3 +52,4 @@ export default function MarketplaceNarrative() {
     </div>
   );
 }
+

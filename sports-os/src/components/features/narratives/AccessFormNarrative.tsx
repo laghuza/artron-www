@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import FederationIntakeForm from "@/components/features/narratives/FederationIntakeForm";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface AccessFormNarrativeProps {
   onCancel: () => void;
@@ -21,6 +22,7 @@ export default function AccessFormNarrative({
   onTriggerFlash
 }: AccessFormNarrativeProps) {
   const [isValidating, setIsValidating] = useState<boolean>(false);
+  const orchestrator = useStageOrchestrator();
 
   const handleIntakeComplete = () => {
     setIsValidating(true);
@@ -70,6 +72,7 @@ export default function AccessFormNarrative({
             onMouseLeave={() => onHoverGate(null)}
             onClick={() => {
               onHoverGate(null);
+              if (orchestrator?.selectSubModule) orchestrator.selectSubModule("gate_a");
               onTabChange("login");
             }}
             className="border border-silver-structure/15 bg-iron-surface/30 hover:bg-emerald-core/5 hover:border-emerald-core/40 p-4 rounded cursor-pointer transition-all duration-300 group"
@@ -88,7 +91,10 @@ export default function AccessFormNarrative({
           <div
             onMouseEnter={() => onHoverGate("gate_b")}
             onMouseLeave={() => onHoverGate(null)}
-            onClick={() => onTabChange("request")}
+            onClick={() => {
+              if (orchestrator?.selectSubModule) orchestrator.selectSubModule("gate_b");
+              onTabChange("request");
+            }}
             className="border border-silver-structure/15 bg-iron-surface/30 hover:bg-emerald-core/5 hover:border-emerald-core/40 p-4 rounded cursor-pointer transition-all duration-300 group"
           >
             <div className="font-mono text-[10px] text-emerald-core/70 tracking-[0.16em] mb-0.5 group-hover:text-emerald-core transition-colors">

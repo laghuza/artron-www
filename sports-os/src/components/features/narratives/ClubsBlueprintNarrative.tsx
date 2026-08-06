@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import { useI18n } from "@/context/I18nContext";
+import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 interface NodeData {
   id: string;
@@ -31,12 +32,21 @@ const BLUEPRINT_DEVICES: NodeData[] = [
 
 export default function ClubsBlueprintNarrative({ onBack, onSelectSubItem }: ClubsBlueprintNarrativeProps) {
   const { t } = useI18n();
+  const orchestrator = useStageOrchestrator();
   const [selectedNode, setSelectedNode] = useState<NodeData>(BLUEPRINT_DEVICES[0]);
   const [hoveredNode, setHoveredNode] = useState<NodeData | null>(null);
+
+  useEffect(() => {
+    if (orchestrator?.activeSubModuleId) {
+      const found = BLUEPRINT_DEVICES.find((d) => d.id === orchestrator.activeSubModuleId);
+      if (found) setSelectedNode(found);
+    }
+  }, [orchestrator?.activeSubModuleId]);
 
   const handleSelectDevice = (node: NodeData) => {
     audioManager.playClick();
     setSelectedNode(node);
+    if (orchestrator?.selectSubModule) orchestrator.selectSubModule(node.id);
     if (onSelectSubItem) {
       onSelectSubItem({
         id: node.id,
@@ -56,6 +66,7 @@ export default function ClubsBlueprintNarrative({ onBack, onSelectSubItem }: Clu
       });
     }
   };
+
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn">
