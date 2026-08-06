@@ -72,8 +72,8 @@
   - [x] Step 3: Refine responsive EnneaCore 9-node canvas for mobile viewports
   - [x] Step 4: Verify build (`npx tsc --noEmit` & `npm run build`) & commit/push to `main`
 
-- [/] **Phase 9.3: Desktop Logo Popover & Native Mobile App HUD Drawer**
-  - [ ] Step 1: Implement `DesktopLogoMenu.tsx` popover (< 80 lines)
-  - [ ] Step 2: Overhaul `ArtronCyberMenu.tsx` native mobile HUD drawer (< 120 lines)
-  - [ ] Step 3: Integrate into `SplitCoreDashboard.tsx`
-  - [ ] Step 4: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub
+- [x] **Phase 9.3: Desktop Logo Popover & Native Mobile App HUD Drawer**
+  - [x] Step 1: Implement `DesktopLogoMenu.tsx` popover (< 80 lines)
+  - [x] Step 2: Overhaul `ArtronCyberMenu.tsx` native mobile HUD drawer (< 120 lines)
+  - [x] Step 3: Integrate into `SplitCoreDashboard.tsx`
+  - [x] Step 4: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub
