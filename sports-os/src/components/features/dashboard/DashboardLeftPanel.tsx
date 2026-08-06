@@ -44,55 +44,63 @@ export default function DashboardLeftPanel({
   const orchestrator = useStageOrchestrator();
   const effectiveNode = (orchestrator?.activeNodeId && orchestrator.activeNodeId > 0) ? orchestrator.activeNodeId : currentDisplayNode;
 
-  switch (effectiveNode) {
-    case 1:
-      return (
-        <FederationsNarrative
-          onBack={() => handleNodeSelect(0)}
-          onSelectSubItem={setSelectedSubItem}
-          selectedSubId={selectedSubItem?.id}
-        />
-      );
-    case 2:
-      return (
-        <ClubsBlueprintNarrative
-          onBack={() => handleNodeSelect(0)}
-          onSelectSubItem={setSelectedSubItem}
-          selectedSubId={selectedSubItem?.id}
-        />
-      );
-    case 3:
-      return (
-        <ProfessionalsModulesNarrative
-          onBack={() => handleNodeSelect(0)}
-          onSelectSubItem={setSelectedSubItem}
-        />
-      );
-    case 4: return <MobileOSNarrative />;
-    case 5: return <GamificationNarrative />;
-    case 6: return <MarketplaceNarrative />;
-    case 7: return <AnalyticsNarrative />;
-    case 8:
-      return purgeState === "none" ? (
-        <SlaSecurityNarrative onDataPurgeTrigger={() => setPurgeState("selection")} />
-      ) : (
-        <PurgeNarrative purgeState={purgeState} setPurgeState={setPurgeState} />
-      );
-    case 9:
-      return (
-        <AccessFormNarrative
-          onCancel={() => handleNodeSelect(0)}
-          onSubmitting={handleTriggerScan}
-          onTabChange={handleAccessTabChange}
-          accessTab={accessTab}
-          onHoverGate={setGateHover}
-          onTriggerFlash={() => {
-            setIsFlashActive(true);
-            setTimeout(() => setIsFlashActive(false), 900);
-          }}
-        />
-      );
-    default:
-      return <DefaultNarrative onRequestAccess={() => handleNodeSelect(9)} />;
-  }
+  const renderNarrative = () => {
+    switch (effectiveNode) {
+      case 1:
+        return (
+          <FederationsNarrative
+            onBack={() => handleNodeSelect(0)}
+            onSelectSubItem={setSelectedSubItem}
+            selectedSubId={selectedSubItem?.id}
+          />
+        );
+      case 2:
+        return (
+          <ClubsBlueprintNarrative
+            onBack={() => handleNodeSelect(0)}
+            onSelectSubItem={setSelectedSubItem}
+            selectedSubId={selectedSubItem?.id}
+          />
+        );
+      case 3:
+        return (
+          <ProfessionalsModulesNarrative
+            onBack={() => handleNodeSelect(0)}
+            onSelectSubItem={setSelectedSubItem}
+          />
+        );
+      case 4: return <MobileOSNarrative />;
+      case 5: return <GamificationNarrative />;
+      case 6: return <MarketplaceNarrative />;
+      case 7: return <AnalyticsNarrative />;
+      case 8:
+        return purgeState === "none" ? (
+          <SlaSecurityNarrative onDataPurgeTrigger={() => setPurgeState("selection")} />
+        ) : (
+          <PurgeNarrative purgeState={purgeState} setPurgeState={setPurgeState} />
+        );
+      case 9:
+        return (
+          <AccessFormNarrative
+            onCancel={() => handleNodeSelect(0)}
+            onSubmitting={handleTriggerScan}
+            onTabChange={handleAccessTabChange}
+            accessTab={accessTab}
+            onHoverGate={setGateHover}
+            onTriggerFlash={() => {
+              setIsFlashActive(true);
+              setTimeout(() => setIsFlashActive(false), 900);
+            }}
+          />
+        );
+      default:
+        return <DefaultNarrative onRequestAccess={() => handleNodeSelect(9)} />;
+    }
+  };
+
+  return (
+    <div className="w-full max-w-full overflow-y-auto overflow-x-hidden scrollbar-thin">
+      {renderNarrative()}
+    </div>
+  );
 }
