@@ -92,11 +92,9 @@
   - [x] Step 3: Pixel-align 60% Stage HUD Overlay & 40% Control Panel Cyber Accordion buttons with vivid `#00ff87` indicators
   - [x] Step 4: Verify build (`npx tsc --noEmit` & `npm run build`) & enforce strict < 150 lines per component
 
-- [ ] **Phase 10.3: Artron Design System Directive Alignment — Monochromatic + Single Emerald Core**
-  - [ ] Step 1: Update `globals.css` and `BRANDBOOK.md` to strictly enforce `#121418` background, `#1A1D23` surfaces, 1px `#9CA3AF` borders, flat 4px/6px micro-radius, and single `#00E676` emerald accent (< 3% area).
-  - [ ] Step 2: Audit and refactor dashboard, navigation, and narrative components to purge gradient fills, multi-color badges, and heavy colorful glow shadows.
-  - [ ] Step 3: Execute full verification (`npx tsc --noEmit` & `npm run build`) and ensure component line count compliance (< 150 lines).
-
-
-
-
+- [x] **Phase 10.4: Spotify/PlayStation-Grade Enterprise Foundation**
+  - [x] Step 1: Implement Multi-Role RBAC Portal Matrix (`sports-os/src/config/rbac.config.ts`)
+  - [x] Step 2: Implement Visual Effects Registry (`sports-os/src/config/effects.config.ts`)
+  - [x] Step 3: Implement Immersive Onboarding Engine (`sports-os/src/features/onboarding/OnboardingStateMachine.ts`)
+  - [x] Step 4: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+  - [x] Step 5: Git commit & push updates to `main`
