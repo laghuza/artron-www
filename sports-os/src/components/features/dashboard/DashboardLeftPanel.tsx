@@ -14,6 +14,12 @@ import PurgeNarrative from "@/components/features/narratives/PurgeNarrative";
 import AccessFormNarrative from "@/components/features/narratives/AccessFormNarrative";
 import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
+import { getNodeConfig } from "@/config/node-registry.config";
+import { FederationGovernanceStage } from "@/features/federations";
+import { ClubOperationsStage } from "@/features/clubs";
+import { EdgeTelemetryStage } from "@/features/telemetry";
+import { AthleteStageView } from "@/features/athletes";
+
 interface DashboardLeftPanelProps {
   currentDisplayNode: number;
   handleNodeSelect: (index: number) => void;
@@ -43,33 +49,49 @@ export default function DashboardLeftPanel({
 }: DashboardLeftPanelProps) {
   const orchestrator = useStageOrchestrator();
   const effectiveNode = currentDisplayNode || orchestrator?.activeNodeId || 0;
+  const nodeConfig = getNodeConfig(effectiveNode);
 
   const renderNarrative = () => {
     switch (effectiveNode) {
       case 1:
         return (
-          <Node01CrmNarrative
-            onBack={() => handleNodeSelect(0)}
-            onSelectSubItem={(item) => setSelectedSubItem(item as unknown as SubItemData)}
-            selectedSubId={selectedSubItem?.id}
-          />
+          <div className="space-y-4">
+            <Node01CrmNarrative
+              onBack={() => handleNodeSelect(0)}
+              onSelectSubItem={(item) => setSelectedSubItem(item as unknown as SubItemData)}
+              selectedSubId={selectedSubItem?.id}
+            />
+            <FederationGovernanceStage onBack={() => handleNodeSelect(0)} />
+          </div>
         );
       case 2:
         return (
-          <ClubsBlueprintNarrative
-            onBack={() => handleNodeSelect(0)}
-            onSelectSubItem={setSelectedSubItem}
-            selectedSubId={selectedSubItem?.id}
-          />
+          <div className="space-y-4">
+            <ClubsBlueprintNarrative
+              onBack={() => handleNodeSelect(0)}
+              onSelectSubItem={setSelectedSubItem}
+              selectedSubId={selectedSubItem?.id}
+            />
+            <ClubOperationsStage onBack={() => handleNodeSelect(0)} />
+          </div>
         );
       case 3:
         return (
-          <ProfessionalsModulesNarrative
-            onBack={() => handleNodeSelect(0)}
-            onSelectSubItem={setSelectedSubItem}
-          />
+          <div className="space-y-4">
+            <ProfessionalsModulesNarrative
+              onBack={() => handleNodeSelect(0)}
+              onSelectSubItem={setSelectedSubItem}
+            />
+            <EdgeTelemetryStage onBack={() => handleNodeSelect(0)} />
+          </div>
         );
-      case 4: return <MobileOSNarrative />;
+      case 4:
+        return (
+          <div className="space-y-4">
+            <MobileOSNarrative />
+            <AthleteStageView onBack={() => handleNodeSelect(0)} />
+          </div>
+        );
       case 5: return <GamificationNarrative />;
       case 6: return <MarketplaceNarrative />;
       case 7: return <AnalyticsNarrative />;
