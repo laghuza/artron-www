@@ -11,9 +11,14 @@ export * from './registry/node-registry.config';
 export * from './theme/theme.config';
 export * from './adapters/node-content';
 export * from './security/env';
+export * from './security/audit.logger';
+export * from './schemas/sports.schemas';
 export * from './sports/sports.taxonomy';
 export * from './i18n/i18n.registry';
 export * from './branding/branding.tokens';
 export * from './hooks/useSportsTaxonomy';
+export * from './hooks/useTelemetryProcessor';
 export * from '../components/ui/CyberButton';
 export * from '../components/ui/SportsSelect';
+export * from '../components/ui/CyberErrorBoundary';
+
