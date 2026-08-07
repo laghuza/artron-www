@@ -1,6 +1,6 @@
 /**
  * ARTRON SPORTS OS // WEB AUDIO API SOUND SYNTHESIS ENGINE
- * Generates subtle, futuristic Sci-Fi UI sound effects without external assets.
+ * High-tech, subtle, tactile Sci-Fi UI audio feedback (PlayStation-grade haptic click).
  */
 
 class SoundEngine {
@@ -23,6 +23,9 @@ class SoundEngine {
     this.isMuted = muted;
   }
 
+  /**
+   * Deep, subtle tactile Sci-Fi haptic pulse (Plays ONLY on user click).
+   */
   public playPulseNode() {
     if (this.isMuted) return;
     this.initCtx();
@@ -31,20 +34,24 @@ class SoundEngine {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
+    // Deep sub-frequency sine pulse dropping smoothly (140Hz -> 50Hz)
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
+    osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + 0.04);
 
-    gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.08);
+    osc.stop(this.ctx.currentTime + 0.04);
   }
 
+  /**
+   * Elegant system activation chime for main CTA action click.
+   */
   public playSystemAccess() {
     if (this.isMuted) return;
     this.initCtx();
@@ -53,18 +60,18 @@ class SoundEngine {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.18);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, this.ctx.currentTime + 0.07);
 
-    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.18);
+    gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.07);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.18);
+    osc.stop(this.ctx.currentTime + 0.07);
   }
 }
 

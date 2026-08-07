@@ -27,8 +27,8 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({ nodes: _n, activeNodeId,
 
   const handleNodeHover = (id: number) => {
     setHoveredNode(id);
-    soundEngine.playPulseNode();
   };
+
 
   const handleNodeSelect = (id: number) => {
     soundEngine.playPulseNode();

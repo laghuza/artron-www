@@ -69,9 +69,10 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
               <h1 className="tracking-tight text-white uppercase font-extrabold text-[36px] lg:text-[42px] leading-[1.05] mb-2 font-sans">
                 ARTRON<br />SPORTS OS
               </h1>
-              <p className="font-mono text-[13px] text-[#00E5FF] mb-4 tracking-wider">
+              <p className="font-mono text-[12px] text-[#9CA3AF]/65 mb-4 tracking-widest uppercase border-l-2 border-[#9CA3AF]/30 pl-2.5">
                 {lang === 'KA' ? '« ყველას მოკავშირე, არავის მეგობარი »' : '« Ally of all, friend of none »'}
               </p>
+
               <div className="border-b border-white/10 mb-5" />
               <p className="font-sans text-[14px] leading-[1.7] text-[#C2C7D0]">
                 {lang === 'KA'
