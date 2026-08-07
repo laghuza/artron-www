@@ -20,7 +20,7 @@ import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
 export default function SplitCoreDashboard() {
   const router = useRouter();
-  const { mobileStage, setMobileStage } = useStageOrchestrator();
+  const { mobileStage, setMobileStage, selectNode } = useStageOrchestrator();
   const [activeNode, setActiveNode] = useState<number>(0);
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const [scanTrigger, setScanTrigger] = useState<number>(0);
@@ -42,6 +42,7 @@ export default function SplitCoreDashboard() {
   const handleNodeSelect = (index: number) => {
     audioManager.playHapticClick();
     setActiveNode(index);
+    if (selectNode) selectNode(index);
     setSelectedSubItem(null);
     if (index === 9) setAccessTab("choice");
     setMobileStage("system");
@@ -50,11 +51,11 @@ export default function SplitCoreDashboard() {
 
   return (
     <div className={`relative h-screen w-screen max-h-screen max-w-screen overflow-hidden flex flex-col lg:flex-row select-none transition-all duration-[1000ms] ease-expo-out box-border ${
-      (transitionStep === "sweeping" || transitionStep === "console") ? "bg-black" : transitionStep === "zooming" ? "bg-[#090A0C]" : "bg-iron schematic-grid"
+      (transitionStep === "sweeping" || transitionStep === "console" || transitionStep === "zooming") ? "bg-[#121418]" : "bg-iron schematic-grid"
     }`}>
       <MuteAudioButton isMuted={isMuted} transitionStep={transitionStep} />
       <LanguageToggle />
-      <ArtronCyberMenu isMuted={isMuted} transitionStep={transitionStep} onDataPurgeTrigger={() => { setActiveNode(8); setPurgeState("selection"); setMobileStage("system"); }} />
+      <ArtronCyberMenu isMuted={isMuted} transitionStep={transitionStep} onDataPurgeTrigger={() => { handleNodeSelect(8); setPurgeState("selection"); }} />
       <ScanLine trigger={scanTrigger} />
       <MobileStageDock />
       <div className={`fade-to-black-overlay ${isFadeToBlack ? "active" : ""}`} />
@@ -65,12 +66,12 @@ export default function SplitCoreDashboard() {
         </div>
       )}
 
-      <div className={`h-full flex flex-col justify-center relative overflow-hidden transition-all duration-[1000ms] ease-expo-out bg-[#1A1D23]/55 box-border ${
+      <div className={`h-full flex flex-col justify-center relative overflow-hidden transition-all duration-[1000ms] ease-expo-out bg-[#1A1D23]/60 box-border ${
         transitionStep !== "idle"
           ? "w-0 opacity-0 px-0 py-0 border-r-0 pointer-events-none"
-          : `${mobileStage === "system" ? "w-full flex" : "hidden lg:flex"} lg:w-[40%] px-4 sm:px-8 lg:px-12 py-6 lg:py-16 border-r border-[rgba(156,163,175,0.12)] backdrop-blur-[24px]`
+          : `${mobileStage === "system" ? "w-full flex" : "hidden lg:flex"} lg:w-[40%] px-4 sm:px-8 lg:px-10 py-6 lg:py-16 border-r border-[rgba(156,163,175,0.18)] backdrop-blur-[12px]`
       }`}>
-        <div className="max-w-sm mx-auto w-full overflow-y-auto max-h-full scrollbar-thin">
+        <div className="max-w-md mx-auto w-full overflow-y-auto max-h-full scrollbar-thin">
           {transitionStep === "idle" && (
             <DashboardLeftPanel
               currentDisplayNode={currentDisplayNode}
@@ -115,7 +116,7 @@ export default function SplitCoreDashboard() {
         />
       </div>
 
-      {transitionStep === "idle" && <SystemRegistryFooter onDataPurgeTrigger={() => { setActiveNode(8); setPurgeState("selection"); setMobileStage("system"); }} />}
+      {transitionStep === "idle" && <SystemRegistryFooter onDataPurgeTrigger={() => { handleNodeSelect(8); setPurgeState("selection"); }} />}
     </div>
   );
 }

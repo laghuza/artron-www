@@ -7,37 +7,25 @@
 
 @theme {
   /* ==========================================
-     MINERAL PALETTE (With Aliases for Legacy Classes)
+     MONOCHROMATIC + SINGLE EMERALD CORE PALETTE
      ========================================== */
   
   /* Base & Surfaces */
   --color-base-iron: #121418;
   --color-iron: #121418;
-  --color-iron-surface: #16191e; /* Used in EnneaCore for node surface background */
+  --color-iron-surface: #1A1D23;
 
-  /* Emerald Core Accents */
+  /* Emerald Core Accent (Single Core, < 3% Screen Area) */
   --color-signal-emerald: #00E676;
-  --color-emerald-core: #00E676;   /* Alias to map with legacy text-emerald-core & fill-emerald-core */
+  --color-emerald-core: #00E676;
 
-  /* Sapphire Accents */
-  --color-signal-sapphire: #0F52BA;
-
-  /* Gold Accents */
-  --color-signal-gold: #D4AF37;
-
-  /* Copper Accents */
-  --color-signal-copper: #D97736;
-
-  /* Ruby/Lava Accents */
-  --color-signal-ruby: #FF3D00;
-
-  /* Structural Colors */
+  /* Structural & Border Colors */
   --color-structure-silver: #9CA3AF;
-  --color-silver-structure: #9CA3AF; /* Alias to map with text-silver-structure & stroke-silver-structure */
+  --color-silver-structure: #9CA3AF;
 
   /* Typography */
-  --color-typography-bone: #F5F5F7;
-  --color-bone-light: #F5F5F7;       /* Alias to map with text-bone-light */
+  --color-typography-bone: #F5F5F3;
+  --color-bone-light: #F5F5F3;
 
   /* Typography System Fonts */
   --font-sans: "Outfit", "FiraGO", sans-serif;
@@ -74,13 +62,13 @@ body > div:first-child {
   scrollbar-width: none;
 }
 
-/* Schematic Grid Background with Ambient Vignette */
+/* Architectural 1px Grid Background with Ambient Vignette */
 .schematic-grid {
   background-size: 40px 40px, 40px 40px, 100% 100%;
   background-image: 
-    linear-gradient(to right, rgba(156, 163, 175, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(156, 163, 175, 0.04) 1px, transparent 1px),
-    radial-gradient(circle at center, #16191e 0%, #121418 80%);
+    linear-gradient(to right, rgba(156, 163, 175, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(156, 163, 175, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at center, #1A1D23 0%, #121418 80%);
 }
 
 /* Blinking cursor */
@@ -164,19 +152,19 @@ h4.uppercase {
   animation: ping-fast 0.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-/* Cinematic Radial Sweep Effect */
+/* Cinematic Radial Sweep Effect (Max blur capped at 8px) */
 @keyframes radial-sweep {
   0% {
     width: 0px;
     height: 0px;
     opacity: 0.9;
-    box-shadow: 0 0 30px 10px rgba(0, 230, 118, 0.6), inset 0 0 20px 5px rgba(0, 230, 118, 0.4);
+    box-shadow: 0 0 8px 2px rgba(0, 230, 118, 0.4), inset 0 0 8px 2px rgba(0, 230, 118, 0.2);
   }
   100% {
     width: 2500px;
     height: 2500px;
     opacity: 0;
-    box-shadow: 0 0 120px 40px rgba(0, 230, 118, 0), inset 0 0 100px 30px rgba(0, 230, 118, 0);
+    box-shadow: 0 0 8px 2px rgba(0, 230, 118, 0), inset 0 0 8px 2px rgba(0, 230, 118, 0);
   }
 }
 .radial-sweep-ring {
@@ -185,8 +173,8 @@ h4.uppercase {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 1px solid rgba(0, 230, 118, 0.35);
-  background: radial-gradient(circle, rgba(0, 230, 118, 0.08) 0%, transparent 75%);
+  border: 1px solid rgba(0, 230, 118, 0.25);
+  background: radial-gradient(circle, rgba(0, 230, 118, 0.04) 0%, transparent 75%);
   pointer-events: none;
   z-index: 10;
   animation: radial-sweep 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -196,10 +184,10 @@ h4.uppercase {
 .line-input-core {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(156, 163, 175, 0.2);
+  border-bottom: 1px solid rgba(156, 163, 175, 0.18);
   border-radius: 0;
   padding: 8px 0;
-  color: #fff;
+  color: #F5F5F3;
   outline: none;
   transition: border-bottom-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -210,10 +198,10 @@ h4.uppercase {
 .line-input-centered {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(192, 192, 192, 0.35); /* 1px Antique Silver style */
+  border-bottom: 1px solid rgba(156, 163, 175, 0.18);
   border-radius: 0;
   padding: 8px 0;
-  color: #fff;
+  color: #F5F5F3;
   outline: none;
   text-align: center;
   font-family: var(--font-mono);
@@ -228,7 +216,7 @@ h4.uppercase {
   box-shadow: 0 1px 0 0 #00E676;
 }
 .line-input-centered::placeholder {
-  color: rgba(192, 192, 192, 0.25);
+  color: rgba(156, 163, 175, 0.4);
   text-align: center;
 }
 
@@ -236,7 +224,7 @@ h4.uppercase {
 .fade-to-black-overlay {
   position: fixed;
   inset: 0;
-  background: #000000;
+  background: #121418;
   z-index: 9999;
   pointer-events: none;
   opacity: 0;
@@ -250,7 +238,7 @@ h4.uppercase {
 @keyframes core-flash {
   0% {
     transform: scale(1);
-    filter: brightness(3);
+    filter: brightness(2);
     opacity: 1;
   }
   100% {
@@ -263,15 +251,15 @@ h4.uppercase {
   animation: core-flash 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Grandiose Core Pulsation */
+/* Core Pulsation (Max blur capped at 8px) */
 @keyframes core-grandiose-pulse {
   0%, 100% {
     transform: translate(200px, 200px) scale(1);
-    filter: drop-shadow(0 0 12px rgba(0, 230, 118, 0.3));
+    filter: drop-shadow(0 0 4px rgba(0, 230, 118, 0.3));
   }
   50% {
     transform: translate(200px, 200px) scale(1.22);
-    filter: drop-shadow(0 0 35px rgba(0, 230, 118, 0.85));
+    filter: drop-shadow(0 0 8px rgba(0, 230, 118, 0.6));
   }
 }
 .animate-core-grandiose {
@@ -283,11 +271,11 @@ h4.uppercase {
 @keyframes gate-a-pulse {
   0%, 100% {
     transform: translate(200px, 200px) scale(1);
-    filter: drop-shadow(0 0 12px rgba(0, 230, 118, 0.3));
+    filter: drop-shadow(0 0 4px rgba(0, 230, 118, 0.3));
   }
   50% {
     transform: translate(200px, 200px) scale(1.16);
-    filter: drop-shadow(0 0 30px rgba(0, 230, 118, 0.8));
+    filter: drop-shadow(0 0 8px rgba(0, 230, 118, 0.6));
   }
 }
 .animate-core-gate-a-hover {
@@ -304,6 +292,23 @@ h4.uppercase {
   display: inline-flex;
   animation: telemetry-marquee 35s linear infinite;
 }
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.footer-ticker-wrapper {
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.ticker-content {
+  display: inline-flex;
+  animation: marquee 20s linear infinite;
+}
+
 
 /* Audio Wave Visualizer Styles */
 .audio-wave {
@@ -340,3 +345,27 @@ h4.uppercase {
     height: 10px;
   }
 }
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.artron-footer-ticker {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+

@@ -72,8 +72,31 @@
   - [x] Step 3: Refine responsive EnneaCore 9-node canvas for mobile viewports
   - [x] Step 4: Verify build (`npx tsc --noEmit` & `npm run build`) & commit/push to `main`
 
-- [x] **Phase 9.3: Desktop Logo Popover & Native Mobile App HUD Drawer**
+- [x] Phase 9.3: Desktop Logo Popover & Native Mobile App HUD Drawer
   - [x] Step 1: Implement `DesktopLogoMenu.tsx` popover (< 80 lines)
   - [x] Step 2: Overhaul `ArtronCyberMenu.tsx` native mobile HUD drawer (< 120 lines)
   - [x] Step 3: Integrate into `SplitCoreDashboard.tsx`
   - [x] Step 4: Verify Build (`npx tsc --noEmit` & `npm run build`) & Commit/Push to GitHub
+
+- [x] **Phase 10.1: Node 01 Overhaul — Athlete 360° Profile & Legal Compliance CRM**
+  - [x] Step 1: Update `ge.json` & `en.json` dictionaries with `node_01_crm` translations
+  - [x] Step 2: Update `InteractiveEnneaCore.tsx` node blurring (`blur-sm` / opacity `0.25`) & emerald glow focus for Node 01
+  - [x] Step 3: Create `Node01CrmNarrative.tsx` 40% Left Panel control accordion (5 cyber-chips)
+  - [x] Step 4: Create `Node01CrmStageCard.tsx` 60% Stage 3-part card presentation (Functional, Permissions, Business Value)
+  - [x] Step 5: Wire bi-directional sync into `DashboardLeftPanel.tsx` & `DashboardMainStage.tsx`
+  - [x] Step 6: Verify build (`npx tsc --noEmit` & `npm run build`) & commit changes
+
+- [x] **Phase 10.2: Node 01 Master Directive Repair — Canvas Hitbox, i18n Audit & Visual Alignment**
+  - [x] Step 1: Fix SVG Canvas Hover Coordinate Offset & Hitbox in `InteractiveEnneaCore.tsx`
+  - [x] Step 2: Perform full i18n audit for `node_01_crm` in `ge.json` & `en.json` & wire `useI18n()` into `Node01CrmStageCard.tsx`
+  - [x] Step 3: Pixel-align 60% Stage HUD Overlay & 40% Control Panel Cyber Accordion buttons with vivid `#00ff87` indicators
+  - [x] Step 4: Verify build (`npx tsc --noEmit` & `npm run build`) & enforce strict < 150 lines per component
+
+- [ ] **Phase 10.3: Artron Design System Directive Alignment — Monochromatic + Single Emerald Core**
+  - [ ] Step 1: Update `globals.css` and `BRANDBOOK.md` to strictly enforce `#121418` background, `#1A1D23` surfaces, 1px `#9CA3AF` borders, flat 4px/6px micro-radius, and single `#00E676` emerald accent (< 3% area).
+  - [ ] Step 2: Audit and refactor dashboard, navigation, and narrative components to purge gradient fills, multi-color badges, and heavy colorful glow shadows.
+  - [ ] Step 3: Execute full verification (`npx tsc --noEmit` & `npm run build`) and ensure component line count compliance (< 150 lines).
+
+
+
+

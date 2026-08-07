@@ -77,3 +77,36 @@ export interface NodeAdapterContract {
   config: NodeContentConfig;
   responsiveBreakpoint: 'sm' | 'md' | 'lg' | 'xl';
 }
+
+export interface CrmSubItem {
+  id: string;
+  label: string;
+  functional_desc: string;
+  permissions: string;
+  business_value: string;
+}
+
+export interface Node01CrmData {
+  title: string;
+  short_desc: string;
+  back_button: string;
+  section_functional?: string;
+  section_permissions?: string;
+  section_business?: string;
+  hint_chip_select?: string;
+  status_validated?: string;
+  sub_items: CrmSubItem[];
+}
+
+export const NODE_SIGNATURE_COLORS: Record<number, string> = {
+  1: "#00FF87", // Node 01 (CRM): Emerald Neon
+  2: "#00E5FF", // Node 02 (Clubs): Cyan Teal
+  3: "#3B82F6", // Node 03 (Professionals): Electric Indigo
+  4: "#A855F7", // Node 04 (Mobile OS): Neon Purple
+  5: "#F59E0B", // Node 05 (Coins & Badges): Cyber Gold
+  6: "#F43F5E", // Node 06 (Marketplace): Neon Crimson
+  7: "#10B981", // Node 07 (Telemetry): Mint Green
+  8: "#F97316", // Node 08 (Security & SLA): Cyber Orange
+  9: "#00FF87", // Node 09 (Core Init): Central Emerald
+};
+

@@ -10,7 +10,7 @@ interface I18nContextType {
   lang: Language;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
-  t: (key: string) => string;
+  t: (key: string) => any;
 }
 
 const dictionaries: Record<Language, Record<string, any>> = {
@@ -45,7 +45,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     setLang(lang === "GE" ? "EN" : "GE");
   };
 
-  const t = (key: string): string => {
+  const t = (key: string): any => {
     const keys = key.split(".");
     let current: any = dictionaries[lang];
     for (const k of keys) {
@@ -60,10 +60,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
             return key;
           }
         }
-        return typeof fallback === "string" ? fallback : key;
+        return fallback !== undefined ? fallback : key;
       }
     }
-    return typeof current === "string" ? current : key;
+    return current !== undefined ? current : key;
   };
 
   return (

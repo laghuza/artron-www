@@ -4,23 +4,30 @@
 
 ---
 
-## SECTION 1: MINERAL COLOR TOKENS & SEMANTIC ROLES
+## SECTION 1: MONOCHROMATIC + SINGLE EMERALD CORE PALETTE
 
-Artron utilizes a mathematically balanced **60-15-30 usage law** based on a mineral palette to ensure visual hierarchy and cognitive ease.
+Artron enforces a strict **Monochromatic Canvas + Single Emerald Core Accent** law for visual precision and noise elimination.
 
-### Base Background (60%)
-- **Forged Iron (`#121418`)**: Stable, dark industrial base. The foundational layer of the OS.
+### 1. Base Canvas (Primary Background)
+- **Forged Iron (`#121418`)**: ONLY background canvas color allowed across all screens and stages.
 
-### Structures & Typography (30%)
-- **Clean Bone (`#F5F5F7`)**: Main readable value text. Used for primary headings, body text, and active values.
-- **Antique Silver (`#9CA3AF`)**: Structural wireframes, muted labels, typographic brackets, and inactive structural elements.
+### 2. Surface & Card Containers
+- **Iron-2 Surface (`#1A1D23`)**: Container and card background surface, or `rgba(26, 29, 35, 0.6)` with `backdrop-filter: blur(12px)`.
+- **Card Borders**: `1px solid rgba(156, 163, 175, 0.18)` (`#9CA3AF`). Saturated or colorful borders are FORBIDDEN.
 
-### Signal Accents (15%)
-- **Emerald (`#00E676`)**: Core active signals, hover states, telemetry success, and affirmative interactions.
-- **Sapphire (`#0F52BA`)**: Trust, institutional strength. Primary color for Federation Node 01.
-- **Raw Gold (`#D4AF37`)**: Premium status, external B2B APIs, and high-value integration markers.
-- **Oxidized Copper (`#D97736`)**: Hardware IoT interfaces, biometric tags, and external device telemetry.
-- **Lava / Ruby (`#FF3D00`)**: Critical alerts, deauthorization, system errors, and destructive actions.
+### 3. Typography & Micro-Borders
+- **Primary Text (`#F5F5F3` / `#9CA3AF`)**: Clean bone white and architectural silver.
+- **Muted Meta (`#6B7280`)**: Secondary status and technical tags.
+
+### 4. Single Accent Core (Emerald Core)
+- **Emerald (`#00E676`) ONLY**: Must cover LESS THAN 3% of total screen area. Reserved exclusively for:
+  - Active status node indicators.
+  - Primary CTA button text / 1px border highlight.
+  - Central telemetry focal point on EnneaCore canvas.
+
+### 5. Forbidden Visual Artifacts
+- **FORBIDDEN**: Multi-color badges (blue, purple, orange, red), bright card backgrounds, soft colorful glow blobs, and gradient fills (`from-`, `to-`, `via-`).
+- **NOISE CONTROL**: Box shadows capped at max 8px emerald glow on central active core elements ONLY. All hover/active states rely on 1px border highlights or `#232730` background steps.
 
 ---
 

@@ -2,7 +2,7 @@
 
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
 import DefaultNarrative from "@/components/features/narratives/DefaultNarrative";
-import FederationsNarrative from "@/components/features/narratives/FederationsNarrative";
+import Node01CrmNarrative from "@/components/features/narratives/Node01CrmNarrative";
 import ClubsBlueprintNarrative from "@/components/features/narratives/ClubsBlueprintNarrative";
 import ProfessionalsModulesNarrative from "@/components/features/narratives/ProfessionalsModulesNarrative";
 import MobileOSNarrative from "@/components/features/narratives/MobileOSNarrative";
@@ -42,15 +42,15 @@ export default function DashboardLeftPanel({
   setIsFlashActive,
 }: DashboardLeftPanelProps) {
   const orchestrator = useStageOrchestrator();
-  const effectiveNode = (orchestrator?.activeNodeId && orchestrator.activeNodeId > 0) ? orchestrator.activeNodeId : currentDisplayNode;
+  const effectiveNode = currentDisplayNode || orchestrator?.activeNodeId || 0;
 
   const renderNarrative = () => {
     switch (effectiveNode) {
       case 1:
         return (
-          <FederationsNarrative
+          <Node01CrmNarrative
             onBack={() => handleNodeSelect(0)}
-            onSelectSubItem={setSelectedSubItem}
+            onSelectSubItem={(item) => setSelectedSubItem(item as unknown as SubItemData)}
             selectedSubId={selectedSubItem?.id}
           />
         );

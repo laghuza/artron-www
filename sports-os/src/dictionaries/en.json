@@ -35,8 +35,12 @@
     "scan": "SCAN",
     "ghost_trigger": "GHOST_TRIGGER"
   },
+  "dashboard": {
+    "system_tagline": "EnneaCore 9-Node Athletic Operating System",
+    "default_narrative": "Artron Sports OS is an innovative EnneaCore 9-node athletic platform unifying federations, clubs, coaches, and athletes into a single digital ecosystem."
+  },
   "labels": {
-    "node_1": "01 // FEDERATIONS",
+    "node_1": "01 // ATHLETE 360° CRM",
     "node_2": "02 // CLUBS & ACADEMIES",
     "node_3": "03 // PROFESSIONALS",
     "node_4": "04 // ATHLETE MOBILE OS",
@@ -53,12 +57,12 @@
       "description": "Central core for 9-node athletic telemetry and SaaS operations management."
     },
     "node_1": {
-      "name": "FEDERATION NODES",
-      "tag": "[ NODE_01 // SOVEREIGN_FEDERATIONS ]",
-      "subtitle": "Sports Telemetry",
-      "description": "National federations database is protected by end-to-end encryption. An independent Secure Gateway API is provisioned for each federation.",
-      "select_prompt": "> SELECT FEDERATION FOR 60% STAGE:",
-      "tip": "[ TIP ]: Click on a federation to display full details on the 60% screen."
+      "name": "ATHLETE 360° CRM",
+      "tag": "[ NODE_01 // ARTRON_CRM ]",
+      "subtitle": "Athlete Profiles & Legal Compliance",
+      "description": "Artron CRM is a multi-layered, dynamic database enabling unified digital management for all member types — from elite professional athletes to casual guests, family units, and corporate groups. The system automatically enforces legal and medical compliance, shielding your enterprise from liability.",
+      "select_prompt": "> SELECT MODULE FOR 60% STAGE:",
+      "tip": "[ TIP ]: Click on a module to display full details on the 60% screen."
     },
     "node_2": {
       "name": "FACILITY BLUEPRINT",
@@ -121,5 +125,52 @@
     "back": "Back",
     "request_access": "Request Access",
     "trigger_purge": "[ EXECUTE 14-DAY DATA PURGE ]"
+  },
+  "node_01_crm": {
+    "title": "360° Athlete Profile & Legal Compliance (CRM)",
+    "short_desc": "Artron CRM is a multi-layered, dynamic database enabling unified digital management for all member types — from elite professional athletes to casual guests, family units, and corporate groups. The system automatically enforces legal and medical compliance, shielding your enterprise from liability.",
+    "back_button": "[ RESET ]",
+    "section_functional": "FUNCTIONAL DESCRIPTION",
+    "section_permissions": "PERMISSIONS & GOVERNANCE",
+    "section_business": "BUSINESS VALUE",
+    "hint_chip_select": "[ SELECT AN ACCORDION CHIP ON THE LEFT PANEL TO VIEW FULL TELEMETRY ]",
+    "status_validated": "STATUS: COMPLIANCE_VALIDATED ●",
+    "sub_items": [
+      {
+        "id": "hierarchy",
+        "label": "1. Multi-Profile Hierarchy (Families, Parents & Children)",
+        "functional_desc": "Legal and financial linking of parent and child profiles within a unified ecosystem. Allows parents to manage memberships, wallets, and booking histories for dependents.",
+        "permissions": "Club administrators can delegate full financial management rights to parents while restricting dependents to workout plans and check-ins.",
+        "business_value": "Simplifies launch of family subscription tiers, boosts LTV (Lifetime Value), and significantly increases customer retention."
+      },
+      {
+        "id": "corporate",
+        "label": "2. Corporate Groups, Students & Friend Associations",
+        "functional_desc": "Centralized management of B2B corporate contracts, university partnerships, and group rates with automated invoicing and cap enforcement.",
+        "permissions": "Admin retains rights to restrict corporate visit hours, define usage caps, and automate monthly B2B telemetry reports.",
+        "business_value": "Unlocks a reliable B2B sales pipeline, ensures guaranteed upfront recurring revenue (MRR), and accelerates bulk onboarding."
+      },
+      {
+        "id": "pro_vs_amateur",
+        "label": "3. Professional Athletes vs Amateur Fitness Members",
+        "functional_desc": "Strict segmentation of club members based on athletic goals. Pro athletes access advanced biometrics, while casual members enjoy streamlined onboarding.",
+        "permissions": "Coaches receive view-only access to assigned pro group telemetry and medical safety data under strict privacy governance.",
+        "business_value": "Maintains high athletic standards and elite coaching prestige without alienating mass fitness members."
+      },
+      {
+        "id": "vip_guests",
+        "label": "4. VIP Members, Guests & Trial Visits",
+        "functional_desc": "Instant digital onboarding for single-day guests, VIP clientele, and trial visitors with temporary dynamic QR/NFC access keys.",
+        "permissions": "VIP members receive priority facility reservation rights; guest passes grant time-restricted 24-hour turnstile entry.",
+        "business_value": "Drives premium brand perception, elevates VIP retention, and increases trial-to-membership conversion by 35%."
+      },
+      {
+        "id": "medical_compliance",
+        "label": "5. Medical Validity & Legal Compliance (Compliance & Safety)",
+        "functional_desc": "Automated verification and tracking of Form 100 medical clearances, liability waivers, and digital consent signatures.",
+        "permissions": "System automatically revokes facility turnstile and booking privileges if medical clearance or waiver expires.",
+        "business_value": "Protects club management from legal liability and financial penalties while reducing insurance risk exposure by 80%."
+      }
+    ]
   }
 }

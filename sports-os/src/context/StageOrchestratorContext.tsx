@@ -9,6 +9,7 @@ interface StageOrchestratorContextType {
   mobileStage: "canvas" | "system";
   selectNode: (nodeId: number, subModuleId?: string | null) => void;
   selectSubModule: (subModuleId: string | null) => void;
+  resetStage: () => void;
   toggleInspectMode: (mode?: boolean) => void;
   setMobileStage: (stage: "canvas" | "system") => void;
 }
@@ -30,6 +31,11 @@ export function StageOrchestratorProvider({ children }: { children: ReactNode })
     setActiveSubModuleId(subModuleId);
   }, []);
 
+  const resetStage = useCallback(() => {
+    setActiveNodeId(0);
+    setActiveSubModuleId(null);
+  }, []);
+
   const toggleInspectMode = useCallback((mode?: boolean) => {
     setInspectModeState((prev) => (mode !== undefined ? mode : !prev));
   }, []);
@@ -47,6 +53,7 @@ export function StageOrchestratorProvider({ children }: { children: ReactNode })
         mobileStage,
         selectNode,
         selectSubModule,
+        resetStage,
         toggleInspectMode,
         setMobileStage,
       }}

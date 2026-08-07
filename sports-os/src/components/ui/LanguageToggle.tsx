@@ -21,12 +21,11 @@ export default function LanguageToggle({ className }: LanguageToggleProps) {
       aria-label="Toggle language"
       className={
         className ||
-        "fixed top-4 left-[175px] z-50 hidden lg:flex font-mono text-[9px] uppercase tracking-[0.2em] text-silver-structure/45 hover:text-white border border-silver-structure/10 hover:border-emerald-core/45 bg-iron-surface/40 hover:bg-iron-surface/90 px-3 py-1.5 rounded backdrop-blur-[6px] transition-all duration-300 items-center gap-2 cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.5)] group animate-fadeIn"
+        "fixed top-4 left-[175px] z-50 hidden lg:flex font-mono text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF] hover:text-[#F5F5F3] border border-[#9CA3AF]/18 hover:border-[#00E676]/40 bg-[#1A1D23]/60 hover:bg-[#1A1D23] px-3 py-1.5 rounded-sm backdrop-blur-[12px] transition-colors duration-300 items-center gap-2 cursor-pointer shadow-[0_0_8px_rgba(0,230,118,0.12)] group animate-fadeIn"
       }
     >
       <span
-        className="w-2 h-2 rounded-full transition-all duration-300 group-hover:scale-125 shadow-[0_0_8px_#00ff87]"
-        style={{ backgroundColor: "#00ff87" }}
+        className="w-1.5 h-1.5 rounded-full transition-transform duration-300 group-hover:scale-125 bg-[#00E676]"
       />
       <span>[ LANG: {lang} ]</span>
     </button>
