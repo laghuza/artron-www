@@ -86,9 +86,158 @@ export const Node08GdprShieldWidget: React.FC = () => (
   </div>
 );
 
-export const Node09AccessWidget: React.FC = () => (
-  <div className="bg-[#16191E]/90 border border-[#00E676]/40 p-3 rounded font-mono text-[10px] space-y-1 text-gray-300">
-    <div className="text-[#00E676] font-bold">&gt; CORE_SOVEREIGN_ACCESS_GATEWAY</div>
-    <div>[ STATUS ]: AWAITING_AUTHENTICATION</div>
-  </div>
-);
+import { soundEngine } from '@/core';
+
+export const Node09AccessWidget: React.FC = () => {
+  const [activeTab, setActiveTab] = React.useState<'REGISTER' | 'LOGIN'>('REGISTER');
+  const [entityType, setEntityType] = React.useState<'FEDERATION' | 'CLUB' | 'ATHLETE' | 'SPECIALIST'>('FEDERATION');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [entityName, setEntityName] = React.useState('');
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    soundEngine.playSystemAccess();
+    setIsSubmitted(true);
+  };
+
+  const handleTabSwitch = (tab: 'REGISTER' | 'LOGIN') => {
+    soundEngine.playPulseNode();
+    setActiveTab(tab);
+    setIsSubmitted(false);
+  };
+
+  return (
+    <div className="bg-[#121418]/90 border border-white/10 rounded-lg p-4 font-mono text-[11px] space-y-3 text-gray-300">
+      {/* Dual Tab Switcher */}
+      <div className="grid grid-cols-2 gap-1.5 p-1 bg-[#1A1D23] border border-white/5 rounded-md text-[10px] uppercase tracking-wider">
+        <button
+          type="button"
+          onClick={() => handleTabSwitch('REGISTER')}
+          className={`py-2 px-2 rounded transition-all cursor-pointer ${
+            activeTab === 'REGISTER'
+              ? 'bg-[#121418] text-[#00FF66] border border-[#00FF66]/40 font-bold'
+              : 'text-[#9CA3AF]/70 hover:text-white'
+          }`}
+        >
+          01 // MEMBERSHIP INIT
+        </button>
+        <button
+          type="button"
+          onClick={() => handleTabSwitch('LOGIN')}
+          className={`py-2 px-2 rounded transition-all cursor-pointer ${
+            activeTab === 'LOGIN'
+              ? 'bg-[#121418] text-[#00FF66] border border-[#00FF66]/40 font-bold'
+              : 'text-[#9CA3AF]/70 hover:text-white'
+          }`}
+        >
+          02 // CONSOLE ACCESS
+        </button>
+      </div>
+
+      {isSubmitted ? (
+        <div className="py-6 flex flex-col items-center justify-center text-center space-y-2 font-mono animate-fadeIn">
+          <div className="w-8 h-8 rounded-full border border-[#00FF66] bg-[#00FF66]/10 flex items-center justify-center text-[#00FF66] text-sm">
+            ✓
+          </div>
+          <div className="text-white font-bold text-xs uppercase tracking-wider">
+            {activeTab === 'REGISTER' ? 'MEMBERSHIP DISPATCHED' : 'SESSION AUTHORIZED'}
+          </div>
+          <p className="text-[10px] text-[#9CA3AF] font-sans">
+            {activeTab === 'REGISTER'
+              ? 'განაცხადი მიღებულია. ბირთვი ამუშავებს მონაცემებს.'
+              : 'სესია წარმატებით ავტორიზებულია.'}
+          </p>
+          <button
+            onClick={() => setIsSubmitted(false)}
+            className="mt-2 text-[9px] text-[#00FF66] underline hover:text-white cursor-pointer"
+          >
+            [ RE-OPEN FORM ]
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {activeTab === 'REGISTER' && (
+            <>
+              <div>
+                <label className="block text-[9px] uppercase text-[#9CA3AF]/80 mb-1 tracking-wider">
+                  ENTITY CATEGORY // სუბიექტი
+                </label>
+                <div className="grid grid-cols-2 gap-1 text-[9px]">
+                  {(['FEDERATION', 'CLUB', 'ATHLETE', 'SPECIALIST'] as const).map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        soundEngine.playPulseNode();
+                        setEntityType(cat);
+                      }}
+                      className={`p-1.5 border rounded text-left transition-all cursor-pointer ${
+                        entityType === cat
+                          ? 'bg-[#16191E] border-[#00FF66] text-[#00FF66]'
+                          : 'bg-[#121418] border-white/10 text-[#9CA3AF] hover:text-white'
+                      }`}
+                    >
+                      ● {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[9px] uppercase text-[#9CA3AF]/80 mb-1 tracking-wider">
+                  ORGANIZATION / ATHLETE NAME
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={entityName}
+                  onChange={(e) => setEntityName(e.target.value)}
+                  placeholder="მაგ: Georgian Basketball Fed"
+                  className="w-full bg-[#1A1D23] border border-white/10 focus:border-[#00FF66]/60 rounded px-2.5 py-1.5 text-xs text-white placeholder-[#9CA3AF]/40 outline-none"
+                />
+              </div>
+            </>
+          )}
+
+          <div>
+            <label className="block text-[9px] uppercase text-[#9CA3AF]/80 mb-1 tracking-wider">
+              OPERATOR IDENTITY // EMAIL
+            </label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="operator@artron.ge"
+              className="w-full bg-[#1A1D23] border border-white/10 focus:border-[#00FF66]/60 rounded px-2.5 py-1.5 text-xs text-white placeholder-[#9CA3AF]/40 outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[9px] uppercase text-[#9CA3AF]/80 mb-1 tracking-wider">
+              ACCESS KEY // PASSWORD
+            </label>
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••••••"
+              className="w-full bg-[#1A1D23] border border-white/10 focus:border-[#00FF66]/60 rounded px-2.5 py-1.5 text-xs text-white placeholder-[#9CA3AF]/40 outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full h-[40px] mt-1 bg-[#00FF66] text-[#0A0D10] font-mono text-[11px] font-bold tracking-[1.2px] uppercase rounded shadow-[0_0_15px_rgba(0,255,102,0.25)] hover:bg-[#00E65C] transition-all cursor-pointer"
+          >
+            {activeTab === 'REGISTER' ? '[ SUBMIT MEMBERSHIP REQUEST ]' : '[ AUTHORIZE CONSOLE SESSION ]'}
+          </button>
+        </form>
+      )}
+    </div>
+  );
+};
+
