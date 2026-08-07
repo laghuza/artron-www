@@ -1,6 +1,6 @@
 /**
  * ARTRON SPORTS OS // CENTRAL CORE MATRIX HUB
- * Re-exports all core registries, RBAC maps, effect definitions, theme tokens, sports taxonomy, i18n, and branding.
+ * Re-exports all core registries, RBAC maps, effect definitions, theme tokens, sports taxonomy, i18n, branding, hooks, and atomic UI components.
  * Exposes single-barrel import hub via `@/core`
  */
 
@@ -14,3 +14,6 @@ export * from './security/env';
 export * from './sports/sports.taxonomy';
 export * from './i18n/i18n.registry';
 export * from './branding/branding.tokens';
+export * from './hooks/useSportsTaxonomy';
+export * from '../components/ui/CyberButton';
+export * from '../components/ui/SportsSelect';
