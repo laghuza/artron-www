@@ -36,3 +36,11 @@
 7. **DUAL-LANGUAGE i18n AUTO-SYNC LAW:**
    - Whenever a new text, label, or UI feature is requested in Georgian, the AI agent MUST simultaneously generate its corresponding English translation in `sports-os/src/dictionaries/en.json` and Georgian key in `sports-os/src/dictionaries/ge.json` using consistent key naming (`domain.feature.label`).
 
+8. **SAFE FEATURE OVERWRITE & MIGRATION PROTOCOL:**
+   - Enforce strict rules for when a node's domain logic is replaced with a NEW user task:
+     * **Step A:** Create the NEW domain component in its designated feature directory (e.g. `sports-os/src/features/athletes/`).
+     * **Step B:** Re-bind the Node ID in `sports-os/src/core/registry/node-registry.config.ts` and `sports-os/src/core/registry/site.config.ts` to point to the NEW domain component.
+     * **Step C:** Remove or cleanly deprecate stale/unused narrative files to prevent dead code or orphan imports.
+     * **Step D:** Replace dictionary keys in `sports-os/src/dictionaries/ge.json` and `en.json` with new Georgian and English translations.
+
+
