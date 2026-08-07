@@ -23,3 +23,16 @@
 
 5. **MULTI-TENANT ISOLATION LAW:**
    - All database queries and server actions must strictly scope data using tenant identifiers (`tenantId`, `federationId`, `clubId`).
+
+6. **FEATURE DIRECTORY DISPATCHER LAW:**
+   - AI agents MUST adhere to strict feature routing rules when creating or refactoring modules:
+     * **Athlete / User Management tasks** -> MUST be placed in `sports-os/src/features/athletes/`
+     * **Federation Governance tasks** -> MUST be placed in `sports-os/src/features/federations/`
+     * **Club & Academy tasks** -> MUST be placed in `sports-os/src/features/clubs/`
+     * **PlayStation Onboarding Wizards** -> MUST be placed in `sports-os/src/features/onboarding/`
+     * **Reusable Atomic UI Components** -> MUST be placed in `sports-os/src/components/ui/`
+     * **Master Registries & Types** -> MUST be placed in `sports-os/src/core/`
+
+7. **DUAL-LANGUAGE i18n AUTO-SYNC LAW:**
+   - Whenever a new text, label, or UI feature is requested in Georgian, the AI agent MUST simultaneously generate its corresponding English translation in `sports-os/src/dictionaries/en.json` and Georgian key in `sports-os/src/dictionaries/ge.json` using consistent key naming (`domain.feature.label`).
+
