@@ -17,6 +17,8 @@ export * from './sports/sports.taxonomy';
 export * from './i18n/i18n.registry';
 export * from './branding/branding.tokens';
 export * from './branding/artron.philosophy';
+export * from './utils/audio';
+
 
 export * from './hooks/useSportsTaxonomy';
 export * from './hooks/useTelemetryProcessor';

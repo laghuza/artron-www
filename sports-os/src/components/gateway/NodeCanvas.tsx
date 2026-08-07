@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ViewState, ArtronNode } from '@/types/gateway';
 import { GhostTrigger } from './GhostTrigger';
+import { soundEngine } from '@/core';
 
 interface NodeCanvasProps {
   nodes: ArtronNode[]; activeNodeId: number | null; viewState: ViewState; onSelectNode: (nodeId: number) => void;
@@ -24,6 +25,16 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({ nodes: _n, activeNodeId,
   const currentActive = hoveredNode !== null ? hoveredNode : activeNode;
   const isCenterActive = currentActive === 9;
 
+  const handleNodeHover = (id: number) => {
+    setHoveredNode(id);
+    soundEngine.playPulseNode();
+  };
+
+  const handleNodeSelect = (id: number) => {
+    soundEngine.playPulseNode();
+    onSelectNode(id);
+  };
+
   const nodeItems = COORDS.map((coord, i) => ({
     id: i + 1, ...coord, label: LABELS[i], active: currentActive === i + 1, color: COLORS[i + 1] || "#9CA3AF"
   }));
@@ -38,7 +49,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({ nodes: _n, activeNodeId,
 
       {/* Top-Right Rotating Logo Trigger with Glassmorphic Dropdown */}
       <div className="absolute top-4 right-6 z-40">
-        <GhostTrigger onAccessClick={() => onSelectNode(9)} />
+        <GhostTrigger onAccessClick={() => handleNodeSelect(9)} />
       </div>
 
       <svg viewBox="0 0 400 400" className="w-full max-w-[460px] aspect-square cursor-pointer overflow-visible z-10" onMouseLeave={() => setHoveredNode(null)}>
@@ -72,7 +83,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({ nodes: _n, activeNodeId,
         })}
 
         {/* Central Core Element */}
-        <g onClick={() => onSelectNode(9)} onMouseEnter={() => setHoveredNode(9)} onMouseLeave={() => setHoveredNode(null)} className="cursor-pointer">
+        <g onClick={() => handleNodeSelect(9)} onMouseEnter={() => handleNodeHover(9)} onMouseLeave={() => setHoveredNode(null)} className="cursor-pointer">
           <circle cx="200" cy="200" r="40" fill="transparent" />
           <circle cx="200" cy="200" r="48" fill="url(#core-glow)" className="pointer-events-none" />
           {[38, 28].map((r) => (
@@ -93,7 +104,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({ nodes: _n, activeNodeId,
         {nodeItems.map((node) => {
           const isAct = node.active;
           return (
-            <g key={node.id} transform={`translate(${node.x}, ${node.y})`} onClick={() => onSelectNode(node.id)} onMouseEnter={() => setHoveredNode(node.id)} onMouseLeave={() => setHoveredNode(null)} className="cursor-pointer">
+            <g key={node.id} transform={`translate(${node.x}, ${node.y})`} onClick={() => handleNodeSelect(node.id)} onMouseEnter={() => handleNodeHover(node.id)} onMouseLeave={() => setHoveredNode(null)} className="cursor-pointer">
               <circle r="20" fill="transparent" />
               <circle r={isAct ? 14 : 7} fill="none" stroke={node.color} strokeWidth={isAct ? 0.8 : 0.5} className={`${isAct ? "animate-ping opacity-25" : "animate-pulse opacity-15"} pointer-events-none`} />
               <circle r="2.4" fill={isAct ? node.color : "#121418"} stroke={isAct ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct ? 1.0 : 0.4 }} className="transition-all duration-300" />
@@ -107,3 +118,4 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({ nodes: _n, activeNodeId,
     </div>
   );
 };
+
