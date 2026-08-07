@@ -103,18 +103,24 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
               {activeNode.id === 6 && <Node06MarketWidget />}
               {activeNode.id === 7 && <Node07AnalyticsWidget />}
               {activeNode.id === 8 && <Node08GdprShieldWidget />}
-              {activeNode.id === 9 && <Node09AccessWidget />}
-              <p className="text-[14px] text-gray-300 leading-[1.6] font-sans">{activeNode.shortDesc}</p>
-              {activeNode.subChapters && activeNode.subChapters.length > 0 && (
-                <div className="border-t border-[#262a33] pt-3">
-                  <h3 className="text-[11px] font-mono uppercase tracking-wider text-gray-400 mb-2">Available Sub-Chapters</h3>
-                  <div className="space-y-1.5">
-                    {activeNode.subChapters.map((sub) => (
-                      <button key={sub.id} onClick={() => { soundEngine.playPulseNode(); onSelectSubChapter(sub.id); }} className={`w-full text-left p-2.5 rounded text-xs transition-all border ${activeSubChapterId === sub.id ? 'bg-[#16191E] border-[#00FF66] text-[#00FF66]' : 'bg-[#121418] border-[#262a33] text-gray-300 hover:text-white'}`}>{sub.title}</button>
-                    ))}
-                  </div>
-                </div>
+              {activeNode.id === 9 && <Node09AccessWidget onSelectSubChapter={onSelectSubChapter} />}
+
+              {activeNode.id !== 9 && (
+                <>
+                  <p className="text-[14px] text-gray-300 leading-[1.6] font-sans">{activeNode.shortDesc}</p>
+                  {activeNode.subChapters && activeNode.subChapters.length > 0 && (
+                    <div className="border-t border-[#262a33] pt-3">
+                      <h3 className="text-[11px] font-mono uppercase tracking-wider text-gray-400 mb-2">Available Sub-Chapters</h3>
+                      <div className="space-y-1.5">
+                        {activeNode.subChapters.map((sub) => (
+                          <button key={sub.id} onClick={() => { soundEngine.playPulseNode(); onSelectSubChapter(sub.id); }} className={`w-full text-left p-2.5 rounded text-xs transition-all border ${activeSubChapterId === sub.id ? 'bg-[#16191E] border-[#00FF66] text-[#00FF66]' : 'bg-[#121418] border-[#262a33] text-gray-300 hover:text-white'}`}>{sub.title}</button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
+
             </div>
             <button onClick={() => { soundEngine.playPulseNode(); onResetToCore(); }} className="text-xs font-mono text-gray-400 hover:text-white flex items-center space-x-1.5 uppercase tracking-wider transition-colors pt-2 cursor-pointer">
               <span>← Return to Core</span>

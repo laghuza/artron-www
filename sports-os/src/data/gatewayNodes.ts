@@ -49,6 +49,10 @@ export const GATEWAY_NODES: ArtronNode[] = [
   {
     id: 9, nodeCode: 'CORE_INIT', title: 'ARTRON SPORTS OS',
     shortDesc: 'ართრონი არ არის უბრალოდ პლატფორმა. ეს არის სპორტული სექტორის ლიდერების (ფედერაციების, კლუბებისა და პროფესიონალების) ოპერაციული სისტემა. მართვა ხორციელდება ცენტრალური 9-კვანძიანი Ennea Core ბირთვის მეშვეობით.',
-    subChapters: [{ id: 'core-access', title: '01 // SYSTEM ENTRY', doctrines: ['Central Neural Gateway Init.', 'Real-time telemetry HUD broadcasting.'] }]
+    subChapters: [
+      { id: 'membership-init', title: '01 // MEMBERSHIP INIT', doctrines: ['სპორტულ-გამაჯანსაღებელი სუბიექტის (ფედერაცია, კლუბი, ათლეტი) პირველადი ინიციაცია და ბირთვთან დაკავშირება.'] },
+      { id: 'console-access', title: '02 // CONSOLE ACCESS', doctrines: ['რეგისტრირებული ოპერატორის ავტორიზებული შესვლა მართვისა და ტელემეტრიის კონსოლში.'] }
+    ]
   }
 ];
+
