@@ -2,9 +2,10 @@
 
 ## 🚨 MANDATORY CORE LAWS (NON-NEGOTIABLE)
 
-1. **150-LINE COMPONENT LIMIT LAW:**
-   - No single TypeScript/JSX file in `sports-os/src/` may exceed **150 lines of code**.
-   - Split large components into smaller, modular sub-components or custom hooks when approaching 120 lines.
+1. **COMPONENT LINE LIMIT & MODULARITY LAW:**
+   - **Soft Target:** 250–300 lines of code per file.
+   - **HARD MAXIMUM CEILING:** 400 lines of code per file across all TypeScript/JSX files in `sports-os/src/`.
+   - **Single Responsibility Principle (SRP):** Even with a 400-line ceiling, keep state logic modular, extract reusable hooks/sub-components, and maintain clean architecture.
 
 2. **NEXT.JS `@/` PATH ALIAS LAW:**
    - ALWAYS use absolute Next.js `@/` path aliases (e.g. `@/components/ui/ArtronLogo`, `@/lib/prisma`).

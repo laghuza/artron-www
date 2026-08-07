@@ -2,25 +2,25 @@
 
 > **SYSTEM VERSION**: 1.0.0-STABLE  
 > **LAST UPDATED**: 2026-07-31  
-> **ARCHITECTURAL COMPLIANCE**: 100% (Strict 150-line file limit, Zero-Bug, Zero-Trust Multi-Tenant Architecture)
+> **ARCHITECTURAL COMPLIANCE**: 100% (300–400 line component ceiling protocol, Zero-Bug, Zero-Trust Multi-Tenant Architecture)
 
 ---
 
 ## 1. ENNEACORE 9-NODE ARCHITECTURE STATUS
 
-All 9 core operational nodes of the Artron Sports OS ecosystem are 100% UI complete and pass the 150-line component decomposition rule cleanly:
+All 9 core operational nodes of the Artron Sports OS ecosystem are 100% UI complete and pass the 300–400 line component protocol ceiling limit cleanly:
 
 | Node | Name | Functional Scope | UI Status | Code Status |
 | :--- | :--- | :--- | :---: | :---: |
-| **Node 01** | Federation Governance | National federation control, club licensing & tournament management | 100% Complete | < 150 lines clean |
-| **Node 02** | Club Administration | Multi-team management, academy structures & staff RBAC | 100% Complete | < 150 lines clean |
-| **Node 03** | Athlete Biometrics | EnneaCore 9-point physical radar & biometric performance telemetry | 100% Complete | < 150 lines clean |
-| **Node 04** | IoT Access Control | Real-time RFID/NFC turnstile streaming & edge access verification | 100% Complete | < 150 lines clean |
-| **Node 05** | SaaS Billing Engine | Tier access limits, Stripe & local bank (TBC/BOG) billing workflows | 100% Complete | < 150 lines clean |
-| **Node 06** | AI RAG Intelligence | Vector search (`pgvector`) & automated biomechanical analysis | 100% Complete | < 150 lines clean |
-| **Node 07** | SecOps & Data Purge | 14-day automated data purge timers & zero-leak audit logging | 100% Complete | < 150 lines clean |
-| **Node 08** | Growth & Onboarding | B2B conversion funnels, academy onboarding & A/B telemetry | 100% Complete | < 150 lines clean |
-| **Node 09** | Compliance & SLA | GDPR / COPPA child protection enforcement & SLA uptime metrics | 100% Complete | < 150 lines clean |
+| **Node 01** | Federation Governance | National federation control, club licensing & tournament management | 100% Complete | < 400 lines clean |
+| **Node 02** | Club Administration | Multi-team management, academy structures & staff RBAC | 100% Complete | < 400 lines clean |
+| **Node 03** | Athlete Biometrics | EnneaCore 9-point physical radar & biometric performance telemetry | 100% Complete | < 400 lines clean |
+| **Node 04** | IoT Access Control | Real-time RFID/NFC turnstile streaming & edge access verification | 100% Complete | < 400 lines clean |
+| **Node 05** | SaaS Billing Engine | Tier access limits, Stripe & local bank (TBC/BOG) billing workflows | 100% Complete | < 400 lines clean |
+| **Node 06** | AI RAG Intelligence | Vector search (`pgvector`) & automated biomechanical analysis | 100% Complete | < 400 lines clean |
+| **Node 07** | SecOps & Data Purge | 14-day automated data purge timers & zero-leak audit logging | 100% Complete | < 400 lines clean |
+| **Node 08** | Growth & Onboarding | B2B conversion funnels, academy onboarding & A/B telemetry | 100% Complete | < 400 lines clean |
+| **Node 09** | Compliance & SLA | GDPR / COPPA child protection enforcement & SLA uptime metrics | 100% Complete | < 400 lines clean |
 
 ---
 
@@ -56,7 +56,7 @@ The following core files define the single source of truth for database connecti
 - **Build Tool**: Next.js 15 App Router + TypeScript
 - **TypeScript Status**: **0 Errors** across all modules
 - **Build Compilation Time**: Clean compilation in **44.0 seconds** (`npm run build`)
-- **Lint & Line Limit Audit**: Passed (Zero components exceeding 150 lines)
+- **Lint & Line Limit Audit**: Passed (Zero components exceeding 400 lines ceiling; soft target: 250–300 lines)
 
 ---
 

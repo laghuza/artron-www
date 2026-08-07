@@ -1,7 +1,7 @@
 # 📜 Artron Sports OS Component Registry
 
 **Governance Compliance Status:** 100% PASS  
-**150-Line Component Rule:** STRICT ENFORCEMENT (< 150 Lines Per File)  
+**Component Line Limit Protocol:** Soft Target = 250–300 Lines, HARD MAXIMUM CEILING = 400 Lines Per File  
 **Total Audited Components & Files:** 66 Files
 
 ---

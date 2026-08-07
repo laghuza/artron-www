@@ -44,4 +44,4 @@
   // import { prisma } from '@/lib/prisma';
   ```
 - **NEVER** instantiate `new PrismaClient()` in application code to prevent connection pool exhaustion during Next.js Hot Module Replacement (HMR).
-- File limit law: Strictly enforce **< 150 lines** per file across all components and server actions.
+- Component Line Limit Protocol: Soft Target = 250–300 lines per file. HARD MAXIMUM CEILING = 400 lines per file across all components and server actions.

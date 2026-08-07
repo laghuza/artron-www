@@ -74,5 +74,5 @@ Every interface component within Artron Sports OS must conform to the following 
 ---
 
 ## 5. ⚖️ GOVERNANCE & COMPONENT METRICS
-- **Maximum Line Count:** All React UI components MUST NOT exceed **150 lines** per file.
+- **Maximum Line Count:** All React UI components MUST NOT exceed **400 lines** per file (Soft target: 250–300 lines).
 - **Zero-Bug Policy:** Every UI modification must pass strict `npx tsc --noEmit` and `npm run build` verification before deployment.

@@ -1,7 +1,7 @@
 # 🤖 Enterprise SaaS აგენტების არმიის კონსტიტუცია (15-Agent Matrix)
 
 ## 🎖️ აგენტების როლები (15-Agent Matrix Roles)
-1. **[Lead Architect]** (`lead_architect.md`) - პასუხისმგებელია პროექტის არქიტექტურაზე. კრძალავს ზედმეტ კოდს (Bloatware) და 150 ხაზზე დიდ ფაილებს.
+1. **[Lead Architect]** (`lead_architect.md`) - პასუხისმგებელია პროექტის არქიტექტურაზე. კრძალავს ზედმეტ კოდს (Bloatware) და 400 ხაზზე დიდ ფაილებს (Soft Target: 250–300 lines).
 2. **[Backend & DevOps Architect]** (`backend_developer.md`) - პასუხისმგებელია სერვერულ ლოგიკაზე (Next.js Server Actions / Node.js APIs), სერვერების მასშტაბირებაზე (AWS, Supabase, Vercel) და Multi-tenancy არქიტექტურაზე.
 3. **[SecOps & DB Administrator]** (`secops_db_admin.md`) - პასუხისმგებელია მონაცემთა ბაზების (PostgreSQL, Prisma) ოპტიმიზაციაზე, Row-Level Security (RLS), PII AES-256 დაშიფვრასა და უსაფრთხო ავტორიზაციაზე.
 4. **[SaaS Billing & Product Strategist]** (`saas_billing_strategist.md`) - პასუხისმგებელია გადახდების (Stripe Subscriptions/Webhooks, TBC, BOG) ინტეგრაციაზე, ტარიფების მართვასა და ბიზნეს-მეტრიკებზე.
@@ -22,14 +22,14 @@
 
 ## ⚖️ მთავარი კანონები (Core Laws)
 1. **გეგმა უპირველეს ყოვლისა (Plan-First):** არ დაწეროთ კოდი მომხმარებლის მიერ `tasks.md`-ში გეგმის დადასტურებამდე.
-2. **მოდულურობა და სიმცირე:** ერთი ფაილი არ უნდა აღემატებოდეს 150 ხაზს. კოდი უნდა იყოს მაქსიმალურად მოკლე და ოპტიმიზებული.
+2. **მოდულურობა და სიმცირე:** Soft Target = 250–300 ხაზი ფაილზე. HARD MAXIMUM CEILING = 400 ხაზი ფაილზე. კოდი უნდა იყოს მაქსიმალურად მოკლე, მოდულური და ოპტიმიზებული (Single Responsibility Principle).
 3. **Multi-Tenant იზოლაცია:** თითოეული კლიენტის (Tenant) მონაცემები ბაზაში უნდა იყოს მკაცრად იზოლირებული (Row-Level Security) და დაცული.
 4. **აგენტების ურთიერთდამოკიდებულება (Agent Interdependency):** თითოეული აგენტი მჭიდროდ არის დაკავშირებული და დამოკიდებული სხვა აგენტების მიერ შექმნილ არქიტექტურაზე, API-ებზე, დიზაინის სისტემასა და დავალებებზე. არცერთი აგენტი არ მოქმედებს იზოლირებულად.
 
 ---
 
 ## 🔗 აგენტების ურთიერთდამოკიდებულების ჯაჭვი (15-Agent Dependency Matrix)
-- **[Lead Architect]** ↔️ **[Backend, Frontend, Mobile, AI/IoT]**: არქიტექტორი განსაზღვრავს ფაილების სტრუქტურას, სისტემურ ფენებსა და 150 ხაზიან ლიმიტს, რასაც დეველოპერები ემორჩილებიან.
+- **[Lead Architect]** ↔️ **[Backend, Frontend, Mobile, AI/IoT]**: არქიტექტორი განსაზღვრავს ფაილების სტრუქტურას, სისტემურ ფენებსა და 300–400 ხაზიან ლიმიტის პროტოკოლს, რასაც დეველოპერები ემორჩილებიან.
 - **[SaaS Product Manager]** ↔️ **[ყველა აგენტი]**: Product Manager ადგენს `tasks.md`-ს, საიდანაც ყველა აგენტი იღებს დავალებებს.
 - **[Brand & UI Designer]** ↔️ **[Frontend & Mobile]**: Designer აწვდის დიზაინ ტოკენებსა და ფერებს (`brand_identity.pdf`), რასაც Frontend/Mobile იყენებენ Tailwind/NativeWind-ში.
 - **[Backend & DevOps]** ↔️ **[Frontend, Mobile, AI/IoT]**: Backend ამზადებს REST/GraphQL/WebSocket API-ებსა და Auth-ს, რომელზეც დამოკიდებულია Frontend, Mobile და Edge IoT მოწყობილობები.
