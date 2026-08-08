@@ -98,3 +98,85 @@
   - [x] Step 3: Implement Immersive Onboarding Engine (`sports-os/src/features/onboarding/OnboardingStateMachine.ts`)
   - [x] Step 4: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
   - [x] Step 5: Git commit & push updates to `main`
+
+- [x] **Phase 10.5: Emerald Portal Gate Transition Animation (Core Portal Entry)**
+  - [x] Step 1: Add `PortalState` type definitions & CSS keyframe rules for ambient pulse, ignition shockwave, and core expansion overlay
+  - [x] Step 2: Create `EmeraldPortalGate.tsx` component to manage transition overlays, ESC bypass & prefers-reduced-motion fallback
+  - [x] Step 3: Wire Phase 1 Ambient Pulse & entry triggers into `NodeCanvas.tsx`, `SidebarPanel.tsx`, and `page.tsx` (button, core node, ENTER key)
+  - [x] Step 4: Reveal B2B Console / Dashboard (`SplitCoreDashboard`) on `ENTERED` state with scale/fade animation
+  - [x] Step 5: Verify build (`npx tsc --noEmit` & `npm run build`) & pass manual verification
+
+- [x] **Phase 10.6: Dual-Path Gateway Access System (Operator Credentials & Temporary OTP Entry)**
+  - [x] Step 1: Create `CyberAuthLoginCard.tsx` (Interactive 60% stage login component with Registered Operator & OTP tabs)
+  - [x] Step 2: Create `MembershipRegistrationCard.tsx` (Club/Facility onboarding registration form for `01 // MEMBERSHIP INIT`)
+  - [x] Step 3: Create `TemporaryGuestDashboard.tsx` (Streamlined 1-page temporary control panel for OTP passholders)
+  - [x] Step 4: Update `NodeWidgets.tsx` (`Node09AccessWidget`) to integrate registration and sidebar login forms
+  - [x] Step 5: Update `NodeCanvas.tsx` to render `CyberAuthLoginCard` on 60% stage canvas when Node 09 is selected
+  - [x] Step 6: Wire dual-path authentication and Emerald Portal Gate transition in `page.tsx`
+  - [x] Step 7: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.7: Refined Emerald Portal Gate Transition (300ms Shockwave, 380ms Quantum Expansion cubic-bezier 0.16, 1, 0.3, 1)**
+  - [x] Step 1: Update `globals.css` keyframes (300ms shockwave ring, 380ms scale(120) expansion with `cubic-bezier(0.16, 1, 0.3, 1)`)
+  - [x] Step 2: Refine `CyberAuthLoginCard.tsx` for high-tech 60% stage operator credential login
+  - [x] Step 3: Update `page.tsx` state machine timers (300ms ignition -> 380ms expansion -> console reveal)
+  - [x] Step 4: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.8: Immersive Node #09 Gateway Access Overlay (Vintage Silver Aesthetics & Full-Screen ESC Exit)**
+  - [x] Step 1: Update `CyberAuthLoginCard.tsx` with full-screen fixed backdrop, ESC key listener, and vintage silver typography (`#C0C0C0`/`#9CA3AF`)
+  - [x] Step 2: Update `NodeCanvas.tsx` to render Node 09 overlay as a fixed inset backdrop with smooth fade transition
+  - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.9: Frameless Pure-Black Void Access Matrix (Vintage Silver Line Inputs & Solid Luxury)**
+  - [x] Step 1: Update `CyberAuthLoginCard.tsx` to remove all container box borders/cards and implement frameless line inputs with vintage silver typography
+  - [x] Step 2: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.10: Post-Registration 1-Page Entry Console & Robust Gateway Reset**
+  - [x] Step 1: Update `SplitCoreDashboard.tsx` to include top header return button and ESC key handler
+  - [x] Step 2: Ensure `page.tsx` resets portal and view states cleanly on return
+  - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.11: Dedicated SimpleOperatorDashboard 1-Page Entry View & Zero-Bug Gateway Return**
+  - [x] Step 1: Create `SimpleOperatorDashboard.tsx` (Clean 1-page operator system console with session HUD & ESC listener)
+  - [x] Step 2: Update `page.tsx` to render `SimpleOperatorDashboard` upon login completion
+  - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.12: 40% Sidebar "REQUEST SYSTEM ACCESS" Dual-Path Choice Selector**
+  - [x] Step 1: Create `AccessChoiceModal.tsx` (Dual-path choice selector modal for Path 01 B2B Operator and Path 02 OTP Guest with ESC listener)
+  - [x] Step 2: Update `page.tsx` to handle `isChoiceModalOpen` state and trigger authentication flows
+  - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.13: 40% Sidebar "REQUEST SYSTEM ACCESS" Direct Node #09 Dispatcher**
+  - [x] Step 1: Update `page.tsx` to set `onRequestAccess={() => handleSelectNode(9)}` and remove modal state
+  - [x] Step 2: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.14: 40% Sidebar Panel Internal 2-Button Toggle State**
+  - [x] Step 1: Update `SidebarPanel.tsx` to handle inline `isChoiceActive` toggle state rendering 2 action buttons
+  - [x] Step 2: Update `page.tsx` to pass `onSelectB2B` and `onSelectOtp` callbacks to `SidebarPanel`
+  - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+
+- [x] **Phase 10.15: Node #01 CRM Module & Version Restore Savepoint (Release v10.15)**
+  - [x] Step 1: Implement Node #01 Interactive CRM Module (Sub-chapters, 3-card stage layout, Sky Blue node blurring & laser connection logic)
+  - [x] Step 2: Implement inline 40% sidebar dual-action pathways ("B2B Operator" and "OTP Guest")
+  - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
+  - [x] Step 4: Staged & committed all project files to Git with tag `v10.15-stable` for seamless version restore
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

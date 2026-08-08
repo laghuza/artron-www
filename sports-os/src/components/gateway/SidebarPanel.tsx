@@ -10,15 +10,19 @@ import {
 interface SidebarPanelProps {
   viewState: ViewState; activeNode: ArtronNode | null; activeSubChapterId: string | null;
   onResetToCore: () => void; onSelectSubChapter: (subId: string) => void; onRequestAccess: () => void;
+  onSelectB2B?: () => void; onSelectOtp?: () => void;
 }
 
 import { soundEngine } from '@/core';
 
+import { Node01SubNodeList } from './widgets/Node01SubNodeList';
+
 export const SidebarPanel: React.FC<SidebarPanelProps> = ({
-  viewState, activeNode, activeSubChapterId, onResetToCore, onSelectSubChapter, onRequestAccess
+  viewState, activeNode, activeSubChapterId, onResetToCore, onSelectSubChapter, onRequestAccess, onSelectB2B, onSelectOtp
 }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [lang, setLang] = useState<'KA' | 'EN'>('KA');
+  const [isChoiceActive, setIsChoiceActive] = useState(false);
 
   const toggleMute = () => {
     const nextMute = !isMuted;
@@ -28,9 +32,25 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
   };
 
   const handleAccessClick = () => {
-    soundEngine.playSystemAccess();
-    onRequestAccess();
+    soundEngine.playPulseNode();
+    setIsChoiceActive(true);
   };
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        soundEngine.playPulseNode();
+        if (isChoiceActive) {
+          setIsChoiceActive(false);
+        } else {
+          onResetToCore();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onResetToCore, isChoiceActive]);
+
 
   return (
     <aside className="w-full lg:w-[40%] h-full bg-[#1A1D23]/55 border-r border-[rgba(156,163,175,0.12)] backdrop-blur-[24px] p-6 lg:p-7 flex flex-col justify-between select-none overflow-y-auto">
@@ -58,9 +78,9 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
           </div>
         </div>
 
-        {/* Core Init Hero Card or Selected Node */}
+        {/* Core Init Hero Card, Node 01 Custom Widget, or Selected Node */}
         {viewState === 'CORE_INIT' || !activeNode ? (
-          <div className="animate-fadeIn w-full flex-1 flex flex-col justify-between p-7 lg:p-9 bg-[#12161A]/60 border border-white/10 rounded-xl backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+          <div className="animate-fadeIn w-full flex-1 flex flex-col justify-start p-7 lg:p-9 bg-[#12161A]/60 border border-white/10 rounded-xl backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
             <div>
               <div className="font-mono text-[11px] text-[#00FF66] uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#00FF66] animate-pulse" />
@@ -81,21 +101,82 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
               </p>
             </div>
 
-            <div className="pt-6 flex justify-center">
-              <button
-                onClick={handleAccessClick}
-                className="w-full sm:w-auto h-[54px] px-10 bg-[#00FF66] text-[#0A0D10] font-mono text-[14px] font-bold tracking-[1.5px] uppercase rounded-md shadow-[0_0_25px_rgba(0,255,102,0.35)] transition-all duration-200 hover:bg-[#00E65C] hover:shadow-[0_0_35px_rgba(0,255,102,0.6)] hover:-translate-y-0.5 cursor-pointer active:translate-y-0"
-              >
-                REQUEST SYSTEM ACCESS
-              </button>
+            <div className="mt-[36px]">
+              {!isChoiceActive ? (
+                <button
+                  onClick={handleAccessClick}
+                  className="w-full h-[54px] px-10 bg-[#00FF66] text-[#0A0D10] font-mono text-[14px] font-bold tracking-[1.5px] uppercase rounded-md shadow-[0_0_25px_rgba(0,255,102,0.35)] transition-all duration-200 hover:bg-[#00E65C] hover:shadow-[0_0_35px_rgba(0,255,102,0.6)] hover:-translate-y-0.5 cursor-pointer active:translate-y-0"
+                >
+                  REQUEST SYSTEM ACCESS
+                </button>
+              ) : (
+                <div className="space-y-2.5 w-full animate-fadeIn">
+                  <div className="text-[10px] font-mono text-[#00FF66] tracking-[2px] uppercase mb-1 flex items-center justify-between">
+                    <span>[ SELECT ACCESS PROTOCOL ]</span>
+                    <button
+                      onClick={() => {
+                        soundEngine.playPulseNode();
+                        setIsChoiceActive(false);
+                      }}
+                      className="text-[10px] text-[#9CA3AF] hover:text-white uppercase tracking-[1.5px] cursor-pointer"
+                    >
+                      [ ✕ CANCEL ]
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      soundEngine.playSystemAccess();
+                      if (onSelectB2B) onSelectB2B();
+                      else onRequestAccess();
+                    }}
+                    className="w-full py-3 px-4 bg-[#121418] hover:bg-[#00FF66] text-[#00FF66] hover:text-[#0A0D10] font-mono text-[12px] font-bold tracking-[1.5px] uppercase rounded border border-[#00FF66]/50 transition-all cursor-pointer text-left shadow-[0_0_15px_rgba(0,255,102,0.15)] flex items-center justify-between group"
+                  >
+                    <span>01 // REGISTERED B2B OPERATOR</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      soundEngine.playSystemAccess();
+                      if (onSelectOtp) onSelectOtp();
+                      else onRequestAccess();
+                    }}
+                    className="w-full py-3 px-4 bg-[#121418] hover:bg-[#00FF66] text-[#00FF66] hover:text-[#0A0D10] font-mono text-[12px] font-bold tracking-[1.5px] uppercase rounded border border-[#00FF66]/50 transition-all cursor-pointer text-left shadow-[0_0_15px_rgba(0,255,102,0.15)] flex items-center justify-between group"
+                  >
+                    <span>02 // TEMPORARY OTP GUEST</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </button>
+                </div>
+              )}
             </div>
+
           </div>
+        ) : activeNode.id === 1 ? (
+          <Node01SubNodeList
+            subChapters={activeNode.subChapters}
+            activeSubChapterId={activeSubChapterId}
+            onSelectSubChapter={onSelectSubChapter}
+            onResetToCore={onResetToCore}
+          />
         ) : (
           <div className="animate-fadeIn w-full flex-1 flex flex-col justify-between p-6 lg:p-8 bg-[#12161A]/60 border border-white/10 rounded-xl backdrop-blur-md space-y-5">
             <div className="space-y-4">
-              <div className="font-mono text-[12px] text-[#00FF66] uppercase tracking-[0.15em]">[ NODE_0{activeNode.id} // {activeNode.nodeCode} ]</div>
-              <h2 className="text-2xl font-bold text-white tracking-tight uppercase font-mono">{activeNode.title}</h2>
-              {activeNode.id === 1 && <Node01FederationWidget />}
+              {activeNode.id === 9 ? (
+                <div className="space-y-1 mb-2">
+                  <div className="font-mono text-[11px] text-[#00FF66] opacity-60 uppercase tracking-[0.2em]">
+                    [ GATEWAY // SESSION_INIT ]
+                  </div>
+                  <h2 className="text-[22px] font-bold text-white tracking-tight uppercase font-mono">
+                    ARTRON OS ACCESS
+                  </h2>
+                </div>
+              ) : (
+                <>
+                  <div className="font-mono text-[12px] text-[#00FF66] uppercase tracking-[0.15em]">[ NODE_0{activeNode.id} // {activeNode.nodeCode} ]</div>
+                  <h2 className="text-2xl font-bold text-white tracking-tight uppercase font-mono">{activeNode.title}</h2>
+                </>
+              )}
               {activeNode.id === 2 && <Node02BlueprintWidget />}
               {activeNode.id === 3 && <Node03ProWidget />}
               {activeNode.id === 4 && <Node04MobileWidget />}
@@ -113,7 +194,7 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
                       <h3 className="text-[11px] font-mono uppercase tracking-wider text-gray-400 mb-2">Available Sub-Chapters</h3>
                       <div className="space-y-1.5">
                         {activeNode.subChapters.map((sub) => (
-                          <button key={sub.id} onClick={() => { soundEngine.playPulseNode(); onSelectSubChapter(sub.id); }} className={`w-full text-left p-2.5 rounded text-xs transition-all border ${activeSubChapterId === sub.id ? 'bg-[#16191E] border-[#00FF66] text-[#00FF66]' : 'bg-[#121418] border-[#262a33] text-gray-300 hover:text-white'}`}>{sub.title}</button>
+                          <button key={sub.id} onClick={() => { soundEngine.playPulseNode(); onSelectSubChapter(sub.id); }} className={`w-full text-left p-2.5 rounded text-xs transition-all border ${activeSubChapterId === sub.id ? 'bg-[#16191E] border-[#00FF66] text-[#00FF66]' : 'bg-[#121418] border-[#262a33] text-gray-300 hover:text-[#00FF66]'}`}>{sub.title}</button>
                         ))}
                       </div>
                     </div>
@@ -122,8 +203,11 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
               )}
 
             </div>
-            <button onClick={() => { soundEngine.playPulseNode(); onResetToCore(); }} className="text-xs font-mono text-gray-400 hover:text-white flex items-center space-x-1.5 uppercase tracking-wider transition-colors pt-2 cursor-pointer">
-              <span>← Return to Core</span>
+            <button
+              onClick={() => { soundEngine.playPulseNode(); onResetToCore(); }}
+              className="text-xs font-mono text-gray-400 opacity-50 hover:opacity-100 hover:text-white flex items-center space-x-1.5 uppercase tracking-wider transition-all duration-200 pt-2 cursor-pointer"
+            >
+              <span>&lt; RETURN [ESC]</span>
             </button>
           </div>
         )}

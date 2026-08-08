@@ -2,11 +2,14 @@ import { ArtronNode } from '@/types/gateway';
 
 export const GATEWAY_NODES: ArtronNode[] = [
   {
-    id: 1, nodeCode: 'SOVEREIGN_FEDERATIONS', title: 'FEDERATION NODES',
-    shortDesc: 'ეროვნული ფედერაციების მონაცემთა ბაზა დაცულია ორმხრივი დაშიფვრით. თითოეული ფედერაციისთვის შექმნილია დამოუკიდებელი კრიპტოგრაფიული კარიბჭე (Secure Gateway API).',
+    id: 1, nodeCode: 'CRM_SOVEREIGN_PROFILE', title: 'სპორტსმენთა 360° პროფილი და სამართლებრივი უსაფრთხოება (CRM)',
+    shortDesc: 'Artron CRM არის მრავალშრიანი, დინამიური ბაზა, რომელიც საშუალებას გაძლევთ ერთიან ციფრულ სივრცეში მართოთ სხვადასხვა სტატუსის მქონე მომხმარებლები — პროფესიონალი სპორტსმენებიდან დაწყებული, ერთჯერადი სტუმრებითა და კორპორატიული ჯგუფებით დასრულებული. სისტემა ავტომატურად აკონტროლებს იურიდიულ და სამედიცინო შესაბამისობას, რაც თქვენს ბიზნესს სრულად იცავს სამართლებრივი რისკებისგან.',
     subChapters: [
-      { id: 'fed-registry', title: '01 // CONNECTED FEDERATION REGISTRY', doctrines: ['GEO_FOOTBALL_FED: ● SECURE_ACTIVE', 'GEO_BASKETBALL_FED: ● SECURE_ACTIVE', 'GEO_RUGBY_UNION: ● SECURE_ACTIVE'] },
-      { id: 'fed-gateway', title: '02 // CRYPTOGRAPHIC GATEWAY', doctrines: ['[ GATEWAY_KEY ]: AES_256_RSA_ACTIVE', '[ SYS_LOAD ]: 12.4%'] }
+      { id: '01.1', title: '01.1 // მრავალ-პროფილიანი იერარქია (ოჯახები, მშობლები და შვილები)', doctrines: ['Family billing & multi-account link'] },
+      { id: '01.2', title: '01.2 // კორპორატიული ჯგუფები, სტუდენტები და მეგობრების გაერთიანებები', doctrines: ['Corporate B2B invoicing'] },
+      { id: '01.3', title: '01.3 // პროფესიონალი სპორტსმენები vs მოყვარული მოვარჯიშეები', doctrines: ['Pro level segmentation'] },
+      { id: '01.4', title: '01.4 // VIP წევრები, სტუმრები და საცდელი ვიზიტები', doctrines: ['Fast-track turnstile guest pass'] },
+      { id: '01.5', title: '01.5 // სამედიცინო ვალიდურობა და იურიდიული შესაბამისობა (Compliance & Safety)', doctrines: ['Medical & COPPA automated purge'] }
     ]
   },
   {

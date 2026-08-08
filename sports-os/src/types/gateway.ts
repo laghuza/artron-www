@@ -1,4 +1,5 @@
 export type ViewState = 'CORE_INIT' | 'NODE_SELECTED' | 'SUBCHAPTER_VIEW';
+export type PortalState = 'IDLE' | 'IGNITION' | 'EXPANDING' | 'ENTERED';
 
 export type SubChapter = {
   id: string;

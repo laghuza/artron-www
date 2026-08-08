@@ -368,4 +368,89 @@ h4.uppercase {
   );
 }
 
+/* ==========================================
+   EMERALD PORTAL GATE TRANSITION ANIMATION
+   ========================================== */
+
+/* Phase 1: Ambient Pulse (IDLE State) */
+@keyframes emerald-core-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.6);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 18px rgba(0, 230, 118, 0.85);
+  }
+}
+.animate-emerald-ambient {
+  animation: emerald-core-pulse 3s ease-in-out infinite;
+}
+
+/* SVG ambient drop shadow pulse */
+@keyframes svg-emerald-ambient {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(0, 230, 118, 0.6));
+  }
+  50% {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 12px rgba(0, 230, 118, 0.95));
+  }
+}
+.animate-svg-emerald-ambient {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: svg-emerald-ambient 3s ease-in-out infinite;
+}
+
+/* Phase 2: Radial Shockwave Ignition Ring (300ms) */
+@keyframes portal-ignition-blast {
+  0% {
+    transform: translate3d(-50%, -50%, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) scale(4);
+    opacity: 0;
+  }
+}
+.animate-ignition-blast {
+  animation: portal-ignition-blast 300ms linear forwards;
+  will-change: transform, opacity;
+}
+
+/* Phase 3: Quantum Tunnel Expansion Overlay (380ms) */
+@keyframes portal-core-expand {
+  0% {
+    transform: translate3d(-50%, -50%, 0) scale(1);
+    background: #00E676;
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) scale(120);
+    background: radial-gradient(circle at center, rgba(0, 230, 118, 0.4) 0%, rgba(10, 11, 13, 0.98) 70%);
+  }
+}
+.animate-core-expand {
+  animation: portal-core-expand 380ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Phase 4: Console Reveal Fade & Scale */
+@keyframes console-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-console-reveal {
+  animation: console-reveal 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
+
 

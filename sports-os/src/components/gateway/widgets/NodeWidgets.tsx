@@ -92,52 +92,50 @@ export const Node08GdprShieldWidget: React.FC = () => (
  */
 export const Node09AccessWidget: React.FC<{ onSelectSubChapter?: (subId: string) => void }> = ({ onSelectSubChapter }) => {
   return (
-    <div className="w-full space-y-5 font-mono animate-fadeIn pt-1">
-      {/* Philosophical Header Badge */}
-      <div className="text-[11px] text-[#00FF66] uppercase tracking-[0.18em] flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#00FF66] animate-pulse" />
-        [ ACCESS_GATEWAY // SELECTION ]
-      </div>
-      <p className="font-sans text-[13px] text-[#C2C7D0] leading-relaxed">
-        სისტემური თვითორგანიზების ორი უნიკალური წერტილი. აირჩიეთ სესიის ტიპი:
-      </p>
-
-      {/* Choice Buttons Stack (Screen 2 Style: Wide, Reduced Height, Soft Glow) */}
-      <div className="space-y-4 pt-1">
-        {/* Button 1: MEMBERSHIP INIT */}
-        <div className="space-y-1.5">
-          <button
-            type="button"
-            onClick={() => {
-              soundEngine.playPulseNode();
-              onSelectSubChapter?.('membership-init');
-            }}
-            className="w-full py-2.5 px-4 bg-[#121418]/90 border border-[#00FF66]/60 hover:border-[#00FF66] hover:bg-[#00FF66]/10 text-[#00FF66] font-mono text-[12px] font-bold uppercase tracking-[1.8px] rounded-md transition-all duration-200 text-center shadow-sm cursor-pointer"
-          >
-            01 // MEMBERSHIP INIT
-          </button>
-          <p className="font-sans text-[12px] text-[#9CA3AF]/90 leading-relaxed px-1">
-            სპორტულ-გამაჯანსაღებელი სუბიექტის (ფედერაცია, კლუბი, ათლეტი) პირველადი ინიციაცია და ბირთვთან დაკავშირება.
-          </p>
+    <div className="w-full space-y-3.5 font-mono animate-fadeIn pt-2">
+      {/* Button 1: MEMBERSHIP INIT */}
+      <button
+        type="button"
+        onClick={() => {
+          soundEngine.playPulseNode();
+          onSelectSubChapter?.('membership-init');
+        }}
+        className="group w-full px-5 py-4 bg-[rgba(10,11,13,0.6)] border border-[rgba(0,230,118,0.25)] hover:border-[#00E676] hover:bg-[rgba(0,230,118,0.08)] rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
+      >
+        <span className="font-mono text-[13px] font-bold text-white tracking-[1.5px] uppercase group-hover:text-[#00E676] transition-colors">
+          01 // MEMBERSHIP INIT
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] font-semibold text-[#00E676] bg-[#00E676]/10 px-2.5 py-1 rounded border border-[#00E676]/30 uppercase tracking-wider">
+            NEW REGISTRATION
+          </span>
+          <span className="font-mono text-[14px] text-[#00E676] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
+            →
+          </span>
         </div>
+      </button>
 
-        {/* Button 2: CONSOLE ACCESS */}
-        <div className="space-y-1.5">
-          <button
-            type="button"
-            onClick={() => {
-              soundEngine.playPulseNode();
-              onSelectSubChapter?.('console-access');
-            }}
-            className="w-full py-2.5 px-4 bg-[#121418]/90 border border-[#00FF66]/60 hover:border-[#00FF66] hover:bg-[#00FF66]/10 text-[#00FF66] font-mono text-[12px] font-bold uppercase tracking-[1.8px] rounded-md transition-all duration-200 text-center shadow-sm cursor-pointer"
-          >
-            02 // CONSOLE ACCESS
-          </button>
-          <p className="font-sans text-[12px] text-[#9CA3AF]/90 leading-relaxed px-1">
-            რეგისტრირებული ოპერატორის ავტორიზებული შესვლა მართვისა და ტელემეტრიის კონსოლში.
-          </p>
+      {/* Button 2: CONSOLE ACCESS */}
+      <button
+        type="button"
+        onClick={() => {
+          soundEngine.playPulseNode();
+          onSelectSubChapter?.('console-access');
+        }}
+        className="group w-full px-5 py-4 bg-[rgba(10,11,13,0.6)] border border-[rgba(0,230,118,0.25)] hover:border-[#00E676] hover:bg-[rgba(0,230,118,0.08)] rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
+      >
+        <span className="font-mono text-[13px] font-bold text-white tracking-[1.5px] uppercase group-hover:text-[#00E676] transition-colors">
+          02 // CONSOLE ACCESS
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] font-semibold text-[#00E676] bg-[#00E676]/10 px-2.5 py-1 rounded border border-[#00E676]/30 uppercase tracking-wider">
+            OPERATOR LOGIN
+          </span>
+          <span className="font-mono text-[14px] text-[#00E676] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
+            →
+          </span>
         </div>
-      </div>
+      </button>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { audioManager } from "@/lib/audioManager";
 import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
@@ -18,7 +18,11 @@ import { GLOW_COLORS } from "@/components/features/dashboard/dashboardConstants"
 import { useDashboardEffects } from "@/hooks/useDashboardEffects";
 import { useStageOrchestrator } from "@/context/StageOrchestratorContext";
 
-export default function SplitCoreDashboard() {
+interface SplitCoreDashboardProps {
+  onReturnToGateway?: () => void;
+}
+
+export default function SplitCoreDashboard({ onReturnToGateway }: SplitCoreDashboardProps = {}) {
   const router = useRouter();
   const { mobileStage, setMobileStage, selectNode } = useStageOrchestrator();
   const [activeNode, setActiveNode] = useState<number>(0);
@@ -37,6 +41,18 @@ export default function SplitCoreDashboard() {
   const currentDisplayNode = hoveredNode !== null ? hoveredNode : activeNode;
 
   useDashboardEffects({ setIsMuted, transitionStep, activeNode, setPurgeState, accessTab, setTransitionStep, setSweepTrigger, setAccessTab });
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && transitionStep === 'idle' && purgeState === 'none' && onReturnToGateway) {
+        onReturnToGateway();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [transitionStep, purgeState, onReturnToGateway]);
+
+
 
   const handleTriggerScan = () => setScanTrigger((prev) => prev + 1);
   const handleNodeSelect = (index: number) => {
@@ -61,10 +77,22 @@ export default function SplitCoreDashboard() {
       <div className={`fade-to-black-overlay ${isFadeToBlack ? "active" : ""}`} />
       {transitionStep === "sweeping" && <div key={`sweep-${sweepTrigger}`} className="radial-sweep-ring" />}
       {transitionStep === "idle" && (
-        <div className="absolute top-4 right-4 z-40 animate-fadeIn hidden lg:block">
-          <DesktopLogoMenu onEnterCore={() => handleNodeSelect(9)} />
+        <div className="absolute top-4 right-4 z-50 animate-fadeIn flex items-center gap-3">
+          {onReturnToGateway && (
+            <button
+              type="button"
+              onClick={onReturnToGateway}
+              className="px-3 py-1.5 bg-[#121418]/90 border border-[#00E676]/40 text-[#00E676] hover:bg-[#00E676] hover:text-[#121418] text-[11px] font-mono font-bold tracking-[1.5px] uppercase rounded transition-all cursor-pointer shadow-[0_0_15px_rgba(0,230,118,0.2)]"
+            >
+              [ ✕ RETURN TO GATEWAY (ESC) ]
+            </button>
+          )}
+          <div className="hidden lg:block">
+            <DesktopLogoMenu onEnterCore={() => handleNodeSelect(9)} />
+          </div>
         </div>
       )}
+
 
       <div className={`h-full flex flex-col justify-center relative overflow-hidden transition-all duration-[1000ms] ease-expo-out bg-[#1A1D23]/60 box-border ${
         transitionStep !== "idle"
