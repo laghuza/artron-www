@@ -1,5 +1,5 @@
 {
   "git.path": "/home/hp/bin/git",
   "git.enabled": true,
-  "typescript.tsdk": "sports-os/node_modules/typescript/lib"
+  "typescript.tsdk": "./sports-os/node_modules/typescript/lib"
 }
