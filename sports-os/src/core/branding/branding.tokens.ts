@@ -19,51 +19,51 @@ export interface ButtonTokenConfig {
 
 export const BUTTON_VARIANTS: Record<ButtonVariant, ButtonTokenConfig> = {
   NEON_PRIMARY: {
-    background: 'linear-gradient(135deg, rgba(64, 145, 108, 0.9), rgba(45, 106, 79, 0.95))',
-    border: '1px solid rgba(82, 183, 136, 0.6)',
-    text: '#FFFFFF',
-    hoverBackground: 'linear-gradient(135deg, rgba(82, 183, 136, 1), rgba(64, 145, 108, 1))',
-    boxShadow: '0 0 15px rgba(64, 145, 108, 0.4), inset 0 0 10px rgba(82, 183, 136, 0.2)',
+    background: 'linear-gradient(135deg, rgba(0, 255, 135, 0.9), rgba(0, 229, 255, 0.95))',
+    border: '1px solid rgba(0, 255, 135, 0.6)',
+    text: '#090A0F',
+    hoverBackground: 'linear-gradient(135deg, rgba(0, 255, 135, 1), rgba(0, 229, 255, 1))',
+    boxShadow: '0 0 20px rgba(0, 255, 135, 0.4), inset 0 0 10px rgba(0, 229, 255, 0.3)',
     transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
   },
   GLASS_OUTLINE: {
-    background: 'rgba(26, 29, 35, 0.4)',
-    border: '1px solid rgba(156, 163, 175, 0.25)',
-    text: '#F5F5F3',
-    hoverBackground: 'rgba(26, 29, 35, 0.7)',
-    boxShadow: '0 0 10px rgba(255, 255, 255, 0.05)',
+    background: 'rgba(18, 20, 29, 0.7)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    text: '#F8FAFC',
+    hoverBackground: 'rgba(18, 20, 29, 0.9)',
+    boxShadow: '0 0 15px rgba(0, 255, 135, 0.15)',
     transition: 'all 0.2s ease-in-out'
   },
   DANGER_PURGE: {
-    background: 'rgba(184, 91, 73, 0.15)',
-    border: '1px solid rgba(231, 111, 81, 0.7)',
-    text: '#E76F51',
-    hoverBackground: 'rgba(184, 91, 73, 0.35)',
-    boxShadow: '0 0 20px rgba(231, 111, 81, 0.4)',
+    background: 'rgba(239, 68, 68, 0.15)',
+    border: '1px solid rgba(239, 68, 68, 0.7)',
+    text: '#EF4444',
+    hoverBackground: 'rgba(239, 68, 68, 0.35)',
+    boxShadow: '0 0 20px rgba(239, 68, 68, 0.4)',
     transition: 'all 0.2s ease-in-out'
   },
   HUD_PILL: {
-    background: 'rgba(18, 20, 24, 0.85)',
-    border: '1px solid rgba(64, 145, 108, 0.4)',
-    text: '#52B788',
-    hoverBackground: 'rgba(45, 106, 79, 0.3)',
-    boxShadow: '0 0 12px rgba(82, 183, 136, 0.25)',
+    background: 'rgba(18, 20, 29, 0.85)',
+    border: '1px solid rgba(0, 255, 135, 0.4)',
+    text: '#00FF87',
+    hoverBackground: 'rgba(0, 255, 135, 0.15)',
+    boxShadow: '0 0 12px rgba(0, 255, 135, 0.25)',
     transition: 'all 0.3s ease'
   },
   CYBER_CARD: {
-    background: 'rgba(26, 29, 35, 0.75)',
-    border: '1px solid rgba(142, 125, 190, 0.3)',
-    text: '#A594F9',
-    hoverBackground: 'rgba(142, 125, 190, 0.2)',
-    boxShadow: '0 0 25px rgba(142, 125, 190, 0.2)',
+    background: 'rgba(18, 20, 29, 0.7)',
+    border: '1px solid rgba(0, 229, 255, 0.3)',
+    text: '#00E5FF',
+    hoverBackground: 'rgba(0, 229, 255, 0.15)',
+    boxShadow: '0 0 25px rgba(0, 229, 255, 0.25)',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
   }
 };
 
 export const NEON_GLOW_LEVELS: Record<NeonGlowLevel, string> = {
-  LOW: '0 0 8px rgba(64, 145, 108, 0.2)',
-  MEDIUM: '0 0 16px rgba(64, 145, 108, 0.45)',
-  HIGH_CYBER: '0 0 30px rgba(82, 183, 136, 0.75), 0 0 10px rgba(255, 255, 255, 0.3)'
+  LOW: '0 0 8px rgba(0, 255, 135, 0.2)',
+  MEDIUM: '0 0 16px rgba(0, 255, 135, 0.45)',
+  HIGH_CYBER: '0 0 30px rgba(0, 255, 135, 0.75), 0 0 10px rgba(0, 229, 255, 0.5)'
 };
 
 export const SCANLINE_OPACITY_PRESETS: Record<ScanlineOpacityPreset, number> = {

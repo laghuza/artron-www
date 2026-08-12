@@ -1,12 +1,17 @@
 export const ARTRON_DESIGN_SYSTEM = {
   theme: {
-    canvasBackground: "#121418", // Forged Iron
-    surfaceBackground: "rgba(26, 29, 35, 0.5)", // Iron-2 Surface
-    surfaceBorder: "rgba(156, 163, 175, 0.15)", // Antique Silver Border
-    textPrimary: "#F5F5F3",
-    textMuted: "#6B7280",
+    canvasBackground: "#090A0F", // Dark-Futurist Core
+    surfaceGlass: "rgba(18, 20, 29, 0.7)", // Glassmorphic Surface
+    surfaceBackground: "rgba(18, 20, 29, 0.7)",
+    primaryNeon: "#00FF87", // Primary Neon Accent
+    accentCyan: "#00E5FF", // High-Tech Cyan Accent
+    borderGlow: "rgba(0, 255, 135, 0.15)", // Border Glow
+    surfaceBorder: "rgba(0, 255, 135, 0.15)",
+    textPrimary: "#F8FAFC", // Text Primary
+    textSecondary: "#94A3B8", // Text Secondary
+    textMuted: "#94A3B8",
     fontFamilyCode: "'JetBrains Mono', monospace",
-    fontFamilySans: "'Outfit', 'Inter', sans-serif"
+    fontFamilySans: "'Inter', 'Space Grotesk', sans-serif"
   },
 
   // 9 Natural Mineral Nodes (Biophilic Spectrum)

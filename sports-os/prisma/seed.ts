@@ -1,72 +1,77 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
-  console.log('Seeding Artron Sports OS database...');
+  console.log('Seeding Artron Sports OS database...')
 
-  // 1. SuperAdmin Tenant ('artron-global')
+  // 1. Primary Tenant ('artron-global')
   const tenant = await prisma.tenant.upsert({
     where: { slug: 'artron-global' },
     update: {},
     create: {
-      name: 'Artron Global',
+      name: 'Artron Global Sports Academy',
       slug: 'artron-global',
+      academyType: 'FOOTBALL',
       plan: 'ENTERPRISE',
+      contactEmail: 'admin@artron.ge',
     },
-  });
+  })
 
-  // 2. Federation ('Georgian Football Federation', code: 'GFF')
-  const federation = await prisma.federation.upsert({
-    where: { code: 'GFF' },
-    update: {},
-    create: {
-      tenantId: tenant.id,
-      name: 'Georgian Football Federation',
-      code: 'GFF',
-      country: 'Georgia',
-    },
-  });
-
-  // 3. Club ('FC Dinamo Academy')
-  const club = await prisma.club.create({
+  // 2. Facility ('Dinamo Arena Training Grounds')
+  const facility = await prisma.facility.create({
     data: {
       tenantId: tenant.id,
-      federationId: federation.id,
-      name: 'FC Dinamo Academy',
-      academyType: 'Pro Academy',
+      name: 'Dinamo Arena Training Grounds',
+      location: 'Tbilisi, Georgia',
+      capacity: 500,
     },
-  });
+  })
 
-  // 4. Athlete ('Giorgi Demetradze')
-  await prisma.athlete.create({
+  // 3. Group ('U-17 Elite Squad')
+  const group = await prisma.group.create({
     data: {
       tenantId: tenant.id,
-      clubId: club.id,
+      facilityId: facility.id,
+      name: 'U-17 Elite Squad',
+      ageCategory: 'U-17',
+      discipline: 'Football',
+    },
+  })
+
+  // 4. Athlete Profile ('Giorgi Demetradze')
+  await prisma.athleteProfile.create({
+    data: {
+      tenantId: tenant.id,
+      groupId: group.id,
       firstName: 'Giorgi',
       lastName: 'Demetradze',
-      biometricsJson: { heartRateAvg: 68, vo2Max: 58, topSpeedKmH: 32.4 },
-      piiEncrypted: 'encrypted_pii_sample_demetradze',
+      dateOfBirth: new Date('2008-05-15'),
+      gender: 'Male',
+      isMinor: true,
+      coppaConsentGranted: true,
+      coppaConsentDate: new Date(),
+      piiEncrypted: 'sample_aes256_encrypted_national_id',
     },
-  });
+  })
 
   // 5. System Audit Log entry
   await prisma.auditLog.create({
     data: {
       tenantId: tenant.id,
-      action: 'SYSTEM_DATABASE_SEED',
+      action: 'SYSTEM_DATABASE_SEED_COMPLETE',
       ipAddress: '127.0.0.1',
     },
-  });
+  })
 
-  console.log('Database seeding completed successfully.');
+  console.log('Database seeding completed successfully.')
 }
 
 main()
   .catch((e) => {
-    console.error('Error seeding database:', e);
-    process.exit(1);
+    console.error('Error seeding database:', e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

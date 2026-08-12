@@ -9,7 +9,7 @@ import { SidebarPanel } from '@/components/gateway/SidebarPanel';
 import { NodeCanvas } from '@/components/gateway/NodeCanvas';
 import { NodeDetailPanel } from '@/components/gateway/NodeDetailPanel';
 import { EmeraldPortalGate } from '@/components/gateway/EmeraldPortalGate';
-import { SimpleOperatorDashboard } from '@/components/features/dashboard/SimpleOperatorDashboard';
+import { ArtronB2BDashboard } from '@/components/features/dashboard/ArtronB2BDashboard';
 import { TemporaryGuestDashboard } from '@/components/features/dashboard/TemporaryGuestDashboard';
 import { CyberErrorBoundary, soundEngine } from '@/core';
 
@@ -19,8 +19,6 @@ export default function GatewayPage() {
   const [accessMode, setAccessMode] = useState<'FULL_B2B' | 'TEMP_OTP'>('FULL_B2B');
   const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
   const [activeSubChapterId, setActiveSubChapterId] = useState<string | null>(null);
-
-
 
   const timerRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -55,7 +53,6 @@ export default function GatewayPage() {
 
     timerRef.current = [t1, t2];
   }, [portalState, clearTransitionTimers]);
-
 
   const handleAuthenticate = useCallback(
     (mode: 'FULL_B2B' | 'TEMP_OTP', _credentials?: any) => {
@@ -128,15 +125,15 @@ export default function GatewayPage() {
     setActiveSubChapterId(null);
   }, [clearTransitionTimers]);
 
-  // Phase 4: Console Reveal (Dedicated B2B Operator Console or Temporary OTP Guest Console)
+  // Phase 4: Console Reveal (Dedicated ARt.pdf B2B Operator Console or Temporary OTP Guest Console)
   if (portalState === 'ENTERED') {
     return (
       <CyberErrorBoundary fallbackTitle="ARTRON B2B CONSOLE DIAGNOSTIC">
-        <div className="w-screen h-screen overflow-hidden animate-console-reveal">
+        <div className="w-screen h-screen overflow-x-hidden overflow-y-auto animate-console-reveal">
           {accessMode === 'TEMP_OTP' ? (
             <TemporaryGuestDashboard onExit={handleResetToGateway} />
           ) : (
-            <SimpleOperatorDashboard onReturnToGateway={handleResetToGateway} />
+            <ArtronB2BDashboard onReturnToGateway={handleResetToGateway} />
           )}
         </div>
       </CyberErrorBoundary>

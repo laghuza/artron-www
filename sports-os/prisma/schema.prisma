@@ -1,5 +1,5 @@
-// Prisma Schema for Artron Multi-Tenant Architecture
-// PostgreSQL Database Provider
+// Prisma Schema for Artron Multi-Tenant SaaS Architecture
+// PostgreSQL Database Provider with Row-Level Security (RLS)
 
 generator client {
   provider = "prisma-client-js"
@@ -11,25 +11,92 @@ datasource db {
 
 enum Role {
   SUPER_ADMIN
-  FEDERATION_ADMIN
-  CLUB_ADMIN
+  INSTITUTION_ADMIN
+  COACH
+  STAFF
+  PARENT
   ATHLETE
+}
+enum AcademyType {
+  FOOTBALL
+  BASKETBALL
+  TENNIS
+  MULTI_SPORT
+  FEDERATION
+  OLYMPIC_CENTER
+}
+enum SubscriptionPlan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+enum BillingStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+enum DeviceType {
+  TURNSTILE
+  RFID_SCANNER
+  NFC_READER
+  BIOMETRIC_CAMERA
+  WEARABLE_HUB
+}
+enum AccessResult {
+  GRANTED
+  DENIED
+  OVERRIDE
+}
+enum ConsentStatus {
+  PENDING
+  GRANTED
+  REVOKED
+  EXPIRED
+}
+enum ContractType {
+  ATHLETE
+  COACH
+  STAFF
+}
+enum ContractStatus {
+  DRAFT
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+  EXPIRED
+}
+enum PaymentGateway {
+  STRIPE
+  TBC_BANK
+  BANK_OF_GEORGIA
+  DIRECT_TRANSFER
 }
 
 model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String   @unique
-  plan      String   @default("ENTERPRISE")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  users       User[]
-  federations Federation[]
-  clubs       Club[]
-  athletes    Athlete[]
-  auditLogs   AuditLog[]
-
+  id           String           @id @default(uuid())
+  name         String
+  slug         String           @unique
+  academyType  AcademyType      @default(FOOTBALL)
+  plan         SubscriptionPlan @default(ENTERPRISE)
+  isActive     Boolean          @default(true)
+  address      String?
+  contactEmail String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  users            User[]
+  facilities       Facility[]
+  groups           Group[]
+  athletes         AthleteProfile[]
+  contracts        Contract[]
+  subscriptions    Subscription[]
+  invoices         Invoice[]
+  tuitions         AthleteTuition[]
+  ioTDevices       IoTDevice[]
+  accessLogs       AccessControlLog[]
+  telemetryStreams BiometricTelemetryStream[]
+  auditLogs        AuditLog[]
   @@map("tenants")
 }
 
@@ -38,67 +105,281 @@ model User {
   tenantId     String
   tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   email        String   @unique
-  role         Role     @default(CLUB_ADMIN)
+  role         Role     @default(INSTITUTION_ADMIN)
+  firstName    String
+  lastName     String
+  phone        String?
   passwordHash String
+  isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  auditLogs AuditLog[]
-
+  coachProfile   CoachProfile?
+  athleteProfile AthleteProfile?  @relation("UserAthlete")
+  parentAthletes AthleteProfile[] @relation("ParentAthletes")
+  auditLogs      AuditLog[]
   @@index([tenantId])
   @@map("users")
 }
 
-model Federation {
+model Facility {
   id        String   @id @default(uuid())
   tenantId  String
   tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   name      String
-  code      String   @unique
-  country   String
+  location  String?
+  capacity  Int      @default(100)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  clubs Club[]
-
+  groups     Group[]
+  ioTDevices IoTDevice[]
   @@index([tenantId])
-  @@map("federations")
+  @@map("facilities")
 }
 
-model Club {
-  id           String      @id @default(uuid())
-  tenantId     String
-  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  federationId String?
-  federation   Federation? @relation(fields: [federationId], references: [id], onDelete: SetNull)
-  name         String
-  academyType  String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-
-  athletes Athlete[]
-
+model Group {
+  id          String    @id @default(uuid())
+  tenantId    String
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  facilityId  String?
+  facility    Facility? @relation(fields: [facilityId], references: [id], onDelete: SetNull)
+  name        String
+  ageCategory String
+  discipline  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  coaches  CoachProfile[]
+  athletes AthleteProfile[]
   @@index([tenantId])
-  @@index([federationId])
-  @@map("clubs")
+  @@index([facilityId])
+  @@map("groups")
 }
 
-model Athlete {
+model CoachProfile {
   id             String   @id @default(uuid())
-  tenantId       String
-  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  clubId         String?
-  club           Club?    @relation(fields: [clubId], references: [id], onDelete: SetNull)
-  firstName      String
-  lastName       String
-  biometricsJson Json?
-  piiEncrypted   String?
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  licenseNumber  String?
+  specialization String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  groups    Group[]
+  contracts Contract[]
+  @@map("coach_profiles")
+}
 
+model AthleteProfile {
+  id                  String    @id @default(uuid())
+  tenantId            String
+  tenant              Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId              String?   @unique
+  user                User?     @relation("UserAthlete", fields: [userId], references: [id], onDelete: SetNull)
+  parentUserId        String?
+  parentUser          User?     @relation("ParentAthletes", fields: [parentUserId], references: [id], onDelete: SetNull)
+  groupId             String?
+  group               Group?    @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  firstName           String
+  lastName            String
+  dateOfBirth         DateTime
+  gender              String?
+  rfidTagId           String?   @unique
+  isMinor             Boolean   @default(true)
+  coppaConsentGranted Boolean   @default(false)
+  coppaConsentDate    DateTime?
+  piiEncrypted        String?
+  emergencyContactPii String?
+  isSoftDeleted       Boolean   @default(false)
+  deletedAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  guardianConsents GuardianConsent[]
+  medicalRecords   MedicalRecord[]
+  biometrics       AthleteBiometrics?
+  contracts        Contract[]
+  tuitions         AthleteTuition[]
+  accessLogs       AccessControlLog[]
+  telemetryStreams BiometricTelemetryStream[]
   @@index([tenantId])
-  @@index([clubId])
-  @@map("athletes")
+  @@index([groupId])
+  @@index([parentUserId])
+  @@map("athlete_profiles")
+}
+
+model Contract {
+  id             String         @id @default(uuid())
+  tenantId       String
+  tenant         Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  athleteId      String?
+  athlete        AthleteProfile? @relation(fields: [athleteId], references: [id], onDelete: SetNull)
+  coachProfileId String?
+  coachProfile   CoachProfile?  @relation(fields: [coachProfileId], references: [id], onDelete: SetNull)
+  contractType   ContractType   @default(ATHLETE)
+  status         ContractStatus @default(ACTIVE)
+  startDate      DateTime
+  endDate        DateTime?
+  amountCents    Int            @default(0)
+  currency       String         @default("GEL")
+  documentUrl    String?
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  @@index([tenantId])
+  @@index([athleteId])
+  @@index([coachProfileId])
+  @@map("contracts")
+}
+
+model GuardianConsent {
+  id            String        @id @default(uuid())
+  tenantId      String
+  athleteId     String
+  athlete       AthleteProfile @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  guardianEmail String
+  consentStatus ConsentStatus @default(PENDING)
+  ipAddress     String?
+  consentedAt   DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  @@index([tenantId])
+  @@index([athleteId])
+  @@map("guardian_consents")
+}
+
+model MedicalRecord {
+  id                   String         @id @default(uuid())
+  tenantId             String
+  athleteId            String
+  athlete              AthleteProfile @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  encryptedMedicalData String
+  isPurged             Boolean        @default(false)
+  purgedAt             DateTime?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  @@index([tenantId])
+  @@index([athleteId])
+  @@map("medical_records")
+}
+
+model AthleteBiometrics {
+  id             String         @id @default(uuid())
+  athleteId      String         @unique
+  athlete        AthleteProfile @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  heightCm       Float?
+  weightKg       Float?
+  bloodType      String?
+  vo2Max         Float?
+  enneaCoreScore Json?
+  updatedAt      DateTime       @updatedAt
+  @@map("athlete_biometrics")
+}
+
+model Subscription {
+  id                   String           @id @default(uuid())
+  tenantId             String
+  tenant               Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  paymentGateway       PaymentGateway   @default(STRIPE)
+  stripeCustomerId     String?          @unique
+  stripeSubscriptionId String?          @unique
+  gatewayTransactionId String?
+  planTier             SubscriptionPlan @default(ENTERPRISE)
+  status               BillingStatus    @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean          @default(false)
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  @@index([tenantId])
+  @@map("subscriptions")
+}
+
+model Invoice {
+  id                   String         @id @default(uuid())
+  tenantId             String
+  tenant               Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  paymentGateway       PaymentGateway @default(STRIPE)
+  stripeInvoiceId      String?        @unique
+  gatewayTransactionId String?
+  amountCents          Int
+  currency             String         @default("GEL")
+  status               BillingStatus  @default(ACTIVE)
+  paidAt               DateTime?
+  createdAt            DateTime       @default(now())
+  @@index([tenantId])
+  @@map("invoices")
+}
+
+model AthleteTuition {
+  id                   String         @id @default(uuid())
+  tenantId             String
+  tenant               Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  athleteId            String
+  athlete              AthleteProfile @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  paymentGateway       PaymentGateway @default(TBC_BANK)
+  gatewayTransactionId String?
+  amountCents          Int
+  dueDate              DateTime
+  status               BillingStatus  @default(ACTIVE)
+  paidAt               DateTime?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  @@index([tenantId])
+  @@index([athleteId])
+  @@map("athlete_tuitions")
+}
+
+model IoTDevice {
+  id           String     @id @default(uuid())
+  tenantId     String
+  tenant       Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  facilityId   String?
+  facility     Facility?  @relation(fields: [facilityId], references: [id], onDelete: SetNull)
+  serialNumber String     @unique
+  deviceType   DeviceType @default(TURNSTILE)
+  ipAddress    String?
+  isActive     Boolean    @default(true)
+  lastPingAt   DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  accessLogs       AccessControlLog[]
+  telemetryStreams BiometricTelemetryStream[]
+  @@index([tenantId])
+  @@index([facilityId])
+  @@map("iot_devices")
+}
+
+model AccessControlLog {
+  id           String          @id @default(uuid())
+  tenantId     String
+  tenant       Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  deviceId     String?
+  device       IoTDevice?      @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  athleteId    String?
+  athlete      AthleteProfile? @relation(fields: [athleteId], references: [id], onDelete: SetNull)
+  rfidTagId    String?
+  accessResult AccessResult    @default(GRANTED)
+  timestamp    DateTime        @default(now())
+  metadataJson Json?
+  @@index([tenantId])
+  @@index([deviceId])
+  @@index([athleteId])
+  @@map("access_control_logs")
+}
+
+model BiometricTelemetryStream {
+  id             String         @id @default(uuid())
+  tenantId       String
+  tenant         Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  athleteId      String
+  athlete        AthleteProfile @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  deviceId       String?
+  device         IoTDevice?     @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  heartRate      Int?
+  accelerationG  Float?
+  metricsPayload Json?
+  recordedAt     DateTime       @default(now())
+  @@index([tenantId])
+  @@index([athleteId])
+  @@index([recordedAt])
+  @@map("biometric_telemetry_streams")
 }
 
 model AuditLog {
@@ -110,7 +391,6 @@ model AuditLog {
   action    String
   ipAddress String?
   timestamp DateTime @default(now())
-
   @@index([tenantId])
   @@index([userId])
   @@map("audit_logs")
