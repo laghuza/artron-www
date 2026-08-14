@@ -3,7 +3,8 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import InteractiveEnneaCore from "@/components/features/dashboard/InteractiveEnneaCore";
 import CinematicLoginConsole from "@/components/features/narratives/CinematicLoginConsole";
-import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
+import NodeDetailStage, { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
+import Node01CrmStageCard from "@/components/features/dashboard/Node01CrmStageCard";
 import { ARTRON_DESIGN_SYSTEM } from "@/config/theme.config";
 
 interface DashboardMainStageProps {
@@ -18,7 +19,7 @@ interface DashboardMainStageProps {
 }
 
 export default function DashboardMainStage({
-  activeNode, currentDisplayNode, transitionStep,
+  activeNode, currentDisplayNode, selectedSubItem, setSelectedSubItem, transitionStep,
   handleNodeSelect, setHoveredNode, isFlashActive, gateHover, handleTriggerScan,
   setIsFlashActive, router, handleAccessTabChange, setIsFadeToBlack, accessTab
 }: DashboardMainStageProps) {
@@ -47,6 +48,23 @@ export default function DashboardMainStage({
             isFlashActive={isFlashActive}
             gateHover={gateHover}
           />
+
+          {/* Real-time Sub-chapter Details Overlay Card */}
+          {selectedSubItem && (
+            <div className="absolute inset-0 flex items-center justify-center z-50 p-4 md:p-8 bg-[#090b0e]/85 backdrop-blur-[4px] animate-fadeIn">
+              {activeNode === 1 ? (
+                <Node01CrmStageCard
+                  item={selectedSubItem as any}
+                  onClose={() => setSelectedSubItem(null)}
+                />
+              ) : (
+                <NodeDetailStage
+                  data={selectedSubItem}
+                  onClose={() => setSelectedSubItem(null)}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         {transitionStep === "console" && (
@@ -68,3 +86,4 @@ export default function DashboardMainStage({
     </div>
   );
 }
+

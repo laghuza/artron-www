@@ -17,6 +17,11 @@
 14. **[Sports Analytics & Performance Engineer]** (`sports_analytics_agent.md`) - პასუხისმგებელია ათლეტების ბიომეტრიულ ტელემეტრიაზე, GPS tracking, EnneaCore 9-Node ანალიტიკასა და ტრავმების პრევენციის მოდელებზე.
 15. **[Compliance, GDPR & Legal Agent]** (`compliance_legal_agent.md`) - პასუხისმგებელია GDPR, COPPA child privacy compliance, Automated System Data Purge 14-დღიან პროტოკოლსა და SLA-ზე.
 16. **[Git & Version Control Agent]** (`git_agent.md`) - პასუხისმგებელია ვერსიების კონტროლზე, Git Workflow-ის მართვაზე, Commits/Branching სტრატეგიასა და Pull Request-ების ავტომატიზაციაზე.
+17. **[Creative Motion & Interaction Engineer]** (`artron-motion-interaction-engineer.md`) - პასუხისმგებელია საიტის დინამიურ ანიმაციებზე, Framer Motion-სა და EnneaCore SVG/Canvas ინტერაქციებზე.
+18. **[i18n Localization & B2B SEO Strategist]** (`artron-seo-localization-specialist.md`) - პასუხისმგებელია სამენოვან ლოკალიზაციაზე (KA/EN/RU) და ორგანული B2B საძიებო სიტყვების ოპტიმიზაციაზე (SEO).
+19. **[Penetration Testing & Red-Team Auditor]** (`artron-security-penetration-tester.md`) - პასუხისმგებელია API-ების, ფორმებისა და ავტორიზაციის უსაფრთხოების ტესტირებაზე (Penetration Testing).
+20. **[BI & Data Visualization Analyst]** (`artron-bi-data-visualization-analyst.md`) - პასუხისმგებელია ანალიტიკური მონაცემების, დიაგრამების, SVG გრაფებისა და ROI მეტრიკების ვიზუალიზაციაზე.
+
 
 ---
 
@@ -42,3 +47,18 @@
 - **[Compliance & Legal Agent]** ↔️ **[SecOps, Product Manager, Frontend]**: უზრუნველყოფს GDPR/COPPA დაცვას, Data Purge 14-დღიან ტაიმერებსა და SLA პოლიტიკებს.
 - **[QA & Automation Tester]** ↔️ **[Frontend, Backend, Mobile, Security]**: QA ტესტავს დეველოპერების მიერ დაწერილ კომპონენტებსა და API-ებს Zero-Bug პოლიტიკით.
 - **[Git Agent]** ↔️ **[ყველა დეველოპერი]**: Git Agent აკონტროლებს ყველა აგენტის მიერ შექმნილ Branch-ებს, Commit-ებსა და PR-ებს.
+- **[Creative Motion & Interaction Engineer]** ↔️ **[Frontend, UI Designer]**: ათანხმებს Framer Motion ანიმაციებს, WebGL-ს და Hover/Focus რეაქციებს დიზაინის სისტემასთან.
+- **[i18n Localization & B2B SEO Strategist]** ↔️ **[Frontend, Copywriter, Product Manager]**: უზრუნველყოფს 3-ენოვანი კონტენტის სისწორეს, თავსებადობას და საძიებო სიტყვების ოპტიმიზაციას.
+- **[Penetration Testing & Red-Team Auditor]** ↔️ **[Backend, SecOps, IoT]**: ამოწმებს უსაფრთხოებას, SQLi/XSS მოწყვლადობებს, Socket კავშირებს და PII AES შიფრაციას.
+- **[BI & Data Visualization Analyst]** ↔️ **[Frontend, Sports Analytics, Product Manager]**: ქმნის საოპერაციო, ფინანსური და ტელემეტრიული მონაცემების SVG/Canvas ვიზუალიზაციებს.
+
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

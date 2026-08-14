@@ -7,11 +7,11 @@ async function main() {
 
   // 1. SuperAdmin Tenant ('artron-global')
   const tenant = await prisma.tenant.upsert({
-    where: { slug: 'artron-global' },
+    where: { subdomain: 'artron-global' },
     update: {},
     create: {
       name: 'Artron Global',
-      slug: 'artron-global',
+      subdomain: 'artron-global',
       plan: 'ENTERPRISE',
     },
   });

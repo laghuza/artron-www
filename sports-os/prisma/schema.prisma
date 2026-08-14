@@ -9,41 +9,41 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  SUPER_ADMIN
-  FEDERATION_ADMIN
-  CLUB_ADMIN
-  ATHLETE
-}
-
 model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String   @unique
-  plan      String   @default("ENTERPRISE")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  users       User[]
-  federations Federation[]
-  clubs       Club[]
-  athletes    Athlete[]
-  auditLogs   AuditLog[]
+  id            String         @id @default(uuid())
+  name          String
+  subdomain     String         @unique
+  plan          String         @default("ENTERPRISE")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  users         User[]
+  subscriptions Subscription[]
+  turnstileLogs TurnstileLog[]
+  federations   Federation[]
+  clubs         Club[]
+  athletes      Athlete[]
+  auditLogs     AuditLog[]
 
   @@map("tenants")
 }
 
 model User {
-  id           String   @id @default(uuid())
-  tenantId     String
-  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  email        String   @unique
-  role         Role     @default(CLUB_ADMIN)
-  passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  auditLogs AuditLog[]
+  id                  String                   @id @default(uuid())
+  email               String                   @unique
+  passwordHash        String
+  name                String
+  personalIdEncrypted String?                  @unique
+  personalIdIv        String?
+  personalIdAuthTag   String?
+  role                UserRole                 @default(CLUB_ADMIN)
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  tenantId            String
+  tenant              Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  subscriptions       Subscription[]
+  turnstileLogs       TurnstileLog[]
+  deletionRequests    AccountDeletionRequest[]
+  auditLogs           AuditLog[]
 
   @@index([tenantId])
   @@map("users")
@@ -58,8 +58,7 @@ model Federation {
   country   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  clubs Club[]
+  clubs     Club[]
 
   @@index([tenantId])
   @@map("federations")
@@ -75,8 +74,7 @@ model Club {
   academyType  String
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-
-  athletes Athlete[]
+  athletes     Athlete[]
 
   @@index([tenantId])
   @@index([federationId])
@@ -114,4 +112,79 @@ model AuditLog {
   @@index([tenantId])
   @@index([userId])
   @@map("audit_logs")
+}
+
+model Subscription {
+  id                  String             @id @default(uuid())
+  userId              String
+  user                User               @relation(fields: [userId], references: [id])
+  tenantId            String
+  tenant              Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  type                String
+  status              SubscriptionStatus @default(ACTIVE)
+  price               Float
+  startDate           DateTime
+  endDate             DateTime
+  createdAt           DateTime           @default(now())
+  refundEligibleUntil DateTime
+  refundedAt          DateTime?
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+model TurnstileLog {
+  id        String             @id @default(uuid())
+  timestamp DateTime           @default(now())
+  userId    String
+  user      User               @relation(fields: [userId], references: [id])
+  tenantId  String
+  tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  direction TurnstileDirection
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("turnstile_logs")
+}
+
+model AccountDeletionRequest {
+  id                 String                @id @default(uuid())
+  userId             String
+  user               User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  requestedAt        DateTime              @default(now())
+  scheduledPurgeAt   DateTime
+  taxArchiveRequired Boolean               @default(false)
+  status             DeletionRequestStatus @default(PENDING)
+
+  @@index([userId])
+  @@map("deletion_requests")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  FEDERATION_ADMIN
+  CLUB_ADMIN
+  STAFF_COACH
+  STAFF_MEDIC
+  ATHLETE
+  CUSTOMER
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  REFUNDED
+}
+
+enum TurnstileDirection {
+  IN
+  OUT
+}
+
+enum DeletionRequestStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
 }

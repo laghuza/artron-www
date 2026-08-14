@@ -118,7 +118,7 @@ export const RoiCalculator: React.FC = () => {
                     step="50"
                     value={members}
                     onChange={(e) => setMembers(parseInt(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#00ff87] outline-none"
+                    className="w-full artron-range-input cursor-pointer outline-none"
                     style={{ minHeight: '44px' }}
                   />
                   <div className="flex justify-between text-[10px] text-[#556987] pt-1">
@@ -145,7 +145,7 @@ export const RoiCalculator: React.FC = () => {
                     step="1"
                     value={staff}
                     onChange={(e) => setStaff(parseInt(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#00ff87] outline-none"
+                    className="w-full artron-range-input cursor-pointer outline-none"
                     style={{ minHeight: '44px' }}
                   />
                   <div className="flex justify-between text-[10px] text-[#556987] pt-1">

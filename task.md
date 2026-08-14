@@ -1,0 +1,8 @@
+- [x] Create onboarding components directory structures
+- [x] Write Custom UI components (`CustomSelect.tsx`, `DiagnosticCell.tsx`, `ExecutiveEncryptionKeyInput.tsx`)
+- [x] Write Wizard helper functions and steps (`wizardUtils.ts`, `ClubIntakeSteps.tsx`, `FederationIntakeSteps.tsx`)
+- [x] Write Wizard step views for Clubs and Federations
+- [x] Write Core dispatcher `RegistryIntakeWizard.tsx`
+- [x] Write page components (`page.tsx` and `GetStartedClient.tsx`)
+- [x] Update landing page `HeroSection.tsx` CTA buttons
+- [x] Run build and verify correctness
