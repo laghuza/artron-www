@@ -22,26 +22,35 @@ export const RoiCalculator: React.FC = () => {
   const getCurrencyConfig = () => {
     switch (locale) {
       case 'ka':
-        return { symbol: '₾', rate: 120, formatBefore: false };
+        return { symbol: '₾', rate: 120, formatBefore: false, step: 5, min: 30, max: 500, laborRate: 8, cardSavings: 0.2 };
       case 'ru':
-        return { symbol: '₽', rate: 4000, formatBefore: false };
+        return { symbol: '₽', rate: 4000, formatBefore: false, step: 100, min: 1000, max: 15000, laborRate: 300, cardSavings: 10 };
       case 'en':
       default:
-        return { symbol: '$', rate: 50, formatBefore: true };
+        return { symbol: '$', rate: 50, formatBefore: true, step: 5, min: 10, max: 200, laborRate: 15, cardSavings: 0.1 };
     }
   };
 
   const currency = getCurrencyConfig();
+  const [price, setPrice] = useState<number>(currency.rate);
+  const [prevLocale, setPrevLocale] = useState<string>(locale);
+
+  // Reset price slider value when locale changes
+  if (locale !== prevLocale) {
+    setPrevLocale(locale);
+    const newConfig = getCurrencyConfig();
+    setPrice(newConfig.rate);
+  }
 
   // Compute calculated metrics directly during render
   // 1. Time Saved = (Members * 10 visits * 1.5 min) / 60 + (Staff * 4 hrs of tracking/admin)
   const timeSaved = Math.round((members * 0.25) + (staff * 4));
 
-  // 2. Revenue Increase (Annual) = Members * 5% churn reduction * monthly sub price * 12 months
-  const revenueIncrease = Math.round(members * 0.05 * currency.rate * 12);
+  // 2. Revenue Increase (Annual) = Members * 5% churn reduction * monthly price * 12 months
+  const revenueIncrease = Math.round(members * 0.05 * price * 12);
 
-  // 3. Administrative Overhead Savings (Monthly) = (Time Saved * 8 labor cost rate) + (Members * 0.2 card print cost savings)
-  const overheadSavings = Math.round((timeSaved * 8) + (members * 0.2));
+  // 3. Administrative Overhead Savings (Monthly) = (Time Saved * laborRate) + (Members * cardSavings)
+  const overheadSavings = Math.round((timeSaved * currency.laborRate) + (members * currency.cardSavings));
 
   const formatNumber = (num: number) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -55,7 +64,7 @@ export const RoiCalculator: React.FC = () => {
   };
 
   return (
-    <section className="py-20 px-4 md:px-8 bg-[#0B0F17] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#121b2d]/50 via-[#0B0F17] to-[#080b11] relative overflow-hidden border-b border-white/5">
+    <section id="roi" className="py-20 px-4 md:px-8 bg-[#0B0F17] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#121b2d]/50 via-[#0B0F17] to-[#080b11] relative overflow-hidden border-b border-white/5">
       {/* Decorative background grid */}
       <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(to_right,#00A3FF_1px,transparent_1px),linear-gradient(to_bottom,#00A3FF_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_100%,#000_70%,transparent_100%)]"></div>
 
@@ -125,6 +134,33 @@ export const RoiCalculator: React.FC = () => {
                     <span>100</span>
                     <span>2,500</span>
                     <span>5,000</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Average Price Slider */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-semibold text-[#94A3B8]">{t('roi_price_label')}</span>
+                  <span className="text-lg font-black text-[#00ff87] bg-[#00ff87]/10 border border-[#00ff87]/20 px-3 py-1 rounded-xl">
+                    {formatCurrency(price)}
+                  </span>
+                </div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={currency.min}
+                    max={currency.max}
+                    step={currency.step}
+                    value={price}
+                    onChange={(e) => setPrice(parseInt(e.target.value))}
+                    className="w-full artron-range-input cursor-pointer outline-none"
+                    style={{ minHeight: '44px' }}
+                  />
+                  <div className="flex justify-between text-[10px] text-[#556987] pt-1">
+                    <span>{formatCurrency(currency.min)}</span>
+                    <span>{formatCurrency(Math.round((currency.min + currency.max) / 2))}</span>
+                    <span>{formatCurrency(currency.max)}</span>
                   </div>
                 </div>
               </div>
@@ -304,7 +340,7 @@ export const RoiCalculator: React.FC = () => {
                   </div>
                   
                   {(() => {
-                    const maxRev = 5000 * 0.05 * currency.rate * 12;
+                    const maxRev = 5000 * 0.05 * currency.max * 12;
                     const y1 = Math.round(95 - ((revenueIncrease * 0.2) / maxRev) * 70);
                     const y2 = Math.round(95 - ((revenueIncrease * 0.45) / maxRev) * 70);
                     const y3 = Math.round(95 - ((revenueIncrease * 0.7) / maxRev) * 70);
