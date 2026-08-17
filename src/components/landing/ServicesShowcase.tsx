@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Zap
 } from 'lucide-react';
+import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 
 export const ServicesShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -68,7 +69,7 @@ export const ServicesShowcase: React.FC = () => {
   const services = activeTab === 'b2b' ? b2bServices : b2cServices;
 
   return (
-    <section className="py-20 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5">
+    <section id="services" className="py-20 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5">
       {/* Glow Backdrops */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00A3FF]/5 rounded-full filter blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#0066FF]/5 rounded-full filter blur-3xl pointer-events-none"></div>
@@ -179,6 +180,21 @@ export const ServicesShowcase: React.FC = () => {
             </div>
           ))}
         </div>
+
+        {/* B2C App Store Badges Integration */}
+        {activeTab === 'b2c' && (
+          <div className="mt-14 pt-10 border-t border-white/10 flex flex-col items-center justify-center text-center space-y-4 animate-fadeIn">
+            <div className="max-w-lg">
+              <span className="text-[10px] font-mono font-bold text-[#00ff87] tracking-wider uppercase block mb-1">
+                [ B2C // ATHLETE MOBILE OS DISTRIBUTION ]
+              </span>
+              <h4 className="text-xl font-bold text-white tracking-tight">
+                {t('store_b2c_desc')}
+              </h4>
+            </div>
+            <AppStoreBadges align="center" className="pt-2" />
+          </div>
+        )}
 
       </div>
     </section>

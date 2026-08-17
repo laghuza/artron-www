@@ -178,7 +178,7 @@ function GatewayPageContent() {
 
 
 
-          {viewState === 'SUBCHAPTER_VIEW' && activeNodeId !== 1 ? (
+          {viewState === 'SUBCHAPTER_VIEW' && (activeNodeId === null || activeNodeId > 4) ? (
             <NodeDetailPanel
               activeSubChapter={activeSubChapter}
               onBackToNode={handleBackToNode}

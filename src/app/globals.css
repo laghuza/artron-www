@@ -1,6 +1,10 @@
 @import url('https://fonts.cdnfonts.com/css/firago');
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

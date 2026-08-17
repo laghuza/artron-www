@@ -15,6 +15,7 @@ export default function RegistryIntakeWizard({ onReset }: RegistryIntakeWizardPr
 
   // FEDERATION States
   const [fedName, setFedName] = useState("");
+  const [fedSubdomain, setFedSubdomain] = useState("");
   const [legalForm, setLegalForm] = useState("ააიპ (არასამეწარმეო არაკომერციული იურიდიული პირი)");
   const [fedCode, setFedCode] = useState("");
   const [sportsType, setSportsType] = useState("");
@@ -31,8 +32,17 @@ export default function RegistryIntakeWizard({ onReset }: RegistryIntakeWizardPr
   const [showPassword, setShowPassword] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
 
+  // Federation Billing & Hardware config states
+  const [fedGatesCount, setFedGatesCount] = useState("1");
+  const [fedSelectedPlan, setFedSelectedPlan] = useState("STARTER");
+  const [fedBillingCycle, setFedBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>("MONTHLY");
+  const [fedIncludeHardwareQuote, setFedIncludeHardwareQuote] = useState(false);
+  const [fedTurnstileType, setFedTurnstileType] = useState("TRIPOD");
+  const [fedScannerType, setFedScannerType] = useState("RFID");
+
   // CLUB States
   const [clubName, setClubName] = useState("");
+  const [clubSubdomain, setClubSubdomain] = useState("");
   const [clubLegalForm, setClubLegalForm] = useState("შპს");
   const [clubCode, setClubCode] = useState("");
   const [clubServices, setClubServices] = useState("");
@@ -47,6 +57,13 @@ export default function RegistryIntakeWizard({ onReset }: RegistryIntakeWizardPr
   const [clubAccessCode, setClubAccessCode] = useState("");
   const [clubShowPassword, setClubShowPassword] = useState(false);
   const [clubIsAgreed, setClubIsAgreed] = useState(false);
+
+  // Club Billing & Hardware config states
+  const [clubSelectedPlan, setClubSelectedPlan] = useState("STARTER");
+  const [clubBillingCycle, setClubBillingCycle] = useState<'MONTHLY' | 'ANNUAL'>("MONTHLY");
+  const [clubIncludeHardwareQuote, setClubIncludeHardwareQuote] = useState(false);
+  const [clubTurnstileType, setClubTurnstileType] = useState("TRIPOD");
+  const [clubScannerType, setClubScannerType] = useState("RFID");
 
   return (
     <div className="space-y-4 font-sans select-none animate-fadeIn max-w-md w-full min-h-[460px] flex flex-col justify-between">
@@ -97,7 +114,8 @@ export default function RegistryIntakeWizard({ onReset }: RegistryIntakeWizardPr
       {flow === 'federation' && !isSuccess && (
         <FederationIntakeSteps
           step={step} setStep={setStep} setFlow={setFlow} setIsSuccess={setIsSuccess}
-          fedName={fedName} setFedName={setFedName} legalForm={legalForm} setLegalForm={setLegalForm}
+          fedName={fedName} setFedName={setFedName} fedSubdomain={fedSubdomain} setFedSubdomain={setFedSubdomain}
+          legalForm={legalForm} setLegalForm={setLegalForm}
           fedCode={fedCode} setFedCode={setFedCode} sportsType={sportsType} setSportsType={setSportsType}
           country={country} setCountry={setCountry} address={address} setAddress={setAddress}
           hqName={hqName} setHqName={setHqName} governingDept={governingDept} setGoverningDept={setGoverningDept}
@@ -108,13 +126,20 @@ export default function RegistryIntakeWizard({ onReset }: RegistryIntakeWizardPr
           accessCode={accessCode} setAccessCode={setAccessCode}
           showPassword={showPassword} setShowPassword={setShowPassword}
           isAgreed={isAgreed} setIsAgreed={setIsAgreed}
+          fedGatesCount={fedGatesCount} setFedAccessGatesCount={setFedGatesCount}
+          fedSelectedPlan={fedSelectedPlan} setFedSelectedPlan={setFedSelectedPlan}
+          fedBillingCycle={fedBillingCycle} setFedBillingCycle={setFedBillingCycle}
+          fedIncludeHardwareQuote={fedIncludeHardwareQuote} setFedIncludeHardwareQuote={setFedIncludeHardwareQuote}
+          fedTurnstileType={fedTurnstileType} setFedTurnstileType={setFedTurnstileType}
+          fedScannerType={fedScannerType} setFedScannerType={setFedScannerType}
         />
       )}
 
       {flow === 'club' && !isSuccess && (
         <ClubIntakeSteps
           step={step} setStep={setStep} setFlow={setFlow} setIsSuccess={setIsSuccess}
-          clubName={clubName} setClubName={setClubName} clubLegalForm={clubLegalForm} setClubLegalForm={setClubLegalForm}
+          clubName={clubName} setClubName={setClubName} clubSubdomain={clubSubdomain} setClubSubdomain={setClubSubdomain}
+          clubLegalForm={clubLegalForm} setClubLegalForm={setClubLegalForm}
           clubCode={clubCode} setClubCode={setClubCode} clubServices={clubServices} setClubServices={setClubServices}
           clubAddress={clubAddress} setClubAddress={setClubAddress}
           branchesCount={branchesCount} setBranchesCount={setBranchesCount}
@@ -127,6 +152,11 @@ export default function RegistryIntakeWizard({ onReset }: RegistryIntakeWizardPr
           clubAccessCode={clubAccessCode} setClubAccessCode={setClubAccessCode}
           clubShowPassword={clubShowPassword} setClubShowPassword={setClubShowPassword}
           clubIsAgreed={clubIsAgreed} setClubIsAgreed={setClubIsAgreed}
+          selectedPlan={clubSelectedPlan} setSelectedPlan={setClubSelectedPlan}
+          billingCycle={clubBillingCycle} setBillingCycle={setClubBillingCycle}
+          includeHardwareQuote={clubIncludeHardwareQuote} setIncludeHardwareQuote={setClubIncludeHardwareQuote}
+          turnstileType={clubTurnstileType} setTurnstileType={setClubTurnstileType}
+          scannerType={clubScannerType} setScannerType={setClubScannerType}
         />
       )}
     </div>

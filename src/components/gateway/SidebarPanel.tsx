@@ -16,8 +16,7 @@ interface SidebarPanelProps {
 }
 
 import { soundEngine } from '@/core';
-
-import { Node01SubNodeList } from './widgets/Node01SubNodeList';
+import { NodeSubNodeList } from './NodeSubNodeList';
 
 export const SidebarPanel: React.FC<SidebarPanelProps> = ({
   viewState, activeNode, activeSubChapterId, onResetToCore, onSelectSubChapter, onRequestAccess, onSelectB2B, onSelectOtp
@@ -151,18 +150,21 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
                     }}
                     className="w-full py-3 px-4 bg-[#121418] hover:bg-[#00FF66] text-[#00FF66] hover:text-[#0A0D10] font-mono text-[12px] font-bold tracking-[1.5px] uppercase rounded border border-[#00FF66]/50 transition-all cursor-pointer text-left shadow-[0_0_15px_rgba(0,255,102,0.15)] flex items-center justify-between group"
                   >
-                    <span>{t('actions.temporary_guest')}</span>
+                    <span>{t('actions.sandbox_demo')}</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
                 </div>
               )}
             </div>
-
           </div>
-        ) : activeNode.id === 1 ? (
-          <Node01SubNodeList
+        ) : (activeNode.id >= 1 && activeNode.id <= 4) ? (
+          <NodeSubNodeList
+            nodeId={activeNode.id}
+            nodeCode={activeNode.nodeCode || `NODE_0${activeNode.id}`}
+            title={t(`nodes.node_${activeNode.id}.subtitle`) || activeNode.title}
             subChapters={activeNode.subChapters}
             activeSubChapterId={activeSubChapterId}
+            themeColor={activeNode.id === 1 ? '#00B0FF' : activeNode.id === 3 ? '#D97736' : '#00ff87'}
             onSelectSubChapter={onSelectSubChapter}
             onResetToCore={onResetToCore}
           />

@@ -22,5 +22,11 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
+    env: {
+      DATABASE_URL: "postgresql://artron_admin:artron_pass_2026@localhost:5432/artron_sports_os?schema=public",
+      JWT_SECRET: "artron-dev-jwt-secret-key-32-chars-long-secure-token",
+      PII_AES256_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      MQTT_BROKER_URL: "mqtt://localhost:1883",
+    },
   },
 });

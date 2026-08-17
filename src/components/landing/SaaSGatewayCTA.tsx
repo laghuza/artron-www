@@ -4,6 +4,7 @@ import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
 import { Calendar, ArrowRight, Building2, Sparkles } from 'lucide-react';
+import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 
 export const SaaSGatewayCTA: React.FC = () => {
   const { t } = useLanguage();
@@ -74,6 +75,11 @@ export const SaaSGatewayCTA: React.FC = () => {
                 <span>{t('cta_btn_register')}</span>
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
+            </div>
+
+            {/* Mobile Store Badges for Athletes */}
+            <div className="pt-6 border-t border-white/5">
+              <AppStoreBadges align="center" />
             </div>
 
           </div>

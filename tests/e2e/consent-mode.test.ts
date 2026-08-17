@@ -85,9 +85,9 @@ test.describe('Google Consent Mode v2 & Cookie Consent Banner', () => {
     await settingsBtn.click();
 
     // Verify that the setting panels are revealed
-    await expect(page.locator('text=აუცილებელი')).toBeVisible();
-    await expect(page.locator('text=ანალიტიკა')).toBeVisible();
-    await expect(page.locator('text=მარკეტინგი')).toBeVisible();
+    await expect(page.locator('h4', { hasText: 'აუცილებელი' })).toBeVisible();
+    await expect(page.locator('h4', { hasText: 'ანალიტიკა' })).toBeVisible();
+    await expect(page.locator('h4', { hasText: 'მარკეტინგი' })).toBeVisible();
 
     // Toggle analytics to true, marketing remains false
     const analyticsToggle = page.locator('button[aria-label="Toggle Analytics Cookies"]');

@@ -29,8 +29,8 @@ export default function FederationIntakeStep3View({
       <div>
         <div className="space-y-1 mb-4">
           <div className="font-mono text-[9.5px] text-[#9CA3AF] uppercase tracking-widest flex justify-between">
-            <span>[ CALIBRATION_SEQUENCE: NODE_03_OF_03 ]</span>
-            <span><span className="text-[#00ff87]">● ● ●</span></span>
+            <span>[ CALIBRATION_SEQUENCE: NODE_05_OF_05 ]</span>
+            <span><span className="text-[#00ff87]">● ● ● ● ●</span></span>
           </div>
           <h2 className="text-2xl font-semibold tracking-tight text-[#F5F5F7] uppercase">EXECUTIVE AUTHORITY</h2>
         </div>
@@ -53,7 +53,7 @@ export default function FederationIntakeStep3View({
       <div className="space-y-3">
         <div className="p-3 border border-[#9CA3AF]/10 bg-[#121418]/50 text-[#9CA3AF] font-mono text-[11px] uppercase tracking-wider leading-relaxed">[ SYSTEM_LOG ]: იქმნება ფედერაციის მმართველი ადმინისტრატორის ანგარიში. ამ მომხმარებელს მიენიჭება სრული კრიპტოგრაფიული გასაღები ფედერაციის ადმინ-პანელზე.</div>
         <div className="flex gap-4 pt-2 font-mono text-xs">
-          <button type="button" onClick={() => setStep(2)} className="flex-1 py-3 px-4 border border-[#9CA3AF]/20 text-[#9CA3AF] hover:bg-[#9CA3AF]/10 transition-all uppercase cursor-pointer">[ BACK ]</button>
+          <button type="button" onClick={() => setStep(4)} className="flex-1 py-3 px-4 border border-[#9CA3AF]/20 text-[#9CA3AF] hover:bg-[#9CA3AF]/10 transition-all uppercase cursor-pointer">[ BACK ]</button>
           <button type="button" disabled={!isFedStep3Valid} onClick={() => setIsSuccess(true)} className={`flex-1 py-3 px-4 font-bold border transition-all uppercase cursor-pointer ${isFedStep3Valid ? 'border-[#00ff87] text-[#00ff87] bg-[#00ff87]/10 hover:bg-[#00ff87] hover:text-[#121418]' : 'border-[#9CA3AF]/10 text-[#9CA3AF]/30 cursor-not-allowed'}`}>[ REGISTER_CORE ]</button>
         </div>
       </div>

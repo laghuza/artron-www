@@ -21,8 +21,8 @@ export default function FederationIntakeStep2View({
       <div>
         <div className="space-y-1 mb-4">
           <div className="font-mono text-[9.5px] text-[#9CA3AF] uppercase tracking-widest flex justify-between">
-            <span>[ CALIBRATION_SEQUENCE: NODE_02_OF_03 ]</span>
-            <span><span className="text-[#00ff87]">● ●</span> <span className="text-[#9CA3AF]/10">○</span></span>
+            <span>[ CALIBRATION_SEQUENCE: NODE_02_OF_05 ]</span>
+            <span><span className="text-[#00ff87]">● ●</span> <span className="text-[#9CA3AF]/10">○ ○ ○</span></span>
           </div>
           <h2 className="text-2xl font-semibold tracking-tight text-[#F5F5F7] uppercase">OPERATIONAL INFRASTRUCTURE</h2>
         </div>

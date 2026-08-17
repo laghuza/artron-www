@@ -2,6 +2,8 @@
 
 import ClubIntakeStep1View from "@/components/features/narratives/wizard/ClubIntakeStep1View";
 import ClubIntakeStep2View from "@/components/features/narratives/wizard/ClubIntakeStep2View";
+import HardwareCalculatorStep from "@/components/features/narratives/wizard/HardwareCalculatorStep";
+import PlanSelectorStep from "@/components/features/narratives/wizard/PlanSelectorStep";
 import ClubIntakeStep3View from "@/components/features/narratives/wizard/ClubIntakeStep3View";
 
 interface ClubIntakeStepsProps {
@@ -10,6 +12,7 @@ interface ClubIntakeStepsProps {
   setFlow: (f: 'gateway_dispatcher' | 'federation' | 'club') => void;
   setIsSuccess: (s: boolean) => void;
   clubName: string; setClubName: (v: string) => void;
+  clubSubdomain: string; setClubSubdomain: (v: string) => void;
   clubLegalForm: string; setClubLegalForm: (v: string) => void;
   clubCode: string; setClubCode: (v: string) => void;
   clubServices: string; setClubServices: (v: string) => void;
@@ -24,10 +27,16 @@ interface ClubIntakeStepsProps {
   clubAccessCode: string; setClubAccessCode: (v: string) => void;
   clubShowPassword: boolean; setClubShowPassword: (v: boolean) => void;
   clubIsAgreed: boolean; setClubIsAgreed: (v: boolean) => void;
+
+  selectedPlan: string; setSelectedPlan: (p: string) => void;
+  billingCycle: 'MONTHLY' | 'ANNUAL'; setBillingCycle: (c: 'MONTHLY' | 'ANNUAL') => void;
+  includeHardwareQuote: boolean; setIncludeHardwareQuote: (v: boolean) => void;
+  turnstileType: string; setTurnstileType: (v: string) => void;
+  scannerType: string; setScannerType: (v: string) => void;
 }
 
 export default function ClubIntakeSteps(props: ClubIntakeStepsProps) {
-  const isClubStep1Valid = props.clubName.trim() !== "" && props.clubCode.replace(/\s/g, '').length === 9 && props.clubServices.trim() !== "";
+  const isClubStep1Valid = props.clubName.trim() !== "" && props.clubSubdomain.trim() !== "" && props.clubCode.replace(/\s/g, '').length === 9 && props.clubServices.trim() !== "";
   const isClubStep2Valid = props.clubAddress.trim() !== "" && props.branchesCount.trim() !== "" && props.gatesCount.trim() !== "";
   const isClubStep3Valid = props.clubFirstName.trim() !== "" && props.clubLastName.trim() !== "" && props.clubExecPosition.trim() !== "" && props.clubContactMobile.replace(/\D/g, '').length === 12 && props.clubOfficialEmail.includes("@") && props.clubAccessCode.trim() !== "" && props.clubIsAgreed;
 
@@ -36,6 +45,7 @@ export default function ClubIntakeSteps(props: ClubIntakeStepsProps) {
       {props.step === 1 && (
         <ClubIntakeStep1View
           clubName={props.clubName} setClubName={props.setClubName}
+          clubSubdomain={props.clubSubdomain} setClubSubdomain={props.setClubSubdomain}
           clubLegalForm={props.clubLegalForm} setClubLegalForm={props.setClubLegalForm}
           clubCode={props.clubCode} setClubCode={props.setClubCode}
           clubServices={props.clubServices} setClubServices={props.setClubServices}
@@ -51,6 +61,30 @@ export default function ClubIntakeSteps(props: ClubIntakeStepsProps) {
         />
       )}
       {props.step === 3 && (
+        <HardwareCalculatorStep
+          onBack={() => props.setStep(2)}
+          onContinue={() => props.setStep(4)}
+          gatesCount={props.gatesCount}
+          setAccessGatesCount={props.setAccessGatesCount}
+          includeHardwareQuote={props.includeHardwareQuote}
+          setIncludeHardwareQuote={props.setIncludeHardwareQuote}
+          turnstileType={props.turnstileType}
+          setTurnstileType={props.setTurnstileType}
+          scannerType={props.scannerType}
+          setScannerType={props.setScannerType}
+        />
+      )}
+      {props.step === 4 && (
+        <PlanSelectorStep
+          onBack={() => props.setStep(3)}
+          onContinue={() => props.setStep(5)}
+          selectedPlan={props.selectedPlan}
+          setSelectedPlan={props.setSelectedPlan}
+          billingCycle={props.billingCycle}
+          setBillingCycle={props.setBillingCycle}
+        />
+      )}
+      {props.step === 5 && (
         <ClubIntakeStep3View
           clubFirstName={props.clubFirstName} setClubFirstName={props.setClubFirstName}
           clubLastName={props.clubLastName} setClubLastName={props.setClubLastName}

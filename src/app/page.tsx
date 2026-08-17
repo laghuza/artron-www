@@ -2,6 +2,8 @@ import { HeroSection } from "@/components/landing/HeroSection";
 import { PartnerEcosystem } from "@/components/landing/PartnerEcosystem";
 import { ServicesShowcase } from "@/components/landing/ServicesShowcase";
 import { RoiCalculator } from "@/components/landing/RoiCalculator";
+import { BusinessStatsShowcase } from "@/components/landing/BusinessStatsShowcase";
+import { AnalyticsShowcase } from "@/components/landing/AnalyticsShowcase";
 import { DashboardFeaturesSection } from "@/components/DashboardFeaturesSection";
 import { BookingEngine } from "@/components/landing/BookingEngine";
 import { FaqSection } from "@/components/landing/FaqSection";
@@ -32,6 +34,8 @@ export default function Home() {
         <PartnerEcosystem />
         <ServicesShowcase />
         <RoiCalculator />
+        <BusinessStatsShowcase />
+        <AnalyticsShowcase />
         <DashboardFeaturesSection />
         <BookingEngine />
         <FaqSection />

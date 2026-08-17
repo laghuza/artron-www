@@ -6,6 +6,7 @@ import { HeroVideoShowcase } from './HeroVideoShowcase';
 import { HeroTelemetryLogs } from './HeroTelemetryLogs';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
+import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 import { 
   Activity, 
   Users, 
@@ -17,11 +18,12 @@ import {
   CheckCircle2, 
   Check,
   ArrowRight,
-  Sparkles,
   PhoneCall,
   Terminal,
   Globe,
-  Lock
+  Lock,
+  Search,
+  X
 } from 'lucide-react';
 
 interface TelemetryLog {
@@ -41,16 +43,116 @@ export const HeroSection: React.FC = () => {
     { id: '3', time: '18:01:10', user: 'ანა ბ.', role: 'Employee', type: 'IN', status: 'Granted' },
     { id: '4', time: '18:03:45', user: 'David T.', role: 'Member', type: 'OUT', status: 'Granted' },
   ]);
+
+  const [stats, setStats] = useState({
+    activeMembers: '1,248',
+    dailyEntries: '384',
+    winbackRate: '+18%'
+  });
   
   const [activeTab, setActiveTab] = useState<'b2b' | 'b2c'>('b2b');
   const [qrCodeVal, setQrCodeVal] = useState<string>('ART-88301-GCM');
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [scanSuccess, setScanSuccess] = useState<boolean>(false);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [b2bView, setB2bView] = useState<'telemetry' | 'screenshot'>('telemetry');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  // ESC key listener for lightbox modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
 
   // Set client flag for server/client hydration safety
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  // Fetch initial telemetry stats and logs from backend DB
+  useEffect(() => {
+    const fetchTelemetryData = async () => {
+      try {
+        const res = await fetch('/api/v1/telemetry/stats');
+        const data = await res.json();
+        if (data.status === 'success' || data.status === 'fallback') {
+          if (data.stats) setStats(data.stats);
+          if (data.logs) setLogs(data.logs);
+        }
+      } catch (err) {
+        console.warn('[ARTRON TELEMETRY] Failed to fetch live telemetry stats:', err);
+      }
+    };
+    fetchTelemetryData();
+  }, []);
+
+  // Connect to SSE stream for real-time turnstile telemetry
+  useEffect(() => {
+    let eventSource: EventSource | null = null;
+    
+    const connectSSE = () => {
+      eventSource = new EventSource('/api/v1/telemetry/stream');
+      
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.type === 'scan') {
+            let userName = data.message 
+              ? data.message.replace('Access granted: User ', '').replace(' checked in', '').replace(' checked out', '') 
+              : 'Guest';
+            
+            // Anonymize user name for GDPR
+            const parts = userName.trim().split(/\s+/);
+            if (parts.length > 1) {
+              userName = `${parts[0]} ${parts[parts.length - 1].charAt(0).toUpperCase()}.`;
+            }
+
+            const newLog: TelemetryLog = {
+              id: data.userId + '-' + data.timestamp,
+              time: new Date(data.timestamp).toTimeString().split(' ')[0],
+              user: userName,
+              role: 'Member',
+              type: data.direction || 'IN',
+              status: 'Granted'
+            };
+
+            setLogs(prev => [newLog, ...prev.slice(0, 4)]);
+            
+            if (data.direction === 'IN') {
+              setStats(prev => {
+                const current = parseInt(prev.dailyEntries.replace(/,/g, ''), 10);
+                if (!isNaN(current)) {
+                  return {
+                    ...prev,
+                    dailyEntries: (current + 1).toLocaleString()
+                  };
+                }
+                return prev;
+              });
+            }
+          }
+        } catch (err) {
+          console.error('[ARTRON TELEMETRY SSE] Event parsing error:', err);
+        }
+      };
+
+      eventSource.onerror = () => {
+        if (eventSource) eventSource.close();
+        setTimeout(connectSSE, 5000);
+      };
+    };
+
+    connectSSE();
+
+    return () => {
+      if (eventSource) eventSource.close();
+    };
   }, []);
 
   // Periodic QR Code regeneration to show "Dynamic QR Pass" security
@@ -67,23 +169,53 @@ export const HeroSection: React.FC = () => {
     if (isScanning || scanSuccess) return;
     setIsScanning(true);
     
-    setTimeout(() => {
+    setTimeout(async () => {
       setIsScanning(false);
       setScanSuccess(true);
 
-      // Create new telemetry entry
       const now = new Date();
       const timeStr = now.toTimeString().split(' ')[0];
-      const newLog: TelemetryLog = {
-        id: Date.now().toString(),
-        time: timeStr,
-        user: locale === 'ka' ? 'გიორგი ს. (მობილურით)' : locale === 'ru' ? 'Георгий С. (моб.)' : 'George S. (Mobile)',
-        role: 'Member',
-        type: 'IN',
-        status: 'Granted'
-      };
 
-      setLogs(prev => [newLog, ...prev.slice(0, 4)]);
+      try {
+        const res = await fetch('/api/v1/telemetry/scan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            qrToken: qrCodeVal,
+            direction: 'IN',
+            tenantId: '00000000-0000-0000-0000-000000000000'
+          })
+        });
+
+        if (!res.ok) {
+          throw new Error('Scan post rejected');
+        }
+      } catch (err) {
+        // Fallback simulation if DB offline
+        const newLog: TelemetryLog = {
+          id: Date.now().toString(),
+          time: timeStr,
+          user: locale === 'ka' ? 'გიორგი ს. (მობილურით)' : locale === 'ru' ? 'Георгий С. (моб.)' : 'George S. (Mobile)',
+          role: 'Member',
+          type: 'IN',
+          status: 'Granted'
+        };
+
+        setLogs(prev => [newLog, ...prev.slice(0, 4)]);
+        
+        setStats(prev => {
+          const current = parseInt(prev.dailyEntries.replace(/,/g, ''), 10);
+          if (!isNaN(current)) {
+            return {
+              ...prev,
+              dailyEntries: (current + 1).toLocaleString()
+            };
+          }
+          return prev;
+        });
+      }
 
       // Reset success status after a delay
       setTimeout(() => {
@@ -107,11 +239,7 @@ export const HeroSection: React.FC = () => {
         {/* Left Column: Copy & Value Proposition */}
         <div className="lg:col-span-5 text-center lg:text-left flex flex-col justify-center space-y-6">
           
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 self-center lg:self-start bg-[#00A3FF]/10 border border-[#00A3FF]/20 rounded-full px-4 py-1.5 text-xs text-[#00A3FF] font-bold tracking-wide animate-pulse animate-fadeIn">
-            <Sparkles className="w-4.5 h-4.5 text-[#00D2FF]" />
-            {t('hero_badge')}
-          </div>
+
 
           {/* Heading */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight animate-fadeIn opacity-0 [animation-delay:150ms]">
@@ -152,6 +280,11 @@ export const HeroSection: React.FC = () => {
               <Smartphone className="w-4.5 h-4.5 text-[#00ff87] drop-shadow-[0_0_8px_#00ff87]" />
               {t('cta_b2c')}
             </button>
+          </div>
+
+          {/* Official App Store & Google Play Badges */}
+          <div className="pt-2 animate-fadeIn opacity-0 [animation-delay:500ms]">
+            <AppStoreBadges align="left" className="items-center lg:items-start" />
           </div>
 
           {/* Highlight Stats Info */}
@@ -231,47 +364,96 @@ export const HeroSection: React.FC = () => {
               <div className="absolute bottom-2 right-2 text-[#00ff87]/40 font-mono text-[9px] pointer-events-none select-none">┘</div>
 
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-white/5 pb-3.5 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3.5 mb-4 gap-2">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#00ff87] animate-pulse drop-shadow-[0_0_8px_#00ff87]"></span>
                   <h4 className="text-xs font-bold text-white tracking-wider uppercase flex items-center gap-1.5 font-sans">
                     {t('db_title')}
-                    <span className="text-[9px] font-mono text-[#00e5ff] font-bold">[ CONSOLE: #01 ]</span>
                   </h4>
                 </div>
-                <div className="flex items-center gap-1.5 text-[9px] font-mono text-[#00ff87] font-semibold bg-[#00ff87]/15 px-2 py-0.5 rounded border border-[#00ff87]/20">
-                  <Wifi className="w-3 h-3 text-[#00ff87] drop-shadow-[0_0_8px_#00ff87]" />
-                  {t('db_status')}
+                <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto" onClick={(e) => e.stopPropagation()}>
+                  {/* View Selector Tabs */}
+                  <div className="flex bg-black/40 border border-white/5 rounded-lg p-0.5">
+                    <button 
+                      onClick={() => setB2bView('telemetry')}
+                      className={`px-2 py-0.5 text-[8.5px] font-mono uppercase font-bold rounded transition-all cursor-pointer ${
+                        b2bView === 'telemetry' ? 'bg-[#00ff87]/15 text-[#00ff87] border border-[#00ff87]/20' : 'text-[#94A3B8] hover:text-white border border-transparent'
+                      }`}
+                      style={{ minHeight: '20px' }}
+                    >
+                      {t('db_toggle_live')}
+                    </button>
+                    <button 
+                      onClick={() => setB2bView('screenshot')}
+                      className={`px-2 py-0.5 text-[8.5px] font-mono uppercase font-bold rounded transition-all cursor-pointer ${
+                        b2bView === 'screenshot' ? 'bg-[#00ff87]/15 text-[#00ff87] border border-[#00ff87]/20' : 'text-[#94A3B8] hover:text-white border border-transparent'
+                      }`}
+                      style={{ minHeight: '20px' }}
+                    >
+                      {t('db_toggle_screenshot')}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-[9px] font-mono text-[#00ff87] font-semibold bg-[#00ff87]/15 px-2 py-0.5 rounded border border-[#00ff87]/20 shrink-0">
+                    <Wifi className="w-3 h-3 text-[#00ff87] drop-shadow-[0_0_8px_#00ff87]" />
+                    {t('db_status')}
+                  </div>
                 </div>
               </div>
 
-              {/* Grid KPIs */}
-              <div className="grid grid-cols-3 gap-3 mb-4">
-                <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
-                  <div className="flex justify-center text-[#00A3FF] mb-1">
-                    <Users className="w-4 h-4" />
+              {b2bView === 'telemetry' ? (
+                <>
+                  {/* Grid KPIs */}
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
+                      <div className="flex justify-center text-[#00A3FF] mb-1">
+                        <Users className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] text-[#94A3B8] block">{t('db_kpi_members')}</span>
+                      <span className="text-sm font-black text-white mt-0.5 block">{stats.activeMembers}</span>
+                    </div>
+                    <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
+                      <div className="flex justify-center text-[#00FF87] mb-1">
+                        <Activity className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] text-[#94A3B8] block">{t('db_kpi_entries')}</span>
+                      <span className="text-sm font-black text-white mt-0.5 block">{stats.dailyEntries}</span>
+                    </div>
+                    <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
+                      <div className="flex justify-center text-emerald-400 mb-1">
+                        <TrendingUp className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] text-[#94A3B8] block">{t('db_kpi_winback')}</span>
+                      <span className="text-sm font-black text-emerald-400 mt-0.5 block">{stats.winbackRate}</span>
+                    </div>
                   </div>
-                  <span className="text-[10px] text-[#94A3B8] block">{t('db_kpi_members')}</span>
-                  <span className="text-sm font-black text-white mt-0.5 block">1,248</span>
-                </div>
-                <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
-                  <div className="flex justify-center text-[#00FF87] mb-1">
-                    <Activity className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] text-[#94A3B8] block">{t('db_kpi_entries')}</span>
-                  <span className="text-sm font-black text-white mt-0.5 block">384</span>
-                </div>
-                <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
-                  <div className="flex justify-center text-emerald-400 mb-1">
-                    <TrendingUp className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] text-[#94A3B8] block">{t('db_kpi_winback')}</span>
-                  <span className="text-sm font-black text-emerald-400 mt-0.5 block">+18%</span>
-                </div>
-              </div>
 
-              {/* Telemetry Gate Log Panel */}
-              <HeroTelemetryLogs logs={logs} />
+                  {/* Telemetry Gate Log Panel */}
+                  <HeroTelemetryLogs logs={logs} />
+                </>
+              ) : (
+                <div 
+                  className="relative group/img overflow-hidden rounded-xl border border-white/5 bg-[#0B0F17]/30 flex items-center justify-center min-h-[290px] w-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <img 
+                    src="/control_panel_showcase.png" 
+                    alt={t('db_screenshot_alt')} 
+                    className="w-full h-[290px] object-cover transition-transform duration-700 group-hover/img:scale-105" 
+                  />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 flex flex-col items-center justify-center gap-2 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-full bg-[#00ff87]/15 border border-[#00ff87]/30 flex items-center justify-center text-[#00ff87] shadow-lg shadow-[#00ff87]/10 animate-bounce">
+                      <Search className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono font-bold text-white uppercase tracking-widest bg-slate-950/80 px-2.5 py-1 rounded-md border border-white/10">
+                      {t('db_screenshot_zoom')}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Glowing overlay shadow */}
               <div className="absolute -inset-px bg-gradient-to-r from-[#00A3FF]/10 to-[#00D2FF]/10 rounded-2xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300"></div>
@@ -400,6 +582,45 @@ export const HeroSection: React.FC = () => {
         </div>
       </footer>
 
+      {/* Lightbox Modal for Control Panel Screenshot */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 bg-[#05070a]/95 backdrop-blur-md z-50 flex items-center justify-center p-4 md:p-8 animate-fadeIn"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="relative max-w-6xl w-full bg-[#0B0F17] border border-[#8a99ad]/20 rounded-2xl overflow-hidden shadow-2xl p-2 animate-scaleUp"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* L-Shape Corner Brackets */}
+            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00ff87]/40" />
+            <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00ff87]/40" />
+            <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00ff87]/40" />
+            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00ff87]/40" />
+
+            {/* Close Button */}
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 border border-white/15 hover:border-white/30 text-[#94A3B8] hover:text-white flex items-center justify-center transition-all cursor-pointer"
+              style={{ minHeight: '32px' }}
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header info */}
+            <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded bg-black/60 border border-white/10 text-[9px] font-mono text-[#00ff87] tracking-wider uppercase">
+              [ SCREENSHOT // ARTRON_SPORTS_OS_DASHBOARD ]
+            </div>
+
+            {/* Image */}
+            <img 
+              src="/control_panel_showcase.png" 
+              alt={t('db_screenshot_alt')} 
+              className="w-full h-auto max-h-[80vh] object-contain rounded-xl"
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 };

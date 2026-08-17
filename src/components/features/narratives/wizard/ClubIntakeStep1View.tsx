@@ -6,6 +6,7 @@ import { formatFedCode } from "@/components/features/narratives/wizard/wizardUti
 
 interface ClubIntakeStep1ViewProps {
   clubName: string; setClubName: (v: string) => void;
+  clubSubdomain: string; setClubSubdomain: (v: string) => void;
   clubLegalForm: string; setClubLegalForm: (v: string) => void;
   clubCode: string; setClubCode: (v: string) => void;
   clubServices: string; setClubServices: (v: string) => void;
@@ -15,7 +16,7 @@ interface ClubIntakeStep1ViewProps {
 }
 
 export default function ClubIntakeStep1View({
-  clubName, setClubName, clubLegalForm, setClubLegalForm, clubCode, setClubCode,
+  clubName, setClubName, clubSubdomain, setClubSubdomain, clubLegalForm, setClubLegalForm, clubCode, setClubCode,
   clubServices, setClubServices, isClubStep1Valid, setStep, setFlow
 }: ClubIntakeStep1ViewProps) {
   return (
@@ -23,8 +24,8 @@ export default function ClubIntakeStep1View({
       <div>
         <div className="space-y-1 mb-4">
           <div className="font-mono text-[9.5px] text-[#9CA3AF] uppercase tracking-widest flex justify-between">
-            <span>[ CLUB_INTEGRATION: STEP_01_OF_03 ]</span>
-            <span><span className="text-[#00ff87]">●</span> <span className="text-[#9CA3AF]/10">○ ○</span></span>
+            <span>[ CLUB_INTEGRATION: STEP_01_OF_05 ]</span>
+            <span><span className="text-[#00ff87]">●</span> <span className="text-[#9CA3AF]/10">○ ○ ○ ○</span></span>
           </div>
           <h2 className="text-2xl font-semibold tracking-tight text-[#F5F5F7] uppercase">FACILITY IDENTITY</h2>
         </div>
@@ -32,6 +33,15 @@ export default function ClubIntakeStep1View({
           <DiagnosticCell coordinate="[ ORG_01.1 // LEGAL_ENTITY_NAME ]" placeholder="ააიპ ქუთაისის საცურაო აკადემია" value={clubName} onChange={setClubName} isValid={clubName.trim() !== ""} />
           <CustomSelect options={["შპს", "ააიპ", "ინდ. მეწარმე"]} selected={clubLegalForm} onChange={setClubLegalForm} label="[ LEGAL_DESCRIPTOR // FORM ]" />
           <DiagnosticCell coordinate="[ DATABASE_KEY // REGISTRY_CODE ]" placeholder="204 123 456" value={clubCode} onChange={(val) => setClubCode(formatFedCode(val))} isValid={clubCode.replace(/\s/g, '').length === 9} telemetryStatus={`[ CHAR_LIMIT: ${clubCode.replace(/\s/g, '').length}/9 ]`} />
+          <DiagnosticCell 
+            coordinate="[ SaaS_DOMAIN // SUBDOMAIN ]" 
+            placeholder="my-gym" 
+            value={clubSubdomain} 
+            onChange={(val) => setClubSubdomain(val.toLowerCase().replace(/[^a-z0-9-]/g, ''))} 
+            isValid={clubSubdomain.trim() !== ""} 
+            telemetryStatus={clubSubdomain.trim() !== "" ? '[ AVAILABLE // ხელმისაწვდომია ]' : '[ ALPHANUMERIC & HYPHENS ]'}
+            suffix={<span className="text-[#9CA3AF]/40 pr-3.5">.artron.ge</span>}
+          />
           <DiagnosticCell coordinate="[ TELEMETRY_CLASS // SPORT_SERVICES ]" placeholder="ფიტნესი, საცურაო აუზი, ტანვარჯიში" value={clubServices} onChange={setClubServices} isValid={clubServices.trim() !== ""} />
         </div>
       </div>

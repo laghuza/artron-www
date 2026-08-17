@@ -7,6 +7,8 @@ import { formatFedCode } from "@/components/features/narratives/wizard/wizardUti
 interface FederationIntakeStep1ViewProps {
   fedName: string;
   setFedName: (v: string) => void;
+  fedSubdomain: string;
+  setFedSubdomain: (v: string) => void;
   legalForm: string;
   setLegalForm: (v: string) => void;
   fedCode: string;
@@ -19,7 +21,7 @@ interface FederationIntakeStep1ViewProps {
 }
 
 export default function FederationIntakeStep1View({
-  fedName, setFedName, legalForm, setLegalForm, fedCode, setFedCode,
+  fedName, setFedName, fedSubdomain, setFedSubdomain, legalForm, setLegalForm, fedCode, setFedCode,
   sportsType, setSportsType, isFedStep1Valid, setStep, setFlow
 }: FederationIntakeStep1ViewProps) {
   return (
@@ -27,8 +29,8 @@ export default function FederationIntakeStep1View({
       <div>
         <div className="space-y-1 mb-4">
           <div className="font-mono text-[9.5px] text-[#9CA3AF] uppercase tracking-widest flex justify-between">
-            <span>[ FEDERATION_INTEGRATION: STEP_01_OF_03 ]</span>
-            <span><span className="text-[#00ff87]">●</span> <span className="text-[#9CA3AF]/10">○ ○</span></span>
+            <span>[ FEDERATION_INTEGRATION: STEP_01_OF_05 ]</span>
+            <span><span className="text-[#00ff87]">●</span> <span className="text-[#9CA3AF]/10">○ ○ ○ ○</span></span>
           </div>
           <h2 className="text-2xl font-semibold tracking-tight text-[#F5F5F7] uppercase">FEDERATION IDENTITY</h2>
         </div>
@@ -36,6 +38,15 @@ export default function FederationIntakeStep1View({
           <DiagnosticCell coordinate="[ ADM_01.1 // FEDERATION_NAME ]" placeholder="საქართველოს კალათბურთის ეროვნული ფედერაცია" value={fedName} onChange={setFedName} isValid={fedName.trim() !== ""} />
           <CustomSelect options={[legalForm]} selected={legalForm} onChange={setLegalForm} label="[ ADM_01.2 // LEGAL_FORM ]" disabled={true} />
           <DiagnosticCell coordinate="[ ADM_01.3 // IDENTIFICATION_CODE ]" placeholder="204 123 456" value={fedCode} onChange={(val) => setFedCode(formatFedCode(val))} isValid={fedCode.replace(/\s/g, '').length === 9} telemetryStatus={`[ CHAR_LIMIT: ${fedCode.replace(/\s/g, '').length}/9 ]`} />
+          <DiagnosticCell 
+            coordinate="[ SaaS_DOMAIN // SUBDOMAIN ]" 
+            placeholder="judo-fed" 
+            value={fedSubdomain} 
+            onChange={(val) => setFedSubdomain(val.toLowerCase().replace(/[^a-z0-9-]/g, ''))} 
+            isValid={fedSubdomain.trim() !== ""} 
+            telemetryStatus={fedSubdomain.trim() !== "" ? '[ AVAILABLE // ხელმისაწვდომია ]' : '[ ALPHANUMERIC & HYPHENS ]'}
+            suffix={<span className="text-[#9CA3AF]/40 pr-3.5">.artron.ge</span>}
+          />
           <DiagnosticCell coordinate="[ ADM_01.4 // SPORTS_TYPE_TAGS ]" placeholder="ჭადრაკი, ფეხბურთი, რაგბი" value={sportsType} onChange={setSportsType} isValid={sportsType.trim() !== ""} />
         </div>
       </div>

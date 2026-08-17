@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { 
   TrendingUp, 
   Clock, 
@@ -12,14 +13,59 @@ import {
   ChevronRight,
   Info
 } from 'lucide-react';
+import { RoiChart } from './RoiChart';
+
+interface AnimatedNumberProps {
+  value: number;
+  format: (val: number) => string;
+}
+
+// 60 FPS dynamic numerical count-up helper component for real-time HUD slider feel
+const AnimatedNumber: React.FC<AnimatedNumberProps> = ({ value, format }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+  const prevValueRef = useRef(value);
+
+  useEffect(() => {
+    let start = prevValueRef.current;
+    const end = value;
+    if (start === end) {
+      setDisplayValue(end);
+      return;
+    }
+
+    const duration = 400; // ms
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Easing: easeOutCubic
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const currentVal = Math.round(start + (end - start) * easedProgress);
+      setDisplayValue(currentVal);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        prevValueRef.current = end;
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [value]);
+
+  return <>{format(displayValue)}</>;
+};
 
 export const RoiCalculator: React.FC = () => {
   const { locale, t } = useLanguage();
   const [members, setMembers] = useState<number>(1000);
   const [staff, setStaff] = useState<number>(20);
 
-  // Currency configuration based on active locale
-  const getCurrencyConfig = () => {
+  // Currency configuration based on active locale - memoized to prevent recreation
+  const currency = useMemo(() => {
     switch (locale) {
       case 'ka':
         return { symbol: '₾', rate: 120, formatBefore: false, step: 5, min: 30, max: 500, laborRate: 8, cardSavings: 0.2 };
@@ -29,39 +75,42 @@ export const RoiCalculator: React.FC = () => {
       default:
         return { symbol: '$', rate: 50, formatBefore: true, step: 5, min: 10, max: 200, laborRate: 15, cardSavings: 0.1 };
     }
-  };
+  }, [locale]);
 
-  const currency = getCurrencyConfig();
   const [price, setPrice] = useState<number>(currency.rate);
   const [prevLocale, setPrevLocale] = useState<string>(locale);
 
   // Reset price slider value when locale changes
   if (locale !== prevLocale) {
     setPrevLocale(locale);
-    const newConfig = getCurrencyConfig();
-    setPrice(newConfig.rate);
+    setPrice(currency.rate);
   }
 
-  // Compute calculated metrics directly during render
-  // 1. Time Saved = (Members * 10 visits * 1.5 min) / 60 + (Staff * 4 hrs of tracking/admin)
-  const timeSaved = Math.round((members * 0.25) + (staff * 4));
+  // Compute calculated metrics - memoized to ensure zero redundant performance cost
+  const timeSaved = useMemo(() => {
+    return Math.round((members * 0.25) + (staff * 4));
+  }, [members, staff]);
 
-  // 2. Revenue Increase (Annual) = Members * 5% churn reduction * monthly price * 12 months
-  const revenueIncrease = Math.round(members * 0.05 * price * 12);
+  const revenueIncrease = useMemo(() => {
+    return Math.round(members * 0.05 * price * 12);
+  }, [members, price]);
 
-  // 3. Administrative Overhead Savings (Monthly) = (Time Saved * laborRate) + (Members * cardSavings)
-  const overheadSavings = Math.round((timeSaved * currency.laborRate) + (members * currency.cardSavings));
+  const overheadSavings = useMemo(() => {
+    return Math.round((timeSaved * currency.laborRate) + (members * currency.cardSavings));
+  }, [timeSaved, currency.laborRate, currency.cardSavings, members]);
 
-  const formatNumber = (num: number) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
+  const formatNumber = useMemo(() => {
+    return (num: number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }, []);
 
-  const formatCurrency = (amount: number) => {
-    const formatted = formatNumber(amount);
-    return currency.formatBefore 
-      ? `${currency.symbol}${formatted}` 
-      : `${formatted} ${currency.symbol}`;
-  };
+  const formatCurrency = useMemo(() => {
+    return (amount: number) => {
+      const formatted = formatNumber(amount);
+      return currency.formatBefore 
+        ? `${currency.symbol}${formatted}` 
+        : `${formatted} ${currency.symbol}`;
+    };
+  }, [currency]);
 
   return (
     <section id="roi" className="py-20 px-4 md:px-8 bg-[#0B0F17] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#121b2d]/50 via-[#0B0F17] to-[#080b11] relative overflow-hidden border-b border-white/5">
@@ -87,7 +136,13 @@ export const RoiCalculator: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
           
           {/* Sliders Card (Left Column) */}
-          <div className="lg:col-span-5 bg-[#05070a]/85 border border-[#8a99ad]/20 backdrop-blur-xl rounded-3xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+            className="lg:col-span-5 bg-[#05070a]/85 border border-[#8a99ad]/20 hover:border-[#00ff87]/30 backdrop-blur-xl rounded-3xl p-8 flex flex-col justify-between shadow-2xl hover:shadow-[0_0_50px_rgba(0,255,135,0.04)] relative overflow-hidden group transition-all duration-500"
+          >
             {/* L-Shape Corner Brackets */}
             <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00ff87]/30" />
             <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00ff87]/30" />
@@ -220,10 +275,16 @@ export const RoiCalculator: React.FC = () => {
               </div>
             </div>
 
-          </div>
+          </motion.div>
 
           {/* Calculations Cards (Right Column) */}
-          <div className="lg:col-span-7 flex flex-col justify-between gap-6">
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+            className="lg:col-span-7 flex flex-col justify-between gap-6"
+          >
             
             {/* Top Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -250,7 +311,7 @@ export const RoiCalculator: React.FC = () => {
                   <h4 className="text-sm font-bold text-[#94A3B8]">{t('roi_time_saved_title')}</h4>
                 </div>
                 <div className="text-3xl md:text-4xl font-black text-white mb-2 font-mono">
-                  {formatNumber(timeSaved)} <span className="text-lg font-bold text-[#94A3B8] font-sans">Hrs</span>
+                  <AnimatedNumber value={timeSaved} format={formatNumber} /> <span className="text-lg font-bold text-[#94A3B8] font-sans">Hrs</span>
                 </div>
                 <p className="text-xs text-[#94A3B8] leading-relaxed">
                   {t('roi_time_saved_desc')}
@@ -279,7 +340,7 @@ export const RoiCalculator: React.FC = () => {
                   <h4 className="text-sm font-bold text-[#94A3B8]">{t('roi_overhead_title')}</h4>
                 </div>
                 <div className="text-3xl md:text-4xl font-black text-[#00ff87] mb-2 font-mono">
-                  {formatCurrency(overheadSavings)}
+                  <AnimatedNumber value={overheadSavings} format={formatCurrency} />
                 </div>
                 <p className="text-xs text-[#94A3B8] leading-relaxed">
                   {t('roi_overhead_desc')}
@@ -321,7 +382,7 @@ export const RoiCalculator: React.FC = () => {
                 </div>
 
                 <div className="text-4xl md:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-[#e2e8f0] to-[#00ff87] tracking-tight mb-4 font-mono leading-none">
-                  {formatCurrency(revenueIncrease)}
+                  <AnimatedNumber value={revenueIncrease} format={formatCurrency} />
                 </div>
                 
                 <p className="text-sm text-[#94A3B8] leading-relaxed mb-6 max-w-xl">
@@ -329,81 +390,16 @@ export const RoiCalculator: React.FC = () => {
                 </p>
 
                 {/* BI Dynamic SVG Growth Projections Chart */}
-                <div className="mb-6 bg-[#0B0F17]/50 border border-white/5 rounded-2xl p-4 relative overflow-hidden">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">
-                      {locale === 'ka' ? '5-წლიანი ROI ზრდის ტრენდი' : locale === 'ru' ? '5-летний тренд роста ROI' : '5-Year ROI Growth Trend'}
-                    </span>
-                    <span className="text-[10px] font-mono text-[#00ff87] font-bold">
-                      {locale === 'ka' ? 'ავტომატიზირებული' : locale === 'ru' ? 'Автоматизировано' : 'Automated'}
-                    </span>
-                  </div>
-                  
-                  {(() => {
-                    const maxRev = 5000 * 0.05 * currency.max * 12;
-                    const y1 = Math.round(95 - ((revenueIncrease * 0.2) / maxRev) * 70);
-                    const y2 = Math.round(95 - ((revenueIncrease * 0.45) / maxRev) * 70);
-                    const y3 = Math.round(95 - ((revenueIncrease * 0.7) / maxRev) * 70);
-                    const y4 = Math.round(95 - ((revenueIncrease * 0.85) / maxRev) * 70);
-                    const y5 = Math.round(95 - ((revenueIncrease * 1.0) / maxRev) * 70);
-                    
-                    return (
-                      <svg className="w-full h-28 overflow-visible" viewBox="0 0 500 100">
-                        <defs>
-                          <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#00ff87" stopOpacity="0.25" />
-                            <stop offset="100%" stopColor="#00ff87" stopOpacity="0" />
-                          </linearGradient>
-                          <linearGradient id="line-grad" x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0%" stopColor="#00e5ff" />
-                            <stop offset="100%" stopColor="#00ff87" />
-                          </linearGradient>
-                        </defs>
-                        {/* Grid Lines */}
-                        <line x1="20" y1="25" x2="480" y2="25" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
-                        <line x1="20" y1="60" x2="480" y2="60" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
-                        <line x1="20" y1="95" x2="480" y2="95" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
-                        
-                        {/* Glow Area */}
-                        <path
-                          d={`M 20 95 L 20 ${y1} L 135 ${y2} L 250 ${y3} L 365 ${y4} L 480 ${y5} L 480 95 Z`}
-                          fill="url(#chart-glow)"
-                          className="transition-all duration-500 ease-out"
-                        />
-                        
-                        {/* Line */}
-                        <path
-                          d={`M 20 ${y1} L 135 ${y2} L 250 ${y3} L 365 ${y4} L 480 ${y5}`}
-                          fill="none"
-                          stroke="url(#line-grad)"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="transition-all duration-500 ease-out"
-                        />
-                        
-                        {/* Dots */}
-                        <circle cx="20" cy={y1} r="3" fill="#00e5ff" className="transition-all duration-500 ease-out" />
-                        <circle cx="135" cy={y2} r="3" fill="#00e5ff" className="transition-all duration-500 ease-out" />
-                        <circle cx="250" cy={y3} r="3" fill="#00e5ff" className="transition-all duration-500 ease-out" />
-                        <circle cx="365" cy={y4} r="3" fill="#00ff87" className="transition-all duration-500 ease-out" />
-                        <circle cx="480" cy={y5} r="4" fill="#00ff87" className="transition-all duration-500 ease-out" />
-                        
-                        {/* Labels */}
-                        <text x="20" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y1</text>
-                        <text x="135" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y2</text>
-                        <text x="250" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y3</text>
-                        <text x="365" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y4</text>
-                        <text x="460" y="108" fill="#00ff87" fontSize="8" className="font-mono font-bold">Y5 (PROJ)</text>
-                      </svg>
-                    );
-                  })()}
-                </div>
+                <RoiChart 
+                  revenueIncrease={revenueIncrease} 
+                  maxRev={5000 * 0.05 * currency.max * 12} 
+                  locale={locale} 
+                />
               </div>
 
               {/* Bottom Call to Action inside ROI section */}
               <button
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00ff87] to-[#00e5ff] hover:brightness-110 text-slate-950 font-extrabold rounded-2xl transition-all duration-300 shadow-xl shadow-[#00ff87]/20 hover:shadow-[#00ff87]/30 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00ff87] to-[#00e5ff] hover:brightness-110 text-slate-950 font-extrabold rounded-2xl transition-all duration-300 shadow-xl shadow-[#00ff87]/20 hover:shadow-[#00ff87]/40 active:scale-98 hover:scale-[1.02] transform border border-[#00ff87]/25 hover:border-[#00ff87]/50 cursor-pointer"
                 style={{ minHeight: '48px' }}
                 onClick={() => {
                   const element = document.getElementById('b2b-cta-target');
@@ -421,7 +417,7 @@ export const RoiCalculator: React.FC = () => {
 
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
 

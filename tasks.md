@@ -160,6 +160,34 @@
   - [x] Step 3: Verify type safety (`npx tsc --noEmit`) and production build (`npm run build`)
   - [x] Step 4: Staged & committed all project files to Git with tag `v10.15-stable` for seamless version restore
 
+- [x] **Phase 11: Official App Store & Google Play Badges with "Coming Soon" Indicator**
+  - [x] Step 1: Create reusable, pixel-perfect `AppStoreBadges.tsx` component with Apple & Google Play SVG vectors and "Coming Soon" live badge
+  - [x] Step 2: Update dictionaries (`ge.json`, `en.json`, `ru.json`) with localized copy
+  - [x] Step 3: Integrate `AppStoreBadges` into `HeroSection.tsx` (CTA area & Mobile Simulated Shell)
+  - [x] Step 4: Integrate `AppStoreBadges` into `ServicesShowcase.tsx` (B2C Mobile section) & `SaaSGatewayCTA.tsx`
+- [x] **Phase 12: EnneaCore 9 Nodes & Gateway Master Ecosystem Overhaul**
+  - [x] **Phase 12.1: ეტაპი 1 — ცენტრალური მონაცემთა ბაზა და 3-ენოვანი ლექსიკონები (Data Core & i18n)**
+    - [x] `src/data/gatewayNodes.ts`-ის სრული გამდიდრება 9-ვე კვანძისთვის (სათაურები, მოკლე აღწერები, ქვეთავები `subChapters` და დოქტრინები/ფუნქციონალი)
+    - [x] 3-ენოვანი ლექსიკონების (`ge.json`, `en.json`, `ru.json`) სინქრონიზაცია და გამდიდრება 9-ვე კვანძის ნარატივებისა და ტერმინოლოგიისთვის
+    - [x] ტიპების ვალიდაცია `src/types/gateway.ts` და TypeScript კომპილაციის შემოწმება (`npx tsc --noEmit`)
+
+  - [x] **Phase 12.2: ეტაპი 2 — ინფრასტრუქტურა და პერსონალის მოდულები (Nodes 02, 03, 04)**
+    - [x] Node 02 (Facility Blueprint & Access): ობიექტის ციფრული ტყუპი, RFID/NFC/Dynamic QR ტურნიკეტების მონიტორინგი და ცოცხალი დატვირთვის Heatmap
+    - [x] Node 03 (Staff, Trainers & Labor Log): ბრძანება №01-15/ნ ელექტრონული აღრიცხვის ჟურნალი, მწვრთნელთა ჰაბი და საკომისიოების ბილინგი
+    - [x] Node 04 (Athlete & Client Experience): მობილური აპლიკაციის ეკოსისტემა, ოჯახური ანგარიშები, ვიზიტების ისტორია და ტრენერთან ჩაწერა
+  - [x] **Phase 12.3: ეტაპი 3 — კომერცია, ლოიალობა და AI/BI ანალიტიკა (Nodes 05, 06, 07)**
+    - [x] Node 05 (Loyalty, Cashback & Points Bank): ართრონ ქოინების საფულე, კეშბექის წესები და VIP სტატუსები
+    - [x] Node 06 (Marketplace & POS Inventory): ფიტნეს-ბარის და აქსესუარების POS სისტემა, მყისიერი ჩამოწერა და მარაგები
+    - [x] Node 07 (AI Analytics Core): KPI Dashboard, Market Analytics, Churn Prediction და Win-back ავტომატური კამპანიები
+  - [x] **Phase 12.4: ეტაპი 4 — უსაფრთხოება და სარეგისტრაციო კარიბჭე (Nodes 08, 09)**
+    - [x] Node 08 (Security, GDPR & Legal): AES-256 PII დაშიფვრა, 14-დღიანი ავტომატური წაშლის პროტოკოლი და საგადასახადო 3-წლიანი არქივაცია
+    - [x] Node 09 (Core OS Onboarding & Access): სარეგისტრაციო ფორმის გაძლიერება ორგანიზაციის ტიპის მიხედვით და სატესტო დემო-გარემოს მყისიერი ინიციაცია
+  - [x] **Phase 12.5: ეტაპი 5 — QA აუდიტი, მობილური ადაპტაცია და Git Release**
+    - [x] ტიპების მკაცრი ვალიდაცია (`npx tsc --noEmit`) და საწარმოო ბილდი (`npm run build`)
+    - [x] 60 FPS ანიმაციების, ხმოვანი ეფექტებისა და სრული რესპონსიულობის შემოწმება
+    - [x] `tasks.md`-ის დასრულების მონიშვნა და Git Release Commit (`v12.0-master-ecosystem`)
+
+
 
 
 
