@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { soundEngine } from '@/core';
+import { useI18n } from '@/context/I18nContext';
 
 export const Node01FederationWidget: React.FC = () => (
   <div className="bg-[#16191E]/90 border border-[#262a33] p-3.5 rounded font-mono text-[11px] space-y-2.5 leading-relaxed">
@@ -91,47 +92,71 @@ export const Node08GdprShieldWidget: React.FC = () => (
  * NODE 09: SYSTEM ACCESS GATEWAY (3-STEP ACCESSIBLE FLOW IN 40% SIDEBAR)
  */
 export const Node09AccessWidget: React.FC<{ onSelectSubChapter?: (subId: string) => void }> = ({ onSelectSubChapter }) => {
+  const { t } = useI18n();
+
   return (
-    <div className="w-full space-y-3.5 font-mono animate-fadeIn pt-2">
-      {/* Button 1: MEMBERSHIP INIT */}
+    <div className="w-full space-y-3 font-mono animate-fadeIn pt-2">
+      {/* Button 1: ORGANIZATION REGISTRATION / ONBOARDING */}
       <button
         type="button"
         onClick={() => {
           soundEngine.playPulseNode();
-          onSelectSubChapter?.('membership-init');
+          onSelectSubChapter?.('09.1');
         }}
-        className="group w-full px-5 py-4 bg-[rgba(10,11,13,0.6)] border border-[rgba(0,255,135,0.25)] hover:border-[#00ff87] hover:bg-[rgba(0,255,135,0.08)] rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
+        className="group w-full px-4 py-3.5 bg-[rgba(10,11,13,0.7)] border border-[rgba(0,176,255,0.35)] hover:border-[#00B0FF] hover:bg-[rgba(0,176,255,0.08)] rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
       >
-        <span className="font-mono text-[13px] font-bold text-white tracking-[1.5px] uppercase group-hover:text-[#00ff87] transition-colors">
-          01 // MEMBERSHIP INIT
+        <span className="font-mono text-[12px] sm:text-[13px] font-bold text-white tracking-[1.2px] uppercase group-hover:text-[#00B0FF] transition-colors text-left">
+          {t('gateway.membership_init_btn')}
         </span>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] font-semibold text-[#00ff87] bg-[#00ff87]/10 px-2.5 py-1 rounded border border-[#00ff87]/30 uppercase tracking-wider">
-            NEW REGISTRATION
+          <span className="font-mono text-[10px] font-semibold text-[#00B0FF] bg-[#00B0FF]/10 px-2 py-0.5 rounded border border-[#00B0FF]/30 uppercase tracking-wider">
+            {t('gateway.membership_init_badge')}
           </span>
-          <span className="font-mono text-[14px] text-[#00ff87] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
+          <span className="font-mono text-[13px] text-[#00B0FF] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
             →
           </span>
         </div>
       </button>
 
-      {/* Button 2: CONSOLE ACCESS */}
+      {/* Button 2: GUEST 1-HOUR DEMO ACCESS */}
       <button
         type="button"
         onClick={() => {
           soundEngine.playPulseNode();
-          onSelectSubChapter?.('console-access');
+          onSelectSubChapter?.('09.2');
         }}
-        className="group w-full px-5 py-4 bg-[rgba(10,11,13,0.6)] border border-[rgba(0,255,135,0.25)] hover:border-[#00ff87] hover:bg-[rgba(0,255,135,0.08)] rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
+        className="group w-full px-4 py-3.5 bg-[rgba(10,11,13,0.7)] border border-[rgba(0,255,135,0.35)] hover:border-[#00ff87] hover:bg-[rgba(0,255,135,0.08)] rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
       >
-        <span className="font-mono text-[13px] font-bold text-white tracking-[1.5px] uppercase group-hover:text-[#00ff87] transition-colors">
-          02 // CONSOLE ACCESS
+        <span className="font-mono text-[12px] sm:text-[13px] font-bold text-white tracking-[1.2px] uppercase group-hover:text-[#00ff87] transition-colors text-left">
+          {t('gateway.guest_demo_btn')}
         </span>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] font-semibold text-[#00ff87] bg-[#00ff87]/10 px-2.5 py-1 rounded border border-[#00ff87]/30 uppercase tracking-wider">
-            OPERATOR LOGIN
+          <span className="font-mono text-[10px] font-semibold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded border border-[#00ff87]/30 uppercase tracking-wider">
+            {t('gateway.guest_demo_badge')}
           </span>
-          <span className="font-mono text-[14px] text-[#00ff87] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
+          <span className="font-mono text-[13px] text-[#00ff87] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
+            →
+          </span>
+        </div>
+      </button>
+
+      {/* Button 3: OPERATOR AUTHENTICATION */}
+      <button
+        type="button"
+        onClick={() => {
+          soundEngine.playPulseNode();
+          onSelectSubChapter?.('09.3');
+        }}
+        className="group w-full px-4 py-3.5 bg-[rgba(10,11,13,0.7)] border border-white/15 hover:border-white/40 hover:bg-white/5 rounded-md transition-all duration-200 flex items-center justify-between cursor-pointer hover:translate-x-[2px] shadow-sm"
+      >
+        <span className="font-mono text-[12px] sm:text-[13px] font-bold text-gray-300 tracking-[1.2px] uppercase group-hover:text-white transition-colors text-left">
+          {t('gateway.console_access_btn')}
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] font-semibold text-gray-300 bg-white/5 px-2 py-0.5 rounded border border-white/15 uppercase tracking-wider">
+            {t('gateway.console_access_badge')}
+          </span>
+          <span className="font-mono text-[13px] text-white opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
             →
           </span>
         </div>

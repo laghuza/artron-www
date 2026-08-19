@@ -14,20 +14,33 @@ import { Node08CanvasView } from './Node08CanvasView';
 import { Node09CanvasView } from './Node09CanvasView';
 import { GhostTrigger } from './GhostTrigger';
 import { CyberAuthLoginCard } from './CyberAuthLoginCard';
+import { UnifiedRegistrationWizard, UnifiedRegistrationData } from './UnifiedRegistrationWizard';
 import { soundEngine } from '@/core';
+import { FacilityPreset } from '@/types/gateway';
+
+import { useRouter } from 'next/navigation';
 
 interface NodeCanvasProps {
   nodes: ArtronNode[];
   activeNodeId: number | null;
   activeSubChapterId?: string | null;
+  activePreset?: FacilityPreset;
   viewState: ViewState;
   onSelectNode: (nodeId: number) => void;
   onPortalEntry?: () => void;
   onAuthenticate?: (
     mode: 'FULL_B2B' | 'TEMP_OTP',
-    credentials: { username?: string; password?: string; otpCode?: string }
+    credentials: { username?: string; password?: string; otpCode?: string; orgName?: string; discipline?: string; isTrial?: boolean }
   ) => void;
 }
+
+const PRESET_NODES_MAP: Record<FacilityPreset, number[]> = {
+  ALL: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  GYM: [2, 5, 6, 7],
+  POOL: [1, 2, 7],
+  STUDIO: [3, 4, 5],
+  CLUB: [1, 3, 8],
+};
 
 const COLORS: Record<number, string> = {
   1: "#00B0FF",
@@ -56,20 +69,24 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
   nodes: _n,
   activeNodeId,
   activeSubChapterId,
+  activePreset = 'ALL',
   viewState: _v,
   onSelectNode,
   onPortalEntry,
   onAuthenticate,
 }) => {
+  const router = useRouter();
   const { t } = useI18n();
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const [showAuthCard, setShowAuthCard] = useState(false);
+  const [showRegistrationCard, setShowRegistrationCard] = useState(false);
   const activeNode = activeNodeId || 0;
   const currentActive = hoveredNode !== null ? hoveredNode : activeNode;
   const isCenterActive = currentActive === 9;
   const isNode09Active = activeNodeId === 9;
   const isAnyNodeActive = activeNodeId !== null && activeNodeId > 0 && activeNodeId < 9;
   const activeColor = activeNodeId ? (COLORS[activeNodeId] || "#00ff87") : "#00B0FF";
+  const highlightedNodes = PRESET_NODES_MAP[activePreset] || PRESET_NODES_MAP.ALL;
 
   const handleNodeHover = (id: number) => {
     setHoveredNode(id);
@@ -80,13 +97,29 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
     onSelectNode(id);
   };
 
+  const handleRegistrationComplete = (data: UnifiedRegistrationData) => {
+    setShowRegistrationCard(false);
+    if (onAuthenticate) {
+      onAuthenticate('FULL_B2B', {
+        username: data.email,
+        orgName: data.clubName,
+        discipline: data.clubServices,
+        isTrial: true,
+      });
+    } else if (onPortalEntry) {
+      onPortalEntry();
+    }
+  };
+
   const nodeItems = COORDS.map((coord, i) => ({
     id: i + 1,
     ...coord,
     label: t(`labels.node_${i + 1}`),
     active: currentActive === i + 1,
+    isPresetMatch: highlightedNodes.includes(i + 1),
     color: COLORS[i + 1] || "#9CA3AF"
   }));
+
 
   return (
     <div className="w-full lg:w-[60%] h-full flex items-center justify-center relative select-none p-6 overflow-hidden">
@@ -98,7 +131,25 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
 
       {/* Top-Right Rotating Logo Trigger with Glassmorphic Dropdown */}
       <div className="absolute top-4 right-6 z-40">
-        <GhostTrigger onAccessClick={() => { if (onPortalEntry) onPortalEntry(); else handleNodeSelect(9); }} />
+        <GhostTrigger
+          onRegisterClick={() => {
+            soundEngine.playSystemAccess();
+            router.push('/get-started?mode=register');
+          }}
+          onGuestDemoClick={() => {
+            soundEngine.playPulseNode();
+            router.push('/get-started?mode=demo');
+          }}
+          onOperatorAuthClick={() => {
+            soundEngine.playPulseNode();
+            handleNodeSelect(9);
+            setShowAuthCard(true);
+          }}
+          onAccessClick={() => {
+            if (onPortalEntry) onPortalEntry();
+            else handleNodeSelect(9);
+          }}
+        />
       </div>
 
       {/* Overlay Stage Views for Interactive Nodes */}
@@ -126,22 +177,56 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
       {activeNodeId === 8 && (
         <Node08CanvasView activeSubChapterId={activeSubChapterId || null} />
       )}
-      {activeNodeId === 9 && !showAuthCard && (
+      {activeNodeId === 9 && !showAuthCard && !showRegistrationCard && (
         <Node09CanvasView
           activeSubChapterId={activeSubChapterId || null}
           onLaunchRegistration={() => {
-            if (onPortalEntry) onPortalEntry();
+            soundEngine.playSystemAccess();
+            router.push('/get-started?mode=register');
+          }}
+          onLaunchDemo={() => {
+            soundEngine.playPulseNode();
+            router.push('/get-started?mode=demo');
           }}
           onLaunchAuth={() => setShowAuthCard(true)}
         />
       )}
 
-      {/* Overlay for Node #09 Full-Screen Immersive Auth & Registration Backdrop */}
+      {/* Overlay for Node #09 Full-Screen Immersive Auth Backdrop */}
       {isNode09Active && showAuthCard && onAuthenticate && (
         <CyberAuthLoginCard
           onAuthenticate={onAuthenticate}
           onClose={() => setShowAuthCard(false)}
+          onSwitchToRegister={() => {
+            setShowAuthCard(false);
+            setShowRegistrationCard(true);
+          }}
         />
+      )}
+
+      {/* Overlay for Node #09 Unified 14-Day Onboarding / Sandbox Registration Modal */}
+      {isNode09Active && showRegistrationCard && (
+        <div className="fixed inset-0 z-[100] bg-[#060709]/95 overflow-y-auto flex items-center justify-center p-3 md:p-6 select-none font-sans animate-fadeIn">
+          <div className="relative w-full max-w-2xl my-auto py-6">
+            <div className="w-full flex justify-end mb-2">
+              <button
+                type="button"
+                onClick={() => setShowRegistrationCard(false)}
+                className="font-mono text-xs text-[#9CA3AF] hover:text-[#00FF87] px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 transition-colors cursor-pointer"
+              >
+                [ ESC / ✕ დახურვა ]
+              </button>
+            </div>
+            <UnifiedRegistrationWizard
+              onComplete={handleRegistrationComplete}
+              onCancel={() => setShowRegistrationCard(false)}
+              onSwitchToLogin={() => {
+                setShowRegistrationCard(false);
+                setShowAuthCard(true);
+              }}
+            />
+          </div>
+        </div>
       )}
 
       <svg viewBox="0 0 400 400" className="w-full max-w-[460px] aspect-square cursor-pointer overflow-visible z-10" onMouseLeave={() => setHoveredNode(null)}>
@@ -221,6 +306,8 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
         {nodeItems.map((node) => {
           const isAct = node.active;
           const isBlurred = isAnyNodeActive && node.id !== activeNodeId;
+          const isPresetDimmed = activePreset !== 'ALL' && !isAnyNodeActive && !node.isPresetMatch;
+          const isPresetHighlighted = activePreset !== 'ALL' && !isAnyNodeActive && node.isPresetMatch;
 
           return (
             <g
@@ -232,13 +319,16 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
               className="cursor-pointer transition-all duration-500"
               style={{
                 filter: isBlurred ? 'blur(8px)' : 'none',
-                opacity: isBlurred ? 0.2 : 1
+                opacity: isBlurred ? 0.2 : (isPresetDimmed ? 0.35 : 1)
               }}
             >
               <circle r="20" fill="transparent" />
-              <circle r={isAct ? 14 : 7} fill="none" stroke={node.color} strokeWidth={isAct ? 0.8 : 0.5} className={`${isAct ? "animate-ping opacity-35" : "animate-pulse opacity-15"} pointer-events-none`} />
-              <circle r="2.4" fill={isAct ? node.color : "#121418"} stroke={isAct ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct ? 1.0 : 0.4 }} className="transition-all duration-300" />
-              <text x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct ? "#F5F5F7" : "#9CA3AF"} className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300" style={{ fillOpacity: isAct ? 1.0 : 0.35 }}>
+              {isPresetHighlighted && (
+                <circle r="18" fill="none" stroke={node.color} strokeWidth="1.2" className="animate-ping opacity-30 pointer-events-none" />
+              )}
+              <circle r={isAct || isPresetHighlighted ? 14 : 7} fill="none" stroke={node.color} strokeWidth={isAct ? 0.8 : 0.5} className={`${isAct || isPresetHighlighted ? "animate-ping opacity-35" : "animate-pulse opacity-15"} pointer-events-none`} />
+              <circle r="2.4" fill={isAct || isPresetHighlighted ? node.color : "#121418"} stroke={isAct || isPresetHighlighted ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct || isPresetHighlighted ? 1.0 : 0.4 }} className="transition-all duration-300" />
+              <text x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct || isPresetHighlighted ? "#F5F5F7" : "#9CA3AF"} className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300" style={{ fillOpacity: isAct || isPresetHighlighted ? 1.0 : 0.35 }}>
                 {node.label}
               </text>
             </g>
@@ -248,3 +338,4 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
     </div>
   );
 };
+

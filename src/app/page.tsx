@@ -2,6 +2,7 @@ import { HeroSection } from "@/components/landing/HeroSection";
 import { PartnerEcosystem } from "@/components/landing/PartnerEcosystem";
 import { ServicesShowcase } from "@/components/landing/ServicesShowcase";
 import { RoiCalculator } from "@/components/landing/RoiCalculator";
+import { PricingSection } from "@/components/landing/PricingSection";
 import { BusinessStatsShowcase } from "@/components/landing/BusinessStatsShowcase";
 import { AnalyticsShowcase } from "@/components/landing/AnalyticsShowcase";
 import { DashboardFeaturesSection } from "@/components/DashboardFeaturesSection";
@@ -31,14 +32,15 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow flex flex-col">
         <HeroSection />
-        <PartnerEcosystem />
         <ServicesShowcase />
-        <RoiCalculator />
-        <BusinessStatsShowcase />
-        <AnalyticsShowcase />
         <DashboardFeaturesSection />
-        <BookingEngine />
+        <AnalyticsShowcase />
+        <BusinessStatsShowcase />
+        <RoiCalculator />
+        <PricingSection />
+        <PartnerEcosystem />
         <FaqSection />
+        <BookingEngine />
         <SaaSGatewayCTA />
       </main>
       <Footer />

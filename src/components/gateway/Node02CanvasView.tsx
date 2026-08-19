@@ -3,6 +3,8 @@
 import React from 'react';
 import { useI18n } from '@/context/I18nContext';
 import { NODE_02_SUB_NODES_DATA } from '@/data/node02BlueprintData';
+import { TurnstileSimulator } from './widgets/TurnstileSimulator';
+
 
 interface Node02CanvasViewProps {
   activeSubChapterId: string | null;
@@ -46,34 +48,24 @@ export const Node02CanvasView: React.FC<Node02CanvasViewProps> = ({ activeSubCha
 
       {/* Main Canvas Area Content: State 1 vs State 2 */}
       {!isSubNodeSelected ? (
-        /* State 1: Centered Intro Text overlay over SVG matrix */
-        <div className="my-auto mx-auto max-w-2xl text-center pointer-events-auto bg-[#0A0D11]/85 border border-[#00ff87]/30 p-7 lg:p-9 rounded-2xl backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] animate-fadeIn">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#00ff87]/10 border border-[#00ff87]/30 font-mono text-[11px] text-[#00ff87] uppercase tracking-[0.2em] mb-4">
+        /* State 1: Centered Intro Text and Live Turnstile Simulator overlay */
+        <div className="my-auto mx-auto max-w-2xl text-center pointer-events-auto bg-[#0A0D11]/85 border border-[#00ff87]/30 p-6 lg:p-8 rounded-2xl backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] animate-fadeIn space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#00ff87]/10 border border-[#00ff87]/30 font-mono text-[11px] text-[#00ff87] uppercase tracking-[0.2em]">
             <span className="w-2 h-2 rounded-full bg-[#00ff87] animate-pulse" />
             [ NODE_02 // FACILITY DIGITAL TWIN ]
           </div>
 
-          <h2 className="font-mono text-[22px] font-bold text-[#00ff87] uppercase tracking-wide leading-tight mb-4 shadow-emerald-500/10 text-shadow">
+          <h2 className="font-mono text-[20px] font-bold text-[#00ff87] uppercase tracking-wide leading-tight shadow-emerald-500/10 text-shadow">
             {t('node_02_blueprint.title')}
           </h2>
 
-          <p className="font-sans text-[14px] text-gray-300 leading-[1.6] text-justify max-w-xl mx-auto border-t border-white/10 pt-4">
+          <p className="font-sans text-[13px] text-gray-300 leading-[1.6] text-justify max-w-xl mx-auto border-t border-white/10 pt-3">
             {t('node_02_blueprint.short_desc')}
           </p>
 
-          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px] text-gray-400">
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
-              &lt; 50ms LATENCY
-            </div>
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
-              ANTI-PASSBACK
-            </div>
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
-              LIVE HEATMAP
-            </div>
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
-              FAIL-SAFE ESC
-            </div>
+          {/* Interactive Live Turnstile Simulator */}
+          <div className="pt-2 text-left">
+            <TurnstileSimulator />
           </div>
         </div>
       ) : (

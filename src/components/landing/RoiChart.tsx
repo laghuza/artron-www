@@ -22,11 +22,11 @@ export const RoiChart: React.FC<RoiChartProps> = ({ revenueIncrease, maxRev, loc
   return (
     <div className="mb-6 bg-[#0B0F17]/50 border border-white/5 rounded-2xl p-4 relative overflow-hidden">
       <div className="flex justify-between items-center mb-4">
-        <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">
-          {locale === 'ka' ? '5-წლიანი ROI ზრდის ტრენდი' : locale === 'ru' ? '5-летний тренд роста ROI' : '5-Year ROI Growth Trend'}
+        <span className="text-[11px] font-semibold text-[#94A3B8] tracking-wide">
+          {locale === 'ka' ? '5-წლიანი შემოსავლის ზრდის დინამიკა' : locale === 'ru' ? 'Динамика роста доходов на 5 лет' : '5-Year Projected Revenue Growth'}
         </span>
-        <span className="text-[10px] font-mono text-[#00ff87] font-bold">
-          {locale === 'ka' ? 'ავტომატიზირებული' : locale === 'ru' ? 'Автоматизировано' : 'Automated'}
+        <span className="text-[10px] font-semibold text-[#00ff87] bg-[#00ff87]/10 border border-[#00ff87]/20 px-2 py-0.5 rounded-full">
+          {locale === 'ka' ? 'ავტომატიზაციით' : locale === 'ru' ? 'С автоматизацией' : 'With Automation'}
         </span>
       </div>
 
@@ -72,11 +72,21 @@ export const RoiChart: React.FC<RoiChartProps> = ({ revenueIncrease, maxRev, loc
         <motion.circle cx="480" animate={{ cy: y5 }} r="4" fill="#00ff87" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
 
         {/* Labels */}
-        <text x="20" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y1</text>
-        <text x="135" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y2</text>
-        <text x="250" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y3</text>
-        <text x="365" y="108" fill="#64748B" fontSize="8" className="font-mono text-center">Y4</text>
-        <text x="460" y="108" fill="#00ff87" fontSize="8" className="font-mono font-bold">Y5 (PROJ)</text>
+        <text x="20" y="108" fill="#64748B" fontSize="9" className="font-sans font-medium text-center">
+          {locale === 'ka' ? '1 წელი' : locale === 'ru' ? '1 год' : 'Year 1'}
+        </text>
+        <text x="135" y="108" fill="#64748B" fontSize="9" className="font-sans font-medium text-center">
+          {locale === 'ka' ? '2 წელი' : locale === 'ru' ? '2 год' : 'Year 2'}
+        </text>
+        <text x="250" y="108" fill="#64748B" fontSize="9" className="font-sans font-medium text-center">
+          {locale === 'ka' ? '3 წელი' : locale === 'ru' ? '3 год' : 'Year 3'}
+        </text>
+        <text x="365" y="108" fill="#64748B" fontSize="9" className="font-sans font-medium text-center">
+          {locale === 'ka' ? '4 წელი' : locale === 'ru' ? '4 год' : 'Year 4'}
+        </text>
+        <text x="445" y="108" fill="#00ff87" fontSize="9" className="font-sans font-bold">
+          {locale === 'ka' ? '5 წელი (პროგნოზი)' : locale === 'ru' ? '5 лет (прогноз)' : 'Year 5 (Proj)'}
+        </text>
       </svg>
     </div>
   );

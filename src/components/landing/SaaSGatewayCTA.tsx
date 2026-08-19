@@ -3,19 +3,11 @@
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
-import { Calendar, ArrowRight, Building2, Sparkles } from 'lucide-react';
+import { Calendar, Building2, Sparkles } from 'lucide-react';
 import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 
 export const SaaSGatewayCTA: React.FC = () => {
   const { t } = useLanguage();
-
-  const handleScrollToBooking = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById('booking-engine');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <section id="saas-gateway-cta" className="py-24 relative overflow-hidden bg-[#0B0F17] border-t border-white/5">
@@ -52,28 +44,27 @@ export const SaaSGatewayCTA: React.FC = () => {
               {t('cta_subtitle')}
             </p>
 
-            {/* Action Buttons Grid */}
+            {/* Action Buttons Grid - 2 High-Impact Conversion Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 pt-4">
               
-              {/* Scroll to Booking Calendar */}
-              <button
-                onClick={handleScrollToBooking}
-                className="py-3 px-6 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-[#E2E8F0] text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
+              {/* 1. Book Presentation / Demo Presentation */}
+              <Link
+                href="/get-started?mode=demo"
+                className="py-3.5 px-7 rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/15 hover:border-[#00A3FF]/60 text-white text-sm font-bold shadow-[0_0_20px_rgba(0,163,255,0.15)] hover:shadow-[0_0_25px_rgba(0,163,255,0.3)] hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-2.5 cursor-pointer"
                 style={{ minHeight: '48px' }}
               >
-                <Calendar className="w-4.5 h-4.5 text-[#00ff87] drop-shadow-[0_0_6px_#00ff87]" />
+                <Calendar className="w-4.5 h-4.5 text-[#00A3FF]" />
                 <span>{t('cta_btn_book')}</span>
-              </button>
+              </Link>
 
-              {/* Navigate to Onboarding flow */}
+              {/* 2. Register Gym / Onboarding Flow */}
               <Link
-                href="/get-started"
-                className="py-3 px-6 rounded-xl bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 text-sm font-extrabold shadow-lg shadow-[#00ff87]/25 hover:shadow-[#00ff87]/45 hover:brightness-110 hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-2"
+                href="/get-started?mode=register"
+                className="py-3.5 px-7 rounded-xl bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 text-sm font-extrabold shadow-lg shadow-[#00ff87]/25 hover:shadow-[#00ff87]/45 hover:brightness-110 hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-2.5 cursor-pointer"
                 style={{ minHeight: '48px' }}
               >
                 <Building2 className="w-4.5 h-4.5" />
                 <span>{t('cta_btn_register')}</span>
-                <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 

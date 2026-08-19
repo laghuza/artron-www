@@ -1,5 +1,6 @@
 export type ViewState = 'CORE_INIT' | 'NODE_SELECTED' | 'SUBCHAPTER_VIEW';
 export type PortalState = 'IDLE' | 'IGNITION' | 'EXPANDING' | 'ENTERED';
+export type FacilityPreset = 'ALL' | 'GYM' | 'POOL' | 'STUDIO' | 'CLUB';
 
 export type SubChapter = {
   id: string;
@@ -14,3 +15,4 @@ export type ArtronNode = {
   shortDesc: string;
   subChapters: SubChapter[];
 };
+

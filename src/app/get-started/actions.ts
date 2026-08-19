@@ -164,6 +164,8 @@ export async function registerClubAction(formData: {
   clubOfficialEmail: string;
   clubAccessCode: string;
   personalId: string;
+  plan?: string;
+  billingCycle?: string;
 }) {
   try {
     // 1. Rate Limiting
@@ -190,6 +192,8 @@ export async function registerClubAction(formData: {
 
     const sanitizedEmail = formData.clubOfficialEmail.toLowerCase().trim();
     const sanitizedCode = formData.clubCode.replace(/\s/g, "");
+    const normalizedPlan = (formData.plan || "PRO").toUpperCase();
+    const normalizedCycle = (formData.billingCycle || "MONTHLY").toUpperCase();
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -209,12 +213,12 @@ export async function registerClubAction(formData: {
 
     // 3. Database transaction to create Tenant, User and Club
     await prisma.$transaction(async (tx) => {
-      // Create Tenant
+      // Create Tenant with selected plan
       const tenant = await tx.tenant.create({
         data: {
           name: formData.clubName,
           subdomain,
-          plan: "ENTERPRISE",
+          plan: normalizedPlan,
         }
       });
 
@@ -251,7 +255,13 @@ export async function registerClubAction(formData: {
       });
     });
 
-    return { success: true, deploymentKey: "ART-CLB-108XX", officialEmail: sanitizedEmail };
+    return { 
+      success: true, 
+      deploymentKey: "ART-CLB-108XX", 
+      officialEmail: sanitizedEmail,
+      plan: normalizedPlan,
+      billingCycle: normalizedCycle,
+    };
   } catch (error: any) {
     console.error("Club registration error:", error);
     return { success: false, error: error.message || "სისტემური შეცდომა რეგისტრაციისას." };

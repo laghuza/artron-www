@@ -5,7 +5,6 @@ import { useLanguage } from '@/context/LanguageContext';
 import { 
   Calendar, 
   MapPin, 
-  Clock, 
   Globe, 
   Wifi, 
   Terminal, 
@@ -17,7 +16,7 @@ import {
 export const BookingEngine: React.FC = () => {
   const { t, locale } = useLanguage();
   
-  // States for fallback interactive form
+  // States for direct interactive demo booking
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('+995');
@@ -25,7 +24,6 @@ export const BookingEngine: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<'calendar' | 'direct'>('calendar');
   const [detectedTimezone, setDetectedTimezone] = useState('UTC');
 
   useEffect(() => {
@@ -128,159 +126,167 @@ export const BookingEngine: React.FC = () => {
 
             <div className="flex flex-col h-full space-y-6">
               
-              {/* Tab Selector */}
+              {/* Header Status Bar */}
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <div className="flex bg-[#121722]/80 border border-white/10 p-1 rounded-xl">
-                  <button 
-                    onClick={() => setActiveTab('calendar')}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                      activeTab === 'calendar' ? 'bg-[#00ff87]/20 text-[#00ff87] border border-[#00ff87]/20' : 'text-[#94A3B8] hover:text-white border border-transparent'
-                    }`}
-                    style={{ minHeight: '36px' }}
-                  >
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>Cal.com</span>
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('direct')}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                      activeTab === 'direct' ? 'bg-[#00ff87]/20 text-[#00ff87] border border-[#00ff87]/20' : 'text-[#94A3B8] hover:text-white border border-transparent'
-                    }`}
-                    style={{ minHeight: '36px' }}
-                  >
-                    <Terminal className="w-3.5 h-3.5" />
-                    <span>{locale === 'ka' ? 'პირდაპირი მოთხოვნა' : locale === 'ru' ? 'Быстрый запрос' : 'Direct Intake'}</span>
-                  </button>
+                <div className="flex items-center gap-2 bg-[#121722]/80 border border-white/10 px-3.5 py-1.5 rounded-xl">
+                  <Terminal className="w-4 h-4 text-[#00ff87]" />
+                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                    {locale === 'ka' ? 'პირდაპირი დემო მოთხოვნა' : locale === 'ru' ? 'Запрос демонстрации' : 'Direct Demo Intake'}
+                  </span>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono text-[#94A3B8] bg-[#121722]/60 px-3 py-1 rounded-lg border border-white/5">
+                <div className="flex items-center gap-2 text-[10px] font-mono text-[#94A3B8] bg-[#121722]/60 px-3 py-1 rounded-lg border border-white/5">
                   <Globe className="w-3.5 h-3.5 text-[#00A3FF] animate-pulse" />
                   <span>[ TZ: {detectedTimezone} ]</span>
                 </div>
               </div>
 
-              {/* Tab content 1: Cal.com Embed */}
-              {activeTab === 'calendar' && (
-                <div className="relative w-full h-[450px] bg-[#05070a]/90 rounded-xl overflow-hidden border border-white/5 flex flex-col items-center justify-center">
-                  <iframe
-                    src={`https://cal.com/artron/demo?theme=dark&layout=month_view`}
-                    className="w-full h-full border-0 rounded-xl"
-                    allowFullScreen
-                    title="Cal.com Demo Booking Scheduler"
-                  />
-                  <div className="absolute bottom-2 right-2 hidden md:flex items-center gap-1.5 text-[9px] font-mono text-[#00ff87]/60">
-                    <Lock className="w-2.5 h-2.5" />
-                    <span>SSL ENCRYPTED SECURE CALENDAR CONNECTION</span>
-                  </div>
-                </div>
-              )}
+              {/* Direct Intake Form */}
+              <div className="flex-grow flex flex-col justify-center">
+                {!isSuccess ? (
+                  <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">
+                        {t('booking_fallback_name')}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="e.g. დავით თოდუა"
+                        className="w-full bg-[#121722]/50 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all"
+                        disabled={isSubmitting}
+                        style={{ minHeight: '44px' }}
+                      />
+                    </div>
 
-              {/* Tab content 2: Direct Intake Fallback Form */}
-              {activeTab === 'direct' && (
-                <div className="flex-grow flex flex-col justify-center">
-                  {!isSuccess ? (
-                    <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">{t('booking_fallback_name')}</label>
+                        <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">
+                          {t('booking_fallback_email')}
+                        </label>
                         <input
-                          type="text"
+                          type="email"
                           required
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="e.g. დავით თოდუა"
+                          value={email}
+                          placeholder="e.g. info@artron.ge"
+                          onChange={(e) => setEmail(e.target.value)}
                           className="w-full bg-[#121722]/50 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all"
                           disabled={isSubmitting}
                           style={{ minHeight: '44px' }}
                         />
                       </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">{t('booking_fallback_email')}</label>
-                          <input
-                            type="email"
-                            required
-                            value={email}
-                            placeholder="e.g. ceo@artron.ge"
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-[#121722]/50 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all"
-                            disabled={isSubmitting}
-                            style={{ minHeight: '44px' }}
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">{t('booking_fallback_phone')}</label>
-                          <input
-                            type="text"
-                            required
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="w-full bg-[#121722]/50 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all font-mono"
-                            disabled={isSubmitting}
-                            style={{ minHeight: '44px' }}
-                          />
-                        </div>
-                      </div>
-
                       <div className="space-y-1">
-                        <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">{t('booking_fallback_type')}</label>
-                        <select
-                          value={facilityType}
-                          onChange={(e) => setFacilityType(e.target.value)}
-                          className="w-full bg-[#121722]/80 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all cursor-pointer"
+                        <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">
+                          {t('booking_fallback_phone')}
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="w-full bg-[#121722]/50 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all font-mono"
                           disabled={isSubmitting}
                           style={{ minHeight: '44px' }}
-                        >
-                          <option value="gym" className="bg-[#121722]">{locale === 'ka' ? 'ფიტნეს დარბაზი / კლუბი' : locale === 'ru' ? 'Фитнес-клуб / Зал' : 'Fitness Club / Gym'}</option>
-                          <option value="pool" className="bg-[#121722]">{locale === 'ka' ? 'საცურაო აუზი / სპა' : locale === 'ru' ? 'Бассейн / Спа' : 'Swimming Pool / Spa'}</option>
-                          <option value="studio" className="bg-[#121722]">{locale === 'ka' ? 'სტუდია (იოგა, კროსფიტი)' : locale === 'ru' ? 'Студия (Йога, Кроссфит)' : 'Studio (Yoga, CrossFit)'}</option>
-                          <option value="federation" className="bg-[#121722]">{locale === 'ka' ? 'სპორტული ფედერაცია' : locale === 'ru' ? 'Спортивная Федерация' : 'Sports Federation'}</option>
-                        </select>
+                        />
                       </div>
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full mt-4 py-3 rounded-xl bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 font-extrabold shadow-lg shadow-[#00ff87]/20 hover:brightness-110 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                        style={{ minHeight: '48px' }}
-                      >
-                        <span>{t('booking_fallback_submit')}</span>
-                        <ArrowRight className="w-4.5 h-4.5" />
-                      </button>
-
-                      {isSubmitting && (
-                        <div className="bg-[#05070a] border border-white/5 rounded-xl p-4 font-mono text-[9px] text-[#00ff87] space-y-1 overflow-y-auto max-h-[120px] transition-all">
-                          {logs.map((log, i) => (
-                            <div key={i}>{log}</div>
-                          ))}
-                        </div>
-                      )}
-                    </form>
-                  ) : (
-                    <div className="font-mono text-xs text-[#00ff87] space-y-4 border border-[#00ff87]/20 bg-[#00ff87]/5 p-6 rounded-xl animate-fadeIn">
-                      <div className="flex items-center gap-2 text-sm font-black">
-                        <ShieldCheck className="w-5 h-5 text-[#00ff87]" />
-                        <span>[ INTAKE_PROTOCOL_SUCCESSFUL // ONLINE_SYNCED ]</span>
-                      </div>
-                      <div className="border-t border-[#00ff87]/20 my-2" />
-                      <p className="normal-case text-[#94A3B8] font-sans leading-relaxed">
-                        {t('booking_fallback_success')}
-                      </p>
-                      <div className="text-[10px] text-[#00ff87]/60">
-                        &gt; DEPLOY_NODE: NODE_03_DEMO_CLIENT<br />
-                        &gt; GEO_IP_TRACE: KUTAISI, GEORGIA<br />
-                        &gt; ACCESS_GRANT: GRANTED (PENDING ENGINEER CALLBACK)
-                      </div>
-                      <button 
-                        onClick={() => { setIsSuccess(false); setName(''); setEmail(''); }}
-                        className="text-[10px] uppercase font-bold text-[#00e5ff] hover:text-[#00ff87] transition-all cursor-pointer underline decoration-dotted"
-                      >
-                        [ ← SEND_ANOTHER_REQUEST ]
-                      </button>
                     </div>
-                  )}
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] block">
+                        {t('booking_fallback_type')}
+                      </label>
+                      <select
+                        value={facilityType}
+                        onChange={(e) => setFacilityType(e.target.value)}
+                        className="w-full bg-[#121722]/80 border border-white/10 rounded-xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-[#00ff87] transition-all cursor-pointer"
+                        disabled={isSubmitting}
+                        style={{ minHeight: '44px' }}
+                      >
+                        <option value="gym" className="bg-[#121722]">{locale === 'ka' ? 'ფიტნეს დარბაზი / კლუბი' : locale === 'ru' ? 'Фитнес-клуб / Зал' : 'Fitness Club / Gym'}</option>
+                        <option value="pool" className="bg-[#121722]">{locale === 'ka' ? 'საცურაო აუზი / სპა' : locale === 'ru' ? 'Бассейн / Спа' : 'Swimming Pool / Spa'}</option>
+                        <option value="studio" className="bg-[#121722]">{locale === 'ka' ? 'სტუდია (იოგა, კროსფიტი)' : locale === 'ru' ? 'Студия (Йога, Кроссфит)' : 'Studio (Yoga, CrossFit)'}</option>
+                        <option value="federation" className="bg-[#121722]">{locale === 'ka' ? 'სპორტული ფედერაცია' : locale === 'ru' ? 'Спортивная Федерация' : 'Sports Federation'}</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 font-extrabold shadow-lg shadow-[#00ff87]/20 hover:brightness-110 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      style={{ minHeight: '48px' }}
+                    >
+                      <span>{t('booking_fallback_submit')}</span>
+                      <ArrowRight className="w-4.5 h-4.5" />
+                    </button>
+
+                    {/* Direct quick contact links */}
+                    <div className="pt-3 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-[#94A3B8]">
+                      <span className="text-[10px] text-[#94A3B8]/70 uppercase">
+                        {locale === 'ka' ? 'ან დაგვიკავშირდით პირდაპირ:' : locale === 'ru' ? 'Или свяжитесь напрямую:' : 'Or contact us directly:'}
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <a
+                          href="https://wa.me/995599000000"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#00ff87] hover:underline flex items-center gap-1 text-[11px]"
+                        >
+                          WhatsApp
+                        </a>
+                        <a
+                          href="https://t.me/artron_support"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#00A3FF] hover:underline flex items-center gap-1 text-[11px]"
+                        >
+                          Telegram
+                        </a>
+                      </div>
+                    </div>
+
+                    {isSubmitting && (
+                      <div className="bg-[#05070a] border border-white/5 rounded-xl p-4 font-mono text-[9px] text-[#00ff87] space-y-1 overflow-y-auto max-h-[120px] transition-all">
+                        {logs.map((log, i) => (
+                          <div key={i}>{log}</div>
+                        ))}
+                      </div>
+                    )}
+                  </form>
+                ) : (
+                  <div className="font-mono text-xs text-[#00ff87] space-y-4 border border-[#00ff87]/20 bg-[#00ff87]/5 p-6 rounded-xl animate-fadeIn">
+                    <div className="flex items-center gap-2 text-sm font-black">
+                      <ShieldCheck className="w-5 h-5 text-[#00ff87]" />
+                      <span>[ INTAKE_PROTOCOL_SUCCESSFUL // ONLINE_SYNCED ]</span>
+                    </div>
+                    <div className="border-t border-[#00ff87]/20 my-2" />
+                    <p className="normal-case text-[#94A3B8] font-sans leading-relaxed">
+                      {t('booking_fallback_success')}
+                    </p>
+                    <div className="text-[10px] text-[#00ff87]/60">
+                      &gt; DEPLOY_NODE: NODE_03_DEMO_CLIENT<br />
+                      &gt; GEO_IP_TRACE: KUTAISI, GEORGIA<br />
+                      &gt; ACCESS_GRANT: GRANTED (PENDING ENGINEER CALLBACK)
+                    </div>
+                    <button 
+                      onClick={() => { setIsSuccess(false); setName(''); setEmail(''); }}
+                      className="text-[10px] uppercase font-bold text-[#00e5ff] hover:text-[#00ff87] transition-all cursor-pointer underline decoration-dotted"
+                    >
+                      [ ← SEND_ANOTHER_REQUEST ]
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Security Badge */}
+              <div className="flex items-center justify-between text-[9px] font-mono text-[#94A3B8]/60 pt-2 border-t border-white/5">
+                <div className="flex items-center gap-1.5 text-[#00ff87]/70">
+                  <Lock className="w-3 h-3" />
+                  <span>AES-256-GCM SSL ENCRYPTED GATEWAY</span>
                 </div>
-              )}
+                <span>ORDER №01-15/ნ COMPLIANT</span>
+              </div>
 
             </div>
           </div>

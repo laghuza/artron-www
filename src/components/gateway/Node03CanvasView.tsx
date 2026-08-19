@@ -3,6 +3,7 @@
 import React from 'react';
 import { useI18n } from '@/context/I18nContext';
 import { NODE_03_SUB_NODES_DATA } from '@/data/node03StaffData';
+import { LaborTimesheetSimulator } from './widgets/LaborTimesheetSimulator';
 
 interface Node03CanvasViewProps {
   activeSubChapterId: string | null;
@@ -46,34 +47,24 @@ export const Node03CanvasView: React.FC<Node03CanvasViewProps> = ({ activeSubCha
 
       {/* Main Canvas Area Content: State 1 vs State 2 */}
       {!isSubNodeSelected ? (
-        /* State 1: Centered Intro Text overlay over SVG matrix */
-        <div className="my-auto mx-auto max-w-2xl text-center pointer-events-auto bg-[#0A0D11]/85 border border-[#D97736]/30 p-7 lg:p-9 rounded-2xl backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] animate-fadeIn">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D97736]/10 border border-[#D97736]/30 font-mono text-[11px] text-[#D97736] uppercase tracking-[0.2em] mb-4">
+        /* State 1: Centered Intro Text & Live Timesheet Simulator overlay */
+        <div className="my-auto mx-auto max-w-2xl text-center pointer-events-auto bg-[#0A0D11]/85 border border-[#D97736]/30 p-6 lg:p-8 rounded-2xl backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] animate-fadeIn space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D97736]/10 border border-[#D97736]/30 font-mono text-[11px] text-[#D97736] uppercase tracking-[0.2em]">
             <span className="w-2 h-2 rounded-full bg-[#D97736] animate-pulse" />
             [ NODE_03 // ORDER №01-15/N & TRAINERS HUB ]
           </div>
 
-          <h2 className="font-mono text-[22px] font-bold text-[#D97736] uppercase tracking-wide leading-tight mb-4 shadow-amber-500/10 text-shadow">
+          <h2 className="font-mono text-[20px] font-bold text-[#D97736] uppercase tracking-wide leading-tight shadow-amber-500/10 text-shadow">
             {t('node_03_staff.title')}
           </h2>
 
-          <p className="font-sans text-[14px] text-gray-300 leading-[1.6] text-justify max-w-xl mx-auto border-t border-white/10 pt-4">
+          <p className="font-sans text-[13px] text-gray-300 leading-[1.6] text-justify max-w-xl mx-auto border-t border-white/10 pt-3">
             {t('node_03_staff.short_desc')}
           </p>
 
-          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px] text-gray-400">
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#D97736]">
-              ORDER №01-15/N
-            </div>
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#D97736]">
-              TRAINERS HUB
-            </div>
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#D97736]">
-              SPLIT BILLING
-            </div>
-            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#D97736]">
-              KPI RATINGS
-            </div>
+          {/* Interactive Labor Timesheet Generator */}
+          <div className="pt-2 text-left">
+            <LaborTimesheetSimulator />
           </div>
         </div>
       ) : (

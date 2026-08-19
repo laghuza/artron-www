@@ -121,8 +121,11 @@ export const RoiCalculator: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00ff87]/10 border border-[#00ff87]/20 text-xs font-mono font-bold text-[#00ff87] mb-4 tracking-wider uppercase">
-            <Sparkles className="w-3.5 h-3.5" /> [SYS: ROI_CALCULATOR]
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#00ff87]/10 border border-[#00ff87]/20 text-xs font-bold text-[#00ff87] mb-4 tracking-wide shadow-sm shadow-[#00ff87]/10">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>
+              {locale === 'ka' ? 'ფინანსური კალკულატორი' : locale === 'ru' ? 'Калькулятор окупаемости' : 'Financial & ROI Calculator'}
+            </span>
           </div>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
             {t('roi_title')}
@@ -161,9 +164,11 @@ export const RoiCalculator: React.FC = () => {
               <h3 className="text-xl font-bold text-white flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-[#00ff87]" />
-                  {locale === 'ka' ? 'ობიექტის პარამეტრები' : locale === 'ru' ? 'Параметры объекта' : 'Facility Parameters'}
+                  {locale === 'ka' ? 'დარბაზის მონაცემები' : locale === 'ru' ? 'Параметры клуба' : 'Facility Metrics'}
                 </span>
-                <span className="text-[8px] font-mono text-[#00e5ff]/80 font-bold">[ INPUT_REF: 0x01 ]</span>
+                <span className="text-xs text-[#64748B] font-normal">
+                  {locale === 'ka' ? 'შეარჩიეთ მაჩვენებლები' : locale === 'ru' ? 'Выберите значения' : 'Adjust sliders'}
+                </span>
               </h3>
 
               {/* Members Slider */}
@@ -254,10 +259,10 @@ export const RoiCalculator: React.FC = () => {
                 <Info className="w-4 h-4 text-[#00ff87] drop-shadow-[0_0_6px_#00ff87] shrink-0 mt-0.5" />
                 <p>
                   {locale === 'ka' 
-                    ? 'გაანგარიშება ეფუძნება IoT წვდომის ავტომატიზაციასა და მობილური აპლიკაციით შენარჩუნების 5%-იან ზრდას.' 
+                    ? 'გაანგარიშება ეფუძნება ტურნიკეტების ავტომატიზაციას, ადმინისტრაციული დროის განთავისუფლებასა და მობილური აპლიკაციით წევრთა შენარჩუნების 5%-იან ზრდას.' 
                     : locale === 'ru' 
-                    ? 'Расчет основан на автоматизации доступа IoT и увеличении удержания на 5% через мобильное приложение.' 
-                    : 'Calculations are based on IoT access automation and a 5% increase in retention via mobile app.'}
+                    ? 'Расчет основан на автоматизации турникетов, высвобождении времени персонала и росте удержания клиентов на 5% через мобильное приложение.' 
+                    : 'Calculations are based on IoT turnstile automation, reduced front-desk labor, and a 5% boost in member retention via the mobile app.'}
                 </p>
               </div>
               <div className="pt-2.5 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -373,10 +378,10 @@ export const RoiCalculator: React.FC = () => {
                   <div>
                     <h4 className="text-base font-extrabold text-white flex items-center gap-2">
                       {t('roi_revenue_title')}
-                      <span className="text-[9px] font-mono text-[#00e5ff]/80 font-bold">[ SYS_CALC: ANNUAL_NET ]</span>
                     </h4>
-                    <span className="text-[10px] uppercase font-mono font-bold text-[#00ff87] tracking-wider">
-                      {locale === 'ka' ? 'წლიური პროგნოზი' : locale === 'ru' ? 'Годовой прогноз' : 'Annual Projection'}
+                    <span className="text-xs font-semibold text-[#00ff87] flex items-center gap-1.5 mt-0.5">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00ff87] animate-pulse"></span>
+                      {locale === 'ka' ? 'სავარაუდო წლიური ზრდა' : locale === 'ru' ? 'Прогноз годового прироста' : 'Projected Annual Growth'}
                     </span>
                   </div>
                 </div>

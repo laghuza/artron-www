@@ -8,12 +8,14 @@ import { soundEngine } from '@/core';
 interface Node09CanvasViewProps {
   activeSubChapterId: string | null;
   onLaunchRegistration?: () => void;
+  onLaunchDemo?: () => void;
   onLaunchAuth?: () => void;
 }
 
 export const Node09CanvasView: React.FC<Node09CanvasViewProps> = ({
   activeSubChapterId,
   onLaunchRegistration,
+  onLaunchDemo,
   onLaunchAuth,
 }) => {
   const { t } = useI18n();
@@ -31,10 +33,14 @@ export const Node09CanvasView: React.FC<Node09CanvasViewProps> = ({
 
   const handleLaunchSandbox = () => {
     soundEngine.playSystemAccess();
-    setSandboxActive(true);
-    setTimeout(() => {
-      setSandboxActive(false);
-    }, 4000);
+    if (onLaunchDemo) {
+      onLaunchDemo();
+    } else {
+      setSandboxActive(true);
+      setTimeout(() => {
+        setSandboxActive(false);
+      }, 4000);
+    }
   };
 
   return (
@@ -66,7 +72,7 @@ export const Node09CanvasView: React.FC<Node09CanvasViewProps> = ({
         <div className="my-auto mx-auto max-w-2xl text-center pointer-events-auto bg-[#0A0D11]/85 border border-emerald-500/30 p-7 lg:p-9 rounded-2xl backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] animate-fadeIn">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 font-mono text-[11px] text-[#00ff87] uppercase tracking-[0.2em] mb-4">
             <span className="w-2 h-2 rounded-full bg-[#00ff87] animate-pulse" />
-            [ NODE_09 // SPORTS OS GATEWAY & ONBOARDING HUB ]
+            {t('gateway.node_09_badge')}
           </div>
 
           <h2 className="font-mono text-[22px] font-bold text-white uppercase tracking-wide leading-tight mb-4 text-shadow">
@@ -77,7 +83,7 @@ export const Node09CanvasView: React.FC<Node09CanvasViewProps> = ({
             {t('node_09_core_init.short_desc')}
           </p>
 
-          {/* Quick Action Matrix in State 1 */}
+          {/* Quick Action Matrix in State 1: 3 Explicit Actions */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 font-mono text-[11px]">
             {onLaunchRegistration && (
               <button
@@ -86,18 +92,18 @@ export const Node09CanvasView: React.FC<Node09CanvasViewProps> = ({
                   soundEngine.playPulseNode();
                   onLaunchRegistration();
                 }}
-                className="px-4 py-2 rounded-lg bg-[#00ff87]/15 hover:bg-[#00ff87]/25 border border-[#00ff87]/50 text-[#00ff87] transition-all cursor-pointer shadow-[0_0_15px_rgba(0,255,135,0.2)] hover:scale-[1.02] active:scale-[0.98]"
+                className="px-5 py-2.5 rounded-lg bg-[#00B0FF]/20 hover:bg-[#00B0FF]/30 border border-[#00B0FF]/60 text-[#00B0FF] font-semibold transition-all cursor-pointer shadow-[0_0_20px_rgba(0,176,255,0.25)] hover:scale-[1.02] active:scale-[0.98]"
               >
-                ⚡ {t('labels.node_9')} // ონბორდინგი
+                {t('gateway.btn_start_trial')}
               </button>
             )}
 
             <button
               type="button"
               onClick={handleLaunchSandbox}
-              className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/20 hover:border-[#00ff87]/50 text-white transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+              className="px-4 py-2.5 rounded-lg bg-[#00ff87]/15 hover:bg-[#00ff87]/25 border border-[#00ff87]/50 text-[#00ff87] font-semibold transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
             >
-              🎮 {sandboxActive ? 'ინიციაცია მიმდინარეობს...' : 'SANDBOX DEMO გაშვება'}
+              {sandboxActive ? t('gateway.sandbox_running') : t('gateway.btn_run_sandbox')}
             </button>
 
             {onLaunchAuth && (
@@ -107,78 +113,126 @@ export const Node09CanvasView: React.FC<Node09CanvasViewProps> = ({
                   soundEngine.playPulseNode();
                   onLaunchAuth();
                 }}
-                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/20 hover:border-[#00ff87]/50 text-white transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                className="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/50 text-gray-300 hover:text-white transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
-                🔐 ოპერატორის კონსოლი
+                {t('gateway.btn_operator_console')}
               </button>
             )}
           </div>
 
           {sandboxActive && (
             <div className="mt-4 p-3 rounded-lg bg-[#00ff87]/10 border border-[#00ff87]/40 font-mono text-[11px] text-[#00ff87] animate-pulse">
-              ✓ SANDBOX INSTANCE #ARTRON-TEST-2026 INITIALIZED // SIMULATION ACTIVE
+              {t('gateway.sandbox_active_msg')}
             </div>
           )}
         </div>
       ) : (
-        /* State 2: 3-Column / 3-Card Layout Container */
-        <div className="my-auto w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 pointer-events-auto animate-fadeIn">
-          {/* Card 1: ფუნქციონალური აღწერა */}
-          <div className="group bg-[#0E1015]/90 border border-emerald-500/20 hover:border-[#00ff87]/60 rounded-xl p-5 lg:p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,255,135,0.2)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div className="font-mono text-[12px] font-bold text-[#00ff87] uppercase tracking-wider mb-3 flex items-center justify-between border-b border-white/10 pb-2.5">
-                <span>01 // {t('node_09_core_init.section_functional')}</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] opacity-60 group-hover:opacity-100 transition-opacity" />
+        /* State 2: 3-Column / 3-Card Layout Container + Bottom Action Trigger */
+        <div className="my-auto w-full max-w-5xl mx-auto space-y-4 pointer-events-auto animate-fadeIn">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+            {/* Card 1: ფუნქციონალური აღწერა */}
+            <div className="group bg-[#0E1015]/90 border border-emerald-500/20 hover:border-[#00ff87]/60 rounded-xl p-5 lg:p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,255,135,0.2)] transition-all duration-300 flex flex-col justify-between">
+              <div>
+                <div className="font-mono text-[12px] font-bold text-[#00ff87] uppercase tracking-wider mb-3 flex items-center justify-between border-b border-white/10 pb-2.5">
+                  <span>01 // {t('node_09_core_init.section_functional')}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] opacity-60 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="font-sans text-[13.5px] text-gray-200 leading-[1.65]">
+                  {subIndex !== undefined ? t(`node_09_core_init.sub_items.${subIndex}.functional_desc`) : activeSubData?.card1.desc}
+                </p>
               </div>
-              <p className="font-sans text-[13.5px] text-gray-200 leading-[1.65]">
-                {subIndex !== undefined ? t(`node_09_core_init.sub_items.${subIndex}.functional_desc`) : activeSubData?.card1.desc}
-              </p>
+              <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[10px] text-[#00ff87]/70 uppercase tracking-widest flex items-center justify-between">
+                <span>{t('gateway.init_core')}</span>
+                <span>{t('gateway.mod_09a')}</span>
+              </div>
             </div>
-            <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[10px] text-[#00ff87]/70 uppercase tracking-widest flex items-center justify-between">
-              <span>INITIALIZATION: CORE</span>
-              <span>MOD 09.A</span>
+
+            {/* Card 2: მმართველობითი კონტროლი */}
+            <div className="group bg-[#0E1015]/90 border border-emerald-500/20 hover:border-[#00ff87]/60 rounded-xl p-5 lg:p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,255,135,0.2)] transition-all duration-300 flex flex-col justify-between">
+              <div>
+                <div className="font-mono text-[12px] font-bold text-[#00ff87] uppercase tracking-wider mb-3 flex items-center justify-between border-b border-white/10 pb-2.5">
+                  <span>02 // {t('node_09_core_init.section_permissions')}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] opacity-60 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="font-sans text-[13px] text-gray-300 leading-[1.65] font-mono border-l-2 border-[#00ff87]/40 pl-3">
+                  {subIndex !== undefined ? t(`node_09_core_init.sub_items.${subIndex}.permissions`) : activeSubData?.card2.desc}
+                </p>
+              </div>
+              <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[10px] text-[#00ff87]/70 uppercase tracking-widest flex items-center justify-between">
+                <span>{t('gateway.admin_dispatcher')}</span>
+                <span>{t('gateway.mod_09b')}</span>
+              </div>
+            </div>
+
+            {/* Card 3: ბიზნეს ხედვა */}
+            <div className="group bg-[#0E1015]/90 border border-emerald-500/20 hover:border-[#00ff87]/60 rounded-xl p-5 lg:p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,255,135,0.2)] transition-all duration-300 flex flex-col justify-between">
+              <div>
+                <div className="font-mono text-[12px] font-bold text-[#00ff87] uppercase tracking-wider mb-3 flex items-center justify-between border-b border-white/10 pb-2.5">
+                  <span>03 // {t('node_09_core_init.section_business')}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] opacity-60 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="font-sans text-[13.5px] text-gray-200 leading-[1.65]">
+                  {subIndex !== undefined ? t(`node_09_core_init.sub_items.${subIndex}.business_value`) : activeSubData?.card3.desc}
+                </p>
+              </div>
+              <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[10px] text-[#00ff87]/70 uppercase tracking-widest flex items-center justify-between">
+                <span>{t('gateway.roi_migration')}</span>
+                <span>{t('gateway.mod_09c')}</span>
+              </div>
             </div>
           </div>
 
-          {/* Card 2: მმართველობითი კონტროლი */}
-          <div className="group bg-[#0E1015]/90 border border-emerald-500/20 hover:border-[#00ff87]/60 rounded-xl p-5 lg:p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,255,135,0.2)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div className="font-mono text-[12px] font-bold text-[#00ff87] uppercase tracking-wider mb-3 flex items-center justify-between border-b border-white/10 pb-2.5">
-                <span>02 // {t('node_09_core_init.section_permissions')}</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] opacity-60 group-hover:opacity-100 transition-opacity" />
-              </div>
-              <p className="font-sans text-[13px] text-gray-300 leading-[1.65] font-mono border-l-2 border-[#00ff87]/40 pl-3">
-                {subIndex !== undefined ? t(`node_09_core_init.sub_items.${subIndex}.permissions`) : activeSubData?.card2.desc}
-              </p>
+          {/* Subchapter Action Row */}
+          {activeSubChapterId === '09.1' && onLaunchRegistration && (
+            <div className="flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  soundEngine.playPulseNode();
+                  onLaunchRegistration();
+                }}
+                className="px-6 py-3 rounded-lg bg-[#00B0FF] hover:bg-[#0090DF] text-[#0A0D10] font-mono text-xs font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(0,176,255,0.35)] transition-all cursor-pointer hover:scale-[1.02]"
+              >
+                🚀 {t('registration.submit_btn') || 'ორგანიზაციის რეგისტრაცია & შესვლა →'}
+              </button>
             </div>
-            <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[10px] text-[#00ff87]/70 uppercase tracking-widest flex items-center justify-between">
-              <span>ADMIN DISPATCHER</span>
-              <span>MOD 09.B</span>
-            </div>
-          </div>
+          )}
 
-          {/* Card 3: ბიზნეს ხედვა */}
-          <div className="group bg-[#0E1015]/90 border border-emerald-500/20 hover:border-[#00ff87]/60 rounded-xl p-5 lg:p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,255,135,0.2)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div className="font-mono text-[12px] font-bold text-[#00ff87] uppercase tracking-wider mb-3 flex items-center justify-between border-b border-white/10 pb-2.5">
-                <span>03 // {t('node_09_core_init.section_business')}</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] opacity-60 group-hover:opacity-100 transition-opacity" />
-              </div>
-              <p className="font-sans text-[13.5px] text-gray-200 leading-[1.65]">
-                {subIndex !== undefined ? t(`node_09_core_init.sub_items.${subIndex}.business_value`) : activeSubData?.card3.desc}
-              </p>
+          {activeSubChapterId === '09.2' && onLaunchDemo && (
+            <div className="flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  soundEngine.playPulseNode();
+                  onLaunchDemo();
+                }}
+                className="px-6 py-3 rounded-lg bg-[#00ff87] hover:bg-[#00df74] text-[#0A0D10] font-mono text-xs font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(0,255,135,0.35)] transition-all cursor-pointer hover:scale-[1.02]"
+              >
+                ⚡ {t('gateway.btn_run_sandbox')}
+              </button>
             </div>
-            <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[10px] text-[#00ff87]/70 uppercase tracking-widest flex items-center justify-between">
-              <span>ROI: 0-DAY MIGRATION</span>
-              <span>MOD 09.C</span>
+          )}
+
+          {activeSubChapterId === '09.3' && onLaunchAuth && (
+            <div className="flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  soundEngine.playPulseNode();
+                  onLaunchAuth();
+                }}
+                className="px-6 py-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:scale-[1.02]"
+              >
+                🔐 {t('gateway.btn_operator_console')}
+              </button>
             </div>
-          </div>
+          )}
         </div>
       )}
 
       {/* Footer System Indicator */}
       <div className="w-full flex justify-end font-mono text-[10px] text-gray-500/80 tracking-widest uppercase pointer-events-none">
-        <span>ARTRON OS // NODE_09 // SPORTS OS GATEWAY & CONSOLE</span>
+        <span>{t('gateway.footer_indicator')}</span>
       </div>
     </div>
   );

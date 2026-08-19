@@ -1,77 +1,77 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useI18n } from '@/context/I18nContext';
 import { soundEngine } from '@/core';
 
-interface CyberAuthLoginCardProps {
-  onAuthenticate: (
-    mode: 'FULL_B2B' | 'TEMP_OTP',
-    credentials: { username?: string; password?: string; otpCode?: string; isTrial?: boolean }
-  ) => void;
-  onClose?: () => void;
-  onSwitchToRegister?: () => void;
+interface OperatorLoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onLoginSuccess: (user: { username: string; orgName?: string; discipline?: string }) => void;
 }
 
-export const CyberAuthLoginCard: React.FC<CyberAuthLoginCardProps> = ({
-  onAuthenticate,
+export const OperatorLoginModal: React.FC<OperatorLoginModalProps> = ({
+  isOpen,
   onClose,
-  onSwitchToRegister,
+  onLoginSuccess,
 }) => {
   const { t } = useI18n();
-  const [username, setUsername] = useState('operator@artron.ge');
-  const [password, setPassword] = useState('••••••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Global ESC key listener for instant return to core
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && onClose) {
-        e.preventDefault();
-        soundEngine.playPulseNode();
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim() || !password.trim()) {
-      setErrorMsg(t('system.credentials_required') || 'მომხმარებელი და პაროლი სავალდებულოა');
-      soundEngine.playPulseNode();
+    setErrorMsg(null);
+
+    if (!email.trim()) {
+      setErrorMsg(t('auth.err_email_required') || 'გთხოვთ შეიყვანოთ მომხმარებელი ან ელ.ფოსტა');
       return;
     }
+    if (!password.trim()) {
+      setErrorMsg(t('auth.err_password_required') || 'გთხოვთ შეიყვანოთ პაროლი');
+      return;
+    }
+
     setIsLoading(true);
     soundEngine.playPulseNode();
 
     setTimeout(() => {
       setIsLoading(false);
       soundEngine.playSystemAccess();
-      onAuthenticate('FULL_B2B', { username, password, isTrial: false });
-    }, 400);
+      onLoginSuccess({
+        username: email.includes('@') ? email : `${email}@artron.ge`,
+        orgName: 'LLC ARTRON MASTER MATRIX',
+        discipline: 'B2B Operator Console',
+      });
+    }, 450);
   };
 
   const handleQuickDemoFill = () => {
     soundEngine.playHoverChip();
-    setUsername('operator@artron.ge');
+    setEmail('operator@artron.ge');
     setPassword('••••••••••••');
-    setErrorMsg('');
+    setErrorMsg(null);
     setIsLoading(true);
 
     setTimeout(() => {
       setIsLoading(false);
       soundEngine.playSystemAccess();
-      onAuthenticate('FULL_B2B', { username: 'operator@artron.ge', isTrial: false });
-    }, 350);
+      onLoginSuccess({
+        username: 'operator@artron.ge',
+        orgName: 'LLC ARTRON MASTER MATRIX',
+        discipline: 'Matrix Operations Core',
+      });
+    }, 400);
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md overflow-y-auto flex items-center justify-center p-4 md:p-8 select-none font-sans animate-fadeIn">
-      {/* Discord-styled Floating Box */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn select-none">
+      {/* Discord-styled Card Container */}
       <div className="relative w-full max-w-md bg-[#1E1F22] border border-[#313338] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden">
         {/* Top Glowing Laser Border */}
         <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#00ff87] to-transparent" />
@@ -86,47 +86,45 @@ export const CyberAuthLoginCard: React.FC<CyberAuthLoginCardProps> = ({
               <div className="text-[14px] font-bold text-white tracking-wide font-mono flex items-center gap-2">
                 <span>ARTRON OS</span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#5865F2]/20 text-[#5865F2] font-semibold border border-[#5865F2]/30">
-                  OPERATOR
+                  SYSTEM B2B
                 </span>
               </div>
-              <p className="text-[12px] text-[#949BA4]">
-                {t('system.gateway_entry') || 'ოპერატორის ავტორიზაცია'}
+              <p className="text-[12px] text-[#949BA4] font-sans">
+                {t('auth.operator_auth_subtitle') || 'ოპერატორის ავტორიზაცია'}
               </p>
             </div>
           </div>
 
-          {onClose && (
-            <button
-              type="button"
-              onClick={() => {
-                soundEngine.playPulseNode();
-                onClose();
-              }}
-              className="w-8 h-8 rounded-lg bg-[#2B2D31] hover:bg-[#35373C] text-[#949BA4] hover:text-white flex items-center justify-center text-[13px] transition-colors cursor-pointer"
-            >
-              ✕
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => {
+              soundEngine.playPulseNode();
+              onClose();
+            }}
+            className="w-8 h-8 rounded-lg bg-[#2B2D31] hover:bg-[#35373C] text-[#949BA4] hover:text-white flex items-center justify-center text-[13px] transition-colors cursor-pointer"
+          >
+            ✕
+          </button>
         </div>
 
-        {/* Discord Embed-styled Bot Notice */}
+        {/* Discord Embed-styled Notice */}
         <div className="px-6 pt-4">
-          <div className="bg-[#2B2D31] border-l-4 border-[#00ff87] p-3 rounded-r-lg text-[12px] text-[#DBDEE1] flex items-start gap-2.5">
+          <div className="bg-[#2B2D31] border-l-4 border-[#00ff87] p-3 rounded-r-lg text-[12px] text-[#DBDEE1] font-sans flex items-start gap-2.5">
             <span className="text-[14px]">🤖</span>
             <div>
               <div className="font-semibold text-white flex items-center gap-1.5 font-mono text-[11px]">
-                <span>ARTRON CORE</span>
+                <span>ARTRON BOT</span>
                 <span className="text-[9px] px-1 rounded bg-[#5865F2] text-white">BOT</span>
               </div>
               <div className="text-[#949BA4] text-[11.5px] mt-0.5">
-                {t('system.gateway_desc') || 'შეიყვანეთ თქვენი უფლებამოსილი ოპერატორის ან ადმინის მონაცემები სამართავ კონსოლში შესასვლელად.'}
+                {t('auth.bot_instruction') || 'შეიყვანეთ თქვენი უფლებამოსილი ოპერატორის ან ადმინის მონაცემები სამართავ კონსოლში შესასვლელად.'}
               </div>
             </div>
           </div>
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-4 font-sans">
           {errorMsg && (
             <div className="p-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[12px] flex items-center gap-2 animate-shake">
               <span>⚠️</span>
@@ -136,22 +134,23 @@ export const CyberAuthLoginCard: React.FC<CyberAuthLoginCardProps> = ({
 
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold text-[#B5BAC1] uppercase tracking-wider font-mono">
-              {t('system.operator_identifier') || 'მომხმარებელი / ელ.ფოსტა'} <span className="text-rose-400">*</span>
+              {t('auth.input_email_label') || 'მომხმარებელი / ელ.ფოსტა'} <span className="text-rose-400">*</span>
             </label>
-            <input
-              type="text"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="operator@artron.ge"
-              className="w-full bg-[#111214] border border-[#383A40] focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87] text-white placeholder-[#5C6067] px-3.5 py-2.5 rounded-lg text-[13px] outline-none transition-all font-mono"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="operator@artron.ge"
+                className="w-full bg-[#111214] border border-[#383A40] focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87] text-white placeholder-[#5C6067] px-3.5 py-2.5 rounded-lg text-[13px] outline-none transition-all font-mono"
+              />
+            </div>
           </div>
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-bold text-[#B5BAC1] uppercase tracking-wider font-mono">
-                {t('system.security_access_key') || 'პაროლი'} <span className="text-rose-400">*</span>
+                {t('auth.input_password_label') || 'პაროლი'} <span className="text-rose-400">*</span>
               </label>
               <button
                 type="button"
@@ -161,14 +160,15 @@ export const CyberAuthLoginCard: React.FC<CyberAuthLoginCardProps> = ({
                 {showPassword ? 'დამალვა' : 'გამოჩენა'}
               </button>
             </div>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••••"
-              className="w-full bg-[#111214] border border-[#383A40] focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87] text-white placeholder-[#5C6067] px-3.5 py-2.5 rounded-lg text-[13px] outline-none transition-all font-mono"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                className="w-full bg-[#111214] border border-[#383A40] focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87] text-white placeholder-[#5C6067] px-3.5 py-2.5 rounded-lg text-[13px] outline-none transition-all font-mono"
+              />
+            </div>
           </div>
 
           {/* Action Buttons */}
@@ -186,7 +186,7 @@ export const CyberAuthLoginCard: React.FC<CyberAuthLoginCardProps> = ({
               ) : (
                 <>
                   <span>🚀</span>
-                  <span>{t('actions.initialize_gateway') || 'სისტემაში შესვლა →'}</span>
+                  <span>{t('auth.btn_submit_login') || 'სისტემაში შესვლა →'}</span>
                 </>
               )}
             </button>
@@ -198,23 +198,8 @@ export const CyberAuthLoginCard: React.FC<CyberAuthLoginCardProps> = ({
               className="w-full py-2 px-4 bg-[#2B2D31] hover:bg-[#35373C] border border-[#383A40] hover:border-[#00ff87]/50 text-[#00ff87] font-mono text-[11px] font-semibold tracking-wide uppercase rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>⚡</span>
-              <span>სატესტო დემო-შესვლა (1-Click)</span>
+              <span>{t('auth.btn_demo_fill') || 'სატესტო დემო-შესვლა (1-Click)'}</span>
             </button>
-
-            {onSwitchToRegister && (
-              <div className="text-center pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    soundEngine.playPulseNode();
-                    onSwitchToRegister();
-                  }}
-                  className="text-[11px] text-[#949BA4] hover:text-[#00ff87] tracking-wider transition-colors cursor-pointer"
-                >
-                  {t('registration.switch_to_register')} →
-                </button>
-              </div>
-            )}
           </div>
         </form>
 

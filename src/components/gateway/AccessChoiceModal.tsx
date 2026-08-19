@@ -78,72 +78,64 @@ export const AccessChoiceModal: React.FC<AccessChoiceModalProps> = ({
 
         {/* 2 Path Choice Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full text-left">
-          {/* PATH 01: B2B OPERATOR ACCESS */}
-          <div className="bg-[#0D0F13]/90 border border-[#9CA3AF]/20 hover:border-[#00ff87]/60 rounded-xl p-5 md:p-6 flex flex-col justify-between space-y-4 md:space-y-6 backdrop-blur-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,135,0.15)] group">
+          {/* PATH 01: B2B PURCHASE & FULL REGISTRATION */}
+          <div className="bg-[#0D0F13]/90 border border-[#9CA3AF]/20 hover:border-[#00A3FF]/60 rounded-xl p-5 md:p-6 flex flex-col justify-between space-y-4 md:space-y-6 backdrop-blur-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,163,255,0.15)] group">
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-[9px] md:text-[10px] text-[#00ff87] font-bold tracking-[1.5px] uppercase font-mono">
+              <div className="flex items-center justify-between text-[9px] md:text-[10px] text-[#00A3FF] font-bold tracking-[1.5px] uppercase font-mono">
                 <span>PATH 01</span>
-                <span>B2B MATRIX</span>
+                <span>B2B REGISTRATION</span>
               </div>
               <h3 className="text-[14px] md:text-[16px] font-bold text-[#E5E7EB] tracking-[1.5px] uppercase group-hover:text-white transition-colors">
-                REGISTERED B2B OPERATOR
+                სისტემის შეძენა / რეგისტრაცია
               </h3>
               <p className="text-[11px] md:text-[12px] text-[#9CA3AF] font-sans leading-relaxed">
-                Full-tier access for sports facility managers, club admins, and federation operators with verified credentials.
+                დარბაზის, აუზის ან სტუდიის პირდაპირი B2B რეგისტრაცია და სამართავი პანელის შეძენა.
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                soundEngine.playSystemAccess();
-                onSelectPath('FULL_B2B');
-              }}
-              className="w-full py-2.5 md:py-3 bg-[rgba(0,255,135,0.12)] hover:bg-[#00ff87] text-[#00ff87] hover:text-[#060709] font-bold text-[11px] md:text-[12px] tracking-[2px] uppercase rounded border border-[#00ff87]/40 transition-all duration-200 cursor-pointer shadow-md group-hover:shadow-[0_0_20px_rgba(0,255,135,0.4)]"
+            <a
+              href="/get-started?mode=register"
+              onClick={() => soundEngine.playSystemAccess()}
+              className="w-full py-2.5 md:py-3 bg-[#00A3FF]/15 hover:bg-[#00A3FF] text-[#00A3FF] hover:text-slate-950 font-bold text-[11px] md:text-[12px] tracking-[2px] uppercase rounded border border-[#00A3FF]/40 transition-all duration-200 cursor-pointer shadow-md group-hover:shadow-[0_0_20px_rgba(0,163,255,0.4)] text-center block"
             >
-              [ SELECT B2B OPERATOR PATH → ]
-            </button>
+              [ 🚀 სისტემის შეძენა / რეგისტრაცია → ]
+            </a>
           </div>
 
-          {/* PATH 02: TEMPORARY OTP GUEST ACCESS */}
-          <div className="bg-[#0D0F13]/90 border border-[#9CA3AF]/20 hover:border-[#00ff87]/60 rounded-xl p-5 md:p-6 flex flex-col justify-between space-y-4 md:space-y-6 backdrop-blur-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,135,0.15)] group">
+          {/* PATH 02: 1-HOUR GUEST TEST DRIVE */}
+          <div className="bg-[#0D0F13]/90 border border-[#9CA3AF]/20 hover:border-emerald-400/60 rounded-xl p-5 md:p-6 flex flex-col justify-between space-y-4 md:space-y-6 backdrop-blur-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(52,211,153,0.15)] group">
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-[9px] md:text-[10px] text-[#00ff87] font-bold tracking-[1.5px] uppercase font-mono">
+              <div className="flex items-center justify-between text-[9px] md:text-[10px] text-emerald-400 font-bold tracking-[1.5px] uppercase font-mono">
                 <span>PATH 02</span>
-                <span>OTP GUEST PASS</span>
+                <span>1-HOUR GUEST DEMO</span>
               </div>
               <h3 className="text-[14px] md:text-[16px] font-bold text-[#E5E7EB] tracking-[1.5px] uppercase group-hover:text-white transition-colors">
-                TEMPORARY OTP PASSHOLDER
+                ⚡ 1-საათიანი GUEST დემო წვდომა
               </h3>
               <p className="text-[11px] md:text-[12px] text-[#9CA3AF] font-sans leading-relaxed">
-                Streamlined 1-day access pass for athletes, guests, and temporary telemetry monitoring via a 6-digit OTP code.
+                მყისიერი ერთჯერადი წვდომა სამართავ პანელში რეალური საჩვენებელი მონაცემებით (სატესტო პერიოდის ლოდინის გარეშე).
               </p>
             </div>
 
-            <form onSubmit={handleOtpSubmit} className="space-y-3">
-              <input
-                type="text"
-                maxLength={6}
-                value={otpCode}
-                onChange={(e) => {
-                  setOtpCode(e.target.value);
-                  setOtpError('');
-                }}
-                placeholder="ENTER 6-DIGIT OTP PASS"
-                className="w-full px-3 py-2 bg-[#060709] border border-[#9CA3AF]/20 focus:border-[#00ff87] rounded text-[11px] md:text-[12px] text-[#D1D5DB] focus:outline-none tracking-[2px] uppercase text-center font-mono placeholder-[#9CA3AF]/30"
-              />
-              {otpError && (
-                <div className="text-[9px] md:text-[10px] text-[#FF5252] text-center font-bold">
-                  {otpError}
-                </div>
-              )}
-              <button
-                type="submit"
-                className="w-full py-2.5 md:py-3 bg-[rgba(0,255,135,0.12)] hover:bg-[#00ff87] text-[#00ff87] hover:text-[#060709] font-bold text-[11px] md:text-[12px] tracking-[2px] uppercase rounded border border-[#00ff87]/40 transition-all duration-200 cursor-pointer shadow-md group-hover:shadow-[0_0_20px_rgba(0,255,135,0.4)]"
+            <div className="space-y-2.5">
+              <a
+                href="/get-started?mode=demo"
+                onClick={() => soundEngine.playSystemAccess()}
+                className="w-full py-2.5 md:py-3 bg-emerald-500/15 hover:bg-emerald-400 text-emerald-400 hover:text-slate-950 font-bold text-[11px] md:text-[12px] tracking-[2px] uppercase rounded border border-emerald-400/40 transition-all duration-200 cursor-pointer shadow-md group-hover:shadow-[0_0_20px_rgba(52,211,153,0.4)] text-center block"
               >
-                [ ENTER OTP PASSHOLDER → ]
+                [ ⚡ GUEST დემოს მიღება → ]
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  soundEngine.playSystemAccess();
+                  onSelectPath('TEMP_OTP', 'GUEST1');
+                }}
+                className="w-full py-1.5 text-[10px] text-slate-400 hover:text-white text-center font-mono uppercase tracking-wider transition-colors"
+              >
+                ან მყისიერად გახსენით საჩვენებელი Dashboard →
               </button>
-            </form>
+            </div>
           </div>
         </div>
 

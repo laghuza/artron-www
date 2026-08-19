@@ -23,9 +23,9 @@ export default function PlanSelectorStep({
   const [paymentProvider, setPaymentProvider] = useState<'TBC' | 'BOG' | 'STRIPE'>('TBC');
 
   const plans = [
-    { id: 'STARTER', name: 'STARTER', basePrice: 199, features: ['1 Branch', 'Max 200 Members', 'Basic Telemetry'] },
-    { id: 'PRO', name: 'PRO PROFESSIONAL', basePrice: 499, features: ['3 Branches', 'Max 1000 Members', 'Anti-Passback Engine'] },
-    { id: 'ENTERPRISE', name: 'ENTERPRISE OS', basePrice: 999, features: ['Unlimited Branches', 'Unlimited Members', 'Full RLS + Dedicated Core'] },
+    { id: 'STARTER', name: 'STARTER', basePrice: 350, features: ['1 Branch', 'Max 100 Members', 'QR Check-in & CRM'] },
+    { id: 'PRO', name: 'PRO PROFESSIONAL', basePrice: 565, features: ['1-3 Branches', 'Max 1000 Members', 'IoT Turnstiles + №01-15/ნ'] },
+    { id: 'ENTERPRISE', name: 'ENTERPRISE OS', basePrice: 950, features: ['Unlimited Branches', 'Unlimited Members', 'Pools & Dedicated SLA'] },
   ];
 
   const calculatePrice = (base: number) => {

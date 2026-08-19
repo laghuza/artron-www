@@ -73,6 +73,20 @@ class SoundEngine {
     osc.start();
     osc.stop(this.ctx.currentTime + 0.07);
   }
+
+  /**
+   * Subtle soft click on chip / tab selection
+   */
+  public playHoverChip() {
+    this.playPulseNode();
+  }
+
+  /**
+   * Subtle card interaction pulse
+   */
+  public playCardHover() {
+    this.playPulseNode();
+  }
 }
 
 export const soundEngine = new SoundEngine();

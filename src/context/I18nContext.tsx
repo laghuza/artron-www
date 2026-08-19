@@ -46,24 +46,34 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   };
 
   const t = (key: string): any => {
-    const keys = key.split(".");
-    let current: any = dictionaries[lang];
-    for (const k of keys) {
-      if (current && typeof current === "object" && k in current) {
-        current = current[k];
-      } else {
-        let fallback: any = dictionaries.EN;
-        for (const fk of keys) {
-          if (fallback && typeof fallback === "object" && fk in fallback) {
-            fallback = fallback[fk];
+    const resolveFromDict = (dict: Record<string, any>) => {
+      if (!dict) return undefined;
+      if (key in dict) return dict[key];
+      const keys = key.split(".");
+      let current: any = dict;
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        if (current && typeof current === "object") {
+          if (k in current) {
+            current = current[k];
           } else {
-            return key;
+            const rest = keys.slice(i).join(".");
+            if (rest in current) {
+              return current[rest];
+            }
+            return undefined;
           }
+        } else {
+          return undefined;
         }
-        return fallback !== undefined ? fallback : key;
       }
-    }
-    return current !== undefined ? current : key;
+      return current;
+    };
+
+    const res = resolveFromDict(dictionaries[lang]);
+    if (res !== undefined) return res;
+    const fallback = resolveFromDict(dictionaries.EN);
+    return fallback !== undefined ? fallback : key;
   };
 
   return (

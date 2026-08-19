@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { I18nProvider } from '@/context/I18nContext';
 
-import { ViewState, PortalState } from '@/types/gateway';
+import { ViewState, PortalState, FacilityPreset } from '@/types/gateway';
 import { GATEWAY_NODES } from '@/data/gatewayNodes';
 import { FooterTelemetry } from '@/components/gateway/FooterTelemetry';
 import { SidebarPanel } from '@/components/gateway/SidebarPanel';
@@ -12,6 +13,7 @@ import { NodeDetailPanel } from '@/components/gateway/NodeDetailPanel';
 import { EmeraldPortalGate } from '@/components/gateway/EmeraldPortalGate';
 import { SimpleOperatorDashboard } from '@/components/features/dashboard/SimpleOperatorDashboard';
 import { TemporaryGuestDashboard } from '@/components/features/dashboard/TemporaryGuestDashboard';
+import { OperatorLoginModal } from '@/components/gateway/OperatorLoginModal';
 import { CyberErrorBoundary, soundEngine } from '@/core';
 
 export default function GatewayPage() {
@@ -23,13 +25,21 @@ export default function GatewayPage() {
 }
 
 function GatewayPageContent() {
+  const router = useRouter();
   const [viewState, setViewState] = useState<ViewState>('CORE_INIT');
   const [portalState, setPortalState] = useState<PortalState>('IDLE');
   const [accessMode, setAccessMode] = useState<'FULL_B2B' | 'TEMP_OTP'>('FULL_B2B');
+  const [facilityPreset, setFacilityPreset] = useState<FacilityPreset>('ALL');
   const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
   const [activeSubChapterId, setActiveSubChapterId] = useState<string | null>(null);
-
-
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [sessionUser, setSessionUser] = useState<{
+    username: string;
+    orgName?: string;
+    discipline?: string;
+    adminName?: string;
+    isTrial?: boolean;
+  } | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -67,8 +77,25 @@ function GatewayPageContent() {
 
 
   const handleAuthenticate = useCallback(
-    (mode: 'FULL_B2B' | 'TEMP_OTP', _credentials?: any) => {
+    (
+      mode: 'FULL_B2B' | 'TEMP_OTP',
+      credentials?: { username?: string; orgName?: string; discipline?: string; adminName?: string; isTrial?: boolean }
+    ) => {
       setAccessMode(mode);
+      if (credentials) {
+        setSessionUser({
+          username: credentials.username || 'operator@artron.ge',
+          orgName: credentials.orgName,
+          discipline: credentials.discipline,
+          adminName: credentials.adminName,
+          isTrial: credentials.isTrial ?? false,
+        });
+      } else {
+        setSessionUser({
+          username: 'operator@artron.ge',
+          isTrial: false,
+        });
+      }
       handleStartPortalTransition();
     },
     [handleStartPortalTransition]
@@ -101,7 +128,12 @@ function GatewayPageContent() {
 
   const activeNode = GATEWAY_NODES.find((node) => node.id === activeNodeId) || null;
   const activeSubChapter =
-    activeNode?.subChapters.find((sub) => sub.id === activeSubChapterId) || null;
+    activeNode?.subChapters.find(
+      (sub) =>
+        sub.id === activeSubChapterId ||
+        (activeSubChapterId === 'membership-init' && sub.id === '09.1') ||
+        (activeSubChapterId === 'console-access' && sub.id === '09.3')
+    ) || null;
 
   const handleSelectNode = (nodeId: number) => {
     setActiveNodeId(nodeId);
@@ -110,8 +142,19 @@ function GatewayPageContent() {
   };
 
   const handleSelectSubChapter = (subId: string) => {
-    if (subId === 'console-access' || subId === 'enter-core') {
-      handleAuthenticate('FULL_B2B');
+    if (subId === '09.1' || subId === 'membership-init') {
+      soundEngine.playSystemAccess();
+      router.push('/get-started?mode=register');
+      return;
+    }
+    if (subId === '09.2' || subId === 'sandbox-demo') {
+      soundEngine.playPulseNode();
+      router.push('/get-started?mode=demo');
+      return;
+    }
+    if (subId === 'console-access' || subId === '09.3' || subId === 'enter-core') {
+      soundEngine.playPulseNode();
+      setIsLoginModalOpen(true);
       return;
     }
     setActiveSubChapterId(subId);
@@ -145,18 +188,37 @@ function GatewayPageContent() {
           {accessMode === 'TEMP_OTP' ? (
             <TemporaryGuestDashboard onExit={handleResetToGateway} />
           ) : (
-            <SimpleOperatorDashboard onReturnToGateway={handleResetToGateway} />
+            <SimpleOperatorDashboard
+              sessionUser={sessionUser}
+              onReturnToGateway={handleResetToGateway}
+              onOpenNode={(nodeId) => {
+                handleResetToGateway();
+                handleSelectNode(nodeId);
+              }}
+            />
           )}
         </div>
       </CyberErrorBoundary>
     );
   }
 
-
-
   return (
     <CyberErrorBoundary fallbackTitle="ARTRON GATEWAY DIAGNOSTIC">
       <EmeraldPortalGate portalState={portalState} onBypass={handleBypassTransition} />
+
+      {/* Operator Login Modal */}
+      <OperatorLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={(user) => {
+          setIsLoginModalOpen(false);
+          handleAuthenticate('FULL_B2B', {
+            username: user.username,
+            orgName: user.orgName,
+            discipline: user.discipline,
+          });
+        }}
+      />
 
       <main
         className={`min-h-screen h-screen w-full flex flex-col justify-between overflow-hidden bg-[#090b0e] text-white transition-opacity duration-380 ${
@@ -168,29 +230,39 @@ function GatewayPageContent() {
             viewState={viewState}
             activeNode={activeNode}
             activeSubChapterId={activeSubChapterId}
+            activePreset={facilityPreset}
+            onSelectPreset={setFacilityPreset}
             onResetToCore={handleResetToCore}
             onSelectSubChapter={handleSelectSubChapter}
-            onRequestAccess={() => handleSelectNode(9)}
-            onSelectB2B={() => handleSelectNode(9)}
-            onSelectOtp={() => handleAuthenticate('TEMP_OTP')}
+            onRequestAccess={() => {
+              soundEngine.playPulseNode();
+              router.push('/get-started?mode=demo');
+            }}
+            onSelectB2B={() => {
+              soundEngine.playSystemAccess();
+              router.push('/get-started?mode=register');
+            }}
+            onSelectOtp={() => {
+              soundEngine.playPulseNode();
+              router.push('/get-started?mode=demo');
+            }}
           />
-
-
-
 
           {viewState === 'SUBCHAPTER_VIEW' && (activeNodeId === null || activeNodeId > 4) ? (
             <NodeDetailPanel
               activeSubChapter={activeSubChapter}
               onBackToNode={handleBackToNode}
+              onAuthenticate={handleAuthenticate}
             />
           ) : (
             <NodeCanvas
               nodes={GATEWAY_NODES}
               activeNodeId={activeNodeId}
               activeSubChapterId={activeSubChapterId}
+              activePreset={facilityPreset}
               viewState={viewState}
               onSelectNode={handleSelectNode}
-              onPortalEntry={() => handleAuthenticate('FULL_B2B')}
+              onPortalEntry={() => setIsLoginModalOpen(true)}
               onAuthenticate={handleAuthenticate}
             />
           )}
