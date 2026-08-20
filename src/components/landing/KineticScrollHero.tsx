@@ -56,7 +56,7 @@ export const KineticScrollHero: React.FC = () => {
     <div 
       id="hero" 
       ref={containerRef} 
-      className="relative w-full h-[280vh] md:h-[320vh] bg-[#080B10] max-w-[100vw] overflow-x-hidden"
+      className="relative w-full h-[280vh] md:h-[320vh] bg-[#080B10] max-w-[100vw] overflow-x-hidden studio-grain"
     >
       {/* Sticky Viewport Stage with Hardware Acceleration */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between items-center select-none studio-perspective gpu-accelerated max-w-full">
@@ -107,7 +107,7 @@ export const KineticScrollHero: React.FC = () => {
           className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none font-mono text-[9px] sm:text-[10px] tracking-widest text-slate-500 uppercase will-change-opacity px-4 text-center whitespace-nowrap"
         >
           <span>{locale === 'ka' ? 'ჩამოსქროლეთ ეკოსისტემის გასაშლელად' : locale === 'ru' ? 'Листайте вниз для открытия' : 'Scroll to explore ecosystem'}</span>
-          <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 animate-bounce" />
+          <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00A3FF] animate-bounce" />
         </motion.div>
       </div>
     </div>

@@ -9,9 +9,32 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ==========================================
+   ARTRON STUDIO DESIGN TOKEN SYSTEM
+   ========================================== */
 :root {
+  /* Canvas Hierarchy (Never Pure #000000) */
   --background: #080B10;
   --foreground: #F8FAFC;
+  --artron-surface-0: #080B10;       /* Page ground */
+  --artron-surface-1: #0F141C;       /* Elevated panels */
+  --artron-surface-2: #182030;       /* Interactive cards */
+  --artron-surface-2h: #1E293B;      /* Card hover state */
+
+  /* Brand Accent — ALL interactive elements, CTAs, badges */
+  --artron-brand: #00A3FF;
+  --artron-brand-start: #0066FF;
+  --artron-brand-end: #00D2FF;
+  --artron-brand-glow: rgba(0, 163, 255, 0.20);
+  --artron-brand-hairline: rgba(0, 163, 255, 0.18);
+
+  /* Status Signals — IoT gate OPEN, live check-in, door unlock ONLY */
+  --artron-signal-live: #10B981;     /* Emerald: active/unlocked/positive */
+  --artron-signal-live-glow: rgba(16, 185, 129, 0.20);
+  --artron-signal-alert: #EF4444;    /* Crimson: error/expired/alert */
+  --artron-signal-amber: #F59E0B;    /* Amber: pending/medium-risk */
+
+  /* Legacy aliases (kept for keyframe compat) */
   --artron-cyan: #00A3FF;
   --artron-surface: #0F141C;
   --artron-border: rgba(255, 255, 255, 0.08);
@@ -58,6 +81,27 @@ body {
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+/* ==========================================
+   STUDIO GRAIN / NOISE TEXTURE OVERLAY
+   Adds organic film-grain depth to sections.
+   opacity: 0.032 — visible but non-intrusive.
+   ========================================== */
+.studio-grain {
+  position: relative;
+}
+.studio-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.032;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 /* ==========================================
@@ -228,4 +272,90 @@ body {
 .artron-range-input::-moz-range-thumb:hover {
   transform: scale(1.25);
   box-shadow: 0 0 12px rgba(0, 255, 135, 0.95);
+}
+
+/* ==========================================
+   PRO CARD ANIMATED CONIC BORDER
+   Rotating electric gradient border for
+   the most prominent pricing plan card.
+   ========================================== */
+@property --conic-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes conic-border-spin {
+  to { --conic-angle: 360deg; }
+}
+
+.pro-card-border {
+  background: conic-gradient(
+    from var(--conic-angle, 0deg),
+    #0066FF 0deg,
+    #00D2FF 90deg,
+    #00A3FF 180deg,
+    #0066FF 270deg,
+    #0066FF 360deg
+  );
+  animation: conic-border-spin 5s linear infinite;
+}
+
+/* ==========================================
+   3D PHONE TILT — DualCore Mobile Showcase
+   CSS perspective tilt for premium depth.
+   ========================================== */
+.phone-tilt-3d {
+  transform: rotateY(-10deg) rotateX(4deg) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.phone-tilt-3d:hover {
+  transform: rotateY(-5deg) rotateX(2deg) translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-tilt-3d,
+  .phone-tilt-3d:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+  .pro-card-border {
+    animation: none !important;
+  }
+}
+
+/* ==========================================
+   SECTION TRANSITION FLOATING NODES
+   3 desynchronised keyframes so nodes never
+   move in sync — feels organic, not robotic.
+   ========================================== */
+@keyframes st-float-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(6px, -8px) scale(1.15); }
+  66%  { transform: translate(-4px, 4px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes st-float-b {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  40%  { transform: translate(-10px, -5px) rotate(15deg); }
+  70%  { transform: translate(8px, 6px) rotate(-8deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes st-float-c {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(5px, -10px) scale(1.2); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="st-float-a"],
+  [style*="st-float-b"],
+  [style*="st-float-c"] {
+    animation: none !important;
+  }
 }

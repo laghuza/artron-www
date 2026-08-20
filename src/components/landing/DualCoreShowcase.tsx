@@ -44,7 +44,7 @@ export const DualCoreShowcase: React.FC = () => {
   };
 
   return (
-    <section id="dual-core" className="relative py-24 sm:py-32 bg-[#080B10] border-t border-white/[0.06] overflow-hidden">
+    <section id="dual-core" className="relative py-24 sm:py-32 bg-[#080B10] border-t border-white/[0.06] overflow-hidden studio-grain">
       {/* Background Studio Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none" />
 
@@ -154,7 +154,9 @@ export const DualCoreShowcase: React.FC = () => {
 
           {/* Right: B2C Mobile Frame Simulator (5 Cols) */}
           <div className="lg:col-span-5 flex flex-col items-center">
-            <div className="w-[280px] sm:w-[310px] rounded-[40px] bg-[#0A0D14] border-[4px] border-slate-700/60 p-4 relative shadow-[0_0_50px_rgba(0,163,255,0.15)]">
+            {/* 3D Perspective Wrapper */}
+            <div style={{ perspective: '1400px', perspectiveOrigin: '60% 50%' }} className="w-full flex justify-center">
+              <div className="w-[280px] sm:w-[310px] rounded-[40px] bg-[#0A0D14] border-[4px] border-slate-700/60 p-4 relative shadow-[0_40px_80px_rgba(0,163,255,0.20),0_0_0_1px_rgba(0,163,255,0.10),0_20px_40px_rgba(0,0,0,0.6)] phone-tilt-3d">
               {/* Phone Speaker Notch */}
               <div className="w-20 h-4 bg-slate-800 rounded-full mx-auto mb-4" />
 
@@ -194,6 +196,7 @@ export const DualCoreShowcase: React.FC = () => {
                 )}
               </button>
             </div>
+            </div> {/* end perspective wrapper */}
           </div>
 
         </div>

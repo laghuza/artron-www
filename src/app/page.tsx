@@ -14,6 +14,7 @@ import { Footer } from "@/components/landing/Footer";
 import { AIBotWidget } from "@/components/landing/AIBotWidget";
 import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
 import { LeftFloatingNavDock } from "@/components/navigation/LeftFloatingNavDock";
+import { SectionTransition } from "@/components/ui/SectionTransition";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -36,15 +37,18 @@ export default function Home() {
       <main className="flex-grow flex flex-col">
         <KineticScrollHero />
         <DualCoreShowcase />
+        <SectionTransition variant="sparse" />        {/* ① Dual → Services */}
         <ServicesShowcase />
         <DashboardFeaturesSection />
         <AnalyticsShowcase />
         <BusinessStatsShowcase />
+        <SectionTransition />                         {/* ② Stats → ROI */}
         <RoiCalculator />
         <PricingSection />
+        <SectionTransition variant="sparse" />        {/* ③ Pricing → Partners */}
         <PartnerEcosystem />
         <FaqSection />
-        <BookingEngine />
+        <SectionTransition />                         {/* ④ FAQ → CTA */}
         <SaaSGatewayCTA />
       </main>
       <Footer />

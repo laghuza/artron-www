@@ -16,16 +16,16 @@ export const BusinessStatsShowcase: React.FC = () => {
   const { t, locale } = useLanguage();
 
   return (
-    <section id="business-stats" className="py-20 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5">
+    <section id="business-stats" className="py-20 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5 studio-grain">
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#00ff87]/5 rounded-full filter blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#00A3FF]/5 rounded-full filter blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00ff87]/10 border border-[#00ff87]/20 text-xs font-mono font-bold text-[#00ff87] mb-4 tracking-wider uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-[#00ff87]" /> [SYS: BUSINESS_METRICS]
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00A3FF]/10 border border-[#00A3FF]/20 text-xs font-mono font-bold text-[#00A3FF] mb-4 tracking-wider uppercase">
+            <Sparkles className="w-3.5 h-3.5 text-[#00A3FF]" /> [SYS: BUSINESS_METRICS]
           </div>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
             {t('stats_sec_title')}
@@ -39,22 +39,22 @@ export const BusinessStatsShowcase: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
           {/* Card 1: LTV & Churn Recovery */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00ff87]/30 transition-all duration-300">
-            {/* L-Shape Corner Brackets */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00ff87]/25" />
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
+            {/* L-Shape Corner Brackets — brand blue */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00A3FF]/20" />
 
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[8px] font-mono text-[#00e5ff] font-bold">[ MODULE: WIN_BACK_CRM ]</span>
-                <div className="w-8 h-8 rounded-lg bg-[#00ff87]/10 flex items-center justify-center border border-[#00ff87]/20">
-                  <TrendingUp className="w-4.5 h-4.5 text-[#00ff87]" />
+                <span className="text-[8px] font-mono text-[#00A3FF]/70 font-bold">[ MODULE: WIN_BACK_CRM ]</span>
+                <div className="w-8 h-8 rounded-lg bg-[#00A3FF]/10 flex items-center justify-center border border-[#00A3FF]/20">
+                  <TrendingUp className="w-4.5 h-4.5 text-[#00A3FF]" />
                 </div>
               </div>
               <h3 className="text-sm font-bold text-white mb-1">{t('stats_card_ltv_title')}</h3>
-              <div className="text-3xl font-black text-[#00ff87] font-mono mb-1">{t('stats_card_ltv_metric')}</div>
+              <div className="text-3xl font-black text-[#00A3FF] font-mono mb-1">{t('stats_card_ltv_metric')}</div>
               <p className="text-[10px] text-[#94A3B8] uppercase font-mono tracking-wider mb-4">{t('stats_card_ltv_sub')}</p>
               
               <ul className="space-y-2 border-t border-white/5 pt-4 mb-6">
@@ -86,22 +86,22 @@ export const BusinessStatsShowcase: React.FC = () => {
           </div>
 
           {/* Card 2: IoT Access Automation */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00ff87]/30 transition-all duration-300">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
             {/* L-Shape Corner Brackets */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00ff87]/25" />
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00A3FF]/20" />
 
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[8px] font-mono text-[#00e5ff] font-bold">[ MODULE: IoT_RELAY_GATE ]</span>
-                <div className="w-8 h-8 rounded-lg bg-[#00ff87]/10 flex items-center justify-center border border-[#00ff87]/20">
-                  <Cpu className="w-4.5 h-4.5 text-[#00ff87]" />
+                <span className="text-[8px] font-mono text-[#00A3FF]/70 font-bold">[ MODULE: IoT_RELAY_GATE ]</span>
+                <div className="w-8 h-8 rounded-lg bg-[#00A3FF]/10 flex items-center justify-center border border-[#00A3FF]/20">
+                  <Cpu className="w-4.5 h-4.5 text-[#00A3FF]" />
                 </div>
               </div>
               <h3 className="text-sm font-bold text-white mb-1">{t('stats_card_iot_title')}</h3>
-              <div className="text-3xl font-black text-[#00ff87] font-mono mb-1">{t('stats_card_iot_metric')}</div>
+              <div className="text-3xl font-black text-[#00A3FF] font-mono mb-1">{t('stats_card_iot_metric')}</div>
               <p className="text-[10px] text-[#94A3B8] uppercase font-mono tracking-wider mb-4">{t('stats_card_iot_sub')}</p>
               
               <ul className="space-y-2 border-t border-white/5 pt-4 mb-6">
@@ -147,22 +147,22 @@ export const BusinessStatsShowcase: React.FC = () => {
           </div>
 
           {/* Card 3: Labor Compliance (Order №01-15/ნ) */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00ff87]/30 transition-all duration-300">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
             {/* L-Shape Corner Brackets */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00ff87]/25" />
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00A3FF]/20" />
 
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[8px] font-mono text-[#00e5ff] font-bold">[ REG: LABOR_COMPLIANCE ]</span>
-                <div className="w-8 h-8 rounded-lg bg-[#00ff87]/10 flex items-center justify-center border border-[#00ff87]/20">
-                  <Clock className="w-4.5 h-4.5 text-[#00ff87]" />
+                <span className="text-[8px] font-mono text-[#00A3FF]/70 font-bold">[ REG: LABOR_COMPLIANCE ]</span>
+                <div className="w-8 h-8 rounded-lg bg-[#00A3FF]/10 flex items-center justify-center border border-[#00A3FF]/20">
+                  <Clock className="w-4.5 h-4.5 text-[#00A3FF]" />
                 </div>
               </div>
               <h3 className="text-sm font-bold text-white mb-1">{t('stats_card_labor_title')}</h3>
-              <div className="text-3xl font-black text-[#00ff87] font-mono mb-1">{t('stats_card_labor_metric')}</div>
+              <div className="text-3xl font-black text-[#00A3FF] font-mono mb-1">{t('stats_card_labor_metric')}</div>
               <p className="text-[10px] text-[#94A3B8] uppercase font-mono tracking-wider mb-4">{t('stats_card_labor_sub')}</p>
               
               <ul className="space-y-2 border-t border-white/5 pt-4 mb-6">
@@ -194,22 +194,22 @@ export const BusinessStatsShowcase: React.FC = () => {
           </div>
 
           {/* Card 4: Trainer Performance */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00ff87]/30 transition-all duration-300">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
             {/* L-Shape Corner Brackets */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00ff87]/25" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00ff87]/25" />
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00A3FF]/20" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00A3FF]/20" />
 
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[8px] font-mono text-[#00e5ff] font-bold">[ MODULE: PT_COMMISSION ]</span>
-                <div className="w-8 h-8 rounded-lg bg-[#00ff87]/10 flex items-center justify-center border border-[#00ff87]/20">
-                  <Users className="w-4.5 h-4.5 text-[#00ff87]" />
+                <span className="text-[8px] font-mono text-[#00A3FF]/70 font-bold">[ MODULE: PT_COMMISSION ]</span>
+                <div className="w-8 h-8 rounded-lg bg-[#00A3FF]/10 flex items-center justify-center border border-[#00A3FF]/20">
+                  <Users className="w-4.5 h-4.5 text-[#00A3FF]" />
                 </div>
               </div>
               <h3 className="text-sm font-bold text-white mb-1">{t('stats_card_trainers_title')}</h3>
-              <div className="text-3xl font-black text-[#00ff87] font-mono mb-1">{t('stats_card_trainers_metric')}</div>
+              <div className="text-3xl font-black text-[#00A3FF] font-mono mb-1">{t('stats_card_trainers_metric')}</div>
               <p className="text-[10px] text-[#94A3B8] uppercase font-mono tracking-wider mb-4">{t('stats_card_trainers_sub')}</p>
               
               <ul className="space-y-2 border-t border-white/5 pt-4 mb-6">

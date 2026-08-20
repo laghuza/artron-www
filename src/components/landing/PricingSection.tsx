@@ -6,6 +6,130 @@ import { motion } from 'framer-motion';
 import { Check, Zap, Sparkles, Shield, Building2, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { soundEngine } from '@/core';
+import { useMagneticCard } from '@/hooks/useMagneticCard';
+
+/* ── PricingCard: isolated sub-component so useMagneticCard
+   can be called per-card (hooks can't be called inside .map()) ── */
+type PlanItem = {
+  id: string;
+  name: string;
+  desc: string;
+  price: number;
+  badge: string | null;
+  popular: boolean;
+  ctaText: string;
+  ctaHref: string;
+  features: string[];
+  icon: React.ElementType;
+};
+
+const PricingCard: React.FC<{
+  plan: PlanItem;
+  index: number;
+  currencySymbol: string;
+  billingCycle: 'MONTHLY' | 'ANNUAL';
+  t: (key: string) => string;
+}> = ({ plan, index, currencySymbol, billingCycle, t }) => {
+  const Icon = plan.icon;
+  const mag = useMagneticCard({ rotateStrength: plan.popular ? 10 : 6 });
+
+  return (
+    <div style={{ perspective: '1000px' }}>
+      <motion.div
+        ref={mag.ref}
+        key={plan.id}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: index * 0.1 }}
+        style={mag.motionStyle}
+        onMouseMove={mag.onMouseMove}
+        onMouseLeave={mag.onMouseLeave}
+        className={`relative flex flex-col justify-between rounded-2xl p-6 lg:p-8 transition-[box-shadow,border-color] duration-300 ${
+          plan.popular
+            ? 'bg-gradient-to-b from-[#0D1829] to-[#121826] border-0 shadow-[0_0_80px_rgba(0,163,255,0.35),0_20px_50px_rgba(0,163,255,0.15),0_0_0_1px_rgba(0,163,255,0.3)] md:scale-[1.04] md:-translate-y-4 studio-grain z-10'
+            : 'bg-[#10141D] border border-white/10 hover:border-white/20'
+        }`}
+      >
+        {/* Popular animated conic border */}
+        {plan.popular && (
+          <div
+            className="absolute -inset-[1.5px] rounded-[17px] pointer-events-none z-0 pro-card-border"
+            style={{ opacity: 0.9 }}
+          />
+        )}
+        {/* Popular Ribbon */}
+        {plan.popular && (
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0066FF] to-[#00D2FF] text-white text-[11px] font-black uppercase tracking-wider px-4 py-1 rounded-full shadow-[0_4px_12px_rgba(0,163,255,0.4)] flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{plan.badge}</span>
+          </div>
+        )}
+
+        <div>
+          {/* Header info */}
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="flex items-center gap-2">
+              <div className={`p-2 rounded-lg ${plan.popular ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-white/5 text-gray-400'}`}>
+                <Icon className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-black text-white tracking-wide uppercase">
+                {plan.name}
+              </h3>
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-400 min-h-[36px] mb-6">
+            {plan.desc}
+          </p>
+
+          {/* Price display */}
+          <div className="mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/5">
+            <div className="flex items-baseline gap-1">
+              <span className="text-3xl lg:text-4xl font-black text-white">
+                {currencySymbol}{plan.price}
+              </span>
+              <span className="text-xs text-gray-400 font-mono">
+                {t('pricing_mo')}
+              </span>
+            </div>
+            <div className="text-[10px] text-gray-500 font-mono mt-1">
+              {billingCycle === 'ANNUAL' ? t('pricing_billed_annually') : t('pricing_monthly')}
+            </div>
+          </div>
+
+          {/* Feature list */}
+          <ul className="space-y-3 mb-8">
+            {plan.features.map((feat, fIdx) => (
+              <li key={fIdx} className="flex items-start gap-2.5 text-xs text-gray-300">
+                <div className={`mt-0.5 p-0.5 rounded-full ${plan.popular ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-[#00ff87]/20 text-[#00ff87]'}`}>
+                  <Check className="w-3.5 h-3.5" />
+                </div>
+                <span className="leading-relaxed">{feat}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Card CTA */}
+        <div>
+          <Link
+            href={plan.ctaHref}
+            onClick={() => soundEngine.playPulseNode()}
+            className={`w-full py-3.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              plan.popular
+                ? 'bg-[#00A3FF] hover:bg-[#008fe0] text-white shadow-[0_0_20px_rgba(0,163,255,0.4)]'
+                : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            }`}
+          >
+            <span>{plan.ctaText}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
 
 export const PricingSection: React.FC = () => {
   const { t, locale } = useLanguage();
@@ -150,92 +274,16 @@ export const PricingSection: React.FC = () => {
 
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-          {plans.map((plan, index) => {
-            const Icon = plan.icon;
-            return (
-              <motion.div
-                key={plan.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`relative flex flex-col justify-between rounded-2xl p-6 lg:p-8 transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-[#121826] border-2 border-[#00A3FF] shadow-[0_0_35px_rgba(0,163,255,0.2)] md:-translate-y-2'
-                    : 'bg-[#10141D] border border-white/10 hover:border-white/20'
-                }`}
-              >
-                {/* Popular Ribbon */}
-                {plan.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0066FF] to-[#00D2FF] text-white text-[11px] font-black uppercase tracking-wider px-4 py-1 rounded-full shadow-[0_4px_12px_rgba(0,163,255,0.4)] flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>{plan.badge}</span>
-                  </div>
-                )}
-
-                <div>
-                  {/* Header info */}
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className={`p-2 rounded-lg ${plan.popular ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-white/5 text-gray-400'}`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="text-lg font-black text-white tracking-wide uppercase">
-                        {plan.name}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-gray-400 min-h-[36px] mb-6">
-                    {plan.desc}
-                  </p>
-
-                  {/* Price display */}
-                  <div className="mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/5">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl lg:text-4xl font-black text-white">
-                        {currencySymbol}{plan.price}
-                      </span>
-                      <span className="text-xs text-gray-400 font-mono">
-                        {t('pricing_mo')}
-                      </span>
-                    </div>
-                    <div className="text-[10px] text-gray-500 font-mono mt-1">
-                      {billingCycle === 'ANNUAL' ? t('pricing_billed_annually') : t('pricing_monthly')}
-                    </div>
-                  </div>
-
-                  {/* Feature list */}
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-start gap-2.5 text-xs text-gray-300">
-                        <div className={`mt-0.5 p-0.5 rounded-full ${plan.popular ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-[#00ff87]/20 text-[#00ff87]'}`}>
-                          <Check className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="leading-relaxed">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Card CTA */}
-                <div>
-                  <Link
-                    href={plan.ctaHref}
-                    onClick={() => soundEngine.playPulseNode()}
-                    className={`w-full py-3.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                      plan.popular
-                        ? 'bg-[#00A3FF] hover:bg-[#008fe0] text-white shadow-[0_0_20px_rgba(0,163,255,0.4)]'
-                        : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
-                    }`}
-                  >
-                    <span>{plan.ctaText}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </motion.div>
-            );
-          })}
+          {plans.map((plan, index) => (
+            <PricingCard
+              key={plan.id}
+              plan={plan}
+              index={index}
+              currencySymbol={currencySymbol}
+              billingCycle={billingCycle}
+              t={t}
+            />
+          ))}
         </div>
 
         {/* Guarantee Banner */}
