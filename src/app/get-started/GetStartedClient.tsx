@@ -26,7 +26,11 @@ export default function GetStartedClient() {
   }, [activeMode]);
 
   const handleReset = () => {
-    router.push('/');
+    if (activeMode === 'DEMO') {
+      router.push('/sports-os');
+    } else {
+      router.push('/#pricing');
+    }
   };
 
   const initialPlan = (searchParams.get('plan') || 'pro').toLowerCase();
@@ -38,7 +42,43 @@ export default function GetStartedClient() {
       <Header isSticky={true} showBackToHome={true} />
 
       {/* Main Content Area */}
-      <main className="flex-grow max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-16 relative z-10 flex flex-col items-center justify-center">
+      <main className="flex-grow max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-12 relative z-10 flex flex-col items-center justify-center">
+        {/* Mode Switcher Tabs */}
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#0C111C]/80 border border-white/10 backdrop-blur-xl mb-6 shadow-xl">
+          <button
+            type="button"
+            onClick={() => {
+              soundEngine.playPulseNode();
+              setActiveMode('REGISTER');
+              router.replace('/get-started?mode=register');
+            }}
+            className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+              activeMode === 'REGISTER'
+                ? 'bg-gradient-to-r from-[#00A3FF] to-[#0066FF] text-white shadow-[0_0_20px_rgba(0,163,255,0.4)]'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <span>🚀</span>
+            <span>B2B რეგისტრაცია</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              soundEngine.playPulseNode();
+              setActiveMode('DEMO');
+              router.replace('/get-started?mode=demo');
+            }}
+            className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+              activeMode === 'DEMO'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-[0_0_20px_rgba(52,211,153,0.4)]'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <span>⚡</span>
+            <span>1-საათიანი დემო</span>
+          </button>
+        </div>
+
         {/* Central Card */}
         <div className="w-full max-w-2xl p-6 sm:p-10 rounded-3xl border border-white/[0.12] bg-[#0C111C]/85 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
           {/* Top Edge Laser Accent */}

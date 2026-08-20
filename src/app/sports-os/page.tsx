@@ -9,7 +9,6 @@ import { GATEWAY_NODES } from '@/data/gatewayNodes';
 import { FooterTelemetry } from '@/components/gateway/FooterTelemetry';
 import { SidebarPanel } from '@/components/gateway/SidebarPanel';
 import { NodeCanvas } from '@/components/gateway/NodeCanvas';
-import { NodeDetailPanel } from '@/components/gateway/NodeDetailPanel';
 import { EmeraldPortalGate } from '@/components/gateway/EmeraldPortalGate';
 import { SimpleOperatorDashboard } from '@/components/features/dashboard/SimpleOperatorDashboard';
 import { TemporaryGuestDashboard } from '@/components/features/dashboard/TemporaryGuestDashboard';
@@ -248,24 +247,16 @@ function GatewayPageContent() {
             }}
           />
 
-          {viewState === 'SUBCHAPTER_VIEW' && (activeNodeId === null || activeNodeId > 4) ? (
-            <NodeDetailPanel
-              activeSubChapter={activeSubChapter}
-              onBackToNode={handleBackToNode}
-              onAuthenticate={handleAuthenticate}
-            />
-          ) : (
-            <NodeCanvas
-              nodes={GATEWAY_NODES}
-              activeNodeId={activeNodeId}
-              activeSubChapterId={activeSubChapterId}
-              activePreset={facilityPreset}
-              viewState={viewState}
-              onSelectNode={handleSelectNode}
-              onPortalEntry={() => setIsLoginModalOpen(true)}
-              onAuthenticate={handleAuthenticate}
-            />
-          )}
+          <NodeCanvas
+            nodes={GATEWAY_NODES}
+            activeNodeId={activeNodeId}
+            activeSubChapterId={activeSubChapterId}
+            activePreset={facilityPreset}
+            viewState={viewState}
+            onSelectNode={handleSelectNode}
+            onPortalEntry={() => setIsLoginModalOpen(true)}
+            onAuthenticate={handleAuthenticate}
+          />
         </div>
 
         <FooterTelemetry />

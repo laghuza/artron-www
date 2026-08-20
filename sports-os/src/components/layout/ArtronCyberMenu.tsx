@@ -50,8 +50,8 @@ export default function ArtronCyberMenu({ isMuted = false, transitionStep = "idl
                 </p>
                 <div className="text-[10px] text-[#6B7280]">[ SYSTEM_MANIFEST // ENNEACORE ENGINE v9.3 ]</div>
               </div>
-              <button onClick={() => { audioManager.playClick(); setActiveTab("menu"); }} className="w-full py-2.5 bg-[#00E676]/10 border border-[#00E676]/30 text-[#00E676] rounded-sm font-medium text-xs uppercase hover:bg-[#00E676]/20 cursor-pointer text-center tracking-widest">
-                [ {lang === "GE" ? "<- უკან დაბრუნება" : "<- RETURN"} ]
+              <button onClick={() => { audioManager.playClick(); setActiveTab("menu"); }} className="w-full py-2.5 bg-[#00ff87]/10 border border-[#00ff87]/30 text-[#00ff87] rounded-sm font-medium text-xs uppercase hover:bg-[#00ff87]/20 cursor-pointer text-center tracking-widest">
+                [ {lang === "GE" ? "← უკან დაბრუნება" : "← RETURN"} ]
               </button>
             </div>
           ) : (

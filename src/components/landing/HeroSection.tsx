@@ -225,7 +225,7 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-between bg-[#0B0F17] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#121b2d] via-[#0B0F17] to-[#080b11] overflow-hidden pt-12 md:pt-20 px-4 md:px-8 border-b border-white/5">
+    <section id="hero" className="relative min-h-screen flex flex-col justify-between bg-[#0B0F17] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#121b2d] via-[#0B0F17] to-[#080b11] overflow-hidden pt-12 md:pt-20 px-4 md:px-8 border-b border-white/5">
       
       {/* Background Neon Grid Decoration */}
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(to_right,#00A3FF_1px,transparent_1px),linear-gradient(to_bottom,#00A3FF_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>

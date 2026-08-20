@@ -88,12 +88,25 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Action Controls & Language Switcher */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {showBackToHome ? (
-            <Link
-              href="/"
-              className="text-xs sm:text-sm font-semibold text-[#94A3B8] hover:text-[#00A3FF] transition-all py-1.5 px-2.5 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded-lg hidden md:block whitespace-nowrap"
-            >
-              {t('legal_back_to_home').replace('← ', '')}
-            </Link>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Link
+                href="/"
+                className="text-xs sm:text-sm font-semibold text-[#94A3B8] hover:text-white transition-all py-1.5 px-2 sm:px-2.5 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded-lg flex items-center gap-1 whitespace-nowrap"
+              >
+                <span>←</span>
+                <span className="hidden sm:inline">{t('legal_back_to_home').replace('← ', '')}</span>
+                <span className="sm:hidden">{locale === 'ka' ? 'მთავარი' : locale === 'ru' ? 'Главная' : 'Home'}</span>
+              </Link>
+
+              <Link
+                href="/sports-os"
+                className="text-[11px] sm:text-xs font-bold text-[#00ff87] hover:text-slate-950 hover:bg-[#00ff87] hover:shadow-[0_0_18px_rgba(0,255,135,0.45)] transition-all duration-300 h-8 sm:h-9 px-2.5 sm:px-3 focus:outline-none focus:ring-1 focus:ring-[#00ff87] border border-[#00ff87]/40 hover:border-[#00ff87] rounded-xl bg-[#00ff87]/10 font-mono tracking-wider uppercase flex items-center justify-center gap-1.5 shrink-0 shadow-[0_0_12px_rgba(0,255,135,0.15)]"
+              >
+                <span>⚡</span>
+                <span className="hidden md:inline">{locale === 'ka' ? '9 კვანძი (Sports OS)' : locale === 'ru' ? '9 Узлов (Sports OS)' : '9-Node Sports OS'}</span>
+                <span className="md:hidden">Sports OS</span>
+              </Link>
+            </div>
           ) : (
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Link

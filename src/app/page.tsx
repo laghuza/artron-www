@@ -12,6 +12,7 @@ import { SaaSGatewayCTA } from "@/components/landing/SaaSGatewayCTA";
 import { Footer } from "@/components/landing/Footer";
 import { AIBotWidget } from "@/components/landing/AIBotWidget";
 import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
+import { LeftFloatingNavDock } from "@/components/navigation/LeftFloatingNavDock";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -29,7 +30,8 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative">
+      <LeftFloatingNavDock />
       <main className="flex-grow flex flex-col">
         <HeroSection />
         <ServicesShowcase />

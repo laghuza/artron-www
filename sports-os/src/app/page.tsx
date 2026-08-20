@@ -7,7 +7,6 @@ import { GATEWAY_NODES } from '@/data/gatewayNodes';
 import { FooterTelemetry } from '@/components/gateway/FooterTelemetry';
 import { SidebarPanel } from '@/components/gateway/SidebarPanel';
 import { NodeCanvas } from '@/components/gateway/NodeCanvas';
-import { NodeDetailPanel } from '@/components/gateway/NodeDetailPanel';
 import { EmeraldPortalGate } from '@/components/gateway/EmeraldPortalGate';
 import { SimpleOperatorDashboard } from '@/components/features/dashboard/SimpleOperatorDashboard';
 import { TemporaryGuestDashboard } from '@/components/features/dashboard/TemporaryGuestDashboard';
@@ -169,22 +168,15 @@ export default function GatewayPage() {
 
 
 
-          {viewState === 'SUBCHAPTER_VIEW' && activeNodeId !== 1 ? (
-            <NodeDetailPanel
-              activeSubChapter={activeSubChapter}
-              onBackToNode={handleBackToNode}
-            />
-          ) : (
-            <NodeCanvas
-              nodes={GATEWAY_NODES}
-              activeNodeId={activeNodeId}
-              activeSubChapterId={activeSubChapterId}
-              viewState={viewState}
-              onSelectNode={handleSelectNode}
-              onPortalEntry={() => handleAuthenticate('FULL_B2B')}
-              onAuthenticate={handleAuthenticate}
-            />
-          )}
+          <NodeCanvas
+            nodes={GATEWAY_NODES}
+            activeNodeId={activeNodeId}
+            activeSubChapterId={activeSubChapterId}
+            viewState={viewState}
+            onSelectNode={handleSelectNode}
+            onPortalEntry={() => handleAuthenticate('FULL_B2B')}
+            onAuthenticate={handleAuthenticate}
+          />
         </div>
 
         <FooterTelemetry />

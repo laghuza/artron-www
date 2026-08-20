@@ -92,7 +92,8 @@
     "scan": "СКАНИРОВАНИЕ",
     "ghost_trigger": "GHOST_TRIGGER",
     "enter_core": "01 // ВОЙТИ В ЯДРО",
-    "protocol_sla": "02 // ПРОТОКОЛ (SLA)"
+    "protocol_sla": "02 // ПРОТОКОЛ (SLA)",
+    "return_to_main": "← На главную"
   },
   "dashboard": {
     "system_tagline": "9-узловая спортивная операционная система EnneaCore",
@@ -229,13 +230,13 @@
     "registered_b2b": "01 // СИСТЕМНЫЙ ШЛЮЗ B2B",
     "sandbox_demo": "02 // МГНОВЕННЫЙ ДЕМО-РЕЖИМ",
     "temporary_guest": "03 // ВРЕМЕННЫЙ OTP ГОСТЬ",
-    "return": "< НАЗАД [ESC]",
-    "return_to_canvas": "[ ← ВЕРНУТЬСЯ НА ХОЛСТ ]",
+    "return": "← Назад",
+    "return_to_canvas": "← Назад",
     "edit_form_data": "[ ИЗМЕНИТЬ ДАННЫЕ ФОРМЫ ]",
     "submit_membership": "🤝 Забронировать демо-презентацию",
     "authorize_console": "[ АВТОРИЗОВАТЬ СЕССИЮ КОНСОЛИ ]",
     "initialize_gateway": "[ ИНИЦИАЛИЗИРОВАТЬ ДОСТУП К ШЛЮЗУ → ]",
-    "return_to_gateway": "[ ✕ ВЕРНУТЬСЯ К ШЛЮЗУ (ESC) ]",
+    "return_to_gateway": "✕ Вернуться к шлюзу [ESC]",
     "exit_guest_pass": "✕ ЗАКРЫТЬ ГОСТЕВОЙ ПРОПУСК",
     "return_to_core_prompt": "НАЖМИТЕ ESC ИЛИ КНОПКУ ВЫХОДА ДЛЯ ВОЗВРАТА К ШЛЮЗУ ЯДРА",
     "press_esc": "НАЖМИТЕ [ESC] ДЛЯ ВОЗВРАТА К ШЛЮЗУ"

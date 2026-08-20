@@ -92,7 +92,8 @@
     "scan": "SCAN",
     "ghost_trigger": "GHOST_TRIGGER",
     "enter_core": "01 // ENTER THE CORE",
-    "protocol_sla": "02 // PROTOCOL (SLA)"
+    "protocol_sla": "02 // PROTOCOL (SLA)",
+    "return_to_main": "← Back to Main"
   },
   "dashboard": {
     "system_tagline": "EnneaCore 9-Node Athletic Operating System",
@@ -229,13 +230,13 @@
     "registered_b2b": "01 // B2B SYSTEM GATEWAY",
     "sandbox_demo": "02 // INSTANT SANDBOX DEMO",
     "temporary_guest": "03 // TEMPORARY OTP GUEST",
-    "return": "< RETURN [ESC]",
-    "return_to_canvas": "[ ← RETURN TO CANVAS ]",
+    "return": "← Go Back",
+    "return_to_canvas": "← Go Back",
     "edit_form_data": "[ EDIT FORM DATA ]",
     "submit_membership": "🤝 Book Live Demo Presentation",
     "authorize_console": "[ AUTHORIZE CONSOLE SESSION ]",
     "initialize_gateway": "[ INITIALIZE GATEWAY ACCESS → ]",
-    "return_to_gateway": "[ ✕ RETURN TO GATEWAY (ESC) ]",
+    "return_to_gateway": "✕ Return to Gateway [ESC]",
     "exit_guest_pass": "✕ EXIT GUEST PASS",
     "return_to_core_prompt": "PRESS ESC OR EXIT BUTTON TO RETURN TO CORE GATEWAY",
     "press_esc": "PRESS [ESC] TO RETURN TO GATEWAY"

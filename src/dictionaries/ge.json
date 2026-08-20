@@ -92,7 +92,8 @@
     "scan": "სკანირება",
     "ghost_trigger": "GHOST_TRIGGER",
     "enter_core": "01 // ბირთვში შესვლა",
-    "protocol_sla": "02 // პროტოკოლი (SLA)"
+    "protocol_sla": "02 // პროტოკოლი (SLA)",
+    "return_to_main": "← მთავარზე დაბრუნება"
   },
   "dashboard": {
     "system_tagline": "ენეაკორ 9-კვანძიანი ათლეტური ოპერაციული სისტემა",
@@ -229,13 +230,13 @@
     "registered_b2b": "01 // B2B სისტემური კარიბჭე",
     "sandbox_demo": "02 // მყისიერი დემო რეჟიმი",
     "temporary_guest": "03 // დროებითი OTP სტუმარი",
-    "return": "< დაბრუნება [ESC]",
-    "return_to_canvas": "[ ← ტილოზე დაბრუნება ]",
+    "return": "← უკან დაბრუნება",
+    "return_to_canvas": "← უკან დაბრუნება",
     "edit_form_data": "[ მონაცემების რედაქტირება ]",
     "submit_membership": "🤝 დემო-პრეზენტაციის დაჯავშნა",
     "authorize_console": "[ კონსოლის სესიის ავტორიზება ]",
     "initialize_gateway": "[ კარიბჭის წვდომის ინიციალიზაცია → ]",
-    "return_to_gateway": "[ ✕ კარიბჭეზე დაბრუნება (ESC) ]",
+    "return_to_gateway": "✕ კარიბჭეზე დაბრუნება [ESC]",
     "exit_guest_pass": "✕ სტუმრის საშვის დახურვა",
     "return_to_core_prompt": "დააჭირეთ ESC ან გამოსვლის ღილაკს ბირთვზე დასაბრუნებლად",
     "press_esc": "დააჭირეთ [ESC] კარიბჭეზე დასაბრუნებლად"
