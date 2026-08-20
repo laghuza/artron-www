@@ -197,6 +197,20 @@
   - [x] **ეტაპი 2: სარეგისტრაციო და ავტორიზაციის ფორმების დაკავშირება (Onboarding & Auth Flow Routing)** — 14-დღიანი საცდელი გარემოს ავტომატური გენერაცია და ოპერატორის სრული გადამისამართება სამართავ პანელზე.
   - [x] **ეტაპი 3: Sandbox რეჟიმის ცოცხალი ინტერაქტიული გაძლიერება (Live Interactive Sandbox)** — სატესტო დარბაზის მონაცემების, ტურნიკეტების და ვიზიტების ცოცხალი მინი-დაშბორდი.
   - [x] **ეტაპი 4: B2B ოპერატორის სამართავი პანელის სრული 3-ენოვანი გაძლიერება და მოდულების სინქრონიზაცია (Operator Console 3-Language Polish & EnneaCore Module Sync)** — `SimpleOperatorDashboard.tsx`-ის სრული 3-ენოვანი ლოკალიზაცია, სწრაფი საოპერაციო მოქმედებები (Quick Actions), ხმოვანი ეფექტები (`soundEngine`) და 0-Bug საწარმოო ბილდი.
+- [x] **Phase 15: Sasaki Kinetic Scroll Hero & Full Responsive 60-120 FPS Optimization (სრული ადაპტაცია და აჩქარება)**
+  - [x] **ეტაპი 1: Sasaki Kinetic Scroll Hero Core (`KineticScrollHero.tsx`)** — Sticky 3D Perspective Viewport, 4-დონიანი Scroll-Driven აჩქარება და პროგრესის სარკინიგზო ინდიკატორი (`KineticProgressRail.tsx`)
+  - [x] **ეტაპი 2: მონუმენტური კინეტიკური ტიპოგრაფია (`KineticTypoHeader.tsx`)** — Sasaki-ს დისპერსიული გაფართოება, ცენტრალური კიბერ-ბადე (`KineticCentralMesh.tsx`) და კასკადური სვეტოვანი ბარათები (`KineticPillarCards.tsx`)
+  - [x] **ეტაპი 3: მობილური (< 768px) ვერტიკალური დაშლის ადაპტაცია** — ტექსტის გაჭრის სრული პრევენცია, ჰორიზონტალური ზღვრის დაცვა და ასოების ვერტიკალური Y-ღერძის სტაგერ-დისპერსია
+  - [x] **ეტაპი 4: 60-120 FPS GPU აჩქარება & Zero-Overflow (`globals.css`)** — `will-change: transform, opacity`, `translate3d(0,0,0)`, `backface-visibility: hidden` და `overflow-x: hidden` 100vw უსაფრთხოების გარანტია
+  - [x] **ეტაპი 5: a11y & `prefers-reduced-motion` მხარდაჭერა** — `useReducedMotion()` ინტეგრაცია Framer Motion კომპონენტებში და მშვიდი რეჟიმის სრული მხარდაჭერა
+
+- [x] **Phase 16: ეტაპი 6 — QA ტესტირება და ხარისხის კონტროლი (Zero-Bug Policy & 3-Language KA/EN/RU Integrity)**
+  - [x] **ეტაპი 1: Jest Unit ტესტების გაფართოება (`tests/unit/i18n-dictionary.test.ts`)** — `ge.json`, `en.json`, `ru.json` ლექსიკონების JSON ვალიდურობა, სავალდებულო სისტემური გასაღებების არსებობა, კორპორატიული საიდენტიფიკაციო მონაცემების სისწორე და 27/27 Unit ტესტის 100%-ით ჩაბარება.
+  - [x] **ეტაპი 2: Playwright E2E 3-ენოვანი გადართვის ტესტირება (`tests/e2e/i18n-language-switch.test.ts`)** — KA, EN და RU ენების დინამიური გადართვა, ლოკალსთორეიჯის სინქრონიზაცია და კონსოლის 0-შეცდომის ვალიდაცია.
+  - [x] **ეტაპი 3: Playwright Responsive & Zero Overflow ვალიდაცია (`tests/e2e/responsive.test.ts`)** — Mobile (360px), Tablet (768px), Desktop Small (1024px) და Desktop Large (1440px) ეკრანებზე ჰორიზონტალური სქროლის სრული არარსებობა (`hasOverflow: false`).
+  - [x] **ეტაპი 4: Google Consent Mode v2 & Cookie Policy E2E ტესტირება (`tests/e2e/consent-mode.test.ts`)** — Default `denied` სტატუსები, Accept All, Decline All და Custom Cookie Settings არჩევის სრული ვალიდაცია.
+  - [x] **ეტაპი 5: საწარმოო სტაბილურობა, SVG ფიქსები & Build ვალიდაცია** — `RoiChart.tsx` SVG კოორდინატების უსაფრთხოება, CDN შრიფტის ჩანაცვლება ლოკალურად ოპტიმიზებული Google Font-ებით, `npx tsc --noEmit` (0 შეცდომა) და `npm run build` 20/20 გვერდის წარმატებული გენერაცია.
+
 
 
 

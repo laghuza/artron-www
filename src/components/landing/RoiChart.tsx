@@ -8,16 +8,28 @@ interface RoiChartProps {
 }
 
 export const RoiChart: React.FC<RoiChartProps> = ({ revenueIncrease, maxRev, locale }) => {
-  // Memoized calculations of coordinates
+  // Memoized calculations of coordinates with fallback safeguards
   const { y1, y2, y3, y4, y5 } = useMemo(() => {
+    const safeMax = typeof maxRev === 'number' && maxRev > 0 ? maxRev : 100000;
+    const safeInc = typeof revenueIncrease === 'number' && !isNaN(revenueIncrease) ? revenueIncrease : 0;
+    
+    const clampY = (factor: number) => {
+      const calc = 95 - ((safeInc * factor) / safeMax) * 70;
+      if (isNaN(calc)) return 95;
+      return Math.round(Math.max(15, Math.min(95, calc)));
+    };
+
     return {
-      y1: Math.round(95 - ((revenueIncrease * 0.2) / maxRev) * 70),
-      y2: Math.round(95 - ((revenueIncrease * 0.45) / maxRev) * 70),
-      y3: Math.round(95 - ((revenueIncrease * 0.7) / maxRev) * 70),
-      y4: Math.round(95 - ((revenueIncrease * 0.85) / maxRev) * 70),
-      y5: Math.round(95 - ((revenueIncrease * 1.0) / maxRev) * 70)
+      y1: clampY(0.2),
+      y2: clampY(0.45),
+      y3: clampY(0.7),
+      y4: clampY(0.85),
+      y5: clampY(1.0)
     };
   }, [revenueIncrease, maxRev]);
+
+  const areaPathD = `M 20 95 L 20 ${y1} L 135 ${y2} L 250 ${y3} L 365 ${y4} L 480 ${y5} L 480 95 Z`;
+  const linePathD = `M 20 ${y1} L 135 ${y2} L 250 ${y3} L 365 ${y4} L 480 ${y5}`;
 
   return (
     <div className="mb-6 bg-[#0B0F17]/50 border border-white/5 rounded-2xl p-4 relative overflow-hidden">
@@ -48,14 +60,18 @@ export const RoiChart: React.FC<RoiChartProps> = ({ revenueIncrease, maxRev, loc
 
         {/* Glow Area */}
         <motion.path
-          animate={{ d: `M 20 95 L 20 ${y1} L 135 ${y2} L 250 ${y3} L 365 ${y4} L 480 ${y5} L 480 95 Z` }}
+          d={areaPathD}
+          initial={{ d: areaPathD }}
+          animate={{ d: areaPathD }}
           fill="url(#chart-glow)"
           transition={{ type: 'spring', stiffness: 100, damping: 18 }}
         />
 
         {/* Line */}
         <motion.path
-          animate={{ d: `M 20 ${y1} L 135 ${y2} L 250 ${y3} L 365 ${y4} L 480 ${y5}` }}
+          d={linePathD}
+          initial={{ d: linePathD }}
+          animate={{ d: linePathD }}
           fill="none"
           stroke="url(#line-grad)"
           strokeWidth="2.5"
@@ -65,11 +81,11 @@ export const RoiChart: React.FC<RoiChartProps> = ({ revenueIncrease, maxRev, loc
         />
 
         {/* Dots */}
-        <motion.circle cx="20" animate={{ cy: y1 }} r="3" fill="#00e5ff" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
-        <motion.circle cx="135" animate={{ cy: y2 }} r="3" fill="#00e5ff" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
-        <motion.circle cx="250" animate={{ cy: y3 }} r="3" fill="#00e5ff" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
-        <motion.circle cx="365" animate={{ cy: y4 }} r="3" fill="#00ff87" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
-        <motion.circle cx="480" animate={{ cy: y5 }} r="4" fill="#00ff87" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
+        <motion.circle cx="20" cy={y1} initial={{ cy: y1 }} animate={{ cy: y1 }} r="3" fill="#00e5ff" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
+        <motion.circle cx="135" cy={y2} initial={{ cy: y2 }} animate={{ cy: y2 }} r="3" fill="#00e5ff" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
+        <motion.circle cx="250" cy={y3} initial={{ cy: y3 }} animate={{ cy: y3 }} r="3" fill="#00e5ff" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
+        <motion.circle cx="365" cy={y4} initial={{ cy: y4 }} animate={{ cy: y4 }} r="3" fill="#00ff87" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
+        <motion.circle cx="480" cy={y5} initial={{ cy: y5 }} animate={{ cy: y5 }} r="4" fill="#00ff87" transition={{ type: 'spring', stiffness: 120, damping: 15 }} />
 
         {/* Labels */}
         <text x="20" y="108" fill="#64748B" fontSize="9" className="font-sans font-medium text-center">

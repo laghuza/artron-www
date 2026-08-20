@@ -1,4 +1,5 @@
-import { HeroSection } from "@/components/landing/HeroSection";
+import { KineticScrollHero } from "@/components/landing/KineticScrollHero";
+import { DualCoreShowcase } from "@/components/landing/DualCoreShowcase";
 import { PartnerEcosystem } from "@/components/landing/PartnerEcosystem";
 import { ServicesShowcase } from "@/components/landing/ServicesShowcase";
 import { RoiCalculator } from "@/components/landing/RoiCalculator";
@@ -30,10 +31,11 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative bg-[#080B10] text-[#F8FAFC]">
       <LeftFloatingNavDock />
       <main className="flex-grow flex flex-col">
-        <HeroSection />
+        <KineticScrollHero />
+        <DualCoreShowcase />
         <ServicesShowcase />
         <DashboardFeaturesSection />
         <AnalyticsShowcase />
