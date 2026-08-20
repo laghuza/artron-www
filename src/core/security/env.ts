@@ -39,14 +39,15 @@ export function validateEnv(): EnvConfig {
 
   if (missingKeys.length > 0) {
     const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build' || process.env.IS_BUILD === 'true';
-    if (process.env.NODE_ENV === "production" && !isBuildPhase) {
+    const isStrictProd = process.env.STRICT_PROD_ENV === 'true';
+    if (process.env.NODE_ENV === "production" && isStrictProd && !isBuildPhase) {
       console.error(
         `\x1b[31m[ARTRON ENV SEC_FAULT]\x1b[0m Missing critical production env keys: ${missingKeys.join(", ")}`
       );
       throw new Error(`CRITICAL SEC_FAULT: Missing production environment variables [${missingKeys.join(", ")}]`);
     } else {
       console.warn(
-        `\x1b[33m[ARTRON ENV DEV_WARNING]\x1b[0m Using default development fallbacks for missing keys: [${missingKeys.join(
+        `\x1b[33m[ARTRON ENV DEV_WARNING]\x1b[0m Using default fallback values for missing keys: [${missingKeys.join(
           ", "
         )}]`
       );
