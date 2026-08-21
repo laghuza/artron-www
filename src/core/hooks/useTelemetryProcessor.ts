@@ -12,7 +12,7 @@ export function useTelemetryProcessor({
 }: UseTelemetryProcessorOptions) {
   const [telemetryState, setTelemetryState] = useState<TelemetryPacketPayload>({
     nodeId: activeNodeId || 1,
-    timestamp: Date.now(),
+    timestamp: 0,
     heartRate: 72,
     speedKmH: 0,
     enneaCoreNode: 'CORE_INIT',
@@ -20,7 +20,7 @@ export function useTelemetryProcessor({
   });
 
   const animFrameId = useRef<number | null>(null);
-  const lastSampleTime = useRef<number>(Date.now());
+  const lastSampleTime = useRef<number>(0);
 
   useEffect(() => {
     const updateLoop = () => {

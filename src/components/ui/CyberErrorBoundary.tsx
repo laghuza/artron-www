@@ -50,7 +50,7 @@ export class CyberErrorBoundary extends Component<Props, State> {
           </h3>
 
           <p className="text-xs text-[#00e5ff] font-mono mb-4">
-            ERR_CODE: {this.state.error?.name || 'RUNTIME_FAULT'} // NODE_PROTECTED
+            ERR_CODE: {this.state.error?.name || 'RUNTIME_FAULT'} {'//'} NODE_PROTECTED
           </p>
 
           <p className="text-xs text-gray-400 max-w-md mb-6 leading-relaxed">

@@ -16,6 +16,17 @@ interface HardwareCalculatorStepProps {
   setScannerType: (v: string) => void;
 }
 
+const TURNSTILE_COSTS: Record<string, number> = {
+  TRIPOD: 1200,
+  SPEED_GATE: 3500,
+  READER_ONLY: 400,
+};
+
+const SCANNER_COSTS: Record<string, number> = {
+  RFID: 150,
+  QR_NFC: 450,
+};
+
 export default function HardwareCalculatorStep({
   onBack,
   onContinue,
@@ -30,21 +41,10 @@ export default function HardwareCalculatorStep({
 }: HardwareCalculatorStepProps) {
   const [totalCost, setTotalCost] = useState(0);
 
-  const turnstileCosts: Record<string, number> = {
-    TRIPOD: 1200,
-    SPEED_GATE: 3500,
-    READER_ONLY: 400,
-  };
-
-  const scannerCosts: Record<string, number> = {
-    RFID: 150,
-    QR_NFC: 450,
-  };
-
   useEffect(() => {
     const gates = parseInt(gatesCount) || 1;
-    const tCost = turnstileCosts[turnstileType] || 0;
-    const sCost = scannerCosts[scannerType] || 0;
+    const tCost = TURNSTILE_COSTS[turnstileType] || 0;
+    const sCost = SCANNER_COSTS[scannerType] || 0;
     setTotalCost(gates * (tCost + sCost));
   }, [gatesCount, turnstileType, scannerType]);
 

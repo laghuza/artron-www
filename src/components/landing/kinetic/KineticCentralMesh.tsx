@@ -59,3 +59,4 @@ export const KineticCentralMesh: React.FC<KineticCentralMeshProps> = ({
     </motion.div>
   );
 };
+

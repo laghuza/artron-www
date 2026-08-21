@@ -2,10 +2,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { Users, Coins, Clock, TrendingUp, ShieldAlert, ArrowRight } from 'lucide-react';
+import { Users, Coins, Clock, TrendingUp, ShieldAlert, ArrowRight, Zap } from 'lucide-react';
 import { RoiSliderControl } from './roi/RoiSliderControl';
 import { RoiMetricResultCard } from './roi/RoiMetricResultCard';
 import { RoiChart } from './RoiChart';
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import Link from 'next/link';
 
 export const RoiCalculator: React.FC = () => {
@@ -34,6 +35,7 @@ export const RoiCalculator: React.FC = () => {
   const laborCostSavings = Math.round(monthlyLaborHoursSaved * currency.laborRate);
   const physicalCardSavings = Math.round(members * currency.cardSavings);
   const totalMonthlyGain = churnRecoveredGain + laborCostSavings + physicalCardSavings;
+  const growthAmplitudePct = Math.round((totalMonthlyGain / (monthlyRevenue || 1)) * 100);
 
   const formatCurrency = (val: number) => {
     const formatted = val.toLocaleString();
@@ -41,7 +43,7 @@ export const RoiCalculator: React.FC = () => {
   };
 
   return (
-    <section id="roi-calculator" className="py-24 sm:py-32 bg-[#080B10] border-t border-white/[0.06] relative overflow-hidden">
+    <section id="roi" className="py-24 sm:py-32 bg-[#080B10] border-t border-white/[0.06] relative overflow-hidden">
       {/* Studio Radial Background */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none" />
 
@@ -109,20 +111,36 @@ export const RoiCalculator: React.FC = () => {
             />
 
             {/* Monthly Net ROI Highlight Box */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-[#0F141C] to-slate-900 border border-cyan-500/30">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-[#0F141C] to-slate-900 border border-cyan-500/30 shadow-[0_0_30px_rgba(0,163,255,0.1)] relative overflow-hidden">
               <div className="flex items-center justify-between text-xs font-mono text-cyan-400 mb-2">
-                <span>ESTIMATED NET MONTHLY GAIN</span>
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                <span className="flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>ESTIMATED NET MONTHLY GAIN</span>
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30 text-[10px]">
+                  +{growthAmplitudePct}% GROWTH
+                </span>
               </div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight mb-2">
-                +{formatCurrency(totalMonthlyGain)} <span className="text-xs text-slate-400 font-normal font-sans">/ თვეში</span>
+              <div data-testid="roi-total-gain" className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight mb-2 flex items-baseline gap-1">
+                <span>+</span>
+                <AnimatedNumber
+                  value={totalMonthlyGain}
+                  prefix={currency.formatBefore ? currency.symbol : ''}
+                  suffix={currency.formatBefore ? '' : ` ${currency.symbol}`}
+                  duration={600}
+                />
+                <span className="text-xs text-slate-400 font-normal font-sans ml-1">/ თვეში</span>
               </div>
-              <p className="text-xs text-slate-400 font-light">
-                {locale === 'ka'
-                  ? `წლიური დამატებითი მოგება და დაზოგვა: +${formatCurrency(totalMonthlyGain * 12)}`
-                  : locale === 'ru'
-                  ? `Годовая дополнительная выгода и экономия: +${formatCurrency(totalMonthlyGain * 12)}`
-                  : `Projected annual additional value: +${formatCurrency(totalMonthlyGain * 12)}`}
+              <p className="text-xs text-slate-400 font-light flex items-center gap-1">
+                <span>{locale === 'ka' ? 'წლიური დამატებითი მოგება:' : locale === 'ru' ? 'Годовая выгода:' : 'Projected annual value:'}</span>
+                <span className="text-cyan-300 font-bold font-mono">
+                  +<AnimatedNumber
+                    value={totalMonthlyGain * 12}
+                    prefix={currency.formatBefore ? currency.symbol : ''}
+                    suffix={currency.formatBefore ? '' : ` ${currency.symbol}`}
+                    duration={600}
+                  />
+                </span>
               </p>
             </div>
           </div>
@@ -134,7 +152,10 @@ export const RoiCalculator: React.FC = () => {
                 icon={TrendingUp}
                 code="METRIC_01"
                 label={locale === 'ka' ? 'Win-back & Churn მოგება' : locale === 'ru' ? 'Доход от Win-back и оттока' : 'Win-Back Recovery'}
-                value={`+${formatCurrency(churnRecoveredGain)}`}
+                numericValue={churnRecoveredGain}
+                prefix={currency.formatBefore ? `+${currency.symbol}` : '+'}
+                suffix={currency.formatBefore ? '' : ` ${currency.symbol}`}
+                growthAmplitude="+14% LTV"
                 subtext={locale === 'ka' ? 'დაკარგული და პასიური წევრების დაბრუნებით' : locale === 'ru' ? 'За счет реактивации ушедших клиентов' : 'From AI automated member retention'}
                 accent="#10B981"
               />
@@ -143,7 +164,9 @@ export const RoiCalculator: React.FC = () => {
                 icon={Clock}
                 code="METRIC_02"
                 label={locale === 'ka' ? 'შრომის დროის დაზოგვა' : locale === 'ru' ? 'Экономия рабочего времени' : 'Labor Time Saved'}
-                value={`${monthlyLaborHoursSaved} სთ`}
+                numericValue={monthlyLaborHoursSaved}
+                suffix=" სთ"
+                growthAmplitude="№01-15/ნ"
                 subtext={locale === 'ka' ? `დაზოგილი ხელფასის ექვივალენტი: ${formatCurrency(laborCostSavings)}` : locale === 'ru' ? `Эквивалент экономии: ${formatCurrency(laborCostSavings)}` : `Labor cost equivalent: ${formatCurrency(laborCostSavings)}`}
                 accent="#00A3FF"
               />

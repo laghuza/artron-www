@@ -83,7 +83,7 @@ export const KineticPillarCards: React.FC<KineticPillarCardsProps> = ({
         y: shouldReduceMotion ? '0vh' : cardsY, 
         opacity: shouldReduceMotion ? 1 : cardsOpacity 
       }}
-      className="absolute bottom-4 sm:bottom-8 lg:bottom-12 inset-x-0 z-30 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto gpu-accelerated max-w-full"
+      className="absolute bottom-3 sm:bottom-6 lg:bottom-8 inset-x-0 z-30 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto gpu-accelerated max-w-full"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 lg:gap-4 max-w-full">
         {pillars.map((pillar) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, MotionValue, useReducedMotion } from 'framer-motion';
+import { motion, MotionValue, useTransform, useReducedMotion } from 'framer-motion';
 
 interface KineticProgressRailProps {
   scrollYProgress: MotionValue<number>;
@@ -13,6 +13,7 @@ export const KineticProgressRail: React.FC<KineticProgressRailProps> = ({
   activeStep
 }) => {
   const shouldReduceMotion = useReducedMotion();
+  const railOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
 
   const steps = [
     { num: '01', title: 'INITIALIZE' },
@@ -22,7 +23,10 @@ export const KineticProgressRail: React.FC<KineticProgressRailProps> = ({
   ];
 
   return (
-    <div className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-end gap-6 pointer-events-none gpu-accelerated">
+    <motion.div 
+      style={{ opacity: shouldReduceMotion ? 1 : railOpacity }}
+      className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-end gap-6 pointer-events-none gpu-accelerated will-change-opacity"
+    >
       {/* Step Indicators */}
       <div className="flex flex-col items-end gap-3 font-mono">
         {steps.map((step, idx) => {
@@ -32,7 +36,7 @@ export const KineticProgressRail: React.FC<KineticProgressRailProps> = ({
               <span className={`text-[10px] tracking-widest transition-colors duration-300 ${
                 isActive ? 'text-[#00A3FF] font-bold' : 'text-slate-600'
               }`}>
-                {step.num} // {step.title}
+                {step.num} {'//'} {step.title}
               </span>
               <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                 isActive 
@@ -57,6 +61,6 @@ export const KineticProgressRail: React.FC<KineticProgressRailProps> = ({
         <span className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${shouldReduceMotion ? '' : 'animate-ping'}`} />
         <span className="text-[9px] font-mono text-emerald-400">EDGE_ONLINE // 24ms</span>
       </div>
-    </div>
+    </motion.div>
   );
 };

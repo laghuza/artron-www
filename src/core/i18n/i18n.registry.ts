@@ -34,7 +34,7 @@ export const SUPPORTED_LANGUAGES: Record<'GE' | 'EN', LanguageDefinition> = {
   }
 };
 
-export const DEFAULT_LANGUAGE: 'GE' = 'GE';
+export const DEFAULT_LANGUAGE = 'GE' as const;
 
 export const DICTIONARY_REGISTRY: Record<'GE' | 'EN', Record<string, any>> = {
   GE: geDict,

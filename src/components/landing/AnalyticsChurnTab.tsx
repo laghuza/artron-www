@@ -33,7 +33,7 @@ export const AnalyticsChurnTab: React.FC<AnalyticsChurnTabProps> = ({
   const prevRiskRef = useRef(0);
 
   useEffect(() => {
-    let start = prevRiskRef.current;
+    const start = prevRiskRef.current;
     const end = selectedUser.risk;
     if (start === end) {
       setDisplayRisk(end);

@@ -3,7 +3,6 @@
 import React, { useRef, useState } from 'react';
 import { useScroll, useTransform, useMotionValueEvent, motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
-import { Header } from '@/components/Header';
 import { KineticTypoHeader } from './kinetic/KineticTypoHeader';
 import { KineticCentralMesh } from './kinetic/KineticCentralMesh';
 import { KineticPillarCards } from './kinetic/KineticPillarCards';
@@ -24,39 +23,35 @@ export const KineticScrollHero: React.FC = () => {
   // Track progress step for vertical rail
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest < 0.25) setActiveStep(1);
-    else if (latest < 0.55) setActiveStep(2);
-    else if (latest < 0.85) setActiveStep(3);
+    else if (latest < 0.5) setActiveStep(2);
+    else if (latest < 0.75) setActiveStep(3);
     else setActiveStep(4);
   });
 
   // --- Sasaki Typography Kinematics ---
-  // Letter spacing expands from 0.05em to 0.55em (Desktop)
-  const letterSpacing = useTransform(scrollYProgress, [0, 0.35], ['0.05em', '0.55em']);
-  // Title scales up as letters disperse
-  const titleScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.45]);
-  // Title fades out as cards emerge
-  const titleOpacity = useTransform(scrollYProgress, [0.2, 0.45], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.45], ['0%', '-20%']);
-  const subtitleOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const letterSpacing = useTransform(scrollYProgress, [0, 0.4], ['0.05em', '0.25em']);
+  const titleScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.08]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.35, 0.65], [1, 0.85, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 0.65], ['0%', '-8%']);
+  const subtitleOpacity = useTransform(scrollYProgress, [0, 0.18, 0.45], [1, 0.7, 0]);
 
-  // --- Central Cyber Mesh Kinematics ---
-  const meshScale = useTransform(scrollYProgress, [0.15, 0.55, 0.9], [0.6, 1.15, 0.9]);
-  const meshOpacity = useTransform(scrollYProgress, [0.1, 0.4, 0.85], [0, 0.95, 0.3]);
-  const meshRotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  // --- Central Cyber Mesh / Logo Kinematics ---
+  const meshScale = useTransform(scrollYProgress, [0, 0.4, 0.8], [0.85, 1, 0.8]);
+  const meshOpacity = useTransform(scrollYProgress, [0, 0.3, 0.65], [0.4, 0.7, 0.15]);
+  const meshRotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
 
-  // --- Pillar Cards Cascading Kinematics ---
-  // Bottom-up entrance from 80vh to 0vh
-  const cardsY = useTransform(scrollYProgress, [0.4, 0.75], ['80vh', '0vh']);
-  const cardsOpacity = useTransform(scrollYProgress, [0.38, 0.65], [0, 1]);
+  // --- Pillar Cards Cascading Kinematics (Appears quickly to eliminate dead space) ---
+  const cardsY = useTransform(scrollYProgress, [0.04, 0.28], ['20vh', '0vh']);
+  const cardsOpacity = useTransform(scrollYProgress, [0.04, 0.22], [0, 1]);
 
   // Scroll Hint fading
-  const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
 
   return (
     <div 
       id="hero" 
       ref={containerRef} 
-      className="relative w-full h-[280vh] md:h-[320vh] bg-[#080B10] max-w-[100vw] overflow-x-hidden studio-grain"
+      className="relative w-full h-[110vh] sm:h-[120vh] bg-[#080B10] max-w-[100vw] overflow-x-hidden studio-grain"
     >
       {/* Sticky Viewport Stage with Hardware Acceleration */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between items-center select-none studio-perspective gpu-accelerated max-w-full">
@@ -64,11 +59,6 @@ export const KineticScrollHero: React.FC = () => {
         <div className="absolute inset-0 studio-grid-bg opacity-40 pointer-events-none will-change-opacity" />
         <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#080B10] to-transparent z-20 pointer-events-none" />
         <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#080B10] to-transparent z-20 pointer-events-none" />
-
-        {/* Global Navigation Header */}
-        <div className="w-full relative z-40 px-2 sm:px-4 pt-2">
-          <Header />
-        </div>
 
         {/* Layer 1: Monumental Kinetic Typography */}
         <KineticTypoHeader

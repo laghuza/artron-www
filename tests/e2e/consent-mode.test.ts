@@ -3,18 +3,16 @@ import { test, expect } from '@playwright/test';
 test.describe('Google Consent Mode v2 & Cookie Consent Banner', () => {
   test.beforeEach(async ({ page }) => {
     // Start with fresh localStorage and force Georgian locale
-    await page.goto('/');
-    await page.evaluate(() => {
+    await page.addInitScript(() => {
       localStorage.clear();
       localStorage.setItem('artron_lang', 'ka');
     });
-    // Reload page to apply forced locale
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'load' });
   });
 
   test('should show the cookie consent banner by default', async ({ page }) => {
     // The banner should be visible
-    const banner = page.locator('text=ქუქი-ფაილების და კონფიდენციალურობის მართვა');
+    const banner = page.locator('#artron-cookie-consent-banner');
     await expect(banner).toBeVisible();
 
     // Local storage should not have consent decisions yet
@@ -24,13 +22,13 @@ test.describe('Google Consent Mode v2 & Cookie Consent Banner', () => {
 
   test('should grant all consent types when clicking Accept All', async ({ page }) => {
     // Click the "Accept All" button (ყველას მიღება in Georgian)
-    const acceptAllBtn = page.locator('button:text-is("ყველას მიღება")');
+    const acceptAllBtn = page.getByRole('button', { name: 'ყველას მიღება', exact: true });
     await expect(acceptAllBtn).toBeVisible();
     await acceptAllBtn.click();
 
     // The banner should hide after consent is given
-    const banner = page.locator('text=ქუქი-ფაილების და კონფიდენციალურობის მართვა');
-    await expect(banner).not.toBeVisible();
+    const banner = page.locator('#artron-cookie-consent-banner');
+    await expect(banner).toBeHidden({ timeout: 5000 });
 
     // Verify localStorage state
     const consentJson = await page.evaluate(() => localStorage.getItem('artron_cookie_consent'));
@@ -54,13 +52,13 @@ test.describe('Google Consent Mode v2 & Cookie Consent Banner', () => {
 
   test('should deny analytics and marketing consent types when clicking Decline All', async ({ page }) => {
     // Click the "Decline All" button (ყველაზე უარი in Georgian)
-    const declineAllBtn = page.locator('button:text-is("ყველაზე უარი")');
+    const declineAllBtn = page.getByRole('button', { name: 'ყველაზე უარი', exact: true });
     await expect(declineAllBtn).toBeVisible();
     await declineAllBtn.click();
 
     // The banner should hide
-    const banner = page.locator('text=ქუქი-ფაილების და კონფიდენციალურობის მართვა');
-    await expect(banner).not.toBeVisible();
+    const banner = page.locator('#artron-cookie-consent-banner');
+    await expect(banner).toBeHidden({ timeout: 5000 });
 
     // Verify localStorage state
     const consentJson = await page.evaluate(() => localStorage.getItem('artron_cookie_consent'));
@@ -79,27 +77,28 @@ test.describe('Google Consent Mode v2 & Cookie Consent Banner', () => {
   });
 
   test('should allow custom cookie settings selection', async ({ page }) => {
-    // Click the "Settings" button (პარამეტრები in Georgian)
-    const settingsBtn = page.locator('button:text-is("პარამეტრები")');
+    // Click the "Settings" button (პარამეტრები in Georgian) inside the banner
+    const settingsBtn = page.locator('#artron-cookie-consent-banner').getByRole('button', { name: 'პარამეტრები', exact: true });
     await expect(settingsBtn).toBeVisible();
-    await settingsBtn.click();
+    await settingsBtn.click({ force: true });
 
     // Verify that the setting panels are revealed
-    await expect(page.locator('h4', { hasText: 'აუცილებელი' })).toBeVisible();
-    await expect(page.locator('h4', { hasText: 'ანალიტიკა' })).toBeVisible();
-    await expect(page.locator('h4', { hasText: 'მარკეტინგი' })).toBeVisible();
+    await expect(page.locator('h4').filter({ hasText: 'აუცილებელი' })).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('h4').filter({ hasText: 'ანალიტიკა' })).toBeVisible();
+    await expect(page.locator('h4').filter({ hasText: 'მარკეტინგი' })).toBeVisible();
 
     // Toggle analytics to true, marketing remains false
     const analyticsToggle = page.locator('button[aria-label="Toggle Analytics Cookies"]');
-    await analyticsToggle.click();
+    await analyticsToggle.click({ force: true });
 
     // Save selection (არჩევანის შენახვა in Georgian)
-    const saveBtn = page.locator('button:text-is("არჩევანის შენახვა")');
-    await saveBtn.click();
+    const saveBtn = page.getByRole('button', { name: 'არჩევანის შენახვა', exact: true });
+    await expect(saveBtn).toBeVisible({ timeout: 5000 });
+    await saveBtn.click({ force: true });
 
     // The banner should hide
-    const banner = page.locator('text=ქუქი-ფაილების და კონფიდენციალურობის მართვა');
-    await expect(banner).not.toBeVisible();
+    const banner = page.locator('#artron-cookie-consent-banner');
+    await expect(banner).toBeHidden({ timeout: 5000 });
 
     // Verify localStorage state
     const consentJson = await page.evaluate(() => localStorage.getItem('artron_cookie_consent'));

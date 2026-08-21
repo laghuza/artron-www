@@ -27,8 +27,10 @@ export const SportsSelect: React.FC<SportsSelectProps> = ({ value, onChange, cla
   const [variationId, setVariationId] = useState<string>(value?.variationId || currentSport?.variations[0]?.id || '');
 
   useEffect(() => {
-    if (value?.categoryKey && value.categoryKey !== categoryKey) setCategoryKey(value.categoryKey);
-  }, [value?.categoryKey]);
+    if (value?.categoryKey && value.categoryKey !== categoryKey) {
+      setCategoryKey(value.categoryKey);
+    }
+  }, [value?.categoryKey, categoryKey]);
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCatKey = e.target.value as SportCategoryKey;

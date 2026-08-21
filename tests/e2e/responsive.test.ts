@@ -14,10 +14,7 @@ test.describe('Viewport Responsiveness & Layout Safety', () => {
       await page.setViewportSize({ width: vp.width, height: vp.height });
 
       // Navigate to the root landing page
-      await page.goto('/');
-
-      // Wait for page to be ready
-      await page.waitForLoadState('domcontentloaded');
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
 
       // Verify the page title/header is visible
       const logo = page.locator('text=ARTRON');

@@ -38,6 +38,26 @@ html, body {
   --artron-cyan: #00A3FF;
   --artron-surface: #0F141C;
   --artron-border: rgba(255, 255, 255, 0.08);
+
+  /* shadcn/ui Semantic Token Bindings */
+  --card: #0F141C;
+  --card-foreground: #F8FAFC;
+  --popover: #0F141C;
+  --popover-foreground: #F8FAFC;
+  --primary: #00A3FF;
+  --primary-foreground: #080B10;
+  --secondary: #182030;
+  --secondary-foreground: #F8FAFC;
+  --muted: #182030;
+  --muted-foreground: #94A3B8;
+  --accent: #1E293B;
+  --accent-foreground: #00A3FF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #00A3FF;
+  --radius: 0.75rem;
 }
 
 @theme inline {
@@ -102,6 +122,61 @@ body {
   background-size: 256px 256px;
   z-index: 1;
   border-radius: inherit;
+}
+
+/* ==========================================
+   STUDIO BESPOKE UI UTILITIES (Phase 1)
+   ========================================== */
+.studio-card {
+  background: rgba(24, 32, 48, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.studio-card:hover {
+  border-color: rgba(0, 163, 255, 0.35);
+  box-shadow: 0 0 25px rgba(0, 163, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.studio-card-elevated {
+  background: linear-gradient(180deg, rgba(24, 32, 48, 0.9) 0%, rgba(15, 20, 28, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  border-radius: 1.25rem;
+}
+
+.studio-input {
+  background: #0F141F;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+}
+.studio-input:focus {
+  outline: none;
+  border-color: #00A3FF;
+  box-shadow: 0 0 0 3px rgba(0, 163, 255, 0.2);
+}
+
+.studio-glow-blue {
+  box-shadow: 0 0 30px rgba(0, 163, 255, 0.25);
+}
+
+.studio-glow-emerald {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+}
+
+/* Georgian Ascender/Descender Safe Line-Heights */
+.font-georgian-safe {
+  line-height: 1.25;
+}
+.font-georgian-body {
+  line-height: 1.65;
 }
 
 /* ==========================================
@@ -357,5 +432,97 @@ body {
   [style*="st-float-b"],
   [style*="st-float-c"] {
     animation: none !important;
+  }
+}
+
+/* ==========================================
+   MAGNETIC CTA — NEON BORDER PULSE
+   Rotating electric gradient border for
+   the Hero "Demo" CTA button.
+   ========================================== */
+@property --neon-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes neon-border-spin {
+  to { --neon-angle: 360deg; }
+}
+
+@keyframes neon-border-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 16px rgba(0, 163, 255, 0.5),
+      0 0 36px rgba(0, 163, 255, 0.25),
+      inset 0 0 12px rgba(0, 163, 255, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(0, 163, 255, 0.8),
+      0 0 60px rgba(0, 163, 255, 0.4),
+      inset 0 0 20px rgba(0, 163, 255, 0.15);
+  }
+}
+
+/* Neon border CTA wrapper class */
+.cta-neon-border {
+  position: relative;
+  animation: neon-border-pulse 2.4s ease-in-out infinite;
+  will-change: box-shadow;
+}
+
+.cta-neon-border::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from var(--neon-angle, 0deg),
+    #0066FF 0deg,
+    #00D2FF 90deg,
+    #00A3FF 180deg,
+    #0066FF 270deg,
+    #0066FF 360deg
+  );
+  animation: neon-border-spin 3s linear infinite;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+.cta-neon-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  z-index: -1;
+}
+
+/* ==========================================
+   3D TILT GLASSMORPHIC CARD
+   GPU-accelerated perspective container
+   for the DualCoreShowcase panels.
+   ========================================== */
+.tilt-glass-panel {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+}
+
+.tilt-glass-panel:hover {
+  box-shadow: 0 32px 80px rgba(0, 163, 255, 0.18), 0 0 0 1px rgba(0, 163, 255, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-neon-border {
+    animation: none !important;
+    box-shadow: 0 0 20px rgba(0, 163, 255, 0.4) !important;
+  }
+  .cta-neon-border::before {
+    animation: none !important;
+  }
+  .tilt-glass-panel {
+    will-change: auto !important;
   }
 }

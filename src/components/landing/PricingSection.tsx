@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Check, Zap, Sparkles, Shield, Building2, ArrowRight } from 'lucide-react';
+import { Check, Zap, Sparkles, Shield, Building2, ArrowRight, TrendingUp } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { soundEngine } from '@/core';
 import { useMagneticCard } from '@/hooks/useMagneticCard';
@@ -21,6 +21,8 @@ type PlanItem = {
   ctaHref: string;
   features: string[];
   icon: React.ElementType;
+  roiBadge: string;
+  roiSub: string;
 };
 
 const PricingCard: React.FC<{
@@ -79,12 +81,12 @@ const PricingCard: React.FC<{
             </div>
           </div>
 
-          <p className="text-xs text-gray-400 min-h-[36px] mb-6">
+          <p className="text-xs text-gray-400 min-h-[36px] mb-4">
             {plan.desc}
           </p>
 
           {/* Price display */}
-          <div className="mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/5">
+          <div className="mb-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
             <div className="flex items-baseline gap-1">
               <span className="text-3xl lg:text-4xl font-black text-white">
                 {currencySymbol}{plan.price}
@@ -95,6 +97,17 @@ const PricingCard: React.FC<{
             </div>
             <div className="text-[10px] text-gray-500 font-mono mt-1">
               {billingCycle === 'ANNUAL' ? t('pricing_billed_annually') : t('pricing_monthly')}
+            </div>
+          </div>
+
+          {/* ROI Saver Calculator Badge */}
+          <div className="mb-6 p-3 rounded-xl bg-gradient-to-r from-[#00ff87]/10 to-[#00A3FF]/10 border border-[#00ff87]/20 relative overflow-hidden group">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#00ff87]">
+              <TrendingUp className="w-3.5 h-3.5 text-[#00ff87]" />
+              <span>{plan.roiBadge}</span>
+            </div>
+            <div className="text-[10px] text-gray-400 font-sans mt-1 leading-snug">
+              {plan.roiSub}
             </div>
           </div>
 
@@ -152,7 +165,7 @@ export const PricingSection: React.FC = () => {
   const proPrice = billingCycle === 'ANNUAL' ? proAnnual : proMonthly;
   const enterprisePrice = billingCycle === 'ANNUAL' ? enterpriseAnnual : enterpriseMonthly;
 
-  const plans = [
+  const plans: PlanItem[] = [
     {
       id: 'starter',
       name: t('pricing_starter_name'),
@@ -162,6 +175,8 @@ export const PricingSection: React.FC = () => {
       popular: false,
       ctaText: t('pricing_btn_start'),
       ctaHref: `/get-started?mode=register&plan=starter&cycle=${billingCycle.toLowerCase()}`,
+      roiBadge: t('pricing_starter_roi'),
+      roiSub: t('pricing_starter_roi_sub'),
       features: [
         t('pricing_starter_feat1'),
         t('pricing_starter_feat2'),
@@ -182,6 +197,8 @@ export const PricingSection: React.FC = () => {
       popular: true,
       ctaText: t('pricing_btn_start'),
       ctaHref: `/get-started?mode=register&plan=pro&cycle=${billingCycle.toLowerCase()}`,
+      roiBadge: t('pricing_pro_roi'),
+      roiSub: t('pricing_pro_roi_sub'),
       features: [
         t('pricing_pro_feat1'),
         t('pricing_pro_feat2'),
@@ -198,11 +215,12 @@ export const PricingSection: React.FC = () => {
       name: t('pricing_enterprise_name'),
       desc: t('pricing_enterprise_desc'),
       price: enterprisePrice,
-      isCustom: false,
       badge: null,
       popular: false,
       ctaText: t('pricing_btn_contact'),
       ctaHref: `/get-started?mode=register&plan=enterprise&cycle=${billingCycle.toLowerCase()}`,
+      roiBadge: t('pricing_enterprise_roi'),
+      roiSub: t('pricing_enterprise_roi_sub'),
       features: [
         t('pricing_enterprise_feat1'),
         t('pricing_enterprise_feat2'),

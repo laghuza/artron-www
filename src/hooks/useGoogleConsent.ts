@@ -46,11 +46,15 @@ export const useGoogleConsent = () => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.preferences) {
-          setPreferences(parsed.preferences);
+        const prefs = parsed?.preferences || (parsed?.necessary !== undefined ? parsed : null);
+        if (prefs) {
+          setPreferences({
+            necessary: true,
+            analytics: Boolean(prefs.analytics),
+            marketing: Boolean(prefs.marketing),
+          });
           setHasDecided(true);
-          // Apply consent settings on mount if already decided
-          updateConsentMode(parsed.preferences);
+          updateConsentMode(prefs);
         }
       } catch (e) {
         console.error('Failed to parse cookie consent state:', e);

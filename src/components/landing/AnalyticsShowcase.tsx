@@ -114,6 +114,7 @@ export const AnalyticsShowcase: React.FC = () => {
             return (
               <button
                 key={tab}
+                data-testid={`analytics-tab-${tab}`}
                 onClick={() => setActiveSubTab(tab)}
                 className={`relative px-5 py-3 rounded-xl text-xs font-mono font-bold tracking-wider uppercase border transition-all duration-300 cursor-pointer overflow-hidden ${
                   isActive

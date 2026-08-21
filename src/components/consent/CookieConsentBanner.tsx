@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useGoogleConsent } from '@/hooks/useGoogleConsent';
-import { Shield, Settings as SettingsIcon, Check, X, ShieldAlert } from 'lucide-react';
+import { Shield, Settings as SettingsIcon, Check, X, ShieldAlert, ChevronRight, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const CookieConsentBanner: React.FC = () => {
   const { t } = useLanguage();
@@ -14,7 +15,7 @@ export const CookieConsentBanner: React.FC = () => {
     marketing: false,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleReopen = () => {
       setTempPrefs({
         analytics: preferences.analytics,
@@ -26,11 +27,6 @@ export const CookieConsentBanner: React.FC = () => {
     window.addEventListener('artron-reopen-cookie-settings', handleReopen);
     return () => window.removeEventListener('artron-reopen-cookie-settings', handleReopen);
   }, [preferences, setHasDecided]);
-
-  // If consent is already decided, hide the banner unless settings is forced open
-  if (hasDecided && !showSettings) {
-    return null;
-  }
 
   const handleOpenSettings = () => {
     setTempPrefs({
@@ -50,191 +46,215 @@ export const CookieConsentBanner: React.FC = () => {
   };
 
   const toggleAnalytic = () => {
-    setTempPrefs(prev => ({ ...prev, analytics: !prev.analytics }));
+    setTempPrefs((prev) => ({ ...prev, analytics: !prev.analytics }));
   };
 
   const toggleMarketing = () => {
-    setTempPrefs(prev => ({ ...prev, marketing: !prev.marketing }));
+    setTempPrefs((prev) => ({ ...prev, marketing: !prev.marketing }));
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 bg-gradient-to-t from-[#0B0F17] via-[#0B0F17]/95 to-transparent">
-      <div className="max-w-4xl mx-auto bg-[#05070a]/90 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl shadow-2xl p-5 md:p-6 relative transition-all duration-300">
-        
-        {/* L-Shape Corner Brackets */}
-        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00ff87]/30" />
-        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00ff87]/30" />
-        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00ff87]/30" />
-        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00ff87]/30" />
+    <AnimatePresence>
+      {(!hasDecided || showSettings) && (
+        <motion.div
+          key="artron-cookie-banner"
+          id="artron-cookie-consent-banner"
+          initial={{ opacity: 0, y: 40, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 40, scale: 0.98 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-3 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-6 z-50 flex justify-center pointer-events-none"
+        >
+        <div className="w-full max-w-2xl pointer-events-auto bg-[#070A10]/85 border border-[#00A3FF]/20 backdrop-blur-2xl rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(0,163,255,0.12)] p-4 sm:p-6 relative overflow-hidden text-[#F8FAFC]">
+          {/* Subtle Ambient Cyber Light */}
+          <div className="absolute -top-12 -right-12 w-36 h-36 bg-[#00A3FF]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-[#00ff87]/15 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Title & Icon Header */}
-        <div className="flex items-start gap-4">
-          <div className="p-3 bg-[#00ff87]/10 rounded-xl border border-[#00ff87]/20 text-[#00ff87] shrink-0">
-            <Shield className="w-6 h-6 animate-pulse drop-shadow-[0_0_8px_#00ff87]" />
+          {/* L-Shape Corner Tech Brackets */}
+          <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00A3FF]/40" />
+          <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00A3FF]/40" />
+          <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00ff87]/40" />
+          <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00ff87]/40" />
+
+          {/* Header Row */}
+          <div className="flex items-start gap-3.5 sm:gap-4">
+            <div className="p-2.5 sm:p-3 bg-[#00A3FF]/10 rounded-2xl border border-[#00A3FF]/25 text-[#00A3FF] shrink-0 shadow-[0_0_15px_rgba(0,163,255,0.2)]">
+              <Shield className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-sm sm:text-base font-extrabold text-white tracking-wide">
+                  {t('cookie_title')}
+                </h3>
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full bg-[#00ff87]/10 text-[#00ff87] border border-[#00ff87]/20">
+                  <Lock className="w-2.5 h-2.5" /> GCM v2
+                </span>
+              </div>
+              {!showSettings && (
+                <p className="mt-1 text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                  {t('cookie_desc')}
+                </p>
+              )}
+            </div>
           </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-white tracking-wide">
-              {t('cookie_title')}
-            </h3>
-            {!showSettings && (
-              <p className="mt-2 text-sm text-[#94A3B8] leading-relaxed">
-                {t('cookie_desc')}
-              </p>
-            )}
+
+          {/* Granular Categories Drawer */}
+          {showSettings && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-4 space-y-2.5 border-t border-white/10 pt-4"
+            >
+              {/* Category: Necessary */}
+              <div className="flex items-center justify-between gap-3 p-2.5 sm:p-3 bg-white/[0.03] rounded-xl border border-white/5">
+                <div className="flex-1 min-w-0 pr-2">
+                  <h4 className="text-xs sm:text-sm font-semibold text-white flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>{t('cookie_necessary_title')}</span>
+                  </h4>
+                  <p className="text-[11px] text-[#94A3B8] mt-0.5 line-clamp-2">
+                    {t('cookie_necessary_desc')}
+                  </p>
+                </div>
+                <div className="shrink-0 flex items-center">
+                  <div
+                    className="w-11 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center px-0.5 cursor-not-allowed opacity-80"
+                    aria-label="Necessary Cookies (Required)"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-emerald-400 flex items-center justify-center translate-x-5 text-slate-950 shadow-sm">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Category: Analytics */}
+              <div className="flex items-center justify-between gap-3 p-2.5 sm:p-3 bg-white/[0.03] rounded-xl border border-white/5">
+                <div className="flex-1 min-w-0 pr-2">
+                  <h4 className="text-xs sm:text-sm font-semibold text-white flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${tempPrefs.analytics ? 'bg-emerald-400' : 'bg-slate-500'}`}></span>
+                    <span>{t('cookie_analytics_title')}</span>
+                  </h4>
+                  <p className="text-[11px] text-[#94A3B8] mt-0.5 line-clamp-2">
+                    {t('cookie_analytics_desc')}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={toggleAnalytic}
+                  className={`w-12 h-7 rounded-full border transition-all duration-200 flex items-center p-0.5 cursor-pointer min-h-[44px] min-w-[48px] justify-center ${
+                    tempPrefs.analytics ? 'bg-[#00A3FF]/20 border-[#00A3FF]' : 'bg-white/5 border-white/20'
+                  }`}
+                  aria-label="Toggle Analytics Cookies"
+                >
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center transition-transform duration-200 ${
+                      tempPrefs.analytics
+                        ? 'bg-[#00A3FF] translate-x-2 text-white shadow-sm'
+                        : 'bg-[#64748B] -translate-x-2 text-slate-950'
+                    }`}
+                  >
+                    {tempPrefs.analytics ? <Check className="w-3 h-3 stroke-[3]" /> : <X className="w-3 h-3 stroke-[3]" />}
+                  </div>
+                </button>
+              </div>
+
+              {/* Category: Marketing */}
+              <div className="flex items-center justify-between gap-3 p-2.5 sm:p-3 bg-white/[0.03] rounded-xl border border-white/5">
+                <div className="flex-1 min-w-0 pr-2">
+                  <h4 className="text-xs sm:text-sm font-semibold text-white flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${tempPrefs.marketing ? 'bg-emerald-400' : 'bg-slate-500'}`}></span>
+                    <span>{t('cookie_marketing_title')}</span>
+                  </h4>
+                  <p className="text-[11px] text-[#94A3B8] mt-0.5 line-clamp-2">
+                    {t('cookie_marketing_desc')}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={toggleMarketing}
+                  className={`w-12 h-7 rounded-full border transition-all duration-200 flex items-center p-0.5 cursor-pointer min-h-[44px] min-w-[48px] justify-center ${
+                    tempPrefs.marketing ? 'bg-[#00A3FF]/20 border-[#00A3FF]' : 'bg-white/5 border-white/20'
+                  }`}
+                  aria-label="Toggle Marketing Cookies"
+                >
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center transition-transform duration-200 ${
+                      tempPrefs.marketing
+                        ? 'bg-[#00A3FF] translate-x-2 text-white shadow-sm'
+                        : 'bg-[#64748B] -translate-x-2 text-slate-950'
+                    }`}
+                  >
+                    {tempPrefs.marketing ? <Check className="w-3 h-3 stroke-[3]" /> : <X className="w-3 h-3 stroke-[3]" />}
+                  </div>
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Action Row */}
+          <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-white/10 pt-3">
+            <a
+              href="https://artron.ge/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] font-mono text-[#00A3FF] hover:underline flex items-center gap-1 min-h-[44px] py-1"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>{t('cookie_policy_link')}</span>
+              <ChevronRight className="w-3 h-3 opacity-60" />
+            </a>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {!showSettings ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleOpenSettings}
+                    className="flex-1 sm:flex-initial py-2 px-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-xs font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
+                  >
+                    <SettingsIcon className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{t('cookie_settings')}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={declineAll}
+                    className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-xs font-semibold hover:bg-white/10 hover:text-white transition-all cursor-pointer min-h-[44px]"
+                  >
+                    {t('cookie_decline_all')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={acceptAll}
+                    className="flex-grow sm:flex-initial py-2 px-5 rounded-xl bg-gradient-to-r from-[#00A3FF] to-[#00E5FF] text-slate-950 text-xs font-black shadow-lg shadow-[#00A3FF]/25 hover:brightness-110 active:scale-98 transition-all cursor-pointer min-h-[44px]"
+                  >
+                    {t('cookie_accept_all')}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setShowSettings(false)}
+                    className="flex-1 sm:flex-initial py-2 px-3 rounded-xl border border-white/10 bg-white/5 text-slate-400 text-xs font-semibold hover:bg-white/10 transition-all cursor-pointer min-h-[44px]"
+                  >
+                    {t('cookie_decline_all')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSaveSettings}
+                    className="flex-grow sm:flex-initial py-2 px-5 rounded-xl bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 text-xs font-black shadow-lg shadow-[#00ff87]/20 hover:brightness-110 transition-all cursor-pointer min-h-[44px]"
+                  >
+                    {t('cookie_save')}
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-
-        {/* Detailed Category Settings */}
-        {showSettings && (
-          <div className="mt-6 space-y-4 border-t border-white/10 pt-5">
-            {/* Category: Necessary */}
-            <div className="flex items-start justify-between gap-4 p-3 bg-white/5 rounded-xl border border-white/5">
-              <div className="flex-1">
-                <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  {t('cookie_necessary_title')}
-                </h4>
-                <p className="text-xs text-[#94A3B8] mt-1">
-                  {t('cookie_necessary_desc')}
-                </p>
-              </div>
-              <button
-                disabled
-                className="w-11 h-6 rounded-full bg-[#00ff87]/20 border border-[#00ff87]/30 flex items-center p-0.5 cursor-not-allowed opacity-80"
-                style={{ minHeight: '44px' }}
-                aria-label="Necessary Cookies (Required)"
-              >
-                <div className="w-5 h-5 rounded-full bg-[#00ff87] flex items-center justify-center translate-x-5 text-slate-950">
-                  <Check className="w-3 h-3" />
-                </div>
-              </button>
-            </div>
-
-            {/* Category: Analytics */}
-            <div className="flex items-start justify-between gap-4 p-3 bg-white/5 rounded-xl border border-white/5">
-              <div className="flex-1">
-                <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${tempPrefs.analytics ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
-                  {t('cookie_analytics_title')}
-                </h4>
-                <p className="text-xs text-[#94A3B8] mt-1">
-                  {t('cookie_analytics_desc')}
-                </p>
-              </div>
-              <button
-                onClick={toggleAnalytic}
-                className={`w-14 h-8 rounded-full border transition-all duration-300 flex items-center p-1 cursor-pointer ${
-                  tempPrefs.analytics 
-                    ? 'bg-[#00ff87]/20 border-[#00ff87]' 
-                    : 'bg-white/5 border-white/20'
-                }`}
-                style={{ minWidth: '56px', minHeight: '44px' }} // Ensures target is at least 44px
-                aria-label="Toggle Analytics Cookies"
-              >
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  tempPrefs.analytics 
-                    ? 'bg-[#00ff87] translate-x-6 text-slate-950' 
-                    : 'bg-[#94A3B8] translate-x-0 text-slate-900'
-                }`}>
-                  {tempPrefs.analytics ? <Check className="w-4.5 h-4.5" /> : <X className="w-4.5 h-4.5" />}
-                </div>
-              </button>
-            </div>
-
-            {/* Category: Marketing */}
-            <div className="flex items-start justify-between gap-4 p-3 bg-white/5 rounded-xl border border-white/5">
-              <div className="flex-1">
-                <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${tempPrefs.marketing ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
-                  {t('cookie_marketing_title')}
-                </h4>
-                <p className="text-xs text-[#94A3B8] mt-1">
-                  {t('cookie_marketing_desc')}
-                </p>
-              </div>
-              <button
-                onClick={toggleMarketing}
-                className={`w-14 h-8 rounded-full border transition-all duration-300 flex items-center p-1 cursor-pointer ${
-                  tempPrefs.marketing 
-                    ? 'bg-[#00ff87]/20 border-[#00ff87]' 
-                    : 'bg-white/5 border-white/20'
-                }`}
-                style={{ minWidth: '56px', minHeight: '44px' }}
-                aria-label="Toggle Marketing Cookies"
-              >
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  tempPrefs.marketing 
-                    ? 'bg-[#00ff87] translate-x-6 text-slate-950' 
-                    : 'bg-[#94A3B8] translate-x-0 text-slate-900'
-                }`}>
-                  {tempPrefs.marketing ? <Check className="w-4.5 h-4.5" /> : <X className="w-4.5 h-4.5" />}
-                </div>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Action Buttons Panel */}
-        <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-white/10 pt-4">
-          <a
-            href="https://artron.ge/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-[#00ff87] hover:underline flex items-center gap-1.5 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00ff87] rounded-md"
-            style={{ minHeight: '44px' }}
-          >
-            <ShieldAlert className="w-4 h-4" />
-            {t('cookie_policy_link')}
-          </a>
-
-          <div className="flex flex-wrap items-center gap-3">
-            {!showSettings ? (
-              <>
-                <button
-                  onClick={handleOpenSettings}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-white/15 bg-white/5 text-white text-sm font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00ff87]"
-                  style={{ minHeight: '44px', minWidth: '100px' }}
-                >
-                  <SettingsIcon className="w-4.5 h-4.5 text-[#94A3B8]" />
-                  {t('cookie_settings')}
-                </button>
-                <button
-                  onClick={declineAll}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-rose-500/25 bg-rose-500/10 text-rose-400 text-sm font-semibold hover:bg-rose-500/15 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500"
-                  style={{ minHeight: '44px', minWidth: '100px' }}
-                >
-                  {t('cookie_decline_all')}
-                </button>
-                <button
-                  onClick={acceptAll}
-                  className="flex-grow sm:flex-initial py-2.5 px-6 rounded-xl bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 text-sm font-extrabold shadow-lg shadow-[#00ff87]/20 hover:brightness-110 active:scale-98 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00ff87]"
-                  style={{ minHeight: '44px', minWidth: '120px' }}
-                >
-                  {t('cookie_accept_all')}
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => setShowSettings(false)}
-                  className="flex-1 sm:flex-initial py-2.5 px-4 rounded-xl border border-white/15 bg-white/5 text-[#94A3B8] text-sm font-semibold hover:bg-white/10 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/20"
-                  style={{ minHeight: '44px', minWidth: '100px' }}
-                >
-                  {t('cookie_decline_all')}
-                </button>
-                <button
-                  onClick={handleSaveSettings}
-                  className="flex-grow sm:flex-initial py-2.5 px-6 rounded-xl bg-[#00ff87] text-slate-950 text-sm font-extrabold shadow-lg shadow-[#00ff87]/20 hover:bg-[#00ff87]/80 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00ff87]"
-                  style={{ minHeight: '44px', minWidth: '150px' }}
-                >
-                  {t('cookie_save')}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-      </div>
-    </div>
+      </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

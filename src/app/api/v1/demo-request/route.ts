@@ -4,9 +4,13 @@ import { z } from 'zod';
 // Zod schema for B2B demo request validation
 const demoRequestSchema = z.object({
   name: z.string().min(2).max(100),
-  email: z.string().email(),
-  phone: z.string().min(7).max(25),
+  email: z.string().email().optional().or(z.literal('')),
+  phone: z.string().min(4).max(50).optional().or(z.literal('')),
   facilityType: z.string().min(2).max(50).optional(),
+  platform: z.string().min(2).max(50).optional(),
+  date: z.string().max(50).optional(),
+  timeSlot: z.string().max(50).optional(),
+  timezone: z.string().max(50).optional(),
 });
 
 // Basic in-memory rate limiting tracker (resets on application reload/serverless cold start)
@@ -69,8 +73,8 @@ export async function POST(request: NextRequest) {
 
     // 4. Sanitize strings against XSS injection
     const sanitizedName = sanitize(name);
-    const sanitizedEmail = sanitize(email);
-    const sanitizedPhone = sanitize(phone);
+    const sanitizedEmail = sanitize(email || '');
+    const sanitizedPhone = sanitize(phone || '');
     const sanitizedFacility = facilityType ? sanitize(facilityType) : 'unknown';
 
     // 5. Simulated storage or downstream webhook delivery (Telegram/Slack)

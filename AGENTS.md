@@ -47,10 +47,24 @@
 - **[Compliance & Legal Agent]** ↔️ **[SecOps, Product Manager, Frontend]**: უზრუნველყოფს GDPR/COPPA დაცვას, Data Purge 14-დღიან ტაიმერებსა და SLA პოლიტიკებს.
 - **[QA & Automation Tester]** ↔️ **[Frontend, Backend, Mobile, Security]**: QA ტესტავს დეველოპერების მიერ დაწერილ კომპონენტებსა და API-ებს Zero-Bug პოლიტიკით.
 - **[Git Agent]** ↔️ **[ყველა დეველოპერი]**: Git Agent აკონტროლებს ყველა აგენტის მიერ შექმნილ Branch-ებს, Commit-ებსა და PR-ებს.
-- **[Creative Motion & Interaction Engineer]** ↔️ **[Frontend, UI Designer]**: ათანხმებს Framer Motion ანიმაციებს, WebGL-ს და Hover/Focus რეაქციებს დიზაინის სისტემასთან.
-- **[i18n Localization & B2B SEO Strategist]** ↔️ **[Frontend, Copywriter, Product Manager]**: უზრუნველყოფს 3-ენოვანი კონტენტის სისწორეს, თავსებადობას და საძიებო სიტყვების ოპტიმიზაციას.
+- **[Creative Motion & Interaction Engineer]** ↔️ **[Frontend, UI Designer]**: ათანხმებს Framer Motion ანიმაციებს, WebGL-ს და Hover/Focus რეაქციებს დიზაინის სისტემასთან. იყენებს `react-view-transitions` უნარს.
+- **[i18n Localization & B2B SEO Strategist]** ↔️ **[Frontend, Copywriter, Product Manager]**: უზრუნველყოფს 3-ენოვანი კონტენტის სისწორეს, თავსებადობას და საძიებო სიტყვების ოპტიმიზაციას. იყენებს `writing-guidelines` და `web-design-guidelines` უნარებს.
 - **[Penetration Testing & Red-Team Auditor]** ↔️ **[Backend, SecOps, IoT]**: ამოწმებს უსაფრთხოებას, SQLi/XSS მოწყვლადობებს, Socket კავშირებს და PII AES შიფრაციას.
 - **[BI & Data Visualization Analyst]** ↔️ **[Frontend, Sports Analytics, Product Manager]**: ქმნის საოპერაციო, ფინანსური და ტელემეტრიული მონაცემების SVG/Canvas ვიზუალიზაციებს.
+
+---
+
+## ⚡ Vercel Official Agent Skills Integration
+ყველა დეველოპერი და დიზაინერი აგენტი ვალდებულია იხელმძღვანელოს `.agents/skills/`-ში ინტეგრირებული Vercel-ის სტანდარტებით:
+1. **`react-best-practices`**: Waterfalls ელიმინაცია, მინიმალური bundle, სერვერული კომპონენტების სწორი გაყოფა, re-render-ების მინიმიზაცია.
+2. **`web-design-guidelines`**: 100+ A11y წესი, 44x44px Touch Targets, Visible Focus, Dark Mode, ნულოვანი Layout Shift (CLS=0).
+3. **`composition-patterns`**: Compound Components და სუფთა მოდულური არქიტექტურა.
+4. **`react-view-transitions`**: Next.js App Router გლუვი View Transitions.
+5. **`vercel-optimize`**: Vercel Serverless & Edge ოპტიმიზაცია, ჭკვიანი ქეშირება.
+6. **`react-native-skills`**: FlashList, Reanimated და მობილური აპლიკაციის პერფორმანსი.
+7. **`writing-guidelines`**: მკაფიო B2B SaaS ქოფირაითინგი და ფასების სტრუქტურა.
+8. **`framer-motion`**: 60 FPS Spring Physics, LazyMotion Bundle ოპტიმიზაცია, Shared Layout (`layoutId`) და EnneaCore SVG ანიმაციები.
+
 
 
 <!-- BEGIN:nextjs-agent-rules -->
