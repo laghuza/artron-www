@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/landing/Footer';
-import { AIBotWidget } from '@/components/landing/AIBotWidget';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { PS5AuroraBackground } from './components/ps5/PS5AuroraBackground';
 import { PS5RegistrationWizard } from './components/ps5/PS5RegistrationWizard';
@@ -107,7 +106,6 @@ export default function GetStartedClient() {
 
       {/* Global Footer & Widgets */}
       <Footer />
-      <AIBotWidget />
       <CookieConsentBanner />
     </PS5AuroraBackground>
   );

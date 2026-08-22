@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/landing/Footer';
-import { AIBotWidget } from '@/components/landing/AIBotWidget';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { AboutHero } from './components/AboutHero';
 import { AboutStatsMatrix } from './components/AboutStatsMatrix';
@@ -48,7 +47,6 @@ export default function AboutClient() {
 
       {/* Embedded Global Components */}
       <Footer />
-      <AIBotWidget />
       <CookieConsentBanner />
     </div>
   );

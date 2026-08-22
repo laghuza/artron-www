@@ -83,8 +83,8 @@ export const LeftFloatingNavDock: React.FC = () => {
     {
       id: 'about',
       href: '/about',
-      labelKey: 'about_title',
-      fallbackLabel: { ka: 'ჩვენს შესახებ', en: 'About Us', ru: 'О нас' },
+      labelKey: 'nav_about',
+      fallbackLabel: { ka: 'ჩვენ შესახებ', en: 'About Us', ru: 'О нас' },
       icon: Info,
       isPage: true,
     },

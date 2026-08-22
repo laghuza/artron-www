@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono, Noto_Sans_Georgian } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { FloatingContactWidget } from "@/components/FloatingContactWidget";
+import { AIBotWidget } from "@/components/landing/AIBotWidget";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -96,6 +97,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <LanguageProvider>
           {children}
           <FloatingContactWidget />
+          <AIBotWidget />
         </LanguageProvider>
       </body>
     </html>

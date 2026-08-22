@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { audioManager } from '@/lib/audioManager';
-import { X, CalendarCheck, Phone } from 'lucide-react';
+import { X, CalendarCheck, Phone, Bot } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    CONTACT CONFIG
@@ -19,25 +19,53 @@ const CONTACT = {
 };
 
 const LABELS = {
-  ka: { telegram: 'Telegram', whatsapp: 'WhatsApp', demo: 'ლაივ დემო', phone: 'ზარი', hub: 'კავშირი' },
-  en: { telegram: 'Telegram', whatsapp: 'WhatsApp', demo: 'Live Demo', phone: 'Call', hub: 'Contact' },
-  ru: { telegram: 'Telegram', whatsapp: 'WhatsApp', demo: 'Демо', phone: 'Звонок', hub: 'Связь' },
+  ka: { aiBot: 'AI ასისტენტი', demo: 'ლაივ დემო', telegram: 'Telegram', whatsapp: 'WhatsApp', phone: 'ზარი' },
+  en: { aiBot: 'AI Assistant', demo: 'Live Demo', telegram: 'Telegram', whatsapp: 'WhatsApp', phone: 'Call' },
+  ru: { aiBot: 'AI Ассистент', demo: 'Демо', telegram: 'Telegram', whatsapp: 'WhatsApp', phone: 'Звонок' },
 } as const;
 
-/* ── Framer Motion variants ── */
+/* ── Framer Motion hub trigger variants ── */
 const hubVariants = {
   closed: { rotate: 0, scale: 1 },
-  open:   { rotate: 45, scale: 1.05 },
+  open:   { rotate: 90, scale: 1.05 },
 };
 
-const itemVariants = (i: number) => ({
-  hidden:  { opacity: 0, y: 12, scale: 0.8 },
-  visible: {
-    opacity: 1, y: 0, scale: 1,
-    transition: { type: 'spring' as const, stiffness: 420, damping: 28, delay: i * 0.05 },
-  },
-  exit: { opacity: 0, y: 8, scale: 0.85, transition: { duration: 0.15 } },
-});
+/* ── Upward Emerging Animation Variants (Bottom to Top) ── */
+const createItemVariants = (totalItems: number, index: number) => {
+  // Stagger order from bottom (closest to button) upwards to top
+  const distanceFromButton = totalItems - 1 - index;
+  const enterDelay = distanceFromButton * 0.045;
+  const exitDelay = index * 0.025;
+
+  return {
+    hidden: {
+      opacity: 0,
+      y: 36,
+      scale: 0.45,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring' as const,
+        stiffness: 440,
+        damping: 24,
+        mass: 0.8,
+        delay: enterDelay,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 28,
+      scale: 0.5,
+      transition: {
+        duration: 0.14,
+        delay: exitDelay,
+      },
+    },
+  };
+};
 
 /* ─────────────────────────────────────────────
    COMPONENT
@@ -75,17 +103,54 @@ export const FloatingContactWidget: React.FC = () => {
   const tgUrl  = `https://t.me/${CONTACT.telegram.username}`;
   const telUrl = `tel:${CONTACT.phone.number}`;
 
-  /* Buttons config */
+  const handleDemoClick = () => {
+    audioManager.playClick();
+    setIsOpen(false);
+    const el = document.getElementById('booking-engine');
+    if (el) {
+      const pos = el.getBoundingClientRect().top + window.scrollY - 88;
+      window.scrollTo({ top: pos, behavior: 'smooth' });
+    }
+  };
+
+  const handleChatbotClick = () => {
+    audioManager.playClick();
+    setIsOpen(false);
+    window.dispatchEvent(new CustomEvent('artron-open-chatbot'));
+  };
+
+  const handleToggle = () => {
+    audioManager.playClick();
+    setIsOpen(!isOpen);
+  };
+
+  /* Action buttons config (ordered top to bottom visually) */
   const ITEMS = [
+    {
+      id: 'chatbot',
+      label: L.aiBot,
+      icon: (
+        <div className="relative flex items-center justify-center">
+          <Bot className="w-5 h-5" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#00ff87] animate-ping" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#00ff87]" />
+        </div>
+      ),
+      accent: '#00ff87',
+      bg: 'linear-gradient(135deg, rgba(0,255,135,0.18) 0%, rgba(0,229,255,0.12) 100%)',
+      border: 'rgba(0,255,135,0.45)',
+      glow: 'rgba(0,255,135,0.5)',
+      onClick: handleChatbotClick,
+    },
     {
       id: 'demo',
       label: L.demo,
       icon: <CalendarCheck className="w-5 h-5" />,
       accent: '#00A3FF',
-      bg: 'rgba(0,163,255,0.14)',
-      border: 'rgba(0,163,255,0.4)',
-      glow: 'rgba(0,163,255,0.45)',
-      isInternal: true,
+      bg: 'rgba(0,163,255,0.16)',
+      border: 'rgba(0,163,255,0.45)',
+      glow: 'rgba(0,163,255,0.5)',
+      onClick: handleDemoClick,
     },
     {
       id: 'telegram',
@@ -97,10 +162,9 @@ export const FloatingContactWidget: React.FC = () => {
         </svg>
       ),
       accent: '#29B6F6',
-      bg: 'rgba(41,182,246,0.12)',
-      border: 'rgba(41,182,246,0.35)',
-      glow: 'rgba(41,182,246,0.4)',
-      isInternal: false,
+      bg: 'rgba(41,182,246,0.14)',
+      border: 'rgba(41,182,246,0.4)',
+      glow: 'rgba(41,182,246,0.45)',
     },
     {
       id: 'whatsapp',
@@ -112,10 +176,9 @@ export const FloatingContactWidget: React.FC = () => {
         </svg>
       ),
       accent: '#25D366',
-      bg: 'rgba(37,211,102,0.12)',
-      border: 'rgba(37,211,102,0.35)',
-      glow: 'rgba(37,211,102,0.4)',
-      isInternal: false,
+      bg: 'rgba(37,211,102,0.14)',
+      border: 'rgba(37,211,102,0.4)',
+      glow: 'rgba(37,211,102,0.45)',
     },
     {
       id: 'phone',
@@ -123,27 +186,11 @@ export const FloatingContactWidget: React.FC = () => {
       label: L.phone,
       icon: <Phone className="w-5 h-5" />,
       accent: '#94A3B8',
-      bg: 'rgba(148,163,184,0.10)',
-      border: 'rgba(148,163,184,0.25)',
-      glow: 'rgba(148,163,184,0.3)',
-      isInternal: false,
+      bg: 'rgba(148,163,184,0.12)',
+      border: 'rgba(148,163,184,0.3)',
+      glow: 'rgba(148,163,184,0.35)',
     },
   ];
-
-  const handleDemoClick = () => {
-    audioManager.playClick();
-    setIsOpen(false);
-    const el = document.getElementById('booking-engine');
-    if (el) {
-      const pos = el.getBoundingClientRect().top + window.scrollY - 88;
-      window.scrollTo({ top: pos, behavior: 'smooth' });
-    }
-  };
-
-  const handleToggle = () => {
-    audioManager.playClick();
-    setIsOpen(!isOpen);
-  };
 
   return (
     <div
@@ -153,7 +200,7 @@ export const FloatingContactWidget: React.FC = () => {
           : 'bottom-6 right-6 md:bottom-8 md:right-8'
       }`}
     >
-      {/* ── Expanded action items ── */}
+      {/* ── Expanded action items shooting upwards from the hub button ── */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -162,117 +209,107 @@ export const FloatingContactWidget: React.FC = () => {
             animate="visible"
             exit="exit"
           >
-            {ITEMS.map((item, i) => (
-              <motion.div
-                key={item.id}
-                variants={itemVariants(i)}
-                className="flex items-center gap-2.5"
-              >
-                {/* Label pill */}
-                <motion.span
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 8 }}
-                  transition={{ delay: i * 0.05 + 0.06, duration: 0.18 }}
-                  className="text-xs font-semibold text-[#94A3B8] bg-[#0B0F17]/95 border border-white/[0.1] rounded-xl px-3 py-1.5 whitespace-nowrap backdrop-blur-xl shadow-xl"
-                >
-                  {item.label}
-                </motion.span>
+            {ITEMS.map((item, i) => {
+              const distanceFromButton = ITEMS.length - 1 - i;
+              const labelDelay = distanceFromButton * 0.045 + 0.04;
 
-                {/* Action button */}
-                {item.isInternal ? (
-                  <button
-                    onClick={handleDemoClick}
-                    className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-xl transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 cursor-pointer shrink-0"
-                    style={{
-                      background: item.bg,
-                      border: `1px solid ${item.border}`,
-                      color: item.accent,
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.boxShadow = `0 0 24px ${item.glow}`;
-                      (e.currentTarget as HTMLElement).style.borderColor = item.accent;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.boxShadow = '';
-                      (e.currentTarget as HTMLElement).style.borderColor = item.border;
-                    }}
-                    aria-label={item.label}
+              return (
+                <motion.div
+                  key={item.id}
+                  variants={createItemVariants(ITEMS.length, i)}
+                  className="flex items-center gap-2.5"
+                >
+                  {/* Action Label Pill */}
+                  <motion.span
+                    initial={{ opacity: 0, x: 12, scale: 0.9 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: 8, scale: 0.9 }}
+                    transition={{ delay: labelDelay, duration: 0.16 }}
+                    className="text-xs font-semibold text-[#CBD5E1] bg-[#0B0F17]/95 border border-white/[0.12] rounded-xl px-3 py-1.5 whitespace-nowrap backdrop-blur-xl shadow-xl select-none"
                   >
-                    {item.icon}
-                  </button>
-                ) : (
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => audioManager.playClick()}
-                    className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-xl transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 cursor-pointer shrink-0"
-                    style={{
-                      background: item.bg,
-                      border: `1px solid ${item.border}`,
-                      color: item.accent,
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.boxShadow = `0 0 24px ${item.glow}`;
-                      (e.currentTarget as HTMLElement).style.borderColor = item.accent;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.boxShadow = '';
-                      (e.currentTarget as HTMLElement).style.borderColor = item.border;
-                    }}
-                    aria-label={item.label}
-                  >
-                    {item.icon}
-                  </a>
-                )}
-              </motion.div>
-            ))}
+                    {item.label}
+                  </motion.span>
+
+                  {/* Action Button */}
+                  {item.onClick ? (
+                    <button
+                      onClick={item.onClick}
+                      className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-xl transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 cursor-pointer shrink-0 shadow-lg"
+                      style={{
+                        background: item.bg,
+                        border: `1px solid ${item.border}`,
+                        color: item.accent,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.boxShadow = `0 0 24px ${item.glow}`;
+                        (e.currentTarget as HTMLElement).style.borderColor = item.accent;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.boxShadow = '';
+                        (e.currentTarget as HTMLElement).style.borderColor = item.border;
+                      }}
+                      aria-label={item.label}
+                    >
+                      {item.icon}
+                    </button>
+                  ) : (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => audioManager.playClick()}
+                      className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-xl transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 cursor-pointer shrink-0 shadow-lg"
+                      style={{
+                        background: item.bg,
+                        border: `1px solid ${item.border}`,
+                        color: item.accent,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.boxShadow = `0 0 24px ${item.glow}`;
+                        (e.currentTarget as HTMLElement).style.borderColor = item.accent;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.boxShadow = '';
+                        (e.currentTarget as HTMLElement).style.borderColor = item.border;
+                      }}
+                      aria-label={item.label}
+                    >
+                      {item.icon}
+                    </a>
+                  )}
+                </motion.div>
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Hub trigger button ── */}
-      <div className="flex items-center gap-2.5">
-        {/* Label */}
-        <AnimatePresence>
-          {!isOpen && (
-            <motion.span
-              initial={{ opacity: 0, x: 8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 8 }}
-              transition={{ duration: 0.2 }}
-              className="text-xs font-semibold text-[#94A3B8] bg-[#0B0F17]/95 border border-white/[0.1] rounded-xl px-3 py-1.5 whitespace-nowrap backdrop-blur-xl shadow-xl select-none"
-            >
-              {L.hub}
-            </motion.span>
-          )}
-        </AnimatePresence>
-
+      {/* ── Hub trigger button (Clean without external text pill) ── */}
+      <div className="flex items-center">
         <motion.button
           onClick={handleToggle}
           variants={hubVariants}
           animate={isOpen ? 'open' : 'closed'}
-          transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 25 }}
           className="relative flex h-14 w-14 items-center justify-center rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00A3FF]/60 shrink-0"
           style={{
             background: isOpen
               ? 'linear-gradient(135deg, #0B0F17 0%, #1A2235 100%)'
               : 'linear-gradient(135deg, #0055E5 0%, #00A3FF 55%, #00C8FF 100%)',
-            border: isOpen ? '1px solid rgba(0,163,255,0.4)' : '1px solid rgba(0,163,255,0.6)',
+            border: isOpen ? '1px solid rgba(0,163,255,0.5)' : '1px solid rgba(0,163,255,0.7)',
             boxShadow: isOpen
-              ? '0 0 28px rgba(0,163,255,0.3), inset 0 1px 0 rgba(255,255,255,0.08)'
-              : '0 0 32px rgba(0,163,255,0.55), inset 0 1px 0 rgba(255,255,255,0.2)',
+              ? '0 0 28px rgba(0,163,255,0.35), inset 0 1px 0 rgba(255,255,255,0.1)'
+              : '0 0 35px rgba(0,163,255,0.6), inset 0 1px 0 rgba(255,255,255,0.25)',
             color: '#FFFFFF',
           }}
-          aria-label={isOpen ? 'Close contact menu' : L.hub}
+          aria-label={isOpen ? 'Close contact menu' : 'Open contact menu'}
           aria-expanded={isOpen}
         >
           {/* Pulsing ambient ring when closed */}
           {!isOpen && (
             <>
               <span className="absolute inset-0 rounded-full border border-[#00A3FF]/50 animate-ping opacity-40 pointer-events-none" />
-              <span className="absolute inset-[-6px] rounded-full border border-[#00A3FF]/20 animate-pulse pointer-events-none" />
+              <span className="absolute inset-[-6px] rounded-full border border-[#00A3FF]/25 animate-pulse pointer-events-none" />
             </>
           )}
 
@@ -283,7 +320,7 @@ export const FloatingContactWidget: React.FC = () => {
                 initial={{ opacity: 0, rotate: -45, scale: 0.8 }}
                 animate={{ opacity: 1, rotate: 0, scale: 1 }}
                 exit={{ opacity: 0, rotate: 45, scale: 0.8 }}
-                transition={{ duration: 0.18 }}
+                transition={{ duration: 0.16 }}
               >
                 <X className="w-5.5 h-5.5" />
               </motion.div>
@@ -293,7 +330,7 @@ export const FloatingContactWidget: React.FC = () => {
                 initial={{ opacity: 0, rotate: 45, scale: 0.8 }}
                 animate={{ opacity: 1, rotate: 0, scale: 1 }}
                 exit={{ opacity: 0, rotate: -45, scale: 0.8 }}
-                transition={{ duration: 0.18 }}
+                transition={{ duration: 0.16 }}
               >
                 <svg className="w-5.5 h-5.5 fill-current" viewBox="0 0 24 24">
                   <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12H8v-2h4v2zm4-4H8V8h8v2z"/>
@@ -306,5 +343,3 @@ export const FloatingContactWidget: React.FC = () => {
     </div>
   );
 };
-
-

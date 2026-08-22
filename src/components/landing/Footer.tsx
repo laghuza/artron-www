@@ -2,16 +2,27 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { Shield, Mail, MapPin, Landmark, Info } from 'lucide-react';
+import { Shield, Mail, MapPin, Landmark, Info, ShieldCheck, FileText, FileCode, Cookie, UserX } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
+  const pathname = usePathname();
 
   const handleOpenCookiePrefs = (e: React.MouseEvent) => {
     e.preventDefault();
     window.dispatchEvent(new Event('artron-reopen-cookie-settings'));
   };
+
+  const legalLinks = [
+    { href: '/about', label: t('nav_about') || 'ჩვენ შესახებ', icon: Info },
+    { href: '/privacy', label: t('privacy_title'), icon: ShieldCheck },
+    { href: '/terms', label: t('terms_title'), icon: FileText },
+    { href: '/b2b-agreement', label: t('b2b_agreement_title'), icon: FileCode },
+    { href: '/cookie-policy', label: t('cookie_policy_title'), icon: Cookie },
+    { href: '/delete-account', label: t('del_acc_title'), icon: UserX },
+  ];
 
   return (
     <footer className="bg-[#070A0F] border-t border-white/10 text-[#94A3B8] relative z-10">
@@ -40,78 +51,39 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: Legal Links */}
           <div className="flex flex-col space-y-4">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <Shield className="w-4 h-4 text-[#00A3FF]" />
               {t('footer_col_legal')}
             </h4>
-            <ul className="space-y-2.5 text-xs md:text-sm">
-              <li>
-                <Link
-                  href="/about"
-                  className="hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded font-medium"
-                  style={{ minHeight: '44px' }}
-                >
-                  <Info className="w-4 h-4 text-[#00A3FF]" />
-                  {t('about_title')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded"
-                  style={{ minHeight: '44px' }}
-                >
-                  <Shield className="w-4 h-4 text-[#00A3FF]" />
-                  {t('privacy_title')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded"
-                  style={{ minHeight: '44px' }}
-                >
-                  <Shield className="w-4 h-4 text-[#00A3FF]" />
-                  {t('terms_title')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/b2b-agreement"
-                  className="hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded"
-                  style={{ minHeight: '44px' }}
-                >
-                  <Shield className="w-4 h-4 text-[#00A3FF]" />
-                  {t('b2b_agreement_title')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cookie-policy"
-                  className="hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded"
-                  style={{ minHeight: '44px' }}
-                >
-                  <Shield className="w-4 h-4 text-[#00A3FF]" />
-                  {t('cookie_policy_title')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/delete-account"
-                  className="hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded"
-                  style={{ minHeight: '44px' }}
-                >
-                  <Shield className="w-4 h-4 text-[#00A3FF]" />
-                  {t('del_acc_title')}
-                </Link>
-              </li>
+            <ul className="space-y-1 text-xs md:text-sm">
+              {legalLinks.map((item) => {
+                const isActive = pathname === item.href;
+                const Icon = item.icon;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`group transition-all flex items-center gap-2.5 py-2 px-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#00A3FF] ${
+                        isActive
+                          ? 'text-[#00A3FF] bg-[#00A3FF]/10 font-bold border border-[#00A3FF]/25 shadow-[inset_0_0_8px_rgba(0,163,255,0.1)]'
+                          : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
+                      }`}
+                      style={{ minHeight: '44px' }}
+                    >
+                      <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-[#00A3FF]' : 'text-[#64748B] group-hover:text-[#00A3FF]'}`} />
+                      <span className="truncate">{item.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
               <li>
                 <button
                   onClick={handleOpenCookiePrefs}
-                  className="w-full text-left hover:text-[#00A3FF] transition-all flex items-center gap-2 py-2 px-1 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded"
+                  className="w-full text-left group hover:text-white hover:bg-white/[0.04] text-[#94A3B8] transition-all flex items-center gap-2.5 py-2 px-2.5 rounded-xl cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#00A3FF]"
                   style={{ minHeight: '44px' }}
                 >
-                  <Shield className="w-4 h-4 text-[#00A3FF]" />
-                  {t('footer_cookie_prefs')}
+                  <Shield className="w-4 h-4 text-[#64748B] group-hover:text-[#00A3FF] transition-colors" />
+                  <span>{t('footer_cookie_prefs')}</span>
                 </button>
               </li>
             </ul>
