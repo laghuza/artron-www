@@ -64,6 +64,8 @@
 6. **`react-native-skills`**: FlashList, Reanimated და მობილური აპლიკაციის პერფორმანსი.
 7. **`writing-guidelines`**: მკაფიო B2B SaaS ქოფირაითინგი და ფასების სტრუქტურა.
 8. **`framer-motion`**: 60 FPS Spring Physics, LazyMotion Bundle ოპტიმიზაცია, Shared Layout (`layoutId`) და EnneaCore SVG ანიმაციები.
+9. **`b2b-saas-positioning`**: April Dunford-ის Obviously Awesome პოზიციონირება, ICP სეგმენტაცია (დარბაზები, აუზები, სტუდიები, ფედერაციები) და კონკურენტული დიფერენცირება.
+10. **`value-proposition-crafting`**: StoryBrand 7-Part Framework, FAB+ROI 4-დონიანი ფორმულა და საქართველოს ბაზრის რეგულაციების (ბრძანება №01-15/ნ, ტურნიკეტების Anti-passback) ბიზნეს-ღირებულებად გადათარგმნა.
 
 
 

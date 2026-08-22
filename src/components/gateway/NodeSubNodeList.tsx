@@ -113,28 +113,6 @@ export const NodeSubNodeList: React.FC<NodeSubNodeListProps> = ({
           })}
         </div>
       </div>
-
-      {/* Bottom Navigation Button: RETURN TO SYSTEM CORE */}
-      <div
-        className="pt-4 border-t"
-        style={{ borderColor: `${themeColor}26` }}
-      >
-        <button
-          type="button"
-          onClick={() => {
-            soundEngine.playPulseNode();
-            onResetToCore();
-          }}
-          className="w-full py-3 px-4 bg-[#12161A]/80 hover:bg-[#161B22] text-white rounded-lg font-mono text-[12px] font-bold tracking-[1.5px] uppercase transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm group hover:scale-[1.01]"
-          style={{
-            borderColor: `${themeColor}66`,
-            borderWidth: '1px'
-          }}
-        >
-          <span className="group-hover:-translate-x-1 transition-transform inline-block" style={{ color: themeColor }}>←</span>
-          <span>{t('system.return_to_core').replace(/^[←\s]+/, '')}</span>
-        </button>
-      </div>
     </div>
   );
 };

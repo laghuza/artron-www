@@ -4,6 +4,7 @@ import React from 'react';
 import { motion, MotionValue, useReducedMotion } from 'framer-motion';
 import { LayoutDashboard, Smartphone, Cpu, Activity, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 interface KineticPillarCardsProps {
   cardsY: MotionValue<string>;
@@ -30,7 +31,7 @@ export const KineticPillarCards: React.FC<KineticPillarCardsProps> = ({
         : locale === 'ru'
         ? 'Табель учета рабочего времени, управление абонементами, финансовая отчетность и персонал.'
         : 'Automated staff timesheets, subscription lifecycles, ledger analytics, and multi-tenant control.',
-      link: '#features',
+      link: '#dashboard-features',
       accent: '#00A3FF'
     },
     {
@@ -44,7 +45,7 @@ export const KineticPillarCards: React.FC<KineticPillarCardsProps> = ({
         : locale === 'ru'
         ? 'Динамический QR-пропуск на турникете, онлайн-оплата и персональная история тренировок.'
         : 'Instant contactless turnstile entry, Apple Pay subscriptions, workout schedules & biometrics.',
-      link: '#mobile-app',
+      link: '#b2c-experience',
       accent: '#10B981'
     },
     {
@@ -58,7 +59,7 @@ export const KineticPillarCards: React.FC<KineticPillarCardsProps> = ({
         : locale === 'ru'
         ? 'Прямое TCP буферное соединение с контроллерами, турникетами и система Anti-Passback.'
         : 'Zero-latency direct socket relays, RFID/NFC biometric gates, and anti-passback enforcement.',
-      link: '#hardware',
+      link: '#partner-ecosystem',
       accent: '#F59E0B'
     },
     {
@@ -72,13 +73,14 @@ export const KineticPillarCards: React.FC<KineticPillarCardsProps> = ({
         : locale === 'ru'
         ? 'Прогнозирование оттока клиентов за 15–30 дней и автоматическая реактивация Win-back.'
         : 'Proactive 15–30 day churn risk scores, automated Win-back SMS triggers & cohort analytics.',
-      link: '#analytics',
+      link: '#analytics-showcase',
       accent: '#8B5CF6'
     }
   ];
 
   return (
     <motion.div 
+      suppressHydrationWarning
       style={{ 
         y: shouldReduceMotion ? '0vh' : cardsY, 
         opacity: shouldReduceMotion ? 1 : cardsOpacity 
@@ -89,40 +91,53 @@ export const KineticPillarCards: React.FC<KineticPillarCardsProps> = ({
         {pillars.map((pillar) => {
           const Icon = pillar.icon;
           return (
-            <Link
+            <TiltSpotlightCard
               key={pillar.id}
-              href={pillar.link}
-              className="group relative p-3.5 sm:p-4 lg:p-5 rounded-2xl bg-[#0F141C]/90 border border-white/[0.08] backdrop-blur-xl hover:border-cyan-500/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,163,255,0.12)] hover:-translate-y-1 block will-change-transform"
+              maxTilt={10}
+              scaleOnHover={1.02}
+              spotlightColor="rgba(0, 163, 255, 0.22)"
+              className="rounded-2xl"
             >
-              {/* Top Meta Line */}
-              <div className="flex items-center justify-between mb-2 sm:mb-3 text-[9px] sm:text-[10px] font-mono">
-                <span className="text-slate-500">{pillar.code}</span>
-                <span className="px-2 py-0.5 rounded-full bg-white/5 text-slate-300 border border-white/5 font-medium">
-                  {pillar.badge}
-                </span>
-              </div>
+              <Link
+                href={pillar.link}
+                className="group relative p-3.5 sm:p-4 lg:p-5 rounded-2xl bg-[#05070a]/90 border border-[#8a99ad]/10 backdrop-blur-xl hover:border-cyan-500/40 transition-colors duration-300 block h-full select-none"
+              >
+                {/* L-Shape Corner Brackets */}
+                <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-500/30" />
+                <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-cyan-500/30" />
+                <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-cyan-500/30" />
+                <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-cyan-500/30" />
 
-              {/* Icon & Title */}
-              <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shrink-0">
-                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                {/* Top Meta Line */}
+                <div className="flex items-center justify-between mb-2 sm:mb-3 text-[9px] sm:text-[10px] font-mono">
+                  <span className="text-slate-500">{pillar.code}</span>
+                  <span className="px-2 py-0.5 rounded-full bg-white/5 text-slate-300 border border-white/5 font-medium">
+                    {pillar.badge}
+                  </span>
                 </div>
-                <h2 className="text-xs sm:text-sm lg:text-base font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
-                  {pillar.title}
-                </h2>
-              </div>
 
-              {/* Description */}
-              <p className="text-[11px] sm:text-xs text-slate-400 font-light leading-relaxed mb-2.5 sm:mb-3 line-clamp-2">
-                {pillar.desc}
-              </p>
+                {/* Icon & Title */}
+                <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shrink-0">
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </div>
+                  <h2 className="text-xs sm:text-sm lg:text-base font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                    {pillar.title}
+                  </h2>
+                </div>
 
-              {/* Explore Link */}
-              <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-mono text-cyan-400 font-medium group-hover:translate-x-0.5 transition-transform">
-                <span>{locale === 'ka' ? 'დეტალურად' : locale === 'ru' ? 'Подробнее' : 'Explore'}</span>
-                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </div>
-            </Link>
+                {/* Description */}
+                <p className="text-[11px] sm:text-xs text-slate-400 font-light leading-relaxed mb-2.5 sm:mb-3 line-clamp-2">
+                  {pillar.desc}
+                </p>
+
+                {/* Explore Link */}
+                <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-mono text-cyan-400 font-medium group-hover:translate-x-0.5 transition-transform">
+                  <span>{locale === 'ka' ? 'დეტალურად' : locale === 'ru' ? 'Подробнее' : 'Explore'}</span>
+                  <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                </div>
+              </Link>
+            </TiltSpotlightCard>
           );
         })}
       </div>

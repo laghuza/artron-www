@@ -116,24 +116,21 @@ export const FaqSection: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className={`relative overflow-hidden bg-[#05070a]/85 border transition-all duration-300 rounded-2xl p-4 md:p-5 backdrop-blur-xl ${
+                className={`relative overflow-hidden bg-[#05070a]/85 border transition-all duration-300 rounded-2xl p-4 md:p-5 backdrop-blur-xl group ${
                   isItemOpen
-                    ? 'border-[#00ff87] bg-[#05070a]/95 shadow-lg shadow-[#00ff87]/5 pl-7'
-                    : 'border-[#8a99ad]/10 hover:border-[#8a99ad]/30'
+                    ? 'border-[#00ff87] bg-[#05070a]/95 shadow-[0_0_25px_rgba(0,255,135,0.1)] pl-7'
+                    : 'border-[#8a99ad]/10 hover:border-[#00A3FF]/40 hover:shadow-[0_0_20px_rgba(0,163,255,0.08)]'
                 }`}
               >
+                {/* L-Shape Corner Brackets */}
+                <div className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 ${isItemOpen ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+                <div className={`absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 ${isItemOpen ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+                <div className={`absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 ${isItemOpen ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+                <div className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 ${isItemOpen ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+
                 {/* Active state emerald pulse vertical accent line */}
                 {isItemOpen && (
                   <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#00ff87] animate-pulse" />
-                )}
-
-                {isItemOpen && (
-                  <>
-                    <div className="absolute top-2 left-2 text-[#00ff87]/35 font-mono text-[9px] pointer-events-none select-none">┌</div>
-                    <div className="absolute top-2 right-2 text-[#00ff87]/35 font-mono text-[9px] pointer-events-none select-none">┐</div>
-                    <div className="absolute bottom-2 left-2 text-[#00ff87]/35 font-mono text-[9px] pointer-events-none select-none">└</div>
-                    <div className="absolute bottom-2 right-2 text-[#00ff87]/35 font-mono text-[9px] pointer-events-none select-none">┘</div>
-                  </>
                 )}
 
                 <button

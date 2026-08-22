@@ -39,6 +39,7 @@ function GatewayPageContent() {
     adminName?: string;
     isTrial?: boolean;
   } | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -201,6 +202,15 @@ function GatewayPageContent() {
     );
   }
 
+  const toggleMute = () => {
+    const nextMute = !isMuted;
+    setIsMuted(nextMute);
+    soundEngine.setMuted(nextMute);
+    if (!nextMute) soundEngine.playPulseNode();
+  };
+
+  const isNodeSelected = activeNodeId !== null;
+
   return (
     <CyberErrorBoundary fallbackTitle="ARTRON GATEWAY DIAGNOSTIC">
       <EmeraldPortalGate portalState={portalState} onBypass={handleBypassTransition} />
@@ -224,39 +234,61 @@ function GatewayPageContent() {
           portalState === 'EXPANDING' ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full border-b border-[#262a33]/40">
-          <SidebarPanel
-            viewState={viewState}
-            activeNode={activeNode}
-            activeSubChapterId={activeSubChapterId}
-            activePreset={facilityPreset}
-            onSelectPreset={setFacilityPreset}
-            onResetToCore={handleResetToCore}
-            onSelectSubChapter={handleSelectSubChapter}
-            onRequestAccess={() => {
-              soundEngine.playPulseNode();
-              router.push('/get-started?mode=demo');
-            }}
-            onSelectB2B={() => {
-              soundEngine.playSystemAccess();
-              router.push('/get-started?mode=register');
-            }}
-            onSelectOtp={() => {
-              soundEngine.playPulseNode();
-              router.push('/get-started?mode=demo');
-            }}
-          />
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full border-b border-[#262a33]/40 relative">
+          {/* Left 40% Control & Telemetry Panel (Animated reveal on node click) */}
+          <div
+            className={`h-full overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isNodeSelected
+                ? "w-full lg:w-[40%] opacity-100 flex flex-col"
+                : "w-0 opacity-0 pointer-events-none p-0 m-0 border-0 hidden"
+            }`}
+          >
+            {isNodeSelected && (
+              <SidebarPanel
+                viewState={viewState}
+                activeNode={activeNode}
+                activeSubChapterId={activeSubChapterId}
+                activePreset={facilityPreset}
+                onSelectPreset={setFacilityPreset}
+                onResetToCore={handleResetToCore}
+                onSelectSubChapter={handleSelectSubChapter}
+                onRequestAccess={() => {
+                  soundEngine.playPulseNode();
+                  router.push('/get-started?mode=demo');
+                }}
+                onSelectB2B={() => {
+                  soundEngine.playSystemAccess();
+                  router.push('/get-started?mode=register');
+                }}
+                onSelectOtp={() => {
+                  soundEngine.playPulseNode();
+                  router.push('/get-started?mode=demo');
+                }}
+              />
+            )}
+          </div>
 
-          <NodeCanvas
-            nodes={GATEWAY_NODES}
-            activeNodeId={activeNodeId}
-            activeSubChapterId={activeSubChapterId}
-            activePreset={facilityPreset}
-            viewState={viewState}
-            onSelectNode={handleSelectNode}
-            onPortalEntry={() => setIsLoginModalOpen(true)}
-            onAuthenticate={handleAuthenticate}
-          />
+          {/* Right / Full-Screen Quantum Node Canvas */}
+          <div
+            className={`h-full flex-1 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isNodeSelected ? "w-full lg:w-[60%]" : "w-full"
+            }`}
+          >
+            <NodeCanvas
+              nodes={GATEWAY_NODES}
+              activeNodeId={activeNodeId}
+              activeSubChapterId={activeSubChapterId}
+              activePreset={facilityPreset}
+              viewState={viewState}
+              onSelectNode={handleSelectNode}
+              onPortalEntry={() => setIsLoginModalOpen(true)}
+              onAuthenticate={handleAuthenticate}
+              isSplitMode={isNodeSelected}
+              onSelectPreset={setFacilityPreset}
+              isMuted={isMuted}
+              onToggleMute={toggleMute}
+            />
+          </div>
         </div>
 
         <FooterTelemetry />

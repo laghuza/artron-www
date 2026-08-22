@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import Link from 'next/link';
 import { Calendar, Building2, ArrowRight } from 'lucide-react';
 import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
+import { MagneticButton } from '@/components/ui/MagneticButton';
 
 export const SaaSGatewayCTA: React.FC = () => {
   const { t, locale } = useLanguage();
@@ -23,15 +23,6 @@ export const SaaSGatewayCTA: React.FC = () => {
       {/* ── Radial burst from bottom-left ── */}
       <div className="absolute bottom-0 left-0 w-[800px] h-[600px] bg-[#00A3FF]/8 rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#0066FF]/5 rounded-full blur-[120px] pointer-events-none" />
-
-      {/* ── Subtle grid ── */}
-      <div
-        className="absolute inset-0 opacity-[0.018] pointer-events-none"
-        style={{
-          backgroundImage: 'linear-gradient(to right, #00A3FF 1px, transparent 1px), linear-gradient(to bottom, #00A3FF 1px, transparent 1px)',
-          backgroundSize: '6rem 6rem',
-        }}
-      />
 
       {/* ── Top accent line ── */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00A3FF]/50 to-transparent" />
@@ -115,25 +106,29 @@ export const SaaSGatewayCTA: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10">
 
               {/* Primary — Register */}
-              <Link
+              <MagneticButton
                 href="/get-started?mode=register"
-                className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-gradient-to-r from-[#0066FF] to-[#00D2FF] text-white text-sm font-extrabold shadow-[0_8px_32px_rgba(0,163,255,0.35)] hover:shadow-[0_12px_40px_rgba(0,163,255,0.50)] hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                variant="primary"
+                shockwaveColor="rgba(0, 210, 255, 0.8)"
+                className="px-7 py-4 text-sm font-extrabold"
                 style={{ minHeight: '52px' }}
               >
                 <Building2 className="w-4.5 h-4.5 shrink-0" />
                 <span>{t('cta_btn_register')}</span>
-                <ArrowRight className="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform duration-200" />
-              </Link>
+                <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-200" />
+              </MagneticButton>
 
               {/* Secondary — Book Demo */}
-              <Link
+              <MagneticButton
                 href="/get-started?mode=demo"
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 hover:border-[#00A3FF]/40 text-white text-sm font-bold hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                variant="secondary"
+                shockwaveColor="rgba(0, 163, 255, 0.6)"
+                className="px-7 py-4 text-sm font-bold"
                 style={{ minHeight: '52px' }}
               >
                 <Calendar className="w-4.5 h-4.5 text-[#00A3FF] shrink-0" />
                 <span>{t('cta_btn_book')}</span>
-              </Link>
+              </MagneticButton>
             </div>
 
             {/* App Store badges */}

@@ -514,6 +514,84 @@ body {
   box-shadow: 0 32px 80px rgba(0, 163, 255, 0.18), 0 0 0 1px rgba(0, 163, 255, 0.12);
 }
 
+@keyframes shockwave-expand {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.9;
+    border-width: 3px;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  50% {
+    opacity: 0.6;
+    border-width: 2px;
+  }
+  100% {
+    width: 320px;
+    height: 320px;
+    opacity: 0;
+    border-width: 1px;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.animate-shockwave {
+  position: absolute;
+  border-style: solid;
+  pointer-events: none;
+  animation: shockwave-expand 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================
+   LASER DATA STREAM CONDUITS & PACKETS
+   ========================================== */
+@keyframes laser-pulse-flow {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes packet-beacon {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+    box-shadow: 0 0 12px rgba(0, 163, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.95;
+    box-shadow: 0 0 24px rgba(0, 163, 255, 0.9), 0 0 40px rgba(0, 210, 255, 0.6);
+  }
+}
+
+@keyframes data-packet-flow {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+.laser-conduit-glow {
+  filter: drop-shadow(0 0 6px rgba(0, 163, 255, 0.65)) drop-shadow(0 0 16px rgba(0, 102, 255, 0.35));
+}
+
+.laser-emerald-glow {
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.7)) drop-shadow(0 0 14px rgba(16, 185, 129, 0.4));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cta-neon-border {
     animation: none !important;
@@ -525,4 +603,13 @@ body {
   .tilt-glass-panel {
     will-change: auto !important;
   }
+  .animate-shockwave {
+    animation: none !important;
+    display: none !important;
+  }
+  .laser-conduit-glow,
+  .laser-emerald-glow {
+    filter: none !important;
+  }
 }
+

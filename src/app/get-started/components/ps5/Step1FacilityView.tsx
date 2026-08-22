@@ -18,12 +18,21 @@ interface Step1FacilityViewProps {
   onCancel: () => void;
 }
 
-const FACILITY_TYPES = [
-  { id: 'gym', label: 'ფიტნეს დარბაზი', sub: 'Gym & Fitness Center', icon: '🏋️‍♂️' },
-  { id: 'pool', label: 'საცურაო აუზი & სპა', sub: 'Pool & Aqua Zone', icon: '🏊‍♂️' },
-  { id: 'studio', label: 'იოგა / პილატეს სტუდია', sub: 'Group Classes & Yoga', icon: '🧘‍♀️' },
-  { id: 'combat', label: 'CrossFit / საბრძოლო', sub: 'Combat & Strength Arena', icon: '🥊' },
-  { id: 'multi', label: 'სპორტული კომპლექსი', sub: 'Multi-Sport Complex', icon: '🏟️' },
+import { Dumbbell, Waves, Sparkles, Shield, Building2, LucideIcon } from 'lucide-react';
+
+interface FacilityTypeItem {
+  id: string;
+  label: string;
+  sub: string;
+  icon: LucideIcon;
+}
+
+const FACILITY_TYPES: FacilityTypeItem[] = [
+  { id: 'gym', label: 'ფიტნეს დარბაზი', sub: 'Gym & Fitness Center', icon: Dumbbell },
+  { id: 'pool', label: 'საცურაო აუზი & სპა', sub: 'Pool & Aqua Zone', icon: Waves },
+  { id: 'studio', label: 'იოგა / პილატეს სტუდია', sub: 'Group Classes & Yoga', icon: Sparkles },
+  { id: 'combat', label: 'CrossFit / საბრძოლო', sub: 'Combat & Strength Arena', icon: Shield },
+  { id: 'multi', label: 'სპორტული კომპლექსი', sub: 'Multi-Sport Complex', icon: Building2 },
 ];
 
 const CITIES = ['თბილისი', 'ბათუმი', 'ქუთაისი', 'რუსთავი', 'ზუგდიდი', 'თელავი', 'სხვა'];
@@ -99,6 +108,7 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             {FACILITY_TYPES.map((type) => {
               const isSelected = clubServices === type.label;
+              const Icon = type.icon;
               return (
                 <button
                   key={type.id}
@@ -111,7 +121,9 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xl sm:text-2xl">{type.icon}</span>
+                    <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-white/5 text-slate-400 group-hover:text-white'}`}>
+                      <Icon className="w-5 h-5" strokeWidth={1.8} />
+                    </div>
                     {isSelected && (
                       <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF]" />
                     )}

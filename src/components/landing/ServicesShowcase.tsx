@@ -9,12 +9,13 @@ import {
   Smartphone, 
   QrCode, 
   Activity,
-  CheckCircle2,
-  Zap,
-  Wifi,
-  Shield
+  CheckCircle2, 
+  Zap, 
+  Wifi, 
+  Shield 
 } from 'lucide-react';
 import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 export const ServicesShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -139,7 +140,8 @@ export const ServicesShowcase: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5">
 
           {/* HERO CARD — col-span-7 */}
-          <div className="lg:col-span-7 bg-[#0D1420]/90 border border-[#00A3FF]/15 backdrop-blur-xl rounded-3xl p-8 relative overflow-hidden group hover:border-[#00A3FF]/40 hover:shadow-[0_0_40px_rgba(0,163,255,0.12)] transition-all duration-500">
+          <TiltSpotlightCard maxTilt={6} spotlightColor="rgba(0, 163, 255, 0.2)" className="lg:col-span-7 rounded-3xl">
+            <div className="bg-[#0D1420]/90 border border-[#00A3FF]/15 backdrop-blur-xl rounded-3xl p-8 relative overflow-hidden group hover:border-[#00A3FF]/40 transition-colors duration-500 h-full">
             {/* Animated top accent line */}
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00A3FF]/60 to-transparent" />
             {/* Ambient glow core */}
@@ -187,10 +189,12 @@ export const ServicesShowcase: React.FC = () => {
                 ))}
               </div>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
 
           {/* COMPACT CARD — col-span-5 */}
-          <div className="lg:col-span-5 bg-[#0D1420]/80 border border-white/[0.07] backdrop-blur-xl rounded-3xl p-7 relative overflow-hidden group hover:border-[#00A3FF]/30 hover:shadow-[0_0_25px_rgba(0,163,255,0.08)] transition-all duration-500 flex flex-col justify-between">
+          <TiltSpotlightCard maxTilt={6} spotlightColor="rgba(0, 163, 255, 0.18)" className="lg:col-span-5 rounded-3xl">
+            <div className="bg-[#0D1420]/80 border border-white/[0.07] backdrop-blur-xl rounded-3xl p-7 relative overflow-hidden group hover:border-[#00A3FF]/30 transition-colors duration-500 flex flex-col justify-between h-full">
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             <div>
@@ -233,14 +237,16 @@ export const ServicesShowcase: React.FC = () => {
                 ))}
               </ul>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
         </div>
 
         {/* Row 2: Mini (4/12) + Wide (8/12) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           {/* MINI CARD — col-span-4 */}
-          <div className="lg:col-span-4 bg-[#0A1018]/80 border border-white/[0.06] backdrop-blur-xl rounded-3xl p-7 relative overflow-hidden group hover:border-[#00A3FF]/25 transition-all duration-500 flex flex-col justify-between min-h-[220px]">
+          <TiltSpotlightCard maxTilt={6} spotlightColor="rgba(0, 163, 255, 0.18)" className="lg:col-span-4 rounded-3xl">
+            <div className="bg-[#0A1018]/80 border border-white/[0.06] backdrop-blur-xl rounded-3xl p-7 relative overflow-hidden group hover:border-[#00A3FF]/25 transition-colors duration-500 flex flex-col justify-between min-h-[220px] h-full">
             <div>
               <div className="text-[9px] font-mono text-[#94A3B8]/30 uppercase tracking-widest mb-4 select-none">
                 [ NODE_REF: 0x03 ]
@@ -266,10 +272,12 @@ export const ServicesShowcase: React.FC = () => {
               <Shield className="w-3.5 h-3.5 text-[#00A3FF]/60" />
               <span>MULTI-TENANT ISOLATION</span>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
 
           {/* WIDE FEATURE STRIP — col-span-8 */}
-          <div className="lg:col-span-8 bg-[#0D1420]/70 border border-white/[0.06] backdrop-blur-xl rounded-3xl p-7 relative overflow-hidden group hover:border-[#00A3FF]/20 transition-all duration-500">
+          <TiltSpotlightCard maxTilt={4} spotlightColor="rgba(0, 163, 255, 0.15)" className="lg:col-span-8 rounded-3xl">
+            <div className="bg-[#0D1420]/70 border border-white/[0.06] backdrop-blur-xl rounded-3xl p-7 relative overflow-hidden group hover:border-[#00A3FF]/20 transition-colors duration-500 h-full">
             <div className="absolute bottom-0 right-0 w-48 h-48 bg-[#00A3FF]/4 rounded-full blur-[60px] pointer-events-none" />
 
             <div className="relative z-10 flex flex-col h-full justify-between">
@@ -309,7 +317,8 @@ export const ServicesShowcase: React.FC = () => {
                 ))}
               </div>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
         </div>
 
         {/* B2C App Store Badges Integration */}

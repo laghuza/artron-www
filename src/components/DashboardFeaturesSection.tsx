@@ -82,14 +82,20 @@ export const DashboardFeaturesSection: React.FC = () => {
                 <button
                   key={feat.id}
                   onClick={() => setActiveFeature(feat.id)}
-                  className={`text-left w-full bg-[#121722]/40 border rounded-2xl p-5 md:p-6 transition-all duration-300 relative group overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00ff87] ${
+                  className={`text-left w-full bg-[#05070a]/85 border rounded-2xl p-5 md:p-6 transition-all duration-300 relative group overflow-hidden cursor-pointer backdrop-blur-xl focus:outline-none ${
                     isSelected 
-                      ? 'border-[#00ff87] bg-[#05070a]/80 shadow-lg shadow-[#00ff87]/5'
-                      : 'border-white/5 hover:border-white/15 hover:bg-[#121722]/60'
+                      ? 'border-[#00ff87] bg-[#05070a]/95 shadow-[0_0_30px_rgba(0,255,135,0.15)] pl-7'
+                      : 'border-[#8a99ad]/10 hover:border-[#00A3FF]/40 hover:bg-[#0A1018] hover:shadow-[0_0_20px_rgba(0,163,255,0.08)]'
                   }`}
                   style={{ minHeight: '110px' }}
                 >
-                  <div className={`absolute left-0 top-0 bottom-0 w-[3px] bg-[#00ff87] transition-opacity duration-300 ${
+                  {/* L-Shape Corner Brackets */}
+                  <div className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 ${isSelected ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+                  <div className={`absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 ${isSelected ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+                  <div className={`absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 ${isSelected ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+                  <div className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 ${isSelected ? 'border-[#00ff87]/60' : 'border-[#00A3FF]/20 opacity-0 group-hover:opacity-100 transition-opacity'}`} />
+
+                  <div className={`absolute left-0 top-0 bottom-0 w-[4px] bg-[#00ff87] transition-opacity duration-300 ${
                     isSelected ? 'opacity-100' : 'opacity-0'
                   }`} />
 
@@ -99,12 +105,12 @@ export const DashboardFeaturesSection: React.FC = () => {
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-300 ${
                         isSelected 
                           ? 'bg-[#00ff87]/20 border-[#00ff87]/40 text-[#00ff87] drop-shadow-[0_0_6px_#00ff87]' 
-                          : 'bg-white/5 border-white/10 text-[#94A3B8] group-hover:text-white group-hover:border-white/20'
+                          : 'bg-white/5 border-white/10 text-[#94A3B8] group-hover:text-[#00A3FF] group-hover:border-[#00A3FF]/30'
                       }`}>
                         {feat.icon}
                       </div>
                       <h3 className={`text-base font-bold transition-all ${
-                        isSelected ? 'text-white' : 'text-[#94A3B8] group-hover:text-[#E2E8F0]'
+                        isSelected ? 'text-white' : 'text-[#94A3B8] group-hover:text-white'
                       }`}>
                         {t(feat.titleKey)}
                       </h3>
@@ -124,10 +130,10 @@ export const DashboardFeaturesSection: React.FC = () => {
           <div className="lg:col-span-7 flex flex-col justify-center">
             <div className="bg-[#05070a]/90 border border-[#8a99ad]/10 rounded-2xl shadow-2xl backdrop-blur-xl relative overflow-hidden flex flex-col w-full min-h-[460px]">
               {/* L-Shape Corner Brackets */}
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00ff87]/30" />
-              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00ff87]/30" />
-              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00ff87]/30" />
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00ff87]/30" />
+              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00ff87]/40" />
+              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00ff87]/40" />
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00ff87]/40" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00ff87]/40" />
 
               {/* Terminal corner brackets */}
               <div className="absolute top-2 left-2 text-[#00ff87]/30 font-mono text-[9px] pointer-events-none select-none">┌</div>

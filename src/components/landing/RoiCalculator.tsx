@@ -111,7 +111,13 @@ export const RoiCalculator: React.FC = () => {
             />
 
             {/* Monthly Net ROI Highlight Box */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-[#0F141C] to-slate-900 border border-cyan-500/30 shadow-[0_0_30px_rgba(0,163,255,0.1)] relative overflow-hidden">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-[#05070a] to-[#0E1726] border border-cyan-500/30 shadow-[0_0_30px_rgba(0,163,255,0.1)] relative overflow-hidden backdrop-blur-xl">
+              {/* L-Shape Corner Brackets */}
+              <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-cyan-400/40" />
+              <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-cyan-400/40" />
+              <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-cyan-400/40" />
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-cyan-400/40" />
+
               <div className="flex items-center justify-between text-xs font-mono text-cyan-400 mb-2">
                 <span className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-cyan-400" />
@@ -173,7 +179,13 @@ export const RoiCalculator: React.FC = () => {
             </div>
 
             {/* Embedded Visual Chart */}
-            <div className="p-6 rounded-2xl bg-[#0F141C] border border-white/[0.08]">
+            <div className="p-6 rounded-2xl bg-[#05070a]/90 border border-[#8a99ad]/10 backdrop-blur-xl relative overflow-hidden">
+              {/* L-Shape Corner Brackets */}
+              <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-cyan-500/30" />
+              <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-cyan-500/30" />
+              <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-cyan-500/30" />
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-cyan-500/30" />
+
               <RoiChart
                 revenueIncrease={totalMonthlyGain * 12}
                 maxRev={monthlyRevenue * 12 || 100000}

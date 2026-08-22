@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import { Check, Zap, Sparkles, Shield, Building2, ArrowRight, TrendingUp } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { soundEngine } from '@/core';
-import { useMagneticCard } from '@/hooks/useMagneticCard';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
+import { MagneticButton } from '@/components/ui/MagneticButton';
 
 /* ── PricingCard: isolated sub-component so useMagneticCard
    can be called per-card (hooks can't be called inside .map()) ── */
@@ -33,26 +34,27 @@ const PricingCard: React.FC<{
   t: (key: string) => string;
 }> = ({ plan, index, currencySymbol, billingCycle, t }) => {
   const Icon = plan.icon;
-  const mag = useMagneticCard({ rotateStrength: plan.popular ? 10 : 6 });
+  const spotlightColor = plan.popular ? 'rgba(0, 163, 255, 0.28)' : 'rgba(0, 163, 255, 0.16)';
 
   return (
-    <div style={{ perspective: '1000px' }}>
-      <motion.div
-        ref={mag.ref}
-        key={plan.id}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4, delay: index * 0.1 }}
-        style={mag.motionStyle}
-        onMouseMove={mag.onMouseMove}
-        onMouseLeave={mag.onMouseLeave}
-        className={`relative flex flex-col justify-between rounded-2xl p-6 lg:p-8 transition-[box-shadow,border-color] duration-300 ${
+    <TiltSpotlightCard
+      maxTilt={plan.popular ? 8 : 6}
+      spotlightColor={spotlightColor}
+      className={`h-full ${plan.popular ? 'md:-translate-y-3 z-10' : ''}`}
+    >
+      <div
+        className={`relative flex flex-col justify-between rounded-2xl p-6 lg:p-8 transition-[box-shadow,border-color] duration-300 h-full backdrop-blur-xl ${
           plan.popular
-            ? 'bg-gradient-to-b from-[#0D1829] to-[#121826] border-0 shadow-[0_0_80px_rgba(0,163,255,0.35),0_20px_50px_rgba(0,163,255,0.15),0_0_0_1px_rgba(0,163,255,0.3)] md:scale-[1.04] md:-translate-y-4 studio-grain z-10'
-            : 'bg-[#10141D] border border-white/10 hover:border-white/20'
+            ? 'bg-gradient-to-b from-[#0B1526]/95 to-[#0E1726]/95 border border-[#00A3FF]/40 shadow-[0_0_80px_rgba(0,163,255,0.3),0_20px_50px_rgba(0,163,255,0.15)] studio-grain'
+            : 'bg-[#05070a]/90 border border-[#8a99ad]/10 hover:border-[#00A3FF]/30'
         }`}
       >
+        {/* L-Shape Corner Brackets */}
+        <div className={`absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
+        <div className={`absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
+        <div className={`absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
+        <div className={`absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
+
         {/* Popular animated conic border */}
         {plan.popular && (
           <div
@@ -62,13 +64,13 @@ const PricingCard: React.FC<{
         )}
         {/* Popular Ribbon */}
         {plan.popular && (
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0066FF] to-[#00D2FF] text-white text-[11px] font-black uppercase tracking-wider px-4 py-1 rounded-full shadow-[0_4px_12px_rgba(0,163,255,0.4)] flex items-center gap-1.5">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0066FF] to-[#00D2FF] text-white text-[11px] font-black uppercase tracking-wider px-4 py-1 rounded-full shadow-[0_4px_12px_rgba(0,163,255,0.4)] flex items-center gap-1.5 z-30">
             <Sparkles className="w-3.5 h-3.5" />
             <span>{plan.badge}</span>
           </div>
         )}
 
-        <div>
+        <div className="relative z-10">
           {/* Header info */}
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2">
@@ -125,22 +127,21 @@ const PricingCard: React.FC<{
         </div>
 
         {/* Card CTA */}
-        <div>
-          <Link
+        <div className="relative z-10">
+          <MagneticButton
             href={plan.ctaHref}
             onClick={() => soundEngine.playPulseNode()}
-            className={`w-full py-3.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
-              plan.popular
-                ? 'bg-[#00A3FF] hover:bg-[#008fe0] text-white shadow-[0_0_20px_rgba(0,163,255,0.4)]'
-                : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
-            }`}
+            fullWidth
+            variant={plan.popular ? 'primary' : 'secondary'}
+            shockwaveColor={plan.popular ? 'rgba(0, 163, 255, 0.7)' : 'rgba(255, 255, 255, 0.4)'}
+            className="w-full py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider"
           >
             <span>{plan.ctaText}</span>
             <ArrowRight className="w-4 h-4" />
-          </Link>
+          </MagneticButton>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </TiltSpotlightCard>
   );
 };
 

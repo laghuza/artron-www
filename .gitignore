@@ -16,6 +16,8 @@ backups/
 eslint_output.txt
 compile_errors.txt
 .DS_Store
+test-results/
+*.tsbuildinfo
 
 # Environment
 .env

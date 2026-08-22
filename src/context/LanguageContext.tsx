@@ -46,7 +46,22 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const t = (key: string): string => {
-    return translations[locale]?.[key] || translations['en']?.[key] || key;
+    const resolveFromDict = (dict: Record<string, any> | undefined) => {
+      if (!dict) return undefined;
+      if (key in dict && typeof dict[key] === 'string') return dict[key];
+      const parts = key.split('.');
+      let current: any = dict;
+      for (const part of parts) {
+        if (current && typeof current === 'object' && part in current) {
+          current = current[part];
+        } else {
+          return undefined;
+        }
+      }
+      return typeof current === 'string' ? current : undefined;
+    };
+
+    return resolveFromDict(translations[locale]) || resolveFromDict(translations['en']) || key;
   };
 
   return (

@@ -11,6 +11,7 @@ import {
   Sparkles,
   Terminal
 } from 'lucide-react';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 export const BusinessStatsShowcase: React.FC = () => {
   const { t, locale } = useLanguage();
@@ -39,7 +40,8 @@ export const BusinessStatsShowcase: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
           {/* Card 1: LTV & Churn Recovery */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
+          <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 163, 255, 0.2)">
+            <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-colors duration-300 h-full">
             {/* L-Shape Corner Brackets — brand blue */}
             <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
@@ -83,10 +85,12 @@ export const BusinessStatsShowcase: React.FC = () => {
                 <text x="180" y="24" fill="#00ff87" fontSize="7" fontWeight="bold" fontFamily="monospace">RECOVERED</text>
               </svg>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
 
           {/* Card 2: IoT Access Automation */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
+          <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 163, 255, 0.2)">
+            <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-colors duration-300 h-full">
             {/* L-Shape Corner Brackets */}
             <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
@@ -144,10 +148,12 @@ export const BusinessStatsShowcase: React.FC = () => {
                 </defs>
               </svg>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
 
           {/* Card 3: Labor Compliance (Order №01-15/ნ) */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
+          <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 163, 255, 0.2)">
+            <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-colors duration-300 h-full">
             {/* L-Shape Corner Brackets */}
             <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
@@ -191,10 +197,12 @@ export const BusinessStatsShowcase: React.FC = () => {
               <div>[18:00:42] Shift 02: CHECK_OUT (NFC)</div>
               <div className="text-[#00ff87] font-bold">[VERIFY: 100% COMPLIANT]</div>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
 
           {/* Card 4: Trainer Performance */}
-          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-all duration-300">
+          <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 163, 255, 0.2)">
+            <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between group hover:border-[#00A3FF]/30 transition-colors duration-300 h-full">
             {/* L-Shape Corner Brackets */}
             <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00A3FF]/20" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00A3FF]/20" />
@@ -249,7 +257,8 @@ export const BusinessStatsShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          </TiltSpotlightCard>
 
         </div>
 

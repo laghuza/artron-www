@@ -2,55 +2,77 @@
 
 interface ArtronLogoProps {
   className?: string;
+  vivid?: boolean;
 }
 
-export default function ArtronLogo({ className = "w-5 h-5" }: ArtronLogoProps) {
+export default function ArtronLogo({ className = "w-6 h-6", vivid = false }: ArtronLogoProps) {
   return (
     <svg
       viewBox="0 0 64 64"
-      className={`${className} fill-none`}
+      className={`${className} fill-none select-none`}
     >
-      {/* Connectors (Antique Silver, strokeWidth 1.1) */}
-      <g
-        id="artron-connectors"
-        className="stroke-[#9CA3AF]/40 group-hover:stroke-[#9CA3AF]/70 transition-colors duration-500"
-        strokeWidth="1.1"
-        strokeLinecap="round"
-        fill="none"
-      >
-        {/* Horizontal */}
-        <line x1="8" y1="8" x2="56" y2="8" />
-        <line x1="8" y1="32" x2="56" y2="32" />
-        <line x1="8" y1="56" x2="56" y2="56" />
-        {/* Vertical */}
-        <line x1="8" y1="8" x2="8" y2="56" />
-        <line x1="32" y1="8" x2="32" y2="56" />
-        <line x1="56" y1="8" x2="56" y2="56" />
-        {/* Diagonals */}
-        <line x1="8" y1="8" x2="56" y2="56" />
-        <line x1="56" y1="8" x2="8" y2="56" />
-      </g>
+      <defs>
+        {/* Glow filter for Emerald Core */}
+        <filter id="emerald-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
 
-      {/* 8 Outer Nodes (Antique Silver `#9CA3AF`, 2.4px radius, placed on 3x3 boundary coordinates) */}
+        {/* Subtle glow for Outer Nodes */}
+        <filter id="node-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        {/* Gradients */}
+        <radialGradient id="emeraldRadial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#00FF87" />
+          <stop offset="70%" stopColor="#00E676" />
+          <stop offset="100%" stopColor="#00B0FF" />
+        </radialGradient>
+
+        <radialGradient id="nodeRadial" cx="40%" cy="40%" r="60%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="70%" stopColor="#E2E8F0" />
+          <stop offset="100%" stopColor="#94A3B8" />
+        </radialGradient>
+      </defs>
+
+      {/* 8 Outer Nodes (Clean, luminous, floating quantum nodes - No Connector Lines) */}
       <g
         id="artron-outer-nodes"
-        className="fill-[#9CA3AF] stroke-[#9CA3AF] stroke-[0.8] group-hover:fill-white group-hover:stroke-white transition-colors duration-500"
+        filter="url(#node-glow)"
+        className="transition-all duration-500"
       >
-        <circle cx="32" cy="8" r="2.4" />
-        <circle cx="56" cy="8" r="2.4" />
-        <circle cx="56" cy="32" r="2.4" />
-        <circle cx="56" cy="56" r="2.4" />
-        <circle cx="32" cy="56" r="2.4" />
-        <circle cx="8" cy="56" r="2.4" />
-        <circle cx="8" cy="32" r="2.4" />
-        <circle cx="8" cy="8" r="2.4" />
+        <circle cx="32" cy="8" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="56" cy="8" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="56" cy="32" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="56" cy="56" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="32" cy="56" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="8" cy="56" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="8" cy="32" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
+        <circle cx="8" cy="8" r={vivid ? "3.2" : "2.6"} fill="url(#nodeRadial)" />
       </g>
 
-      {/* Center Emerald Core (Emerald Green `#00E676`, 4.4px radius) */}
-      <g id="artron-emerald-core" className="artron-emerald-core fill-[#00E676] stroke-[#00E676] stroke-[0.8] filter drop-shadow-[0_0_6px_#00E676]">
-        <circle cx="32" cy="32" r="4.4" />
+      {/* Center Emerald Core (High-tech focal point with radiant emerald glow) */}
+      <g id="artron-emerald-core" filter="url(#emerald-glow)">
+        <circle
+          cx="32"
+          cy="32"
+          r={vivid ? "5.4" : "4.6"}
+          fill="url(#emeraldRadial)"
+        />
+        {/* Core hot-spot highlight */}
+        <circle cx="30.5" cy="30.5" r="1.4" fill="#FFFFFF" opacity="0.8" />
       </g>
     </svg>
   );
 }
+
 

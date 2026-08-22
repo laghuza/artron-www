@@ -41,6 +41,7 @@ const MagneticCTA: React.FC<{ locale: string; subtitleOpacity: MotionValue<numbe
 
   return (
     <motion.div
+      suppressHydrationWarning
       style={{ opacity: shouldReduceMotion ? 1 : subtitleOpacity }}
       className="mt-8 sm:mt-10 flex items-center justify-center gap-3 flex-wrap will-change-opacity pointer-events-auto"
     >
@@ -111,6 +112,7 @@ export const KineticTypoHeader: React.FC<KineticTypoHeaderProps> = ({
 
   return (
     <motion.div
+      suppressHydrationWarning
       style={{
         opacity: shouldReduceMotion ? 1 : titleOpacity,
         scale: shouldReduceMotion ? 1 : titleScale,
@@ -120,6 +122,7 @@ export const KineticTypoHeader: React.FC<KineticTypoHeaderProps> = ({
     >
       {/* Studio Micro-Index Badge */}
       <motion.div
+        suppressHydrationWarning
         style={{ opacity: shouldReduceMotion ? 1 : subtitleOpacity }}
         className="flex items-center gap-2.5 px-3.5 py-1 mb-4 sm:mb-6 rounded-full border border-cyan-500/20 bg-cyan-950/20 backdrop-blur-md will-change-opacity pointer-events-none"
         initial={{ opacity: 0, y: -12 }}
@@ -148,6 +151,7 @@ export const KineticTypoHeader: React.FC<KineticTypoHeaderProps> = ({
 
       {/* Editorial Sub-Headline */}
       <motion.p
+        suppressHydrationWarning
         style={{ opacity: shouldReduceMotion ? 1 : subtitleOpacity }}
         className="mt-4 sm:mt-6 max-w-xl md:max-w-2xl text-xs sm:text-sm md:text-lg text-slate-400 font-light tracking-wide px-3 sm:px-4 will-change-opacity pointer-events-none"
         initial={{ opacity: 0, y: 16 }}

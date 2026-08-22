@@ -4,17 +4,24 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { soundEngine } from '@/core';
+import { Dumbbell, Waves, Sparkles, Shield, Rocket, CheckCircle, ArrowRight, LucideIcon } from 'lucide-react';
 
 interface QuickDemoBookingViewProps {
   onCancel: () => void;
   onSwitchToRegister?: () => void;
 }
 
-const FACILITY_TYPES = [
-  { id: 'gym', label: 'ფიტნეს დარბაზი', icon: '🏋️‍♂️' },
-  { id: 'pool', label: 'საცურაო აუზი & სპა', icon: '🏊‍♂️' },
-  { id: 'studio', label: 'ჯგუფური სტუდია', icon: '🧘‍♀️' },
-  { id: 'club', label: 'სპორტული კლუბი', icon: '🥊' },
+interface FacilityTypeDemoItem {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+const FACILITY_TYPES: FacilityTypeDemoItem[] = [
+  { id: 'gym', label: 'ფიტნეს დარბაზი', icon: Dumbbell },
+  { id: 'pool', label: 'საცურაო აუზი & სპა', icon: Waves },
+  { id: 'studio', label: 'ჯგუფური სტუდია', icon: Sparkles },
+  { id: 'club', label: 'სპორტული კლუბი', icon: Shield },
 ];
 
 export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCancel, onSwitchToRegister }) => {
@@ -178,24 +185,28 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
             ობიექტის ტიპი <span className="text-emerald-400">*</span>
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {FACILITY_TYPES.map((type) => (
-              <button
-                key={type.id}
-                type="button"
-                onClick={() => {
-                  soundEngine.playPulseNode();
-                  setFacilityType(type.id);
-                }}
-                className={`py-2 px-2 rounded-xl text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
-                  facilityType === type.id
-                    ? 'bg-emerald-500/20 border border-emerald-400 text-white shadow-[0_0_15px_rgba(52,211,153,0.3)]'
-                    : 'bg-white/[0.03] border border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.06]'
-                }`}
-              >
-                <span className="text-base">{type.icon}</span>
-                <span className="text-[11px] font-bold">{type.label}</span>
-              </button>
-            ))}
+            {FACILITY_TYPES.map((type) => {
+              const Icon = type.icon;
+              const isSelected = facilityType === type.id;
+              return (
+                <button
+                  key={type.id}
+                  type="button"
+                  onClick={() => {
+                    soundEngine.playPulseNode();
+                    setFacilityType(type.id);
+                  }}
+                  className={`py-2 px-2 rounded-xl text-center transition-all cursor-pointer flex flex-col items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-emerald-500/20 border border-emerald-400 text-white shadow-[0_0_15px_rgba(52,211,153,0.3)]'
+                      : 'bg-white/[0.03] border border-white/10 text-slate-400 hover:text-white hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isSelected ? 'text-emerald-400' : 'text-slate-400'}`} strokeWidth={1.8} />
+                  <span className="text-[11px] font-bold">{type.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 

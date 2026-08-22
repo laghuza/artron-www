@@ -56,7 +56,7 @@ export const KineticScrollHero: React.FC = () => {
       {/* Sticky Viewport Stage with Hardware Acceleration */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between items-center select-none studio-perspective gpu-accelerated max-w-full">
         {/* Ambient Studio Backgrounds */}
-        <div className="absolute inset-0 studio-grid-bg opacity-40 pointer-events-none will-change-opacity" />
+        <div className="absolute inset-0 studio-grid-bg opacity-15 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none will-change-opacity" />
         <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#080B10] to-transparent z-20 pointer-events-none" />
         <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#080B10] to-transparent z-20 pointer-events-none" />
 
@@ -93,6 +93,7 @@ export const KineticScrollHero: React.FC = () => {
 
         {/* Layer 5: Initial Scroll Prompt */}
         <motion.div 
+          suppressHydrationWarning
           style={{ opacity: shouldReduceMotion ? 0.7 : scrollHintOpacity }}
           className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none font-mono text-[9px] sm:text-[10px] tracking-widest text-slate-500 uppercase will-change-opacity px-4 text-center whitespace-nowrap"
         >

@@ -80,9 +80,10 @@ export const AnalyticsShowcase: React.FC = () => {
   }, [activeSubTab, t, locale, churnMock, selectedUserIndex, selectedCell, selectedBranch]);
 
   return (
-    <section id="analytics-showcase" className="py-20 md:py-28 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5">
-      {/* Dynamic Grid Background */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(to_right,#00ff87_1px,transparent_1px),linear-gradient(to_bottom,#00ff87_1px,transparent_1px)] bg-[size:5rem_5rem]"></div>
+    <section id="analytics-showcase" className="py-20 md:py-28 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5 studio-grain">
+      {/* Background Atmospheric Glow */}
+      <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-[#00A3FF]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-1/3 right-1/3 w-[450px] h-[450px] bg-[#00ff87]/5 rounded-full blur-[140px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto relative z-10">
         

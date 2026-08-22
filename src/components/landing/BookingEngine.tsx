@@ -103,11 +103,10 @@ export const BookingEngine: React.FC = () => {
   };
 
   return (
-    <section id="booking-engine" className="py-20 md:py-28 relative overflow-hidden bg-gradient-to-b from-[#080B10] via-[#0E1321] to-[#080B10] border-y border-white/5">
+    <section id="booking-engine" className="py-20 md:py-28 relative overflow-hidden bg-[#080B10] border-y border-white/5 studio-grain">
       {/* Background Decor */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(to_right,#00A3FF_1px,transparent_1px),linear-gradient(to_bottom,#00A3FF_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-      <div className="absolute top-1/4 right-1/4 w-[380px] h-[380px] bg-[#00A3FF]/5 rounded-full blur-[90px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/4 w-[380px] h-[380px] bg-[#00ff87]/5 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-[450px] h-[450px] bg-[#00A3FF]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/4 w-[450px] h-[450px] bg-[#00ff87]/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}

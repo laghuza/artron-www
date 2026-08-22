@@ -5,9 +5,9 @@ import { DualCoreShowcase } from '@/components/landing/DualCoreShowcase';
 import { B2CAthleteAdvantages } from '@/components/landing/B2CAthleteAdvantages';
 import { Footer } from '@/components/landing/Footer';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
-import { LeftFloatingNavDock } from '@/components/navigation/LeftFloatingNavDock';
 import { SectionTransition } from '@/components/ui/SectionTransition';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
+import { LaserDataStreamConnectors } from '@/components/landing/kinetic/LaserDataStreamConnectors';
 import type { Metadata } from 'next';
 
 // ── Dynamically Imported Below-the-Fold Heavy Modules (Vercel Bundle Optimization) ──
@@ -29,6 +29,11 @@ const AnalyticsShowcase = dynamic(
 const BusinessStatsShowcase = dynamic(
   () => import('@/components/landing/BusinessStatsShowcase').then((mod) => mod.BusinessStatsShowcase),
   { loading: () => <SectionSkeleton minHeight="min-h-[450px]" label="GROWTH STATS LOADING..." /> }
+);
+
+const LegacyVsArtronSection = dynamic(
+  () => import('@/components/landing/LegacyVsArtronSection').then((mod) => mod.LegacyVsArtronSection),
+  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="PARADIGM SHIFT MATRIX LOADING..." /> }
 );
 
 const RoiCalculator = dynamic(
@@ -84,24 +89,34 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen relative bg-[#080B10] text-[#F8FAFC]">
       <Header isSticky={true} hideOnInitialScroll={true} />
-      <LeftFloatingNavDock />
-      <main className="flex-grow flex flex-col">
+      <main className="flex-grow flex flex-col relative">
+        <LaserDataStreamConnectors />
         <KineticScrollHero />
+        <SectionTransition variant="laser" />
         <DualCoreShowcase />
+        <SectionTransition variant="laser" />
         <B2CAthleteAdvantages />
-        <SectionTransition variant="sparse" />
+        <SectionTransition variant="laser" />
         <ServicesShowcase />
+        <SectionTransition variant="laser" />
         <DashboardFeaturesSection />
+        <SectionTransition variant="laser" />
         <AnalyticsShowcase />
+        <SectionTransition variant="laser" />
         <BusinessStatsShowcase />
-        <SectionTransition />
+        <SectionTransition variant="laser" />
+        <LegacyVsArtronSection />
+        <SectionTransition variant="laser" />
         <RoiCalculator />
+        <SectionTransition variant="laser" />
         <PricingSection />
-        <SectionTransition variant="sparse" />
+        <SectionTransition variant="laser" />
         <PartnerEcosystem />
+        <SectionTransition variant="laser" />
         <BookingEngine />
+        <SectionTransition variant="laser" />
         <FaqSection />
-        <SectionTransition />
+        <SectionTransition variant="laser" />
         <SaaSGatewayCTA />
       </main>
       <Footer />

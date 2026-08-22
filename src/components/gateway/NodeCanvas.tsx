@@ -20,6 +20,9 @@ import { FacilityPreset } from '@/types/gateway';
 
 import { useRouter } from 'next/navigation';
 
+import Link from 'next/link';
+import { FacilityPresetBar } from './widgets/FacilityPresetBar';
+
 interface NodeCanvasProps {
   nodes: ArtronNode[];
   activeNodeId: number | null;
@@ -32,6 +35,10 @@ interface NodeCanvasProps {
     mode: 'FULL_B2B' | 'TEMP_OTP',
     credentials: { username?: string; password?: string; otpCode?: string; orgName?: string; discipline?: string; isTrial?: boolean }
   ) => void;
+  isSplitMode?: boolean;
+  onSelectPreset?: (preset: FacilityPreset) => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
 const PRESET_NODES_MAP: Record<FacilityPreset, number[]> = {
@@ -55,14 +62,14 @@ const COLORS: Record<number, string> = {
 };
 
 const COORDS = [
-  { x: 200, y: 50,  align: "middle" as const, tx: 200, ty: 30 },
-  { x: 350, y: 50,  align: "start" as const,  tx: 364, ty: 45 },
-  { x: 350, y: 200, align: "start" as const,  tx: 364, ty: 203 },
-  { x: 350, y: 350, align: "start" as const,  tx: 364, ty: 358 },
-  { x: 200, y: 350, align: "middle" as const, tx: 200, ty: 372 },
-  { x: 50,  y: 350, align: "end" as const,    tx: 36,  ty: 358 },
-  { x: 50,  y: 200, align: "end" as const,    tx: 36,  ty: 203 },
-  { x: 50,  y: 50,  align: "end" as const,    tx: 36,  ty: 45 }
+  { x: 200, y: 50,  align: "middle" as const, tx: 200, ty: 26 },
+  { x: 350, y: 50,  align: "start" as const,  tx: 366, ty: 45 },
+  { x: 350, y: 200, align: "start" as const,  tx: 366, ty: 203 },
+  { x: 350, y: 350, align: "start" as const,  tx: 366, ty: 358 },
+  { x: 200, y: 350, align: "middle" as const, tx: 200, ty: 378 },
+  { x: 50,  y: 350, align: "end" as const,    tx: 34,  ty: 358 },
+  { x: 50,  y: 200, align: "end" as const,    tx: 34,  ty: 203 },
+  { x: 50,  y: 50,  align: "end" as const,    tx: 34,  ty: 45 }
 ];
 
 export const NodeCanvas: React.FC<NodeCanvasProps> = ({
@@ -74,6 +81,10 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
   onSelectNode,
   onPortalEntry,
   onAuthenticate,
+  isSplitMode = false,
+  onSelectPreset,
+  isMuted = false,
+  onToggleMute,
 }) => {
   const router = useRouter();
   const { t } = useI18n();
@@ -120,37 +131,110 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
     color: COLORS[i + 1] || "#9CA3AF"
   }));
 
-
   return (
-    <div className="w-full lg:w-[60%] h-full flex items-center justify-center relative select-none p-6 overflow-hidden">
+    <div className="w-full h-full flex items-center justify-center relative select-none p-4 md:p-6 overflow-hidden">
       {/* Ambient Radial Spotlight Glow */}
       <div
-        className="absolute w-[450px] h-[450px] rounded-full blur-[120px] opacity-20 transition-all duration-1000 pointer-events-none z-0"
+        className="absolute w-[450px] md:w-[600px] h-[450px] md:h-[600px] rounded-full blur-[140px] opacity-20 transition-all duration-1000 pointer-events-none z-0"
         style={{ backgroundColor: COLORS[currentActive] || "#00B0FF" }}
       />
 
-      {/* Top-Right Rotating Logo Trigger with Glassmorphic Dropdown */}
-      <div className="absolute top-4 right-6 z-40">
-        <GhostTrigger
-          onRegisterClick={() => {
-            soundEngine.playSystemAccess();
-            router.push('/get-started?mode=register');
-          }}
-          onGuestDemoClick={() => {
-            soundEngine.playPulseNode();
-            router.push('/get-started?mode=demo');
-          }}
-          onOperatorAuthClick={() => {
-            soundEngine.playPulseNode();
-            handleNodeSelect(9);
-            setShowAuthCard(true);
-          }}
-          onAccessClick={() => {
-            if (onPortalEntry) onPortalEntry();
-            else handleNodeSelect(9);
-          }}
-        />
-      </div>
+      {/* Full-Screen Top Floating Cyber HUD (When not in split mode) */}
+      {!isSplitMode && (
+        <div className="absolute top-4 inset-x-4 md:inset-x-8 z-40 flex items-center justify-between pointer-events-auto animate-fadeIn">
+          {/* Left Navigation Controls */}
+          <div className="flex items-center gap-2.5">
+            <Link
+              href="/"
+              onClick={() => soundEngine.playPulseNode()}
+              className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-[#00A3FF] border border-white/10 hover:border-[#00A3FF]/60 bg-[#090D14]/80 backdrop-blur-md px-3 py-1.8 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <span>← {t('hud.return_to_main')}</span>
+            </Link>
+
+            {onToggleMute && (
+              <button
+                type="button"
+                onClick={onToggleMute}
+                className="hidden sm:inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-white border border-white/10 hover:border-[#00A3FF]/60 bg-[#090D14]/80 backdrop-blur-md px-3 py-1.8 rounded-lg transition-all cursor-pointer shadow-sm"
+              >
+                <span className={`w-1.5 h-1.5 rounded-full mr-2 ${!isMuted ? 'bg-[#00A3FF] animate-pulse shadow-[0_0_8px_#00A3FF]' : 'bg-gray-600'}`} />
+                <span>[ {isMuted ? t('hud.audio_muted') : t('hud.audio_on')} ]</span>
+              </button>
+            )}
+          </div>
+
+          {/* Center Facility Preset Selector Bar */}
+          {onSelectPreset && (
+            <div className="hidden md:flex items-center justify-center">
+              <FacilityPresetBar
+                activePreset={activePreset}
+                onSelectPreset={onSelectPreset}
+                compact={true}
+              />
+            </div>
+          )}
+
+          {/* Right Action Menu */}
+          <div className="flex items-center">
+            <GhostTrigger
+              onRegisterClick={() => {
+                soundEngine.playSystemAccess();
+                router.push('/get-started?mode=register');
+              }}
+              onGuestDemoClick={() => {
+                soundEngine.playPulseNode();
+                router.push('/get-started?mode=demo');
+              }}
+              onOperatorAuthClick={() => {
+                soundEngine.playPulseNode();
+                handleNodeSelect(9);
+                setShowAuthCard(true);
+              }}
+              onAccessClick={() => {
+                if (onPortalEntry) onPortalEntry();
+                else handleNodeSelect(9);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Top-Right Rotating Logo Trigger in Split Mode */}
+      {isSplitMode && (
+        <div className="absolute top-4 right-6 z-40">
+          <GhostTrigger
+            onRegisterClick={() => {
+              soundEngine.playSystemAccess();
+              router.push('/get-started?mode=register');
+            }}
+            onGuestDemoClick={() => {
+              soundEngine.playPulseNode();
+              router.push('/get-started?mode=demo');
+            }}
+            onOperatorAuthClick={() => {
+              soundEngine.playPulseNode();
+              handleNodeSelect(9);
+              setShowAuthCard(true);
+            }}
+            onAccessClick={() => {
+              if (onPortalEntry) onPortalEntry();
+              else handleNodeSelect(9);
+            }}
+          />
+        </div>
+      )}
+
+      {/* Full-Screen Bottom Floating Action Hint (When not in split mode) */}
+      {!isSplitMode && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none animate-fadeIn w-full px-4 text-center">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#090D14]/85 border border-[#00A3FF]/30 rounded-full backdrop-blur-md shadow-[0_0_20px_rgba(0,163,255,0.15)] font-mono text-[11px] text-gray-300">
+            <span className="w-2 h-2 rounded-full bg-[#00A3FF] animate-ping" />
+            <span className="text-[#00A3FF] font-bold">ARTRON SPORTS OS //</span>
+            <span className="text-white">{t('system.select_node_hint')}</span>
+          </div>
+        </div>
+      )}
 
       {/* Overlay Stage Views for Interactive Nodes */}
       {activeNodeId === 1 && (
@@ -229,7 +313,11 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
         </div>
       )}
 
-      <svg viewBox="0 0 400 400" className="w-full max-w-[460px] aspect-square cursor-pointer overflow-visible z-10" onMouseLeave={() => setHoveredNode(null)}>
+      <svg
+        viewBox="-170 0 740 400"
+        className={`w-full ${!isSplitMode ? "max-w-[760px] lg:max-w-[840px]" : "max-w-[640px]"} aspect-[740/400] cursor-pointer overflow-visible z-10 transition-all duration-700`}
+        onMouseLeave={() => setHoveredNode(null)}
+      >
         <defs>
           <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor={activeColor} stopOpacity="0.45" />

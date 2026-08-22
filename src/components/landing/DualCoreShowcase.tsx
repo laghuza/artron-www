@@ -357,7 +357,7 @@ export const DualCoreShowcase: React.FC = () => {
             <ArrowRight className="relative w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
           <Link
-            href="#features"
+            href="#dashboard-features"
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium text-slate-300 border border-white/[0.10] hover:border-cyan-500/40 hover:text-white hover:bg-cyan-950/20 transition-all duration-300 min-h-[44px]"
           >
             {locale === 'ka' ? 'ყველა ფუნქცია' : locale === 'ru' ? 'Все функции' : 'Explore Features'}

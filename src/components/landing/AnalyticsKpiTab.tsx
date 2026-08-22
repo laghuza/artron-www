@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { TrendingUp, Users, DollarSign, Target, Award, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 interface AnalyticsKpiTabProps {
   t: (key: string) => string;
@@ -96,90 +97,101 @@ export const AnalyticsKpiTab: React.FC<AnalyticsKpiTabProps> = ({ t, locale }) =
       </div>
 
       {/* KPI Cards Grid */}
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* MRR Card */}
-        <motion.div 
-          variants={cardVariants}
-          whileHover={{ y: -4, scale: 1.015, borderColor: 'rgba(0, 229, 255, 0.3)', boxShadow: '0 4px 20px rgba(0, 229, 255, 0.05)' }}
-          className="bg-[#0b0f17]/50 border border-white/5 p-5 rounded-2xl relative overflow-hidden transition-colors duration-300"
-        >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-[#00e5ff]/5 rounded-full filter blur-lg pointer-events-none"></div>
-          <div className="flex justify-between items-start mb-3">
-            <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">
-              {billingPeriod === 'monthly' ? 'MRR' : 'ARR'}
-            </span>
-            <span className="text-[10px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded flex items-center gap-0.5">
-              +14.2% <TrendingUp className="w-3 h-3" />
-            </span>
+        <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 229, 255, 0.22)">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl p-5 rounded-2xl relative overflow-hidden transition-colors duration-300 group hover:border-[#00e5ff]/40 h-full flex flex-col justify-between">
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00e5ff]/30" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00e5ff]/30" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00e5ff]/30" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00e5ff]/30" />
+
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">
+                  {billingPeriod === 'monthly' ? 'MRR' : 'ARR'}
+                </span>
+                <span className="text-[10px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded flex items-center gap-0.5">
+                  +14.2% <TrendingUp className="w-3 h-3" />
+                </span>
+              </div>
+              <div className="text-2xl font-black text-white font-mono mb-1">
+                {formatValue(mrrValue * multiplier)} {currencySymbol}
+              </div>
+            </div>
+            <div className="text-[10px] text-[#94A3B8]">
+              {billingPeriod === 'monthly' ? 'Monthly Recurring Revenue' : 'Annual Recurring Revenue'}
+            </div>
           </div>
-          <div className="text-2xl font-black text-white font-mono mb-1">
-            {formatValue(mrrValue * multiplier)} {currencySymbol}
-          </div>
-          <div className="text-[10px] text-[#94A3B8]">
-            {billingPeriod === 'monthly' ? 'Monthly Recurring Revenue' : 'Annual Recurring Revenue'}
-          </div>
-        </motion.div>
+        </TiltSpotlightCard>
 
         {/* LTV Card */}
-        <motion.div 
-          variants={cardVariants}
-          whileHover={{ y: -4, scale: 1.015, borderColor: 'rgba(0, 255, 135, 0.3)', boxShadow: '0 4px 20px rgba(0, 255, 135, 0.05)' }}
-          className="bg-[#0b0f17]/50 border border-white/5 p-5 rounded-2xl relative overflow-hidden transition-colors duration-300"
-        >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-[#00ff87]/5 rounded-full filter blur-lg pointer-events-none"></div>
-          <div className="flex justify-between items-start mb-3">
-            <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">LTV</span>
-            <span className="text-[10px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded flex items-center gap-0.5">
-              +8.5% <TrendingUp className="w-3 h-3" />
-            </span>
+        <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 255, 135, 0.22)">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl p-5 rounded-2xl relative overflow-hidden transition-colors duration-300 group hover:border-[#00ff87]/40 h-full flex flex-col justify-between">
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00ff87]/30" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00ff87]/30" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00ff87]/30" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00ff87]/30" />
+
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">LTV</span>
+                <span className="text-[10px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded flex items-center gap-0.5">
+                  +8.5% <TrendingUp className="w-3 h-3" />
+                </span>
+              </div>
+              <div className="text-2xl font-black text-white font-mono mb-1">
+                {formatValue(ltvValue)} {currencySymbol}
+              </div>
+            </div>
+            <div className="text-[10px] text-[#94A3B8]">Customer Lifetime Value</div>
           </div>
-          <div className="text-2xl font-black text-white font-mono mb-1">
-            {formatValue(ltvValue)} {currencySymbol}
-          </div>
-          <div className="text-[10px] text-[#94A3B8]">Customer Lifetime Value</div>
-        </motion.div>
+        </TiltSpotlightCard>
 
         {/* CAC Card */}
-        <motion.div 
-          variants={cardVariants}
-          whileHover={{ y: -4, scale: 1.015, borderColor: 'rgba(255, 74, 90, 0.3)', boxShadow: '0 4px 20px rgba(255, 74, 90, 0.05)' }}
-          className="bg-[#0b0f17]/50 border border-white/5 p-5 rounded-2xl relative overflow-hidden transition-colors duration-300"
-        >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-[#FF4A5A]/5 rounded-full filter blur-lg pointer-events-none"></div>
-          <div className="flex justify-between items-start mb-3">
-            <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">CAC</span>
-            <span className="text-[10px] font-mono font-bold text-[#FF4A5A] bg-[#FF4A5A]/10 px-2 py-0.5 rounded">
-              -12.4% Optimal
-            </span>
+        <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(255, 74, 90, 0.2)">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl p-5 rounded-2xl relative overflow-hidden transition-colors duration-300 group hover:border-[#FF4A5A]/40 h-full flex flex-col justify-between">
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#FF4A5A]/30" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#FF4A5A]/30" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#FF4A5A]/30" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#FF4A5A]/30" />
+
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">CAC</span>
+                <span className="text-[10px] font-mono font-bold text-[#FF4A5A] bg-[#FF4A5A]/10 px-2 py-0.5 rounded">
+                  -12.4% Optimal
+                </span>
+              </div>
+              <div className="text-2xl font-black text-white font-mono mb-1">
+                {formatValue(cacValue)} {currencySymbol}
+              </div>
+            </div>
+            <div className="text-[10px] text-[#94A3B8]">Customer Acquisition Cost</div>
           </div>
-          <div className="text-2xl font-black text-white font-mono mb-1">
-            {formatValue(cacValue)} {currencySymbol}
-          </div>
-          <div className="text-[10px] text-[#94A3B8]">Customer Acquisition Cost</div>
-        </motion.div>
+        </TiltSpotlightCard>
 
         {/* Active Members Card */}
-        <motion.div 
-          variants={cardVariants}
-          whileHover={{ y: -4, scale: 1.015, borderColor: 'rgba(0, 229, 255, 0.3)', boxShadow: '0 4px 20px rgba(0, 229, 255, 0.05)' }}
-          className="bg-[#0b0f17]/50 border border-white/5 p-5 rounded-2xl relative overflow-hidden transition-colors duration-300"
-        >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-[#00e5ff]/5 rounded-full filter blur-lg pointer-events-none"></div>
-          <div className="flex justify-between items-start mb-3">
-            <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">Active Members</span>
-            <span className="text-[10px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded flex items-center gap-0.5">
-              +3.2% <TrendingUp className="w-3 h-3" />
-            </span>
+        <TiltSpotlightCard maxTilt={8} spotlightColor="rgba(0, 229, 255, 0.22)">
+          <div className="bg-[#05070a]/85 border border-[#8a99ad]/10 backdrop-blur-xl p-5 rounded-2xl relative overflow-hidden transition-colors duration-300 group hover:border-[#00e5ff]/40 h-full flex flex-col justify-between">
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#00e5ff]/30" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#00e5ff]/30" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#00e5ff]/30" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#00e5ff]/30" />
+
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider">Active Members</span>
+                <span className="text-[10px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/10 px-2 py-0.5 rounded flex items-center gap-0.5">
+                  +3.2% <TrendingUp className="w-3 h-3" />
+                </span>
+              </div>
+              <div className="text-2xl font-black text-white font-mono mb-1">1,240</div>
+            </div>
+            <div className="text-[10px] text-[#94A3B8]">Net Member Growth this month</div>
           </div>
-          <div className="text-2xl font-black text-white font-mono mb-1">1,240</div>
-          <div className="text-[10px] text-[#94A3B8]">Net Member Growth this month</div>
-        </motion.div>
-      </motion.div>
+        </TiltSpotlightCard>
+      </div>
 
       {/* Target vs. Actual Progress Meter */}
       <motion.div 

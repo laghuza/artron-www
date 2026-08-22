@@ -12,13 +12,10 @@ export const PartnerEcosystem: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'clients' | 'hardware' | 'fintech'>('all');
 
   return (
-    <section id="partner-ecosystem" className="py-20 md:py-28 relative overflow-hidden bg-[#0B0F17] border-b border-white/5">
-      {/* Dynamic Matrix Background Grid */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(to_right,#00A3FF_1px,transparent_1px),linear-gradient(to_bottom,#00A3FF_1px,transparent_1px)] bg-[size:3rem_3rem]"></div>
-      
+    <section id="partner-ecosystem" className="py-20 md:py-28 relative overflow-hidden bg-[#0B0F17] border-b border-white/5 studio-grain">
       {/* Glowing atmospheric orbs */}
-      <div className="absolute top-1/4 left-1/5 -translate-y-1/2 w-[400px] h-[400px] bg-[#00A3FF]/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/5 -translate-y-1/2 w-[400px] h-[400px] bg-[#00ff87]/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/5 -translate-y-1/2 w-[450px] h-[450px] bg-[#00A3FF]/6 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/5 -translate-y-1/2 w-[450px] h-[450px] bg-[#00ff87]/6 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
