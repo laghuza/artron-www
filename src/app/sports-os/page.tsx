@@ -123,6 +123,16 @@ function GatewayPageContent() {
   }, [portalState, handleAuthenticate, handleBypassTransition]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('demo') === 'true') {
+        setAccessMode('TEMP_OTP');
+        setPortalState('ENTERED');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     return () => clearTransitionTimers();
   }, [clearTransitionTimers]);
 

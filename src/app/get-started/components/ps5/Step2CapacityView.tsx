@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { ps5Audio } from '../../core/ps5SoundEngine';
+import { DoorOpen, QrCode, CreditCard, Laptop, ShieldCheck } from 'lucide-react';
 
 interface Step2CapacityViewProps {
   clubAddress: string;
@@ -32,25 +34,25 @@ const BRANCHES_OPTIONS = [
 const HARDWARE_INTEGRATIONS = [
   {
     id: 'turnstile',
-    icon: '🚪',
+    icon: DoorOpen,
     title: 'ტურნიკეტები & ბარიერები',
-    desc: 'პირდაპირი Socket/TCP რელეების ინტეგრაცია',
+    desc: 'პირდაპირი TCP/Socket რელეების მართვა',
   },
   {
     id: 'qr',
-    icon: '📱',
+    icon: QrCode,
     title: 'მობილური QR სკანერი',
     desc: 'სმარტფონიდან მომენტალური Cloud იდენტიფიკაცია',
   },
   {
     id: 'rfid',
-    icon: '💳',
+    icon: CreditCard,
     title: 'RFID / NFC ბარათები & სამაჯურები',
     desc: 'უკონტაქტო ჩიპების ავტომატური კითხვა',
   },
   {
     id: 'crm_only',
-    icon: '💻',
+    icon: Laptop,
     title: 'მხოლოდ CRM მართვა',
     desc: 'ადმინისტრაციული პროგრამა აპარატურის გარეშე',
   },
@@ -69,30 +71,45 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
   onNext,
   onBack,
 }) => {
+  const handleSelectMember = (label: string) => {
+    ps5Audio.playSelect();
+    setMembersScale(label);
+  };
+
+  const handleSelectBranch = (label: string) => {
+    ps5Audio.playNavigate();
+    setBranchesCount(label);
+  };
+
+  const handleSelectHardware = (title: string) => {
+    ps5Audio.playSelect();
+    setHardwareType(title);
+  };
+
   return (
-    <div className="w-full flex flex-col justify-between gap-6 animate-fadeIn">
-      {/* Header Info */}
-      <div className="space-y-1">
+    <div className="w-full flex flex-col gap-6 animate-fadeIn">
+      {/* PS5 Header Section */}
+      <div className="space-y-1.5 pb-4 border-b border-white/[0.08]">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#00A3FF] animate-ping" />
+          <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse" />
           <span className="text-[11px] font-mono tracking-widest text-[#00E5FF] uppercase">
-            ✨ ორგანიზაციის რეგისტრაცია // ნაბიჯი 2
+            STAGE 02 // მასშტაბი & IoT ინფრასტრუქტურა
           </span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
           დარბაზის მასშტაბი & ტექნიკური აღჭურვილობა
         </h2>
         <p className="text-xs sm:text-sm text-slate-300">
-          აირჩიეთ ფილიალების რაოდენობა, წევრთა სავარაუდო ნაკადი და საჭირო ტექნიკა.
+          განსაზღვრეთ ობიექტის ლოკაცია, წევრთა ნაკადის მოცულობა და ტურნიკეტების/აპარატურის ტიპი.
         </p>
       </div>
 
-      {/* Form Fields */}
+      {/* Inputs Matrix */}
       <div className="space-y-5">
         {/* Physical Address */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-            ძირითადი მისამართი / ლოკაცია <span className="text-[#00A3FF]">*</span>
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+            ძირითადი მისამართი / ქუჩა <span className="text-[#00E5FF]">*</span>
           </label>
           <div className="relative">
             <input
@@ -100,18 +117,20 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
               value={clubAddress}
               onChange={(e) => setClubAddress(e.target.value)}
               placeholder="მაგ: ჭავჭავაძის გამზ. 37, თბილისი"
-              className="w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border border-white/[0.12] focus:border-[#00A3FF] focus:bg-white/[0.07] focus:ring-2 focus:ring-[#00A3FF]/20 text-white placeholder-slate-500 text-sm transition-all duration-300 outline-none"
+              className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.12] focus:border-[#00E5FF] focus:bg-white/[0.08] focus:ring-2 focus:ring-[#00A3FF]/30 text-white placeholder-slate-500 text-sm transition-all duration-200 outline-none"
             />
             {clubAddress.trim().length > 0 && (
-              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-emerald-400 text-sm">✓</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#00E5FF] font-bold text-sm">
+                ✓
+              </span>
             )}
           </div>
         </div>
 
         {/* Active Members Scale (PS5 Interactive Chips) */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
-            აქტიური წევრების სავარაუდო რაოდენობა <span className="text-[#00A3FF]">*</span>
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+            აქტიური წევრების სავარაუდო რაოდენობა <span className="text-[#00E5FF]">*</span>
           </label>
           <div className="grid grid-cols-2 gap-2.5">
             {MEMBERS_OPTIONS.map((opt) => {
@@ -120,18 +139,24 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => setMembersScale(opt.label)}
-                  className={`p-3 rounded-xl border text-left transition-all duration-300 flex flex-col justify-between group cursor-pointer ${
+                  onClick={() => handleSelectMember(opt.label)}
+                  className={`p-3.5 rounded-2xl border text-left transition-all duration-300 flex flex-col justify-between group cursor-pointer ${
                     isSelected
-                      ? 'bg-[#00A3FF]/15 border-[#00A3FF] shadow-[0_0_15px_rgba(0,163,255,0.2)] ring-1 ring-[#00A3FF]'
+                      ? 'bg-gradient-to-br from-[#00A3FF]/25 to-[#0055FF]/10 border-[#00E5FF] shadow-[0_0_20px_rgba(0,163,255,0.3)] ring-1 ring-[#00E5FF] scale-[1.02]'
                       : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.2]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className={`text-xs font-bold ${isSelected ? 'text-[#00E5FF]' : 'text-white'}`}>
+                    <span
+                      className={`text-xs font-bold font-mono ${
+                        isSelected ? 'text-[#00E5FF]' : 'text-white'
+                      }`}
+                    >
                       {opt.label}
                     </span>
-                    {isSelected && <span className="text-xs text-[#00A3FF]">●</span>}
+                    {isSelected && (
+                      <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF]" />
+                    )}
                   </div>
                   <span className="text-[10px] text-slate-400 mt-1">
                     {opt.sub}
@@ -143,9 +168,9 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
         </div>
 
         {/* Branches Selection */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
-            ფილიალების რაოდენობა <span className="text-[#00A3FF]">*</span>
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+            ფილიალების რაოდენობა <span className="text-[#00E5FF]">*</span>
           </label>
           <div className="grid grid-cols-3 gap-2.5">
             {BRANCHES_OPTIONS.map((b) => {
@@ -154,11 +179,11 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
                 <button
                   key={b.id}
                   type="button"
-                  onClick={() => setBranchesCount(b.label)}
-                  className={`py-2.5 px-3 rounded-xl border text-center text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                  onClick={() => handleSelectBranch(b.label)}
+                  className={`py-3 px-3 rounded-2xl border text-center text-xs font-bold font-mono transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-[#00A3FF] text-black font-bold shadow-[0_0_15px_rgba(0,163,255,0.3)]'
-                      : 'bg-white/[0.04] text-slate-300 border-white/[0.08] hover:bg-white/[0.08]'
+                      ? 'bg-[#00A3FF] text-black shadow-[0_0_15px_rgba(0,163,255,0.4)]'
+                      : 'bg-white/[0.04] text-slate-300 border-white/[0.08] hover:bg-white/[0.08] hover:text-white'
                   }`}
                 >
                   {b.label}
@@ -169,29 +194,40 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
         </div>
 
         {/* Hardware / Turnstile Integration Grid */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
-            სასურველი ტექნიკური წვდომა & IoT აპარატურა <span className="text-[#00A3FF]">*</span>
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+            სასურველი ტექნიკური წვდომა & IoT აპარატურა <span className="text-[#00E5FF]">*</span>
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {HARDWARE_INTEGRATIONS.map((hw) => {
               const isSelected = hardwareType === hw.title;
+              const Icon = hw.icon;
               return (
                 <button
                   key={hw.id}
                   type="button"
-                  onClick={() => setHardwareType(hw.title)}
-                  className={`p-3 rounded-xl border text-left transition-all duration-300 flex items-start gap-3 cursor-pointer ${
+                  onClick={() => handleSelectHardware(hw.title)}
+                  className={`p-3.5 rounded-2xl border text-left transition-all duration-300 flex items-start gap-3 cursor-pointer ${
                     isSelected
-                      ? 'bg-gradient-to-r from-[#00A3FF]/20 to-transparent border-[#00A3FF] shadow-[0_0_15px_rgba(0,163,255,0.2)]'
+                      ? 'bg-gradient-to-r from-[#00A3FF]/25 via-[#0055FF]/10 to-transparent border-[#00E5FF] shadow-[0_0_20px_rgba(0,163,255,0.3)] ring-1 ring-[#00E5FF]'
                       : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.2]'
                   }`}
                 >
-                  <span className="text-xl shrink-0 p-2 rounded-lg bg-white/[0.04] border border-white/5">
-                    {hw.icon}
-                  </span>
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                      isSelected
+                        ? 'bg-[#00A3FF]/30 text-[#00E5FF]'
+                        : 'bg-white/5 text-slate-400'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
                   <div>
-                    <div className={`text-xs font-bold ${isSelected ? 'text-[#00E5FF]' : 'text-white'}`}>
+                    <div
+                      className={`text-xs font-bold ${
+                        isSelected ? 'text-[#00E5FF]' : 'text-white'
+                      }`}
+                    >
                       {hw.title}
                     </div>
                     <div className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
@@ -203,31 +239,6 @@ export const Step2CapacityView: React.FC<Step2CapacityViewProps> = ({
             })}
           </div>
         </div>
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={onBack}
-          className="px-5 py-3 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer"
-        >
-          ← უკან
-        </button>
-
-        <button
-          type="button"
-          disabled={!isStep2Valid}
-          onClick={onNext}
-          className={`px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
-            isStep2Valid
-              ? 'bg-gradient-to-r from-[#00A3FF] to-[#0055FF] text-white shadow-[0_0_25px_rgba(0,163,255,0.4)] hover:shadow-[0_0_35px_rgba(0,163,255,0.6)] hover:scale-[1.02] cursor-pointer'
-              : 'bg-white/[0.05] text-white/30 border border-white/[0.05] cursor-not-allowed'
-          }`}
-        >
-          <span>შემდეგი ეტაპი</span>
-          <span>→</span>
-        </button>
       </div>
     </div>
   );

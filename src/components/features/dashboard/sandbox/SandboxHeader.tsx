@@ -92,16 +92,28 @@ export const SandboxHeader: React.FC<SandboxHeaderProps> = ({
           🚀 შეძენა
         </a>
 
+        {/* 1 Step Back to Gateway / Previous state */}
         <button
           type="button"
           onClick={() => {
             soundEngine.playPulseNode();
             onExit();
           }}
-          className="px-3.5 py-1.5 rounded bg-[#FF5252]/10 hover:bg-[#FF5252] text-[#FF5252] hover:text-white border border-[#FF5252]/30 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-all cursor-pointer shadow-sm"
+          className="px-3 py-1.5 rounded bg-white/[0.06] hover:bg-white/10 text-[#9CA3AF] hover:text-white border border-white/15 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-all cursor-pointer shadow-sm flex items-center gap-1"
+          title="უკან დაბრუნება (Gateway)"
         >
-          ✕ {t("sandbox.exit_sandbox")}
+          <span>←</span>
+          <span>{t("actions.back") || "უკან"}</span>
         </button>
+
+        {/* Return to Home Landing Page */}
+        <a
+          href="/"
+          className="px-3 py-1.5 rounded bg-white/[0.04] hover:bg-white/[0.08] text-[#9CA3AF] hover:text-white border border-white/10 text-[10px] sm:text-[11px] font-medium tracking-wider uppercase transition-all cursor-pointer shadow-sm flex items-center gap-1"
+          title="მთავარ გვერდზე დაბრუნება"
+        >
+          <span>მთავარი</span>
+        </a>
       </div>
     </header>
   );

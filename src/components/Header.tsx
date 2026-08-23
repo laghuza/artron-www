@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Menu, X, Globe, Zap } from 'lucide-react';
+import { ChevronDown, Menu, X, Globe, Zap, ArrowLeft, Home } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import ArtronLogo from '@/components/ui/ArtronLogo';
 import { audioManager } from '@/lib/audioManager';
@@ -13,6 +14,8 @@ import { MagneticButton } from '@/components/ui/MagneticButton';
 interface HeaderProps {
   isSticky?: boolean;
   showBackToHome?: boolean;
+  onBack?: () => void;
+  backHref?: string;
   className?: string;
   hideOnInitialScroll?: boolean;
 }
@@ -26,9 +29,12 @@ const LANG_META: Record<string, { flag: string; label: string }> = {
 export const Header: React.FC<HeaderProps> = ({
   isSticky = false,
   showBackToHome = false,
+  onBack,
+  backHref,
   className = '',
   hideOnInitialScroll = false,
 }) => {
+  const router = useRouter();
   const { locale, setLocale, t } = useLanguage();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -180,13 +186,40 @@ export const Header: React.FC<HeaderProps> = ({
         {/* ══ RIGHT CONTROLS (System Access, Lang & Menu) ══ */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 z-20">
           {showBackToHome ? (
-            <Link
-              href="/"
-              className="text-xs sm:text-sm font-semibold text-[#94A3B8] hover:text-white transition-all py-1.5 px-3 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded-lg flex items-center gap-1.5 whitespace-nowrap"
-            >
-              <span>←</span>
-              <span>{locale === 'ka' ? 'მთავარი' : locale === 'ru' ? 'Главная' : 'Home'}</span>
-            </Link>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* 1 Step Back Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  audioManager.playClick();
+                  if (onBack) {
+                    onBack();
+                  } else if (backHref) {
+                    router.push(backHref);
+                  } else if (typeof window !== 'undefined' && window.history.length > 1) {
+                    router.back();
+                  } else {
+                    router.push('/');
+                  }
+                }}
+                className="text-xs sm:text-sm font-semibold text-[#94A3B8] hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] hover:border-[#00A3FF]/40 transition-all py-1.5 px-2.5 sm:px-3 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded-xl flex items-center gap-1.5 whitespace-nowrap cursor-pointer shadow-sm active:scale-95"
+                title={locale === 'ka' ? 'ერთი საფეხურით უკან დაბრუნება' : locale === 'ru' ? 'Назад на один шаг' : 'Go back one step'}
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-[#00A3FF]" />
+                <span>{locale === 'ka' ? 'უკან' : locale === 'ru' ? 'Назад' : 'Back'}</span>
+              </button>
+
+              {/* Home Page Link */}
+              <Link
+                href="/"
+                onClick={() => audioManager.playClick()}
+                className="text-xs sm:text-sm font-semibold text-[#94A3B8] hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] hover:border-[#00A3FF]/40 transition-all py-1.5 px-2.5 sm:px-3 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] rounded-xl flex items-center gap-1.5 whitespace-nowrap cursor-pointer shadow-sm active:scale-95"
+                title={locale === 'ka' ? 'მთავარ გვერდზე დაბრუნება' : locale === 'ru' ? 'На главную' : 'Home page'}
+              >
+                <Home className="w-3.5 h-3.5 text-slate-400" />
+                <span>{locale === 'ka' ? 'მთავარი' : locale === 'ru' ? 'Главная' : 'Home'}</span>
+              </Link>
+            </div>
           ) : (
             <>
               {/* ⚡ SYSTEM ACCESS BUTTON — Reverse Kinetic from R2 & N trajectory */}

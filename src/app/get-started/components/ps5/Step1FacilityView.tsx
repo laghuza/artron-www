@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { ps5Audio } from '../../core/ps5SoundEngine';
+import { Dumbbell, Waves, Sparkles, Shield, Building2, LucideIcon, Check } from 'lucide-react';
 
 interface Step1FacilityViewProps {
   clubName: string;
@@ -18,21 +20,20 @@ interface Step1FacilityViewProps {
   onCancel: () => void;
 }
 
-import { Dumbbell, Waves, Sparkles, Shield, Building2, LucideIcon } from 'lucide-react';
-
 interface FacilityTypeItem {
   id: string;
+  key: string;
   label: string;
   sub: string;
   icon: LucideIcon;
 }
 
 const FACILITY_TYPES: FacilityTypeItem[] = [
-  { id: 'gym', label: 'ფიტნეს დარბაზი', sub: 'Gym & Fitness Center', icon: Dumbbell },
-  { id: 'pool', label: 'საცურაო აუზი & სპა', sub: 'Pool & Aqua Zone', icon: Waves },
-  { id: 'studio', label: 'იოგა / პილატეს სტუდია', sub: 'Group Classes & Yoga', icon: Sparkles },
-  { id: 'combat', label: 'CrossFit / საბრძოლო', sub: 'Combat & Strength Arena', icon: Shield },
-  { id: 'multi', label: 'სპორტული კომპლექსი', sub: 'Multi-Sport Complex', icon: Building2 },
+  { id: 'gym', key: '1', label: 'ფიტნეს დარბაზი', sub: 'Gym & Fitness Center', icon: Dumbbell },
+  { id: 'pool', key: '2', label: 'საცურაო აუზი & სპა', sub: 'Pool & Aqua Zone', icon: Waves },
+  { id: 'studio', key: '3', label: 'იოგა / პილატესი', sub: 'Group Classes & Studio', icon: Sparkles },
+  { id: 'combat', key: '4', label: 'CrossFit / საბრძოლო', sub: 'Combat & Strength Arena', icon: Shield },
+  { id: 'multi', key: '5', label: 'სპორტული კომპლექსი', sub: 'Multi-Sport Complex', icon: Building2 },
 ];
 
 const CITIES = ['თბილისი', 'ბათუმი', 'ქუთაისი', 'რუსთავი', 'ზუგდიდი', 'თელავი', 'სხვა'];
@@ -52,39 +53,48 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
   onNext,
   onCancel,
 }) => {
-  // Format 9-digit code with spaces (e.g. 204 123 456)
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '').slice(0, 9);
     const formatted = raw.replace(/(\d{3})(?=\d)/g, '$1 ').trim();
     setClubCode(formatted);
   };
 
+  const handleSelectService = (label: string) => {
+    ps5Audio.playSelect();
+    setClubServices(label);
+  };
+
+  const handleCityClick = (c: string) => {
+    ps5Audio.playNavigate();
+    setCity(c);
+  };
+
   const rawCodeLength = clubCode.replace(/\s/g, '').length;
 
   return (
-    <div className="w-full flex flex-col justify-between gap-6 animate-fadeIn">
-      {/* Header Info */}
-      <div className="space-y-1">
+    <div className="w-full flex flex-col gap-6 animate-fadeIn">
+      {/* PS5 Header Section */}
+      <div className="space-y-1.5 pb-4 border-b border-white/[0.08]">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#00A3FF] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse" />
           <span className="text-[11px] font-mono tracking-widest text-[#00E5FF] uppercase">
-            🚀 B2B რეგისტრაცია & გააქტიურება // ნაბიჯი 1
+            STAGE 01 // ობიექტის პროფილი & იდენტობა
           </span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
           სისტემის შეძენა და ობიექტის რეგისტრაცია
         </h2>
         <p className="text-xs sm:text-sm text-slate-300">
-          დაარეგისტრირეთ თქვენი ობიექტი 2 წუთში და მიიღეთ სამართავი პანელის სრული ფუნქციონალი.
+          შეიყვანეთ თქვენი სპორტული ობიექტის ძირითადი პარამეტრები ეკოსისტემაში ინტეგრაციისთვის.
         </p>
       </div>
 
-      {/* Inputs Area */}
+      {/* Main Input Matrix */}
       <div className="space-y-5">
         {/* Facility Name */}
-        <div className="relative group">
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-            ობიექტის / ბრენდის სახელი <span className="text-[#00A3FF]">*</span>
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+            ობიექტის / ბრენდის სახელი <span className="text-[#00E5FF]">*</span>
           </label>
           <div className="relative">
             <input
@@ -92,19 +102,27 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
               value={clubName}
               onChange={(e) => setClubName(e.target.value)}
               placeholder="მაგ: ProFit Arena Tbilisi"
-              className="w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border border-white/[0.12] focus:border-[#00A3FF] focus:bg-white/[0.07] focus:ring-2 focus:ring-[#00A3FF]/20 text-white placeholder-slate-500 text-sm transition-all duration-300 outline-none"
+              className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.12] focus:border-[#00E5FF] focus:bg-white/[0.08] focus:ring-2 focus:ring-[#00A3FF]/30 text-white placeholder-slate-500 text-sm transition-all duration-200 outline-none"
             />
             {clubName.trim().length > 0 && (
-              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-emerald-400 text-sm">✓</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#00E5FF] font-bold text-sm">
+                ✓
+              </span>
             )}
           </div>
         </div>
 
-        {/* Facility Category Selection (PS5 Interactive Cards) */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
-            ობიექტის კატეგორია <span className="text-[#00A3FF]">*</span>
-          </label>
+        {/* Facility Category Selection (Tactile PS5 Cards) */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+              ობიექტის კატეგორია <span className="text-[#00E5FF]">*</span>
+            </label>
+            <span className="text-[10px] font-mono text-slate-400">
+              აირჩიეთ მიმართულება
+            </span>
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             {FACILITY_TYPES.map((type) => {
               const isSelected = clubServices === type.label;
@@ -113,26 +131,37 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
                 <button
                   key={type.id}
                   type="button"
-                  onClick={() => setClubServices(type.label)}
-                  className={`p-3 rounded-xl border text-left transition-all duration-300 flex flex-col justify-between gap-2 group relative overflow-hidden ${
+                  onClick={() => handleSelectService(type.label)}
+                  className={`p-3.5 rounded-2xl border text-left transition-all duration-300 flex flex-col justify-between gap-2.5 group relative cursor-pointer ${
                     isSelected
-                      ? 'bg-gradient-to-br from-[#00A3FF]/20 to-[#0055FF]/10 border-[#00A3FF] shadow-[0_0_20px_rgba(0,163,255,0.25)] ring-1 ring-[#00A3FF]'
-                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.2]'
+                      ? 'bg-gradient-to-br from-[#00A3FF]/25 via-[#0055FF]/15 to-transparent border-[#00E5FF] shadow-[0_0_25px_rgba(0,163,255,0.35)] ring-1 ring-[#00E5FF] scale-[1.02]'
+                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.2] hover:scale-[1.01]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-white/5 text-slate-400 group-hover:text-white'}`}>
-                      <Icon className="w-5 h-5" strokeWidth={1.8} />
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                        isSelected
+                          ? 'bg-[#00A3FF]/30 text-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.4)]'
+                          : 'bg-white/5 text-slate-400 group-hover:text-white'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
                     </div>
                     {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF]" />
+                      <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]" />
                     )}
                   </div>
+
                   <div>
-                    <div className={`text-xs font-bold transition-colors ${isSelected ? 'text-white' : 'text-slate-200'}`}>
+                    <div
+                      className={`text-xs font-bold transition-colors ${
+                        isSelected ? 'text-white' : 'text-slate-200 group-hover:text-white'
+                      }`}
+                    >
                       {type.label}
                     </div>
-                    <div className="text-[10px] text-slate-400 line-clamp-1">
+                    <div className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
                       {type.sub}
                     </div>
                   </div>
@@ -142,32 +171,39 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
           </div>
         </div>
 
-        {/* 2-Column Grid: Legal Form & Registry Code */}
+        {/* 2-Column: Legal Form & 9-Digit Identification Code */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Legal Form */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
               იურიდიული ფორმა
             </label>
             <select
               value={clubLegalForm}
-              onChange={(e) => setClubLegalForm(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl bg-[#0F1420] border border-white/[0.12] focus:border-[#00A3FF] focus:ring-2 focus:ring-[#00A3FF]/20 text-white text-sm transition-all duration-300 outline-none cursor-pointer"
+              onChange={(e) => {
+                ps5Audio.playNavigate();
+                setClubLegalForm(e.target.value);
+              }}
+              className="w-full px-4 py-3.5 rounded-2xl bg-[#090E1A] border border-white/[0.12] focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00A3FF]/30 text-white text-sm transition-all duration-200 outline-none cursor-pointer"
             >
-              <option value="შპს">შპს (შეზღუდული პასუხისმგებლობის საზოგადოება)</option>
-              <option value="ააიპ">ააიპ (არაკომერციული იურიდიული პირი)</option>
+              <option value="შპს">შპს (შეზღუდული პასუხისმგებლობა)</option>
+              <option value="ააიპ">ააიპ (არაკომერციული ორგანიზაცია)</option>
               <option value="ინდ. მეწარმე">ინდ. მეწარმე</option>
-              <option value="სხვა">სხვა ფორმა</option>
+              <option value="სხვა">სხვა იურიდიული სტატუსი</option>
             </select>
           </div>
 
           {/* Identification Code */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                საიდენტიფიკაციო კოდი <span className="text-[#00A3FF]">*</span>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+                საიდენტიფიკაციო კოდი <span className="text-[#00E5FF]">*</span>
               </label>
-              <span className={`text-[10px] font-mono ${rawCodeLength === 9 ? 'text-emerald-400' : 'text-slate-400'}`}>
+              <span
+                className={`text-[10px] font-mono font-bold ${
+                  rawCodeLength === 9 ? 'text-emerald-400' : 'text-slate-400'
+                }`}
+              >
                 {rawCodeLength}/9 ციფრი
               </span>
             </div>
@@ -177,19 +213,21 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
                 value={clubCode}
                 onChange={handleCodeChange}
                 placeholder="204 123 456"
-                className="w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border border-white/[0.12] focus:border-[#00A3FF] focus:bg-white/[0.07] focus:ring-2 focus:ring-[#00A3FF]/20 text-white placeholder-slate-500 text-sm font-mono tracking-wider transition-all duration-300 outline-none"
+                className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.12] focus:border-[#00E5FF] focus:bg-white/[0.08] focus:ring-2 focus:ring-[#00A3FF]/30 text-white placeholder-slate-500 text-sm font-mono tracking-wider transition-all duration-200 outline-none"
               />
               {rawCodeLength === 9 && (
-                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-emerald-400 text-sm">✓</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400 font-bold text-sm">
+                  ✓
+                </span>
               )}
             </div>
           </div>
         </div>
 
         {/* City Selection Pills */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">
-            ქალაქი / ლოკაცია <span className="text-[#00A3FF]">*</span>
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+            ქალაქი / ლოკაცია <span className="text-[#00E5FF]">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {CITIES.map((c) => {
@@ -198,11 +236,11 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
                 <button
                   key={c}
                   type="button"
-                  onClick={() => setCity(c)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  onClick={() => handleCityClick(c)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-[#00A3FF] text-black font-bold shadow-[0_0_12px_rgba(0,163,255,0.4)]'
-                      : 'bg-white/[0.04] text-slate-300 border border-white/[0.08] hover:bg-white/[0.08]'
+                      ? 'bg-[#00A3FF] text-black font-bold shadow-[0_0_15px_rgba(0,163,255,0.4)]'
+                      : 'bg-white/[0.04] text-slate-300 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white'
                   }`}
                 >
                   {c}
@@ -211,31 +249,6 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
             })}
           </div>
         </div>
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-5 py-3 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer"
-        >
-          გაუქმება
-        </button>
-
-        <button
-          type="button"
-          disabled={!isStep1Valid}
-          onClick={onNext}
-          className={`px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
-            isStep1Valid
-              ? 'bg-gradient-to-r from-[#00A3FF] to-[#0055FF] text-white shadow-[0_0_25px_rgba(0,163,255,0.4)] hover:shadow-[0_0_35px_rgba(0,163,255,0.6)] hover:scale-[1.02] cursor-pointer'
-              : 'bg-white/[0.05] text-white/30 border border-white/[0.05] cursor-not-allowed'
-          }`}
-        >
-          <span>შემდეგი ეტაპი</span>
-          <span>→</span>
-        </button>
       </div>
     </div>
   );
