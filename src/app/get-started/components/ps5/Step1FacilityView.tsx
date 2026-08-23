@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 import { ps5Audio } from '../../core/ps5SoundEngine';
 import { Dumbbell, Waves, Sparkles, Shield, Building2, LucideIcon, Check } from 'lucide-react';
 
@@ -53,6 +54,8 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
   onNext,
   onCancel,
 }) => {
+  const shouldReduceMotion = useReducedMotion();
+
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '').slice(0, 9);
     const formatted = raw.replace(/(\d{3})(?=\d)/g, '$1 ').trim();
@@ -71,10 +74,40 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
 
   const rawCodeLength = clubCode.replace(/\s/g, '').length;
 
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.06,
+        delayChildren: 0.02,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 12, scale: shouldReduceMotion ? 1 : 0.96 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 260,
+        damping: 24,
+      },
+    },
+  };
+
   return (
-    <div className="w-full flex flex-col gap-6 animate-fadeIn">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="w-full flex flex-col gap-6"
+    >
       {/* PS5 Header Section */}
-      <div className="space-y-1.5 pb-4 border-b border-white/[0.08]">
+      <motion.div variants={itemVariants} className="space-y-1.5 pb-4 border-b border-white/[0.08]">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse" />
           <span className="text-[11px] font-mono tracking-widest text-[#00E5FF] uppercase">
@@ -87,12 +120,12 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
         <p className="text-xs sm:text-sm text-slate-300">
           შეიყვანეთ თქვენი სპორტული ობიექტის ძირითადი პარამეტრები ეკოსისტემაში ინტეგრაციისთვის.
         </p>
-      </div>
+      </motion.div>
 
       {/* Main Input Matrix */}
       <div className="space-y-5">
         {/* Facility Name */}
-        <div className="space-y-1.5">
+        <motion.div variants={itemVariants} className="space-y-1.5">
           <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
             ობიექტის / ბრენდის სახელი <span className="text-[#00E5FF]">*</span>
           </label>
@@ -110,10 +143,10 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
               </span>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Facility Category Selection (Tactile PS5 Cards) */}
-        <div className="space-y-2">
+        {/* Facility Category Selection (Tactile PS5 Cards with spring morph stagger) */}
+        <motion.div variants={itemVariants} className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
               ობიექტის კატეგორია <span className="text-[#00E5FF]">*</span>
@@ -124,18 +157,21 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            {FACILITY_TYPES.map((type) => {
+            {FACILITY_TYPES.map((type, idx) => {
               const isSelected = clubServices === type.label;
               const Icon = type.icon;
               return (
-                <button
+                <motion.button
                   key={type.id}
                   type="button"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleSelectService(type.label)}
                   className={`p-3.5 rounded-2xl border text-left transition-all duration-300 flex flex-col justify-between gap-2.5 group relative cursor-pointer ${
                     isSelected
-                      ? 'bg-gradient-to-br from-[#00A3FF]/25 via-[#0055FF]/15 to-transparent border-[#00E5FF] shadow-[0_0_25px_rgba(0,163,255,0.35)] ring-1 ring-[#00E5FF] scale-[1.02]'
-                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.2] hover:scale-[1.01]'
+                      ? 'bg-gradient-to-br from-[#00A3FF]/25 via-[#0055FF]/15 to-transparent border-[#00E5FF] shadow-[0_0_25px_rgba(0,163,255,0.35)] ring-1 ring-[#00E5FF]'
+                      : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.2]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -165,14 +201,14 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
                       {type.sub}
                     </div>
                   </div>
-                </button>
+                </motion.button>
               );
             })}
           </div>
-        </div>
+        </motion.div>
 
         {/* 2-Column: Legal Form & 9-Digit Identification Code */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Legal Form */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
@@ -222,10 +258,10 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* City Selection Pills */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <label className="block text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
             ქალაქი / ლოკაცია <span className="text-[#00E5FF]">*</span>
           </label>
@@ -248,8 +284,8 @@ export const Step1FacilityView: React.FC<Step1FacilityViewProps> = ({
               );
             })}
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };

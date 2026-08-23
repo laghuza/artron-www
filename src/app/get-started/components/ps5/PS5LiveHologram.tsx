@@ -1,58 +1,55 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import { ps5Audio } from '../../core/ps5SoundEngine';
 import { Zap, Sparkles, Building2, Check, ShieldCheck, Cpu, Radio, ChevronRight } from 'lucide-react';
 
 export interface PlanPreset {
   id: 'starter' | 'pro' | 'enterprise';
-  name: string;
+  nameKey: string;
   monthlyPrice: number;
   annualPrice: number;
-  badge: string;
-  defaultMembers: string;
-  defaultBranches: string;
-  defaultHardware: string;
-  description: string;
-  highlights: string[];
+  descKey: string;
+  featKeys: string[];
 }
 
-export const PLAN_PRESETS: Record<'starter' | 'pro' | 'enterprise', PlanPreset> = {
+export const PLAN_PRESETS_CONFIG: Record<'starter' | 'pro' | 'enterprise', PlanPreset> = {
   starter: {
     id: 'starter',
-    name: 'STARTER STUDIO',
+    nameKey: 'ps5_onboarding.plan_starter_name',
     monthlyPrice: 350,
     annualPrice: 280,
-    badge: '100 წევრამდე',
-    defaultMembers: '< 100 წევრი',
-    defaultBranches: '1 ფილიალი',
-    defaultHardware: 'მობილური QR სკანერი',
-    description: 'მცირე იოგა, პილატეს და კერძო სტუდიებისთვის',
-    highlights: ['Cloud CRM წვდომა', 'მობილური QR სკანერი', 'ონლაინ აბონემენტები'],
+    descKey: 'ps5_onboarding.plan_starter_desc',
+    featKeys: [
+      'ps5_onboarding.plan_feat_cloud_crm',
+      'ps5_onboarding.plan_feat_qr_scanner',
+      'ps5_onboarding.plan_feat_online_subs',
+    ],
   },
   pro: {
     id: 'pro',
-    name: 'PRO FITNESS',
+    nameKey: 'ps5_onboarding.plan_pro_name',
     monthlyPrice: 565,
     annualPrice: 450,
-    badge: '1,000 წევრამდე & IoT',
-    defaultMembers: '100 – 500 წევრი',
-    defaultBranches: '1 ფილიალი',
-    defaultHardware: 'ტურნიკეტები & ბარიერები',
-    description: 'სრული ავტომატიზაცია ტურნიკეტებითა და ბიომეტრიით',
-    highlights: ['ტურნიკეტების TCP რელეები', '1,000 წევრამდე & IoT Pass', 'ბრძანება №01-15/ნ ტაბელი'],
+    descKey: 'ps5_onboarding.plan_pro_desc',
+    featKeys: [
+      'ps5_onboarding.plan_feat_turnstiles_tcp',
+      'ps5_onboarding.plan_feat_iot_pass',
+      'ps5_onboarding.plan_feat_timesheet',
+    ],
   },
   enterprise: {
     id: 'enterprise',
-    name: 'ENTERPRISE OS',
+    nameKey: 'ps5_onboarding.plan_enterprise_name',
     monthlyPrice: 950,
     annualPrice: 760,
-    badge: 'ულიმიტო & ქსელი',
-    defaultMembers: '1500+ წევრი',
-    defaultBranches: 'ქსელი (4+ ფილიალი)',
-    defaultHardware: 'ტურნიკეტები & ბარიერები',
-    description: 'სპორტული ქსელების, აუზებისა და არენებისთვის',
-    highlights: ['ულიმიტო ფილიალები & API', 'Real-Time Edge Streaming', 'Multi-Tenant იზოლაცია'],
+    descKey: 'ps5_onboarding.plan_enterprise_desc',
+    featKeys: [
+      'ps5_onboarding.plan_feat_unlimited_branches',
+      'ps5_onboarding.plan_feat_edge_streaming',
+      'ps5_onboarding.plan_feat_multi_tenant',
+    ],
   },
 };
 
@@ -71,7 +68,8 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
   onToggleBillingCycle,
   currentStep,
 }) => {
-  const activePlan = PLAN_PRESETS[selectedPlan];
+  const { t } = useLanguage();
+  const activePlan = PLAN_PRESETS_CONFIG[selectedPlan];
   const price = billingCycle === 'annual' ? activePlan.annualPrice : activePlan.monthlyPrice;
 
   const handlePlanClick = (planKey: 'starter' | 'pro' | 'enterprise') => {
@@ -99,10 +97,10 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
             </div>
             <div>
               <span className="text-[10px] font-mono tracking-widest text-[#00E5FF] uppercase block">
-                SYSTEM TIER MATRIX
+                {t('ps5_onboarding.hologram_system_tier')}
               </span>
               <span className="text-xs font-bold text-white font-mono">
-                {activePlan.name}
+                {t(activePlan.nameKey)}
               </span>
             </div>
           </div>
@@ -118,10 +116,10 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
             <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
               ₾{price}
             </span>
-            <span className="text-xs text-slate-400 font-mono">/ თვე</span>
+            <span className="text-xs text-slate-400 font-mono">/ {t('pricing.period_monthly') || 'თვე'}</span>
           </div>
           <p className="text-xs text-slate-300 mt-1 line-clamp-1">
-            {activePlan.description}
+            {t(activePlan.descKey)}
           </p>
 
           {/* Billing Cycle Toggle */}
@@ -135,7 +133,7 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              ყოველთვიური
+              {t('ps5_onboarding.cycle_monthly')}
             </button>
             <button
               type="button"
@@ -146,7 +144,7 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <span>წლიური</span>
+              <span>{t('ps5_onboarding.cycle_annual')}</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-400 text-black font-bold">
                 -20%
               </span>
@@ -157,14 +155,14 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
         {/* Live Blueprint Specs Grid */}
         <div className="py-4 space-y-2.5 border-b border-white/[0.08] relative z-10">
           <span className="text-[10px] font-mono tracking-wider text-slate-400 uppercase block">
-            ტექნიკური აღჭურვილობის პაკეტი:
+            {t('ps5_onboarding.hologram_hardware_pkg')}:
           </span>
-          {activePlan.highlights.map((feat, idx) => (
+          {activePlan.featKeys.map((key, idx) => (
             <div key={idx} className="flex items-center gap-2 text-xs text-slate-200">
               <span className="w-4 h-4 rounded-full bg-[#00A3FF]/20 text-[#00E5FF] flex items-center justify-center text-[10px] font-bold shrink-0">
                 ✓
               </span>
-              <span>{feat}</span>
+              <span>{t(key)}</span>
             </div>
           ))}
         </div>
@@ -172,11 +170,11 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
         {/* PlayStation 5 Interactive Tier Selector */}
         <div className="pt-4 space-y-2 relative z-10">
           <span className="text-[10px] font-mono tracking-wider text-slate-400 uppercase block">
-            ტარიფის სწრაფი შეცვლა:
+            {t('ps5_onboarding.hologram_quick_switch')}:
           </span>
           <div className="grid grid-cols-3 gap-2">
-            {(Object.keys(PLAN_PRESETS) as Array<'starter' | 'pro' | 'enterprise'>).map((key) => {
-              const p = PLAN_PRESETS[key];
+            {(Object.keys(PLAN_PRESETS_CONFIG) as Array<'starter' | 'pro' | 'enterprise'>).map((key) => {
+              const p = PLAN_PRESETS_CONFIG[key];
               const isCurrent = selectedPlan === key;
               return (
                 <button
@@ -208,8 +206,8 @@ export const PS5LiveHologram: React.FC<PS5LiveHologramProps> = ({
           <ShieldCheck className="w-4 h-4" />
         </div>
         <div className="text-[11px] text-slate-300 leading-snug">
-          <span className="text-white font-semibold block">100% Multi-Tenant იზოლაცია</span>
-          მონაცემთა ბაზები დაცულია AES-256-GCM და RLS პროტოკოლებით.
+          <span className="text-white font-semibold block">{t('ps5_onboarding.hologram_security_title')}</span>
+          {t('ps5_onboarding.hologram_security_desc')}
         </div>
       </div>
     </div>

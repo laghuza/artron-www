@@ -90,4 +90,51 @@ describe('i18n Localization Dictionaries Integrity (KA / EN / RU)', () => {
     expect(enEmpty).toEqual([]);
     expect(ruEmpty).toEqual([]);
   });
+
+  test('ps5_onboarding namespace must be fully populated and parity-matched across KA, EN, and RU', () => {
+    expect(geDict.ps5_onboarding).toBeDefined();
+    expect(enDict.ps5_onboarding).toBeDefined();
+    expect(ruDict.ps5_onboarding).toBeDefined();
+
+    const geKeys = Object.keys(geDict.ps5_onboarding);
+    const enKeys = Object.keys(enDict.ps5_onboarding);
+    const ruKeys = Object.keys(ruDict.ps5_onboarding);
+
+    expect(geKeys.length).toBeGreaterThanOrEqual(40);
+    expect(enKeys.length).toBeGreaterThanOrEqual(40);
+    expect(ruKeys.length).toBeGreaterThanOrEqual(40);
+
+    // Verify 100% key parity
+    const missingInEn = geKeys.filter(k => !(k in enDict.ps5_onboarding));
+    const missingInRu = geKeys.filter(k => !(k in ruDict.ps5_onboarding));
+
+    expect(missingInEn).toEqual([]);
+    expect(missingInRu).toEqual([]);
+
+    // Check specific essential keys
+    const sampleKeys = [
+      'page_title_register',
+      'hud_step1',
+      'hud_step2',
+      'facility_gym_label',
+      'facility_pool_label',
+      'step2_turnstiles_label',
+      'legal_llc',
+      'admin_pid_label',
+      'step5_trophy_title',
+      'dock_enter',
+      'demo_headline',
+    ];
+
+    for (const key of sampleKeys) {
+      expect(typeof geDict.ps5_onboarding[key]).toBe('string');
+      expect(geDict.ps5_onboarding[key].trim().length).toBeGreaterThan(0);
+
+      expect(typeof enDict.ps5_onboarding[key]).toBe('string');
+      expect(enDict.ps5_onboarding[key].trim().length).toBeGreaterThan(0);
+
+      expect(typeof ruDict.ps5_onboarding[key]).toBe('string');
+      expect(ruDict.ps5_onboarding[key].trim().length).toBeGreaterThan(0);
+    }
+  });
 });

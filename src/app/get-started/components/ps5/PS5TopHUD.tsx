@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useLanguage, Locale } from '@/context/LanguageContext';
 import { ps5Audio } from '../../core/ps5SoundEngine';
-import { Volume2, VolumeX, Home, ArrowLeft, ShieldCheck, Wifi } from 'lucide-react';
+import { Volume2, VolumeX, Home, ArrowLeft, ShieldCheck, Wifi, Globe } from 'lucide-react';
 
 interface PS5TopHUDProps {
   currentStep: number;
@@ -12,32 +13,46 @@ interface PS5TopHUDProps {
   activeMode: 'REGISTER' | 'DEMO';
 }
 
-const STEP_LABELS = ['ობიექტის იდენტობა', 'ტექნიკური მასშტაბი', 'ადმინისტრატორი'];
-
 export const PS5TopHUD: React.FC<PS5TopHUDProps> = ({
   currentStep,
   totalSteps = 3,
   onBack,
   activeMode,
 }) => {
+  const { locale, setLocale, t } = useLanguage();
   const [time, setTime] = useState<string>('');
   const [isMuted, setIsMuted] = useState<boolean>(false);
+
+  const stepLabels = [
+    t('ps5_onboarding.hud_step1'),
+    t('ps5_onboarding.hud_step2'),
+    t('ps5_onboarding.hud_step3'),
+  ];
 
   useEffect(() => {
     const updateTime = () => {
       const d = new Date();
       setTime(
-        d.toLocaleTimeString('ka-GE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+        d.toLocaleTimeString(locale === 'ka' ? 'ka-GE' : locale === 'ru' ? 'ru-RU' : 'en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
       );
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [locale]);
 
   const handleToggleSound = () => {
     const muted = ps5Audio.toggleMute();
     setIsMuted(muted);
+  };
+
+  const handleLanguageChange = (newLang: Locale) => {
+    ps5Audio.playNavigate();
+    setLocale(newLang);
   };
 
   return (
@@ -52,7 +67,7 @@ export const PS5TopHUD: React.FC<PS5TopHUDProps> = ({
               onBack();
             }}
             className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00A3FF]/50 hover:bg-[#00A3FF]/10 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer group"
-            title="უკან დაბრუნება (Esc)"
+            title={t('ps5_onboarding.hud_back_tooltip')}
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
           </button>
@@ -75,15 +90,15 @@ export const PS5TopHUD: React.FC<PS5TopHUDProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-black tracking-widest text-white uppercase font-mono">
-                ARTRON
+                {t('ps5_onboarding.hud_console')}
               </span>
               <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-[#00A3FF]/15 border border-[#00A3FF]/30 text-[#00E5FF] font-mono font-bold tracking-wider">
-                PS5 CORE
+                {t('ps5_onboarding.hud_tag')}
               </span>
             </div>
             <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5">
               <Wifi className="w-3 h-3 text-emerald-400" />
-              <span>EDGE NET // LOW LATENCY</span>
+              <span>{t('ps5_onboarding.hud_edge_net')}</span>
             </div>
           </div>
         </Link>
@@ -94,7 +109,7 @@ export const PS5TopHUD: React.FC<PS5TopHUDProps> = ({
         {Array.from({ length: totalSteps }, (_, i) => i + 1).map((stepNum) => {
           const isActive = currentStep === stepNum;
           const isDone = currentStep > stepNum;
-          const label = STEP_LABELS[stepNum - 1] || `ნაბიჯი ${stepNum}`;
+          const label = stepLabels[stepNum - 1] || `${t('ps5_onboarding.hud_step_prefix')} ${stepNum}`;
 
           return (
             <div key={stepNum} className="flex items-center gap-2.5">
@@ -133,24 +148,42 @@ export const PS5TopHUD: React.FC<PS5TopHUDProps> = ({
         })}
       </div>
 
-      {/* Right: Audio FX Toggle, Time, Mode */}
-      <div className="flex items-center gap-3">
+      {/* Right: Language Toggle, Audio FX Toggle, Time, Home */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Language Selector Segment */}
+        <div className="flex items-center p-1 rounded-xl bg-white/[0.04] border border-white/10">
+          {(['ka', 'en', 'ru'] as Locale[]).map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              onClick={() => handleLanguageChange(lang)}
+              className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer ${
+                locale === lang
+                  ? 'bg-[#00A3FF] text-black shadow-[0_0_10px_#00E5FF]'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {lang}
+            </button>
+          ))}
+        </div>
+
         {/* Sound Toggle */}
         <button
           type="button"
           onClick={handleToggleSound}
-          className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all cursor-pointer ${
+          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl border flex items-center justify-center transition-all cursor-pointer ${
             isMuted
               ? 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-slate-200'
               : 'bg-[#00A3FF]/15 border-[#00A3FF]/40 text-[#00E5FF] shadow-[0_0_12px_rgba(0,163,255,0.25)]'
           }`}
-          title={isMuted ? 'ხმის ჩართვა (Web Audio)' : 'ხმის გათიშვა'}
+          title={isMuted ? t('ps5_onboarding.hud_sound_off') : t('ps5_onboarding.hud_sound_on')}
         >
           {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </button>
 
         {/* Real-Time Digital Clock */}
-        <div className="hidden sm:flex flex-col items-end">
+        <div className="hidden lg:flex flex-col items-end">
           <span className="text-xs font-mono font-bold text-slate-200 tracking-wider">
             {time || '00:00:00'}
           </span>
@@ -164,10 +197,10 @@ export const PS5TopHUD: React.FC<PS5TopHUDProps> = ({
         <Link
           href="/"
           onClick={() => ps5Audio.playSelect()}
-          className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 text-xs font-medium text-slate-300 hover:text-white flex items-center gap-1.5 transition-all cursor-pointer"
+          className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 text-xs font-medium text-slate-300 hover:text-white flex items-center gap-1.5 transition-all cursor-pointer"
         >
           <Home className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">მთავარი</span>
+          <span className="hidden sm:inline">{t('nav_about') === 'ჩვენ შესახებ' ? 'მთავარი' : 'Home'}</span>
         </Link>
       </div>
     </header>

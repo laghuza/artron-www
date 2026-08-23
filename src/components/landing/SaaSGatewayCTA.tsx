@@ -5,6 +5,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { Calendar, Building2, ArrowRight } from 'lucide-react';
 import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 import { MagneticButton } from '@/components/ui/MagneticButton';
+import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 export const SaaSGatewayCTA: React.FC = () => {
   const { t, locale } = useLanguage();
@@ -106,17 +107,17 @@ export const SaaSGatewayCTA: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10">
 
               {/* Primary — Register */}
-              <MagneticButton
+              <IgnitionButton
                 href="/get-started?mode=register"
-                variant="primary"
-                shockwaveColor="rgba(0, 210, 255, 0.8)"
+                variant="cyan"
+                size="lg"
                 className="px-7 py-4 text-sm font-extrabold"
-                style={{ minHeight: '52px' }}
+                aria-label="B2B Registration Ignition"
               >
                 <Building2 className="w-4.5 h-4.5 shrink-0" />
                 <span>{t('cta_btn_register')}</span>
                 <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-200" />
-              </MagneticButton>
+              </IgnitionButton>
 
               {/* Secondary — Book Demo */}
               <MagneticButton

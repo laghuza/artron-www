@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import { soundEngine } from '@/core';
 import { useI18n } from '@/context/I18nContext';
-import { PS5ProgressStepper } from '@/app/get-started/components/ps5/PS5ProgressStepper';
-import { Step1FacilityView } from '@/app/get-started/components/ps5/Step1FacilityView';
-import { Step2CapacityView } from '@/app/get-started/components/ps5/Step2CapacityView';
-import { Step3AuthorityView } from '@/app/get-started/components/ps5/Step3AuthorityView';
-import { PS5ActivationSequence } from '@/app/get-started/components/ps5/PS5ActivationSequence';
+import { PS5ProgressStepper, StepperStep } from '@/app/get-started/components/ps5/PS5ProgressStepper';
+import { Step1FacilityTypeMatrix, FacilityTypeMatrixItem } from '@/app/get-started/components/ps5/Step1FacilityTypeMatrix';
+import { Step2ScaleTelemetryView } from '@/app/get-started/components/ps5/Step2ScaleTelemetryView';
+import { Step3OrgIdentityView } from '@/app/get-started/components/ps5/Step3OrgIdentityView';
+import { Step4CommandAccessView } from '@/app/get-started/components/ps5/Step4CommandAccessView';
+import { Step5SystemLaunchSequence } from '@/app/get-started/components/ps5/Step5SystemLaunchSequence';
 import { QuickDemoBookingView } from '@/app/get-started/components/ps5/QuickDemoBookingView';
 import { registerClubAction } from '@/app/get-started/actions';
 
@@ -38,10 +39,11 @@ interface UnifiedRegistrationWizardProps {
   isCompact?: boolean;
 }
 
-const STEPS = [
-  { number: 1, title: 'ობიექტი', subtitle: 'პროფილი & იდენტობა' },
-  { number: 2, title: 'მასშტაბი', subtitle: 'IoT & აპარატურა' },
-  { number: 3, title: 'ადმინისტრატორი', subtitle: 'უსაფრთხოება & წვდომა' },
+const STEPS: StepperStep[] = [
+  { number: 1, title: 'ობიექტი', subtitle: 'ტიპი & კატეგორია' },
+  { number: 2, title: 'მასშტაბი', subtitle: 'IoT & ტელემეტრია' },
+  { number: 3, title: 'იდენტობა', subtitle: 'სახელი & მისამართი' },
+  { number: 4, title: 'სარდლობა', subtitle: 'ადმინი & დაცვა' },
 ];
 
 export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps> = ({
@@ -59,20 +61,24 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [deploymentKey, setDeploymentKey] = useState('ART-CLB-108XX');
 
-  // Step 1: Facility States
+  // Step 1 State
+  const [facilityType, setFacilityType] = useState('ფიტნეს კლუბი & დარბაზი');
+
+  // Step 2 State
+  const [turnstilesCount, setTurnstilesCount] = useState(2);
+  const [isAntiPassbackEnabled, setIsAntiPassbackEnabled] = useState(true);
+  const [membersCapacity, setMembersCapacity] = useState(500);
+  const [trainersCount, setTrainersCount] = useState(8);
+  const [branchesCount, setBranchesCount] = useState('1 ფილიალი');
+
+  // Step 3 State
   const [clubName, setClubName] = useState('');
   const [clubLegalForm, setClubLegalForm] = useState('შპს');
   const [clubCode, setClubCode] = useState('');
-  const [clubServices, setClubServices] = useState('ფიტნეს დარბაზი');
   const [city, setCity] = useState('თბილისი');
-
-  // Step 2: Capacity & Hardware States
   const [clubAddress, setClubAddress] = useState('');
-  const [branchesCount, setBranchesCount] = useState('1 ფილიალი');
-  const [membersScale, setMembersScale] = useState('100 – 500 წევრი');
-  const [hardwareType, setHardwareType] = useState('ტურნიკეტები & ბარიერები');
 
-  // Step 3: Authority & Security States
+  // Step 4 State
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [position, setPosition] = useState('დამფუძნებელი / დირექტორი');
@@ -84,9 +90,10 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
   const [isBiometricAgreed, setIsBiometricAgreed] = useState(false);
 
   // Validation Flags
-  const isStep1Valid = clubName.trim().length > 0 && clubCode.replace(/\s/g, '').length === 9 && clubServices.length > 0;
-  const isStep2Valid = clubAddress.trim().length > 0 && branchesCount.length > 0 && membersScale.length > 0 && hardwareType.length > 0;
-  const isStep3Valid =
+  const isStep1Valid = facilityType.trim().length > 0;
+  const isStep2Valid = turnstilesCount >= 1 && membersCapacity >= 100 && branchesCount.length > 0;
+  const isStep3Valid = clubName.trim().length > 0 && clubCode.replace(/\s/g, '').length === 9 && clubAddress.trim().length > 0;
+  const isStep4Valid =
     firstName.trim().length > 0 &&
     lastName.trim().length > 0 &&
     position.trim().length > 0 &&
@@ -103,14 +110,15 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
     setSubmitError(null);
     try {
       const fullAddress = `${city}, ${clubAddress}`;
+      const hardwareDesc = `${turnstilesCount} ტურნიკეტი (Anti-passback: ${isAntiPassbackEnabled ? 'ON' : 'OFF'}) | ${trainersCount} მწვრთნელი`;
       const res = await registerClubAction({
         clubName,
         clubLegalForm,
         clubCode,
-        clubServices: `${clubServices} | ${membersScale}`,
+        clubServices: `${facilityType} | ${membersCapacity} წევრი`,
         clubAddress: fullAddress,
         branchesCount,
-        gatesCount: hardwareType,
+        gatesCount: hardwareDesc,
         clubFirstName: firstName,
         clubLastName: lastName,
         clubExecPosition: position,
@@ -127,12 +135,12 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
           clubName,
           clubLegalForm,
           clubCode,
-          clubServices,
+          clubServices: facilityType,
           city,
           clubAddress,
           branchesCount,
-          membersScale,
-          hardwareType,
+          membersScale: `${membersCapacity} წევრი`,
+          hardwareType: hardwareDesc,
           firstName,
           lastName,
           position,
@@ -151,13 +159,18 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
     }
   };
 
+  const isCurrentNextDisabled =
+    (step === 1 && !isStep1Valid) ||
+    (step === 2 && !isStep2Valid) ||
+    (step === 3 && !isStep3Valid) ||
+    (step === 4 && (!isStep4Valid || isSubmitting));
+
   return (
     <div className={`w-full flex flex-col justify-between select-none ${isCompact ? 'p-1 font-sans' : 'p-2 md:p-4 font-sans'}`}>
-      {/* Main Mode Body */}
       {activeTab === 'DEMO' ? (
         <div className="p-4 sm:p-6 rounded-2xl bg-[#0E131F]/90 border border-emerald-500/30 backdrop-blur-xl">
-          <QuickDemoBookingView 
-            onCancel={onCancel || (() => {})} 
+          <QuickDemoBookingView
+            onCancel={onCancel || (() => {})}
             onSwitchToRegister={() => {
               soundEngine.playPulseNode();
               setActiveTab('REGISTER');
@@ -174,36 +187,29 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
                 onStepClick={(target) => {
                   if (target === 1) setStep(1);
                   if (target === 2 && isStep1Valid) setStep(2);
+                  if (target === 3 && isStep1Valid && isStep2Valid) setStep(3);
                 }}
               />
             </div>
           )}
 
           {isSuccess ? (
-            <PS5ActivationSequence
+            <Step5SystemLaunchSequence
               deploymentKey={deploymentKey}
               email={email}
               facilityName={clubName}
+              facilityType={facilityType}
               onReset={() => {
                 if (onCancel) onCancel();
                 else setIsSuccess(false);
               }}
             />
           ) : (
-            <div className="p-4 sm:p-6 rounded-2xl bg-[#0E131F]/90 border border-white/[0.12] backdrop-blur-xl">
+            <div className="p-4 sm:p-6 rounded-2xl bg-[#0E131F]/90 border border-white/[0.12] backdrop-blur-xl flex flex-col gap-6">
               {step === 1 && (
-                <Step1FacilityView
-                  clubName={clubName}
-                  setClubName={setClubName}
-                  clubLegalForm={clubLegalForm}
-                  setClubLegalForm={setClubLegalForm}
-                  clubCode={clubCode}
-                  setClubCode={setClubCode}
-                  clubServices={clubServices}
-                  setClubServices={setClubServices}
-                  city={city}
-                  setCity={setCity}
-                  isStep1Valid={isStep1Valid}
+                <Step1FacilityTypeMatrix
+                  selectedFacility={facilityType}
+                  onSelectFacility={(item: FacilityTypeMatrixItem) => setFacilityType(item.label)}
                   onNext={() => {
                     soundEngine.playPulseNode();
                     setStep(2);
@@ -213,29 +219,37 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
               )}
 
               {step === 2 && (
-                <Step2CapacityView
-                  clubAddress={clubAddress}
-                  setClubAddress={setClubAddress}
+                <Step2ScaleTelemetryView
+                  turnstilesCount={turnstilesCount}
+                  setTurnstilesCount={setTurnstilesCount}
+                  isAntiPassbackEnabled={isAntiPassbackEnabled}
+                  setIsAntiPassbackEnabled={setIsAntiPassbackEnabled}
+                  membersCapacity={membersCapacity}
+                  setMembersCapacity={setMembersCapacity}
+                  trainersCount={trainersCount}
+                  setTrainersCount={setTrainersCount}
                   branchesCount={branchesCount}
                   setBranchesCount={setBranchesCount}
-                  membersScale={membersScale}
-                  setMembersScale={setMembersScale}
-                  hardwareType={hardwareType}
-                  setHardwareType={setHardwareType}
-                  isStep2Valid={isStep2Valid}
-                  onNext={() => {
-                    soundEngine.playPulseNode();
-                    setStep(3);
-                  }}
-                  onBack={() => {
-                    soundEngine.playPulseNode();
-                    setStep(1);
-                  }}
                 />
               )}
 
               {step === 3 && (
-                <Step3AuthorityView
+                <Step3OrgIdentityView
+                  clubName={clubName}
+                  setClubName={setClubName}
+                  clubLegalForm={clubLegalForm}
+                  setClubLegalForm={setClubLegalForm}
+                  clubCode={clubCode}
+                  setClubCode={setClubCode}
+                  city={city}
+                  setCity={setCity}
+                  clubAddress={clubAddress}
+                  setClubAddress={setClubAddress}
+                />
+              )}
+
+              {step === 4 && (
+                <Step4CommandAccessView
                   firstName={firstName}
                   setFirstName={setFirstName}
                   lastName={lastName}
@@ -254,20 +268,47 @@ export const UnifiedRegistrationWizard: React.FC<UnifiedRegistrationWizardProps>
                   setIsAgreed={setIsAgreed}
                   isBiometricAgreed={isBiometricAgreed}
                   setIsBiometricAgreed={setIsBiometricAgreed}
-                  isStep3Valid={isStep3Valid}
-                  onSubmit={handleSubmit}
-                  onBack={() => {
-                    soundEngine.playPulseNode();
-                    setStep(2);
-                  }}
-                  isSubmitting={isSubmitting}
                   submitError={submitError}
                 />
               )}
+
+              {/* Navigation Action Buttons for Modal / Portal Mode */}
+              <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    soundEngine.playPulseNode();
+                    if (step > 1) setStep(step - 1);
+                    else onCancel?.();
+                  }}
+                  className="px-5 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 text-xs font-semibold uppercase transition-colors cursor-pointer"
+                >
+                  {step === 1 ? 'გაუქმება' : '← უკან'}
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isCurrentNextDisabled}
+                  onClick={() => {
+                    if (step < 4) {
+                      soundEngine.playPulseNode();
+                      setStep(step + 1);
+                    } else {
+                      handleSubmit();
+                    }
+                  }}
+                  className={`px-7 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-300 ${
+                    !isCurrentNextDisabled
+                      ? 'bg-gradient-to-r from-[#00A3FF] via-[#0066FF] to-[#00D2FF] text-white shadow-[0_0_20px_rgba(0,163,255,0.4)] hover:shadow-[0_0_30px_rgba(0,163,255,0.7)] hover:scale-[1.02] cursor-pointer'
+                      : 'bg-white/[0.04] text-white/30 border border-white/[0.06] cursor-not-allowed'
+                  }`}
+                >
+                  {isSubmitting ? 'მუშავდება...' : step === 4 ? '🚀 SPORT OS გააქტიურება' : 'შემდეგი ეტაპი →'}
+                </button>
+              </div>
             </div>
           )}
 
-          {/* Quick Login Redirection if available */}
           {!isSuccess && onSwitchToLogin && (
             <div className="text-center pt-4">
               <button

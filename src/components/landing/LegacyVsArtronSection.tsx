@@ -18,6 +18,7 @@ import {
   DownloadCloud
 } from 'lucide-react';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
+import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 export const LegacyVsArtronSection: React.FC = () => {
   const { t, locale } = useLanguage();
@@ -292,13 +293,15 @@ export const LegacyVsArtronSection: React.FC = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto shrink-0">
-              <Link
+              <IgnitionButton
                 href="/sports-os"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-mono text-xs uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#0066FF] to-[#00A3FF] hover:from-[#0052cc] hover:to-[#0090e0] border border-[#00A3FF]/50 shadow-[0_0_20px_rgba(0,163,255,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                variant="cyan"
+                size="md"
+                className="w-full sm:w-auto font-mono text-xs uppercase tracking-wider font-bold"
+                aria-label="Instant Sandbox Ignition"
               >
-                <Sparkles className="w-4 h-4" />
                 <span>{t('migration.cta_instant_sandbox')}</span>
-              </Link>
+              </IgnitionButton>
 
               <Link
                 href="/get-started?mode=demo"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono, Noto_Sans_Georgian } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { PortalIgnitionProvider } from "@/components/ui/GlobalPortalIgnition";
 import { FloatingContactWidget } from "@/components/FloatingContactWidget";
 import { AIBotWidget } from "@/components/landing/AIBotWidget";
 import "./globals.css";
@@ -77,6 +78,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${jetbrainsMono.variable} ${notoGeorgian.variable} h-full antialiased dark`}
     >
       <head>
+        {/* High-Priority Video Asset Preload for 0ms Instant Portal Ignition */}
+        <link rel="preload" href="/video/portal-blast.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/video/portal-blast.mp4" as="video" type="video/mp4" />
+
         {/* Google Consent Mode v2 Defaults */}
         <script
           dangerouslySetInnerHTML={{
@@ -95,9 +100,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col bg-[#0B0F17] text-white">
         <LanguageProvider>
-          {children}
-          <FloatingContactWidget />
-          <AIBotWidget />
+          <PortalIgnitionProvider>
+            {children}
+            <FloatingContactWidget />
+            <AIBotWidget />
+          </PortalIgnitionProvider>
         </LanguageProvider>
       </body>
     </html>

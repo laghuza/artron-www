@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/context/LanguageContext';
 import { soundEngine } from '@/core';
 import { Dumbbell, Waves, Sparkles, Shield, Rocket, CheckCircle, ArrowRight, LucideIcon } from 'lucide-react';
 
@@ -13,19 +14,20 @@ interface QuickDemoBookingViewProps {
 
 interface FacilityTypeDemoItem {
   id: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
 }
 
 const FACILITY_TYPES: FacilityTypeDemoItem[] = [
-  { id: 'gym', label: 'ფიტნეს დარბაზი', icon: Dumbbell },
-  { id: 'pool', label: 'საცურაო აუზი & სპა', icon: Waves },
-  { id: 'studio', label: 'ჯგუფური სტუდია', icon: Sparkles },
-  { id: 'club', label: 'სპორტული კლუბი', icon: Shield },
+  { id: 'gym', labelKey: 'ps5_onboarding.type_gym_title', icon: Dumbbell },
+  { id: 'pool', labelKey: 'ps5_onboarding.type_pool_title', icon: Waves },
+  { id: 'studio', labelKey: 'ps5_onboarding.type_studio_title', icon: Sparkles },
+  { id: 'club', labelKey: 'ps5_onboarding.type_fed_title', icon: Shield },
 ];
 
 export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCancel, onSwitchToRegister }) => {
   const router = useRouter();
+  const { t } = useLanguage();
   const [name, setName] = useState('');
   const [facilityName, setFacilityName] = useState('');
   const [facilityType, setFacilityType] = useState('gym');
@@ -35,7 +37,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
   const [guestCredentials, setGuestCredentials] = useState({
     userId: 'GUEST-8842',
     passCode: 'ART-9921',
-    validity: '60 წუთი',
+    validity: '60 min',
   });
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +70,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
       setGuestCredentials({
         userId: randomId,
         passCode: randomCode,
-        validity: '60 წუთი',
+        validity: '60 min',
       });
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -84,33 +86,33 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         </div>
         
         <span className="text-[11px] font-mono tracking-widest text-emerald-400 uppercase mb-1">
-          ⚡ ერთჯერადი GUEST წვდომა გააქტიურებულია
+          ⚡ {t('ps5_onboarding.demo_success_badge')}
         </span>
 
         <h2 className="text-xl sm:text-2xl font-extrabold text-white mb-2">
-          მოგესალმებით, {name}!
+          {t('ps5_onboarding.demo_welcome_prefix')}, {name}!
         </h2>
         <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mb-5 leading-relaxed">
-          თქვენი 1-საათიანი სტუმრის სესია (<span className="text-emerald-400 font-bold">{facilityName}</span>) მზად არის. შეგიძლიათ გადაქექოთ სამართავი პანელის ყველა მოდული რეალური საჩვენებელი მონაცემებით.
+          {t('ps5_onboarding.demo_ready_desc')} (<span className="text-emerald-400 font-bold">{facilityName}</span>).
         </p>
 
         {/* Credentials Box */}
         <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/15 text-left font-mono text-xs w-full max-w-md mb-6 space-y-2 text-slate-300 shadow-xl">
           <div className="flex justify-between items-center pb-1.5 border-b border-white/10">
-            <span className="text-slate-400">ობიექტის პროფილი:</span>
+            <span className="text-slate-400">{t('ps5_onboarding.demo_field_facility')}:</span>
             <span className="text-white font-bold">{facilityName}</span>
           </div>
           <div className="flex justify-between items-center pb-1.5 border-b border-white/10">
-            <span className="text-slate-400">სტუმრის USER ID:</span>
+            <span className="text-slate-400">{t('ps5_onboarding.demo_field_guest_id')}:</span>
             <span className="text-emerald-400 font-bold">{guestCredentials.userId}</span>
           </div>
           <div className="flex justify-between items-center pb-1.5 border-b border-white/10">
-            <span className="text-slate-400">ერთჯერადი წვდომის კოდი:</span>
+            <span className="text-slate-400">{t('ps5_onboarding.demo_field_passcode')}:</span>
             <span className="text-[#00E5FF] font-bold">{guestCredentials.passCode}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-slate-400">სესიის ხანგრძლივობა:</span>
-            <span className="text-amber-400 font-bold">⏱️ {guestCredentials.validity}</span>
+            <span className="text-slate-400">{t('ps5_onboarding.demo_field_validity')}:</span>
+            <span className="text-amber-400 font-bold">⏱️ 60 {t('system.minutes') || 'წუთი'}</span>
           </div>
         </div>
 
@@ -121,7 +123,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
             onClick={() => soundEngine.playSystemAccess()}
             className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_25px_rgba(52,211,153,0.4)] flex items-center justify-center gap-2"
           >
-            <span>⚡ შესვლა სამართავ პანელში (1-საათიანი სესია)</span>
+            <span>{t('ps5_onboarding.demo_btn_enter')}</span>
             <span>→</span>
           </Link>
 
@@ -130,7 +132,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
             onClick={() => soundEngine.playPulseNode()}
             className="w-full py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/10 text-white text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer text-center"
           >
-            🚀 გადასვლა სისტემის შეძენასა და რეგისტრაციაზე
+            {t('ps5_onboarding.demo_btn_upgrade')}
           </Link>
 
           <button
@@ -142,7 +144,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
             className="w-full py-2 px-4 rounded-xl border border-white/10 hover:border-white/20 text-slate-400 hover:text-white text-xs font-medium uppercase tracking-wider transition-all cursor-pointer text-center flex items-center justify-center gap-1.5"
           >
             <span>←</span>
-            <span>მონაცემების რედაქტირება / უკან</span>
+            <span>{t('ps5_onboarding.dock_btn_back')}</span>
           </button>
         </div>
       </div>
@@ -156,8 +158,8 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         <div className="flex items-center gap-2.5">
           <span className="text-xl">🚀</span>
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-white">გადაიფიქრეთ დემო?</span>
-            <span className="text-[11px] text-slate-300">პირდაპირ გაააქტიურეთ ობიექტი და შეიძინეთ სრული პანელი</span>
+            <span className="text-xs font-bold text-white">{t('ps5_onboarding.demo_switch_title')}</span>
+            <span className="text-[11px] text-slate-300">{t('ps5_onboarding.demo_switch_desc')}</span>
           </div>
         </div>
         <button
@@ -169,7 +171,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
           }}
           className="w-full sm:w-auto py-2 px-3.5 rounded-xl bg-gradient-to-r from-[#00A3FF] to-[#0066FF] hover:from-[#00E5FF] hover:to-[#00A3FF] text-slate-950 font-bold text-[11px] uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap shadow-[0_0_15px_rgba(0,163,255,0.4)] text-center"
         >
-          სისტემის შეძენა / რეგისტრაცია →
+          {t('ps5_onboarding.demo_switch_btn')} →
         </button>
       </div>
 
@@ -178,14 +180,14 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-[11px] font-mono tracking-widest text-emerald-400 uppercase">
-            [ ⚡ FAST-TRACK GUEST ACCESS ]
+            [ ⚡ {t('ps5_onboarding.demo_mode_badge')} ]
           </span>
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-          მიიღეთ 1-საათიანი სტუმრის (Guest) წვდომა
+          {t('ps5_onboarding.demo_headline')}
         </h2>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-2.5 mt-2">
-          ⚡ <strong>მყისიერი ტესტ-დრაივი:</strong> შეავსეთ 3 ველი და მომენტალურად შეაბიჯეთ სამართავ პანელში. არანაირი ლოდინი, ზარები ან საბანკო ბარათი.
+          ⚡ <strong>{t('ps5_onboarding.demo_instant_bold')}:</strong> {t('ps5_onboarding.demo_instant_desc')}
         </p>
       </div>
 
@@ -194,7 +196,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         {/* Facility Type Selector */}
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-            ობიექტის ტიპი <span className="text-emerald-400">*</span>
+            {t('ps5_onboarding.demo_field_facility_type')} <span className="text-emerald-400">*</span>
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {FACILITY_TYPES.map((type) => {
@@ -215,7 +217,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
                   }`}
                 >
                   <Icon className={`w-4 h-4 ${isSelected ? 'text-emerald-400' : 'text-slate-400'}`} strokeWidth={1.8} />
-                  <span className="text-[11px] font-bold">{type.label}</span>
+                  <span className="text-[11px] font-bold">{t(type.labelKey)}</span>
                 </button>
               );
             })}
@@ -225,14 +227,14 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         {/* Facility Name */}
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-            ობიექტის / დარბაზის სახელი <span className="text-emerald-400">*</span>
+            {t('ps5_onboarding.demo_field_facility_name')} <span className="text-emerald-400">*</span>
           </label>
           <input
             type="text"
             required
             value={facilityName}
             onChange={(e) => setFacilityName(e.target.value)}
-            placeholder="მაგ: Champion Gym & Fitness"
+            placeholder={t('ps5_onboarding.demo_facility_placeholder')}
             className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.12] focus:border-emerald-400 focus:bg-white/[0.07] text-white placeholder-slate-500 text-xs sm:text-sm outline-none transition-all"
           />
         </div>
@@ -241,21 +243,21 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-              თქვენი სახელი და გვარი <span className="text-emerald-400">*</span>
+              {t('ps5_onboarding.demo_field_name')} <span className="text-emerald-400">*</span>
             </label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="მაგ: დავით ბერიძე"
+              placeholder={t('ps5_onboarding.demo_name_placeholder')}
               className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.12] focus:border-emerald-400 focus:bg-white/[0.07] text-white placeholder-slate-500 text-xs sm:text-sm outline-none transition-all"
             />
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
-              მობილურის ნომერი <span className="text-emerald-400">*</span>
+              {t('ps5_onboarding.demo_field_phone')} <span className="text-emerald-400">*</span>
             </label>
             <input
               type="tel"
@@ -280,7 +282,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
               : 'bg-white/10 text-slate-500 border border-white/5 cursor-not-allowed opacity-60'
           }`}
         >
-          {isSubmitting ? 'სტუმრის წვდომის გენერაცია...' : '⚡ მყისიერი 1-საათიანი Guest წვდომის მიღება →'}
+          {isSubmitting ? t('ps5_onboarding.dock_submitting') : `${t('ps5_onboarding.demo_btn_get_access')} →`}
         </button>
         <button
           type="button"
@@ -288,7 +290,7 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
           className="py-3.5 px-5 rounded-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5"
         >
           <span>←</span>
-          <span>უკან</span>
+          <span>{t('ps5_onboarding.dock_btn_back')}</span>
         </button>
       </div>
     </form>

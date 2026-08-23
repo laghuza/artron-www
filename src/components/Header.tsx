@@ -10,6 +10,7 @@ import ArtronLogo from '@/components/ui/ArtronLogo';
 import { audioManager } from '@/lib/audioManager';
 import { useHeaderKinematics } from '@/core/hooks/useHeaderKinematics';
 import { MagneticButton } from '@/components/ui/MagneticButton';
+import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -91,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
     { href: '/about',               label: t('nav_about') },
   ];
 
-  const systemAccessLabel = locale === 'ka' ? 'სისტემური წვდომა' : locale === 'ru' ? 'Системный доступ' : 'System Access';
+  const systemAccessLabel = locale === 'ka' ? 'Sport OS-ის ჩართვა' : locale === 'ru' ? 'Запуск Sport OS' : 'Launch Sport OS';
   const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა & IOT' : locale === 'ru' ? 'Спортивная Экосистема & IOT' : 'SPORTS & IOT ECOSYSTEM';
 
   /* ── Glass header surface ── */
@@ -233,22 +234,15 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className="will-change-transform shrink-0"
               >
-                <MagneticButton
+                <IgnitionButton
                   href="/sports-os"
                   variant="emerald"
-                  shockwaveColor="rgba(16, 185, 129, 0.8)"
-                  onClick={() => audioManager.playClick()}
+                  size="sm"
                   className="px-2.5 sm:px-3.5 h-8.5 text-[10.5px] sm:text-xs rounded-xl"
-                  aria-label="System Access Login"
+                  aria-label="Sport OS Ignition"
                 >
-                  <span className="relative flex h-2 w-2 mr-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981] shadow-[0_0_8px_#10B981]" />
-                  </span>
-
-                  <Zap className="w-3.5 h-3.5 text-[#34D399] transition-transform shrink-0 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] mr-0.5" />
-                  <span className="tracking-wide font-extrabold whitespace-nowrap">{systemAccessLabel}</span>
-                </MagneticButton>
+                  {systemAccessLabel}
+                </IgnitionButton>
               </motion.div>
             </>
           )}
@@ -399,21 +393,16 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Mobile CTA */}
               <div className="mt-2 pt-2 border-t border-white/[0.08]">
-                <Link
+                <IgnitionButton
                   href="/sports-os"
-                  onClick={() => {
-                    audioManager.playClick();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#052e16] to-[#065f46] border border-[#10B981]/50 hover:bg-[#10B981]/25 transition-all min-h-[44px] shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                  variant="emerald"
+                  size="md"
+                  fullWidth={true}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Sport OS Ignition Mobile"
                 >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
-                  </span>
-                  <Zap className="w-4 h-4 text-[#34D399]" />
-                  <span>{systemAccessLabel}</span>
-                </Link>
+                  {systemAccessLabel}
+                </IgnitionButton>
               </div>
             </div>
           </motion.div>

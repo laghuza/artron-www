@@ -5,6 +5,7 @@ import { useScroll, useTransform, motion, useReducedMotion } from 'framer-motion
 import { useLanguage } from '@/context/LanguageContext';
 import { KineticTypoHeader } from './kinetic/KineticTypoHeader';
 import { KineticCentralMesh } from './kinetic/KineticCentralMesh';
+import { IgnitionButton } from '@/components/ui/IgnitionButton';
 import { ChevronDown } from 'lucide-react';
 
 export const KineticScrollHero: React.FC = () => {
@@ -63,14 +64,35 @@ export const KineticScrollHero: React.FC = () => {
           meshRotate={meshRotate}
         />
 
-        {/* Layer 3: Initial Scroll Prompt */}
+        {/* Layer 3: Interactive Hero Ignition Trigger */}
+        <motion.div
+          suppressHydrationWarning
+          style={{ opacity: shouldReduceMotion ? 1 : subtitleOpacity }}
+          className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-30 flex flex-col sm:flex-row items-center gap-3 px-4 max-w-full"
+        >
+          <IgnitionButton
+            href="/sports-os"
+            variant="emerald"
+            size="md"
+            className="shadow-[0_0_35px_rgba(0,255,135,0.4)]"
+            aria-label="Sport OS Ignition Hero"
+          >
+            {locale === 'ka'
+              ? 'Sport OS-ის ჩართვა'
+              : locale === 'ru'
+              ? 'Запуск Sport OS'
+              : 'Launch Sport OS'}
+          </IgnitionButton>
+        </motion.div>
+
+        {/* Layer 4: Initial Scroll Prompt */}
         <motion.div 
           suppressHydrationWarning
           style={{ opacity: shouldReduceMotion ? 0.7 : scrollHintOpacity }}
-          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none font-mono text-[9px] sm:text-[10px] tracking-widest text-slate-500 uppercase will-change-opacity px-4 text-center whitespace-nowrap"
+          className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1.5 pointer-events-none font-mono text-[8.5px] sm:text-[9.5px] tracking-widest text-slate-500 uppercase will-change-opacity px-4 text-center whitespace-nowrap"
         >
           <span>{locale === 'ka' ? 'ჩამოსქროლეთ ეკოსისტემის გასაშლელად' : locale === 'ru' ? 'Листайте вниз для открытия' : 'Scroll to explore ecosystem'}</span>
-          <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00A3FF] animate-bounce" />
+          <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#00A3FF] animate-bounce" />
         </motion.div>
       </div>
     </div>

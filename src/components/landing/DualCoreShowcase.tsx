@@ -22,6 +22,7 @@ import { LaborComplianceModal } from './LaborComplianceModal';
 import { WalletCard } from './dual-core/WalletCard';
 import { TiltCard } from './dual-core/TiltCard';
 import { SparkLine } from './dual-core/SparkLine';
+import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 const LiveCounter: React.FC<{ target: number; prefix?: string; suffix?: string; color: string }> = ({
   target,
@@ -345,17 +346,16 @@ export const DualCoreShowcase: React.FC = () => {
 
         {/* Bottom CTA strip */}
         <motion.div variants={itemVariants} className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
+          <IgnitionButton
             href="/get-started"
-            className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full font-bold text-sm text-white overflow-hidden transition-all duration-300 hover:scale-[1.03] min-h-[44px]"
-            style={{ background: 'linear-gradient(135deg, #0066FF, #00D2FF)' }}
+            variant="cyan"
+            size="md"
+            className="px-7 py-3.5 text-sm font-bold"
+            aria-label="Request Demo Ignition"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
-            <span className="relative">
-              {locale === 'ka' ? 'დემო მოითხოვეთ' : locale === 'ru' ? 'Запросить демо' : 'Request a Demo'}
-            </span>
-            <ArrowRight className="relative w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+            <span>{locale === 'ka' ? 'დემო მოითხოვეთ' : locale === 'ru' ? 'Запросить демо' : 'Request a Demo'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </IgnitionButton>
           <Link
             href="#dashboard-features"
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium text-slate-300 border border-white/[0.10] hover:border-cyan-500/40 hover:text-white hover:bg-cyan-950/20 transition-all duration-300 min-h-[44px]"

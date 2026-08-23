@@ -2,16 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PS5AuroraBackground } from './components/ps5/PS5AuroraBackground';
 import { PS5TopHUD } from './components/ps5/PS5TopHUD';
 import { PS5RegistrationWizard } from './components/ps5/PS5RegistrationWizard';
 import { QuickDemoBookingView } from './components/ps5/QuickDemoBookingView';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
+import { useLanguage } from '@/context/LanguageContext';
 import { ps5Audio } from './core/ps5SoundEngine';
 
 export default function GetStartedClient() {
   const router = useRouter();
+  const shouldReduceMotion = useReducedMotion();
   const searchParams = useSearchParams();
+  const { t } = useLanguage();
   const modeParam = searchParams.get('mode');
   const activeMode = modeParam === 'demo' ? 'DEMO' : 'REGISTER';
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -19,12 +23,12 @@ export default function GetStartedClient() {
   useEffect(() => {
     document.title =
       activeMode === 'REGISTER'
-        ? `სისტემის შეძენა და ობიექტის რეგისტრაცია // PS5 SETUP | ARTRON`
-        : `სტუმრის 1-საათიანი დემო წვდომა | ARTRON`;
+        ? t('ps5_onboarding.page_title_register')
+        : t('ps5_onboarding.page_title_demo');
 
     // Trigger PS5 boot sound on first user mount
     ps5Audio.playBoot();
-  }, [activeMode]);
+  }, [activeMode, t]);
 
   const handleBack = () => {
     ps5Audio.playBack();
@@ -50,8 +54,16 @@ export default function GetStartedClient() {
         activeMode={activeMode}
       />
 
-      {/* Main Interactive Stage */}
-      <main className="w-full flex-grow flex flex-col justify-center relative z-10">
+      {/* Main Interactive Stage with Spring Morph Entrance */}
+      <motion.main
+        initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          duration: shouldReduceMotion ? 0.05 : 0.45,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+        className="w-full flex-grow flex flex-col justify-center relative z-10"
+      >
         {activeMode === 'REGISTER' ? (
           <PS5RegistrationWizard
             onReset={handleBack}
@@ -72,7 +84,7 @@ export default function GetStartedClient() {
             </div>
           </div>
         )}
-      </main>
+      </motion.main>
 
       {/* Mandatory Consent Banner */}
       <CookieConsentBanner />
