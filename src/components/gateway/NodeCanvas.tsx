@@ -49,15 +49,15 @@ const PRESET_NODES_MAP: Record<FacilityPreset, number[]> = {
 };
 
 const COLORS: Record<number, string> = {
-  1: "#00B0FF",
-  2: "#00ff87",
-  3: "#D97736",
-  4: "#00ff87",
-  5: "#D4AF37",
-  6: "#D4AF37",
-  7: "#00A3FF",
-  8: "#00ff87",
-  9: "#00ff87"
+  1: "#00FF87", // Neon Emerald
+  2: "#00A3FF", // Electric Cyan
+  3: "#38BDF8", // Sky Teal
+  4: "#6366F1", // Electric Indigo
+  5: "#00E5FF", // Cyan Teal
+  6: "#0EA5E9", // Deep Cyan
+  7: "#10B981", // Mint Emerald
+  8: "#00A3FF", // Sapphire Cyber
+  9: "#00FF87"  // Core Emerald
 };
 
 const COORDS = [
@@ -95,7 +95,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
   const isCenterActive = currentActive === 9;
   const isNode09Active = activeNodeId === 9;
   const isAnyNodeActive = activeNodeId !== null && activeNodeId > 0 && activeNodeId < 9;
-  const activeColor = activeNodeId ? (COLORS[activeNodeId] || "#00ff87") : "#00B0FF";
+  const activeColor = activeNodeId ? (COLORS[activeNodeId] || "#00A3FF") : "#00A3FF";
   const highlightedNodes = PRESET_NODES_MAP[activePreset] || PRESET_NODES_MAP.ALL;
 
   const handleNodeSelect = useCallback((id: number) => {
@@ -124,14 +124,14 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
       label: t(`labels.node_${i + 1}`),
       active: currentActive === i + 1,
       isPresetMatch: highlightedNodes.includes(i + 1),
-      color: COLORS[i + 1] || "#9CA3AF"
+      color: COLORS[i + 1] || "#00A3FF"
     }));
   }, [currentActive, highlightedNodes, t]);
 
   return (
     <div className="w-full h-full flex items-center justify-center relative select-none p-4 md:p-6 overflow-hidden bg-[#06080D]">
       {/* 4K Cinematic Ambient Particles and Deep Space Glow */}
-      <QuantumAmbientDust primaryColor="#00A3FF" secondaryColor="#00ff87" />
+      <QuantumAmbientDust primaryColor="#00A3FF" secondaryColor="#00FF87" />
       
       {/* Volumetric Radial Aura */}
       <div
@@ -198,7 +198,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
       {!isSplitMode && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none animate-fadeIn w-full px-4 text-center">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#090D14]/90 border border-[#00A3FF]/40 rounded-full backdrop-blur-md shadow-[0_0_24px_rgba(0,163,255,0.2)] font-mono text-[11px] text-gray-300">
-            <span className="w-2 h-2 rounded-full bg-[#00ff87] animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-[#00FF87] animate-ping" />
             <span className="text-[#00A3FF] font-bold">ARTRON SPORTS OS //</span>
             <span className="text-white">{t('system.select_node_hint')}</span>
           </div>
@@ -277,19 +277,22 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
         onMouseLeave={() => setHoveredNode(null)}
       >
         <defs>
-          {/* High-Intensity Radial Glow Filters */}
+          {/* Quantum Core Radial Glow */}
           <radialGradient id="core-glow-volumetric" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={activeColor} stopOpacity="0.8" />
-            <stop offset="40%" stopColor={activeColor} stopOpacity="0.35" />
-            <stop offset="100%" stopColor={activeColor} stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="node-outer-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
-            <stop offset="50%" stopColor="#00A3FF" stopOpacity="0.4" />
+            <stop offset="0%" stopColor="#00A3FF" stopOpacity="0.5" />
+            <stop offset="45%" stopColor="#0066FF" stopOpacity="0.2" />
             <stop offset="100%" stopColor="#00A3FF" stopOpacity="0" />
           </radialGradient>
+
+          {/* Active Node Holographic Aura */}
+          <radialGradient id="node-active-aura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#00A3FF" stopOpacity="0.65" />
+            <stop offset="50%" stopColor="#00E5FF" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#00A3FF" stopOpacity="0" />
+          </radialGradient>
+
           <filter id="neon-bloom" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -297,24 +300,28 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
           </filter>
         </defs>
 
-        {/* 3x3 Cyber Grid Matrix Wireframe */}
-        <g className="stroke-[rgba(0,163,255,0.08)] stroke-[1] fill-none pointer-events-none">
-          <line x1="50" y1="50" x2="350" y2="50" strokeDasharray="4 4" />
-          <line x1="50" y1="200" x2="350" y2="200" strokeDasharray="4 4" />
-          <line x1="50" y1="350" x2="350" y2="350" strokeDasharray="4 4" />
-          <line x1="50" y1="50" x2="50" y2="350" strokeDasharray="4 4" />
-          <line x1="200" y1="50" x2="200" y2="350" strokeDasharray="4 4" />
-          <line x1="350" y1="50" x2="350" y2="350" strokeDasharray="4 4" />
+        {/* Precision Telemetry Grid & Concentric Orbits */}
+        <g className="stroke-[rgba(148,163,184,0.08)] stroke-[0.75] fill-none pointer-events-none">
+          <line x1="50" y1="50" x2="350" y2="50" strokeDasharray="4 6" />
+          <line x1="50" y1="200" x2="350" y2="200" strokeDasharray="2 4" strokeOpacity="0.6" />
+          <line x1="50" y1="350" x2="350" y2="350" strokeDasharray="4 6" />
+          <line x1="50" y1="50" x2="50" y2="350" strokeDasharray="4 6" />
+          <line x1="200" y1="50" x2="200" y2="350" strokeDasharray="2 4" strokeOpacity="0.6" />
+          <line x1="350" y1="50" x2="350" y2="350" strokeDasharray="4 6" />
+          
+          <circle cx="200" cy="200" r="75" strokeDasharray="3 5" />
+          <circle cx="200" cy="200" r="150" strokeDasharray="4 6" />
+          <circle cx="200" cy="200" r="212" strokeDasharray="2 4" strokeOpacity="0.4" />
         </g>
 
-        {/* Subtle Guide Tracks & Inward Rhythmic Energy Pulses toward Node 09 */}
+        {/* Telemetry Guide Rays & Unified Inward Micro-Photons */}
         {nodeItems.map((node, i) => {
           const isActivePath = currentActive === node.id;
           const isBlurred = isAnyNodeActive && node.id !== activeNodeId;
           const isLaser = activeNodeId === node.id;
-          const pulseDur = isActivePath ? "1.4s" : "2.8s";
-          const delayBase = (i * 0.35).toFixed(2);
-          const delaySecondary = (i * 0.35 + (isActivePath ? 0.7 : 1.4)).toFixed(2);
+          const pulseDur = isActivePath ? "1.3s" : "3.4s";
+          const delayBase = (i * 0.42).toFixed(2);
+          const delaySecondary = (i * 0.42 + 0.65).toFixed(2);
 
           return (
             <g key={`laser-group-${node.id}`}>
@@ -324,10 +331,10 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
                 y1={node.y}
                 x2="200"
                 y2="200"
-                stroke={isLaser || isActivePath ? node.color : "rgba(148, 163, 184, 0.15)"}
-                strokeWidth={isLaser ? "1.8" : isActivePath ? "1.2" : "0.75"}
+                stroke={isLaser || isActivePath ? node.color : "rgba(148, 163, 184, 0.12)"}
+                strokeWidth={isLaser ? "1.6" : isActivePath ? "1.2" : "0.75"}
                 strokeDasharray={isLaser ? undefined : "3 4"}
-                strokeOpacity={isBlurred ? "0.06" : isLaser ? "0.8" : isActivePath ? "0.5" : "0.25"}
+                strokeOpacity={isBlurred ? "0.06" : isLaser ? "0.9" : isActivePath ? "0.6" : "0.25"}
                 className="transition-all duration-300 pointer-events-none"
               />
 
@@ -340,17 +347,16 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
                   y2="200"
                   stroke={node.color}
                   strokeWidth="3.5"
-                  strokeOpacity="0.3"
-                  className="transition-all duration-300 pointer-events-none blur-[1px]"
+                  strokeOpacity="0.25"
+                  className="transition-all duration-300 pointer-events-none blur-[1.5px]"
                 />
               )}
 
-              {/* Primary Inward Energy Pulse (Outer Node -> Node 09 Core) */}
+              {/* Primary Micro-Photon Data Stream (Harmonious Cyan/Blue) */}
               <circle
-                r={isActivePath ? "3.5" : "2.2"}
-                fill={node.color}
+                r={isActivePath ? "2.6" : "1.4"}
+                fill={isActivePath ? node.color : "#00A3FF"}
                 className="pointer-events-none"
-                filter={isActivePath ? "url(#neon-bloom)" : undefined}
               >
                 <animate
                   attributeName="cx"
@@ -370,7 +376,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
                 />
                 <animate
                   attributeName="opacity"
-                  values="0;0.85;1;0.35;0"
+                  values={isActivePath ? "0;0.9;1;0.4;0" : "0;0.45;0.6;0.2;0"}
                   keyTimes="0;0.12;0.65;0.92;1"
                   dur={pulseDur}
                   begin={`${delayBase}s`}
@@ -378,37 +384,39 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
                 />
               </circle>
 
-              {/* Secondary Trailing Micro-Photon Pulse (Smooth continuous flow toward center) */}
-              <circle
-                r={isActivePath ? "2.2" : "1.4"}
-                fill="#FFFFFF"
-                className="pointer-events-none"
-              >
-                <animate
-                  attributeName="cx"
-                  from={node.x}
-                  to="200"
-                  dur={pulseDur}
-                  begin={`${delaySecondary}s`}
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="cy"
-                  from={node.y}
-                  to="200"
-                  dur={pulseDur}
-                  begin={`${delaySecondary}s`}
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  values="0;0.7;0.85;0.2;0"
-                  keyTimes="0;0.15;0.65;0.92;1"
-                  dur={pulseDur}
-                  begin={`${delaySecondary}s`}
-                  repeatCount="indefinite"
-                />
-              </circle>
+              {/* Active Trailing Micro-Sparkle */}
+              {isActivePath && (
+                <circle
+                  r="1.4"
+                  fill="#FFFFFF"
+                  className="pointer-events-none"
+                >
+                  <animate
+                    attributeName="cx"
+                    from={node.x}
+                    to="200"
+                    dur={pulseDur}
+                    begin={`${delaySecondary}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="cy"
+                    from={node.y}
+                    to="200"
+                    dur={pulseDur}
+                    begin={`${delaySecondary}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0;0.7;0.85;0.2;0"
+                    keyTimes="0;0.15;0.65;0.92;1"
+                    dur={pulseDur}
+                    begin={`${delaySecondary}s`}
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              )}
             </g>
           );
         })}
@@ -421,7 +429,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
           className="cursor-pointer"
         >
           <circle cx="200" cy="200" r="45" fill="transparent" />
-          <circle cx="200" cy="200" r="60" fill="url(#core-glow-volumetric)" className="pointer-events-none" />
+          <circle cx="200" cy="200" r="55" fill="url(#core-glow-volumetric)" className="pointer-events-none" />
           
           {/* Rotating Gyroscopic Reticle Rings */}
           <circle
@@ -429,10 +437,10 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
             cy="200"
             r="38"
             fill="none"
-            stroke={activeColor}
-            strokeWidth="0.9"
-            strokeDasharray="6 8"
-            className="opacity-40 pointer-events-none animate-spin"
+            stroke="#00A3FF"
+            strokeWidth="0.8"
+            strokeDasharray="4 6"
+            className="opacity-30 pointer-events-none animate-spin"
             style={{ animationDuration: '24s' }}
           />
           <circle
@@ -440,40 +448,38 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
             cy="200"
             r="28"
             fill="none"
-            stroke={activeColor}
-            strokeWidth="1.2"
-            strokeDasharray="4 6"
-            className="opacity-60 pointer-events-none animate-spin"
+            stroke="#00E5FF"
+            strokeWidth="1.0"
+            strokeDasharray="3 5"
+            className="opacity-45 pointer-events-none animate-spin"
             style={{ animationDuration: '14s', animationDirection: 'reverse' }}
           />
 
           {/* Dynamic Concentric Shockwave Pulse */}
-          <circle cx="200" cy="200" r="22" fill="none" stroke={activeColor} strokeWidth="1.2" className="opacity-35 pointer-events-none animate-ping" />
+          <circle cx="200" cy="200" r="22" fill="none" stroke="#00E5FF" strokeWidth="0.8" className="opacity-25 pointer-events-none animate-ping" />
 
-          {/* Central Glassmorphic Plasma Sphere */}
-          <g className="transition-transform duration-300" style={{ transform: isCenterActive ? "scale(1.22)" : "scale(1)", transformOrigin: "200px 200px" }}>
-            <circle cx="200" cy="200" r="16" fill="#0B111A" stroke={activeColor} strokeWidth="1.8" filter="url(#neon-bloom)" style={{ fillOpacity: 0.95 }} />
-            <circle cx="200" cy="200" r="7" fill={activeColor} className={isAnyNodeActive ? "" : "animate-svg-emerald-ambient"} />
+          {/* Central Quantum Reactor Eye */}
+          <g className="transition-transform duration-300" style={{ transform: isCenterActive ? "scale(1.2)" : "scale(1)", transformOrigin: "200px 200px" }}>
+            <circle cx="200" cy="200" r="16" fill="#0B0E14" stroke="#00A3FF" strokeWidth="1.2" style={{ fillOpacity: 0.95 }} />
+            <circle cx="200" cy="200" r="6" fill="#00E5FF" className="transition-all duration-300" />
             <circle cx="200" cy="200" r="2.5" fill="#FFFFFF" />
           </g>
 
           <text
             x="200"
-            y="174"
+            y="172"
             textAnchor="middle"
-            className={`font-mono text-[8px] font-bold tracking-widest transition-opacity duration-300 drop-shadow-[0_0_8px_rgba(0,255,135,0.8)] ${isCenterActive ? "opacity-100" : "opacity-0"}`}
-            fill={activeColor}
+            className={`font-mono text-[7.5px] font-bold tracking-[1.5px] fill-[#00E5FF] transition-opacity duration-300 drop-shadow-[0_0_8px_rgba(0,163,255,0.8)] ${isCenterActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}
           >
             {t('labels.node_9')}
           </text>
         </g>
 
-        {/* 8 Outer Ennea Nodes */}
+        {/* 8 Outer Unified High-Tech Telemetry Nodes */}
         {nodeItems.map((node) => {
           const isAct = node.active;
           const isBlurred = isAnyNodeActive && node.id !== activeNodeId;
           const isPresetDimmed = activePreset !== 'ALL' && !isAnyNodeActive && !node.isPresetMatch;
-          const isPresetHighlighted = activePreset !== 'ALL' && !isAnyNodeActive && node.isPresetMatch;
 
           return (
             <g
@@ -485,50 +491,54 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
               className="cursor-pointer transition-opacity duration-300"
               style={{ opacity: isBlurred ? 0.15 : isPresetDimmed ? 0.35 : 1 }}
             >
-              <circle r="24" fill="transparent" />
+              {/* Invisible touch/hover target */}
+              <circle r="22" fill="transparent" className="cursor-pointer" />
               
-              {/* Radiant Beacon Pulsing Aura on Active/Highlight */}
-              {(isAct || isPresetHighlighted) && (
-                <circle r="20" fill="none" stroke={node.color} strokeWidth="1.5" className="animate-ping opacity-45 pointer-events-none" />
+              {/* Active Pulsing Radar Halo */}
+              {isAct && (
+                <circle
+                  r="14"
+                  fill="url(#node-active-aura)"
+                  className="pointer-events-none animate-pulse"
+                />
+              )}
+              {isAct && (
+                <circle
+                  r="11"
+                  fill="none"
+                  stroke={node.color}
+                  strokeWidth="1.0"
+                  className="animate-ping opacity-35 pointer-events-none"
+                />
               )}
 
-              {/* Node Outer Orbit Ring */}
-              <circle
-                r={isAct || isPresetHighlighted ? 15 : 9}
-                fill="none"
-                stroke={node.color}
-                strokeWidth={isAct ? 1.4 : 0.8}
-                strokeDasharray={isAct ? "3 3" : undefined}
-                className={`${isAct ? "animate-spin" : isPresetHighlighted ? "animate-pulse opacity-40" : "opacity-30"} pointer-events-none`}
-                style={{ animationDuration: '8s' }}
-              />
+              {/* Node Geometry & Precision Reticle */}
+              <g className="transition-transform duration-300" style={{ transform: isAct ? "scale(1.25)" : "scale(1)" }}>
+                {/* Outer Reticle Ring */}
+                <circle
+                  r="5"
+                  fill={isAct ? "rgba(0, 163, 255, 0.2)" : "rgba(18, 20, 24, 0.85)"}
+                  stroke={isAct ? node.color : "rgba(0, 163, 255, 0.35)"}
+                  strokeWidth={isAct ? "1.4" : "0.9"}
+                  className="transition-all duration-300"
+                />
+                {/* Center Precision Pin */}
+                <circle
+                  r={isAct ? "2.2" : "1.6"}
+                  fill={isAct ? "#FFFFFF" : "rgba(148, 163, 184, 0.6)"}
+                  className="transition-all duration-300"
+                />
+              </g>
 
-              {/* Solid Glass Core Node */}
-              <circle
-                r={isAct ? "4.5" : "3.2"}
-                fill={isAct || isPresetHighlighted ? node.color : "#0E1420"}
-                stroke={isAct || isPresetHighlighted ? "#FFFFFF" : node.color}
-                strokeWidth={isAct ? "1.8" : "1.2"}
-                className="transition-all duration-300"
-                filter={isAct ? "url(#neon-bloom)" : undefined}
-              />
-              
-              {/* Inner White Light Core */}
-              {(isAct || isPresetHighlighted) && (
-                <circle r="1.8" fill="#FFFFFF" className="pointer-events-none" />
-              )}
-
-              {/* Node Title Label with Neon Typography Glow */}
+              {/* Node Telemetry Typography */}
               <text
                 x={node.tx - node.x}
                 y={node.ty - node.y}
                 textAnchor={node.align}
-                fill={isAct || isPresetHighlighted ? "#FFFFFF" : "#94A3B8"}
-                className="font-mono text-[11px] font-bold uppercase tracking-wider transition-colors duration-300 select-none"
-                style={{
-                  fillOpacity: isAct || isPresetHighlighted ? 1.0 : 0.6,
-                  filter: isAct ? `drop-shadow(0 0 6px ${node.color})` : undefined
-                }}
+                fill={isAct ? "#FFFFFF" : "#94A3B8"}
+                className={`font-mono text-[10.5px] uppercase tracking-[1.2px] transition-colors duration-300 select-none ${
+                  isAct ? "font-bold drop-shadow-[0_0_8px_rgba(0,163,255,0.6)]" : "font-normal hover:fill-[#CBD5E1]"
+                }`}
               >
                 {node.label}
               </text>
@@ -539,3 +549,4 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
     </div>
   );
 };
+

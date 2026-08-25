@@ -9,17 +9,17 @@ export const ARTRON_DESIGN_SYSTEM = {
     fontFamilySans: "'Outfit', 'Inter', sans-serif"
   },
 
-  // 9 Natural Mineral Nodes (Biophilic Spectrum)
+  // 9 Refined Artron Cyber Spectrum Nodes
   nodes: {
-    1: { name: "CRM",            primary: "#40916C", secondary: "#52B788" }, // Sage & Moss
-    2: { name: "Clubs",          primary: "#4A6572", secondary: "#6C7A89" }, // Mineral Slate
-    3: { name: "Professionals",  primary: "#5C6B73", secondary: "#7B8B9A" }, // Blue Basalt
-    4: { name: "Mobile OS",      primary: "#8E7DBE", secondary: "#A594F9" }, // Misty Amethyst
-    5: { name: "Coins",          primary: "#D4A373", secondary: "#E9C46A" }, // Warm Sand
-    6: { name: "Marketplace",    primary: "#B85B49", secondary: "#E76F51" }, // Terracotta
-    7: { name: "Telemetry",      primary: "#3A5A40", secondary: "#588157" }, // Olive Jade
-    8: { name: "Security",       primary: "#A0522D", secondary: "#CD853F" }, // Burnt Timber
-    9: { name: "Core Init",      primary: "#2D6A4F", secondary: "#40916C" }  // Raw Central Jade
+    1: { name: "CRM",            primary: "#00FF87", secondary: "#10B981" }, // Neon Emerald
+    2: { name: "Clubs",          primary: "#00A3FF", secondary: "#38BDF8" }, // Electric Cyan
+    3: { name: "Professionals",  primary: "#38BDF8", secondary: "#00E5FF" }, // Sky Teal
+    4: { name: "Mobile OS",      primary: "#6366F1", secondary: "#818CF8" }, // Electric Indigo
+    5: { name: "Coins",          primary: "#00E5FF", secondary: "#38BDF8" }, // Cyber Teal
+    6: { name: "Marketplace",    primary: "#0EA5E9", secondary: "#00A3FF" }, // Deep Cyan
+    7: { name: "Telemetry",      primary: "#10B981", secondary: "#00FF87" }, // Mint Emerald
+    8: { name: "Security",       primary: "#00A3FF", secondary: "#60A5FA" }, // Sapphire Cyber
+    9: { name: "Core Init",      primary: "#00A3FF", secondary: "#00FF87" }  // Artron Quantum Core
   },
 
   // Connector geometry lines
@@ -29,3 +29,4 @@ export const ARTRON_DESIGN_SYSTEM = {
     gridPatternOpacity: 0.04
   }
 };
+

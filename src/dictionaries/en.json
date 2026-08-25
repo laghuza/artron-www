@@ -1193,9 +1193,20 @@
     "cta_whatsapp": "💬 Direct Chat (WhatsApp / Telegram)"
   },
   "ghost": {
-    "register": "01 // Facility Onboarding (Registration)",
-    "guest_demo": "02 // Guest Demo Access (Sandbox)",
-    "operator_auth": "03 // Operator Authorization"
+    "trigger_title": "Quick Access",
+    "trigger_subtitle": "3 Modes",
+    "menu_header": "ARTRON MATRIX // Quick Gateway",
+    "menu_status": "3 Modes Active",
+    "register": "01 // Facility Onboarding",
+    "register_desc": "New Club / Facility Registration",
+    "register_badge": "14 Days Free",
+    "guest_demo": "02 // Guest Demo Access",
+    "guest_demo_desc": "Interactive Sandbox & Test Run",
+    "guest_demo_badge": "Instant Test",
+    "operator_auth": "03 // Operator Authorization",
+    "operator_auth_desc": "Admin Control Console",
+    "operator_auth_badge": "SSO Login",
+    "menu_footer": "Select desired mode for instant system access"
   },
   "pricing_title": "Transparent Pricing for Every Business Scale",
   "pricing_subtitle": "Choose the plan tailored to your business. Fast digital onboarding — no credit card required.",
