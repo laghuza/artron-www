@@ -150,7 +150,7 @@ export const Step1FacilityTypeMatrix: React.FC<Step1FacilityTypeMatrixProps> = (
       </div>
 
       {/* 4 Massive 3D Futuristic Choice Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {facilityOptions.map((item) => {
           const isSelected = selectedFacility === item.id || selectedFacility === item.label;
           const Icon = item.icon;

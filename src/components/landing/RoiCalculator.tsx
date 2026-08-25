@@ -2,12 +2,13 @@
 
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { Users, Coins, Clock, TrendingUp, ShieldAlert, ArrowRight, Zap } from 'lucide-react';
+import { Users, Coins, Clock, TrendingUp, ShieldAlert, ArrowRight, Zap, Sparkles } from 'lucide-react';
 import { RoiSliderControl } from './roi/RoiSliderControl';
 import { RoiMetricResultCard } from './roi/RoiMetricResultCard';
 import { RoiChart } from './RoiChart';
 import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import Link from 'next/link';
+import { soundEngine } from '@/core';
 
 export const RoiCalculator: React.FC = () => {
   const { locale, t } = useLanguage();
@@ -193,13 +194,34 @@ export const RoiCalculator: React.FC = () => {
               />
             </div>
 
-            {/* CTA Link */}
+            {/* CTA Link to Financial Audit Studio */}
             <Link
-              href="#booking-engine"
-              className="w-full py-4 rounded-xl bg-[#0F141C] border border-cyan-500/30 hover:border-cyan-400 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all hover:shadow-[0_0_25px_rgba(0,163,255,0.2)]"
+              href={`/financial-audit?members=${members}&price=${price}&staff=${staff}`}
+              onClick={() => soundEngine.playSystemAccess()}
+              className="relative group block w-full p-[1.5px] rounded-2xl bg-gradient-to-r from-[#00A3FF] via-[#00E5FF] to-[#0066FF] shadow-[0_0_25px_rgba(0,163,255,0.35)] hover:shadow-[0_0_40px_rgba(0,210,255,0.6)] hover:scale-[1.015] active:scale-[0.985] transition-all duration-300 cursor-pointer overflow-hidden"
             >
-              <span>{locale === 'ka' ? 'მოითხოვეთ პერსონალური ფინანსური აუდიტი' : locale === 'ru' ? 'Запросить персональный финансовый аудит' : 'Request Custom Financial Audit'}</span>
-              <ArrowRight className="w-4 h-4 text-cyan-400" />
+              {/* Animated Light Sweep Effect */}
+              <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-[350%] transition-transform duration-1000 ease-out pointer-events-none" />
+
+              <div className="relative flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 rounded-[14.5px] bg-gradient-to-r from-[#0077EE] via-[#0095FF] to-[#00B4FF] text-white">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/40 shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse" />
+                  </div>
+                  <div className="flex flex-col text-left truncate">
+                    <span className="text-white font-extrabold text-xs sm:text-sm md:text-[15px] leading-snug drop-shadow-sm tracking-tight truncate">
+                      {locale === 'ka' ? 'მოითხოვეთ პერსონალური ფინანსური აუდიტი' : locale === 'ru' ? 'Запросить персональный финансовый аудит' : 'Request Custom Financial Audit'}
+                    </span>
+                    <span className="text-cyan-100 text-[10px] sm:text-xs font-medium opacity-90 truncate">
+                      {locale === 'ka' ? 'P&L დიაგნოსტიკა და სრული ფინანსური მოდელირება' : locale === 'ru' ? 'P&L диагностика и финансовое моделирование' : 'Full P&L Diagnostics & Financial Modeling'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-slate-950 flex items-center justify-center shrink-0 shadow-md group-hover:translate-x-1 group-hover:bg-cyan-50 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] transition-all duration-200">
+                  <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-950 font-bold" />
+                </div>
+              </div>
             </Link>
           </div>
 

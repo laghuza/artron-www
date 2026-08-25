@@ -3,9 +3,10 @@
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Wifi, MapPin, MessageCircle, Send } from 'lucide-react';
+import { CONTACT_CONFIG } from '@/config/contact';
 
 export const BookingRadarMap: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
   return (
     <div className="lg:col-span-5 bg-[#05070a]/95 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl relative overflow-hidden flex flex-col justify-between p-6 sm:p-8">
@@ -36,24 +37,33 @@ export const BookingRadarMap: React.FC = () => {
               strokeWidth="1.5"
               strokeDasharray="4 4"
             />
-            <path d="M 160 120 L 290 110" fill="none" stroke="rgba(0,163,255,0.2)" strokeWidth="1" strokeDasharray="3 3" />
-            <path d="M 160 120 L 90 150" fill="none" stroke="rgba(0,255,135,0.2)" strokeWidth="1" strokeDasharray="3 3" />
+            <path d="M 90 150 L 155 120" fill="none" stroke="rgba(0,255,135,0.25)" strokeWidth="1" strokeDasharray="3 3" />
+            <path d="M 155 120 L 200 124" fill="none" stroke="rgba(0,255,135,0.4)" strokeWidth="1" strokeDasharray="2 2" />
+            <path d="M 200 124 L 300 105" fill="none" stroke="rgba(0,163,255,0.25)" strokeWidth="1" strokeDasharray="3 3" />
 
             {/* Pulsing Sonar Ring on Kutaisi HQ */}
-            <circle cx="160" cy="120" r="10" fill="rgba(0,255,135,0.1)" stroke="rgba(0,255,135,0.3)" strokeWidth="1">
+            <circle cx="155" cy="120" r="10" fill="rgba(0,255,135,0.1)" stroke="rgba(0,255,135,0.3)" strokeWidth="1">
               <animate attributeName="r" values="8;32" dur="3s" repeatCount="indefinite" />
               <animate attributeName="opacity" values="1;0" dur="3s" repeatCount="indefinite" />
             </circle>
 
+            {/* Pulse Ring on Terjola Gym */}
+            <circle cx="200" cy="124" r="6" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.4)" strokeWidth="0.8">
+              <animate attributeName="r" values="5;18" dur="2.5s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.8;0" dur="2.5s" repeatCount="indefinite" />
+            </circle>
+
             {/* Nodes */}
-            <circle cx="160" cy="120" r="5" fill="#00ff87" className="cursor-pointer" />
-            <circle cx="290" cy="110" r="4.5" fill="#00A3FF" className="cursor-pointer" />
+            <circle cx="155" cy="120" r="5" fill="#00ff87" className="cursor-pointer" />
+            <circle cx="200" cy="124" r="4.5" fill="#38BDF8" className="cursor-pointer" />
+            <circle cx="300" cy="105" r="4.5" fill="#00A3FF" className="cursor-pointer" />
             <circle cx="90" cy="150" r="4.5" fill="#00e5ff" className="cursor-pointer" />
 
             {/* Text Labels */}
-            <text x="165" y="115" fill="#00ff87" fontSize="8" fontFamily="monospace" fontWeight="bold">KUTAISI_HQ</text>
-            <text x="295" y="105" fill="#00A3FF" fontSize="7" fontFamily="monospace">TBILISI_SYS</text>
-            <text x="95" y="145" fill="#00e5ff" fontSize="7" fontFamily="monospace">BATUMI_SYS</text>
+            <text x="155" y="107" fill="#00ff87" fontSize="8" fontFamily="monospace" fontWeight="bold" textAnchor="middle">KUTAISI_HQ</text>
+            <text x="200" y="140" fill="#38BDF8" fontSize="7" fontFamily="monospace" fontWeight="bold" textAnchor="middle">TERJOLA_GYM</text>
+            <text x="300" y="94" fill="#00A3FF" fontSize="7" fontFamily="monospace" textAnchor="middle">TBILISI_SYS</text>
+            <text x="90" y="166" fill="#00e5ff" fontSize="7" fontFamily="monospace" textAnchor="middle">BATUMI_SYS</text>
           </svg>
 
           <div className="absolute top-2 left-2 flex items-center gap-1.5 text-[8px] font-mono text-[#00ff87]/60">
@@ -74,7 +84,7 @@ export const BookingRadarMap: React.FC = () => {
 
           <div className="flex items-center justify-between gap-2 pt-1">
             <a
-              href="https://wa.me/995599000000"
+              href={CONTACT_CONFIG.whatsapp.getUrl(locale)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 py-2.5 px-3 rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-[11px] font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-[#25D366]/20 transition-all min-h-[44px]"
@@ -83,7 +93,7 @@ export const BookingRadarMap: React.FC = () => {
               <span>WhatsApp</span>
             </a>
             <a
-              href="https://t.me/artron_support"
+              href={CONTACT_CONFIG.telegram.url}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 py-2.5 px-3 rounded-xl bg-[#0088CC]/10 border border-[#0088CC]/30 text-[#0088CC] text-[11px] font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-[#0088CC]/20 transition-all min-h-[44px]"

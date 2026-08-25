@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 import { soundEngine } from '@/core';
 import { Dumbbell, Waves, Sparkles, Shield, Rocket, CheckCircle, ArrowRight, LucideIcon } from 'lucide-react';
@@ -19,18 +19,24 @@ interface FacilityTypeDemoItem {
 }
 
 const FACILITY_TYPES: FacilityTypeDemoItem[] = [
-  { id: 'gym', labelKey: 'ps5_onboarding.type_gym_title', icon: Dumbbell },
-  { id: 'pool', labelKey: 'ps5_onboarding.type_pool_title', icon: Waves },
-  { id: 'studio', labelKey: 'ps5_onboarding.type_studio_title', icon: Sparkles },
-  { id: 'club', labelKey: 'ps5_onboarding.type_fed_title', icon: Shield },
+  { id: 'gym', labelKey: 'booking_type_gym', icon: Dumbbell },
+  { id: 'pool', labelKey: 'booking_type_pool', icon: Waves },
+  { id: 'studio', labelKey: 'booking_type_studio', icon: Sparkles },
+  { id: 'federation', labelKey: 'booking_type_federation', icon: Shield },
 ];
 
 export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCancel, onSwitchToRegister }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useLanguage();
+  const facilityParam = searchParams.get('facility');
   const [name, setName] = useState('');
   const [facilityName, setFacilityName] = useState('');
-  const [facilityType, setFacilityType] = useState('gym');
+  const [facilityType, setFacilityType] = useState(
+    facilityParam && ['gym', 'pool', 'studio', 'federation'].includes(facilityParam)
+      ? facilityParam
+      : 'gym'
+  );
   const [phone, setPhone] = useState('+995');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

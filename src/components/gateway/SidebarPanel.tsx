@@ -64,8 +64,8 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
     <aside className="w-full h-full bg-[#1A1D23]/65 border-r border-[rgba(156,163,175,0.12)] backdrop-blur-[24px] p-5 lg:p-6 flex flex-col justify-between select-none overflow-y-auto">
       {/* Top Section */}
       <div className="w-full flex flex-col flex-1 min-h-0 mb-4">
-        {/* Header Controls aligned flush to the left */}
-        <div className="w-full border-b border-[rgba(156,163,175,0.12)] pb-3 mb-4 flex items-center justify-between gap-2 flex-wrap">
+        {/* Unified Sleek Header Controls */}
+        <div className="w-full border-b border-white/10 pb-3 mb-4 flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -73,27 +73,28 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
                 soundEngine.playPulseNode();
                 onResetToCore();
               }}
-              className="inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#00A3FF] hover:text-white border border-[#00A3FF]/40 hover:border-[#00A3FF] bg-[#00A3FF]/10 hover:bg-[#00A3FF]/20 px-3 py-1.8 rounded-lg transition-all cursor-pointer shadow-[0_0_12px_rgba(0,163,255,0.2)] font-bold"
+              className="inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.15em] text-[#00A3FF] hover:text-white border border-[#00A3FF]/40 hover:border-[#00A3FF] bg-[#00A3FF]/10 hover:bg-[#00A3FF]/20 px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-[0_0_12px_rgba(0,163,255,0.2)] font-bold"
+              title="სრულ გრაფზე დაბრუნება (ESC)"
             >
-              <span>{t('system.full_core_view')}</span>
+              <span>← {t('system.full_core_view') || 'გრაფის ხედვა (ESC)'}</span>
             </button>
 
             <button
               type="button"
               onClick={toggleMute}
-              className="inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-white border border-white/10 hover:border-[#00A3FF]/60 bg-[#0c1017]/80 hover:bg-[#0c1017] px-2.5 py-1.8 rounded-lg transition-all cursor-pointer shadow-sm"
+              className="inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.15em] text-[#94A3B8] hover:text-white border border-white/10 hover:border-[#00A3FF]/60 bg-[#0c1017]/80 hover:bg-[#0c1017] px-2.5 py-1.5 rounded-lg transition-all cursor-pointer shadow-sm"
             >
               <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${!isMuted ? 'bg-[#00A3FF] animate-pulse shadow-[0_0_8px_#00A3FF]' : 'bg-gray-600'}`} />
-              <span>[ {isMuted ? t('hud.audio_muted') : t('hud.audio_on')} ]</span>
+              <span>{isMuted ? t('hud.audio_muted') : t('hud.audio_on')}</span>
             </button>
           </div>
 
           <Link
             href="/"
             onClick={() => soundEngine.playPulseNode()}
-            className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-[#00A3FF] border border-white/10 hover:border-[#00A3FF]/60 bg-[#0c1017]/80 px-3 py-1.8 rounded-lg transition-all flex items-center gap-1 cursor-pointer shadow-sm"
+            className="font-mono text-[10px] uppercase tracking-[0.15em] text-gray-400 hover:text-[#00A3FF] border border-white/10 hover:border-[#00A3FF]/40 bg-[#0c1017]/80 px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1 cursor-pointer shadow-sm"
           >
-            <span>← {t('hud.return_to_main')}</span>
+            <span>🏠 {t('hud.return_to_main') || 'მთავარი'}</span>
           </Link>
         </div>
 

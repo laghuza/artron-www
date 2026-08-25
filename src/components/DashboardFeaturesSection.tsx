@@ -8,12 +8,19 @@ import {
   Clock, 
   TrendingUp, 
   Wifi, 
-  Terminal 
+  Terminal,
+  Building2,
+  Calendar,
+  Play,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 import { IotSimulator } from './landing/features/IotSimulator';
 import { DatabaseSimulator } from './landing/features/DatabaseSimulator';
 import { LaborCompliance } from './landing/features/LaborCompliance';
 import { MultiBranchCrm } from './landing/features/MultiBranchCrm';
+import { MagneticButton } from '@/components/ui/MagneticButton';
+import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 export const DashboardFeaturesSection: React.FC = () => {
   const { t } = useLanguage();
@@ -54,7 +61,7 @@ export const DashboardFeaturesSection: React.FC = () => {
     <section id="dashboard-features" className="py-20 md:py-28 relative overflow-hidden bg-gradient-to-b from-[#0B0F17] via-[#0F1420] to-[#0B0F17] border-b border-white/5">
       {/* Background Radial Glow */}
       <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-[#00ff87]/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/3 left-1/4 w-[450px] h-[450px] bg-[#00ff87]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/3 left-1/4 w-[450px] h-[450px] bg-[#00A3FF]/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -72,7 +79,7 @@ export const DashboardFeaturesSection: React.FC = () => {
         </div>
 
         {/* Dual-Core Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-stretch mb-12">
           
           {/* Left Column: Interactive Nav Cards */}
           <div className="lg:col-span-5 flex flex-col justify-center space-y-4">
@@ -173,7 +180,57 @@ export const DashboardFeaturesSection: React.FC = () => {
 
         </div>
 
+        {/* ── Section CTA Action Dock ── */}
+        <div className="relative overflow-hidden rounded-2xl border border-[#00A3FF]/20 bg-gradient-to-r from-[#050B14]/90 via-[#071322]/90 to-[#050B14]/90 p-6 sm:p-8 backdrop-blur-xl shadow-[0_0_40px_rgba(0,163,255,0.08)]">
+          {/* Subtle Glow Accents */}
+          <div className="absolute -top-24 -left-24 w-60 h-60 bg-[#00A3FF]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-[#00ff87]/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10">
+            {/* Left Content */}
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00A3FF]/10 border border-[#00A3FF]/20 text-[11px] font-mono font-bold text-[#00A3FF] mb-3">
+                <Sparkles className="w-3.5 h-3.5 text-[#00A3FF] animate-pulse" />
+                <span>[ FAST DEPLOYMENT // ZERO SETUP DOWNTIME ]</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight">
+                {t('cta_title')}
+              </h3>
+              <p className="mt-2 text-xs sm:text-sm text-[#94A3B8] font-medium leading-relaxed max-w-2xl">
+                {t('cta_subtitle')}
+              </p>
+            </div>
+
+            {/* Right Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 shrink-0 w-full sm:w-auto">
+              <IgnitionButton
+                href="/get-started?mode=register"
+                variant="cyan"
+                size="md"
+                className="px-6 py-3.5 text-xs sm:text-sm font-extrabold justify-center"
+                aria-label="B2B Registration"
+              >
+                <Building2 className="w-4 h-4 shrink-0" />
+                <span>{t('cta_btn_register')}</span>
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+              </IgnitionButton>
+
+              <MagneticButton
+                href="/get-started?mode=demo"
+                variant="secondary"
+                shockwaveColor="rgba(0, 163, 255, 0.6)"
+                className="px-6 py-3.5 text-xs sm:text-sm font-bold justify-center"
+                style={{ minHeight: '46px' }}
+              >
+                <Play className="w-4 h-4 fill-[#00A3FF]/30 text-[#00A3FF] shrink-0" />
+                <span>{t('cta_btn_book')}</span>
+              </MagneticButton>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
 };
+

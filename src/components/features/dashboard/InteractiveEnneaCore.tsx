@@ -56,35 +56,114 @@ export default function InteractiveEnneaCore({
           <circle cx="200" cy="200" r="75" /><circle cx="200" cy="200" r="150" /><circle cx="200" cy="200" r="212" />
         </g>
 
-        {/* Connector Rays: Default stroke rgba(108, 122, 137, 0.2). Active: ONLY 1 ray lights up with node primary color */}
+        {/* Subtle Guide Tracks & Inward Rhythmic Energy Pulses toward Node 09 */}
         {COORDS.map((coord, i) => {
           const id = (i + 1) as keyof typeof nodes;
           const isRayActive = activeTargetId === id;
           const nodeConfig = nodes[id];
+          const pulseDur = isRayActive ? "1.4s" : "2.8s";
+          const delayBase = (i * 0.35).toFixed(2);
+          const delaySecondary = (i * 0.35 + (isRayActive ? 0.7 : 1.4)).toFixed(2);
+
           return (
             <g key={`ray-group-${id}`}>
-              {isRayActive && (
-                <line x1="200" y1="200" x2={coord.x} y2={coord.y} stroke={nodeConfig.primary} strokeWidth="3" strokeOpacity="0.3" className="pointer-events-none blur-[1px]" />
-              )}
+              {/* Subtle Delicate Guide Track */}
               <line
-                key={`line-${id}`}
-                x1="200" y1="200" x2={coord.x} y2={coord.y}
-                stroke={isRayActive ? nodeConfig.primary : connectors.defaultStroke}
-                strokeWidth={isRayActive ? connectors.activeStrokeWidth : "0.8px"}
-                className={`transition-all duration-300 ${showOuter ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                x1={coord.x}
+                y1={coord.y}
+                x2="200"
+                y2="200"
+                stroke={isRayActive ? nodeConfig.primary : "rgba(156, 163, 175, 0.15)"}
+                strokeWidth={isRayActive ? "1.8" : "0.75"}
+                strokeDasharray={isRayActive ? undefined : "3 4"}
+                strokeOpacity={isRayActive ? "0.8" : "0.25"}
+                className={`transition-all duration-300 pointer-events-none ${showOuter ? "opacity-100" : "opacity-0"}`}
               />
+
+              {/* Active Focused Beam Glow */}
+              {isRayActive && (
+                <line
+                  x1={coord.x}
+                  y1={coord.y}
+                  x2="200"
+                  y2="200"
+                  stroke={nodeConfig.primary}
+                  strokeWidth="3.5"
+                  strokeOpacity="0.3"
+                  className="pointer-events-none blur-[1px]"
+                />
+              )}
+
+              {/* Primary Inward Energy Pulse (Outer Node -> Center Core 09) */}
+              {showOuter && (
+                <circle
+                  r={isRayActive ? "3.5" : "2.2"}
+                  fill={nodeConfig.secondary || "#52B788"}
+                  className="pointer-events-none"
+                >
+                  <animate
+                    attributeName="cx"
+                    from={coord.x}
+                    to="200"
+                    dur={pulseDur}
+                    begin={`${delayBase}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="cy"
+                    from={coord.y}
+                    to="200"
+                    dur={pulseDur}
+                    begin={`${delayBase}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0;0.85;1;0.35;0"
+                    keyTimes="0;0.12;0.65;0.92;1"
+                    dur={pulseDur}
+                    begin={`${delayBase}s`}
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              )}
+
+              {/* Secondary Trailing Micro-Photon Pulse */}
+              {showOuter && (
+                <circle
+                  r={isRayActive ? "2.2" : "1.4"}
+                  fill="#FFFFFF"
+                  className="pointer-events-none"
+                >
+                  <animate
+                    attributeName="cx"
+                    from={coord.x}
+                    to="200"
+                    dur={pulseDur}
+                    begin={`${delaySecondary}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="cy"
+                    from={coord.y}
+                    to="200"
+                    dur={pulseDur}
+                    begin={`${delaySecondary}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0;0.7;0.85;0.2;0"
+                    keyTimes="0;0.15;0.65;0.92;1"
+                    dur={pulseDur}
+                    begin={`${delaySecondary}s`}
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              )}
             </g>
           );
         })}
-
-        {/* Active Ray Telemetry Data Packet */}
-        {showOuter && activeTargetId && activeTargetId !== 9 && (
-          <circle r="2.5" fill={nodes[activeTargetId as keyof typeof nodes]?.secondary || "#52B788"} className="pointer-events-none">
-            <animate attributeName="cx" from="200" to={COORDS[activeTargetId - 1].x} dur="0.9s" repeatCount="indefinite" />
-            <animate attributeName="cy" from="200" to={COORDS[activeTargetId - 1].y} dur="0.9s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="1;0.9;0.1" keyTimes="0;0.7;1" dur="0.9s" repeatCount="indefinite" />
-          </circle>
-        )}
 
         {/* Always-Active Central Raw Jade Core (Node 09) */}
         <g onClick={() => { handleSelectNode(9); onNodeHover(9); }} onMouseEnter={() => { setHoveredNode(9); onNodeHover(9); }} onMouseLeave={() => { setHoveredNode(null); onNodeHover(null); }} className={!showOuter ? "animate-core-grandiose" : gateHover === "gate_a" ? "animate-core-gate-a-hover" : "transition-transform duration-300 cursor-pointer"} style={showOuter && gateHover !== "gate_a" ? { transform: `translate(200px, 200px)` } : {}}>

@@ -45,23 +45,49 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('artron_lang', newLocale);
   };
 
-  const t = (key: string): string => {
+  const t = (key: string, fallback?: string): string => {
     const resolveFromDict = (dict: Record<string, any> | undefined) => {
       if (!dict) return undefined;
+      // 1. Direct top-level match
       if (key in dict && typeof dict[key] === 'string') return dict[key];
+
+      // 2. Dot-separated path match (e.g. 'ps5_onboarding.hud_step1' or 'audit.title')
       const parts = key.split('.');
       let current: any = dict;
       for (const part of parts) {
         if (current && typeof current === 'object' && part in current) {
           current = current[part];
         } else {
-          return undefined;
+          current = undefined;
+          break;
         }
       }
-      return typeof current === 'string' ? current : undefined;
+      if (typeof current === 'string') return current;
+
+      // 3. Fallback search across nested section dictionaries (e.g. 'ps5_onboarding', 'audit', etc.)
+      for (const sectionKey of Object.keys(dict)) {
+        const section = dict[sectionKey];
+        if (section && typeof section === 'object' && !Array.isArray(section)) {
+          if (key in section && typeof section[key] === 'string') {
+            return section[key];
+          }
+          // If key has prefix like 'audit_title', check if 'title' or 'audit_title' exists inside section
+          if (key.startsWith(`${sectionKey}_`)) {
+            const subKey = key.slice(sectionKey.length + 1);
+            if (subKey in section && typeof section[subKey] === 'string') {
+              return section[subKey];
+            }
+          }
+        }
+      }
+
+      return undefined;
     };
 
-    return resolveFromDict(translations[locale]) || resolveFromDict(translations['en']) || key;
+    const resolved = resolveFromDict(translations[locale]) || resolveFromDict(translations['en']) || resolveFromDict(translations['ka']);
+    if (resolved !== undefined) return resolved;
+    if (fallback !== undefined) return fallback;
+    return key;
   };
 
   return (

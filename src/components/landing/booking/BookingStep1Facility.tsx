@@ -22,7 +22,6 @@ export const BookingStep1Facility: React.FC<BookingStep1FacilityProps> = ({
     { id: 'gym', icon: Dumbbell, name: t('booking_type_gym'), desc: t('booking_type_gym_desc') },
     { id: 'pool', icon: Waves, name: t('booking_type_pool'), desc: t('booking_type_pool_desc') },
     { id: 'studio', icon: Activity, name: t('booking_type_studio'), desc: t('booking_type_studio_desc') },
-    { id: 'federation', icon: Trophy, name: t('booking_type_federation'), desc: t('booking_type_federation_desc') },
   ];
 
   return (
@@ -36,7 +35,7 @@ export const BookingStep1Facility: React.FC<BookingStep1FacilityProps> = ({
         </h4>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
         {facilityOptions.map((opt) => {
           const Icon = opt.icon;
           const isSelected = facilityType === opt.id;

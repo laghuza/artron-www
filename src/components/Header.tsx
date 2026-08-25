@@ -2,14 +2,25 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Menu, X, Globe, Zap, ArrowLeft, Home } from 'lucide-react';
+import { 
+  ChevronDown, 
+  Menu, 
+  X, 
+  Globe, 
+  ArrowLeft, 
+  Home, 
+  Cpu, 
+  BarChart3, 
+  TrendingUp, 
+  Zap,
+  ChevronRight
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import ArtronLogo from '@/components/ui/ArtronLogo';
 import { audioManager } from '@/lib/audioManager';
 import { useHeaderKinematics } from '@/core/hooks/useHeaderKinematics';
-import { MagneticButton } from '@/components/ui/MagneticButton';
 import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 interface HeaderProps {
@@ -27,6 +38,27 @@ const LANG_META: Record<string, { flag: string; label: string }> = {
   ru: { flag: '🇷🇺', label: 'RU' },
 };
 
+const SECTION_IDS = [
+  'ecosystem',
+  'dashboard-features',
+  'analytics-showcase',
+  'business-stats',
+  'legacy-vs-artron',
+  'mobile-app',
+  'roi',
+  'pricing',
+  'partner-ecosystem',
+  'booking-engine',
+  'faq',
+];
+
+const CONTROL_PANEL_IDS = [
+  '/#dashboard-features',
+  '/#analytics-showcase',
+  '/#business-stats',
+  '/#legacy-vs-artron',
+];
+
 export const Header: React.FC<HeaderProps> = ({
   isSticky = false,
   showBackToHome = false,
@@ -36,11 +68,17 @@ export const Header: React.FC<HeaderProps> = ({
   hideOnInitialScroll = false,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { locale, setLocale, t } = useLanguage();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const [isControlPanelOpen, setIsControlPanelOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileControlPanelExpanded, setIsMobileControlPanelExpanded] = useState(true);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [activeNav, setActiveNav] = useState<string>('/#ecosystem');
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+  const controlPanelMenuRef = useRef<HTMLDivElement>(null);
+  const controlPanelTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Scroll-driven Reverse Kinetic Assembly kinematics hook
   const kinematics = useHeaderKinematics(hideOnInitialScroll);
@@ -48,13 +86,17 @@ export const Header: React.FC<HeaderProps> = ({
   /* ── Outside-click and ESC key to close dropdowns ── */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
+      if (controlPanelMenuRef.current && !controlPanelMenuRef.current.contains(event.target as Node)) {
+        setIsControlPanelOpen(false);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsDropdownOpen(false);
+        setIsLangOpen(false);
+        setIsControlPanelOpen(false);
         setIsMobileMenuOpen(false);
       }
     };
@@ -66,12 +108,54 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, []);
 
+  /* ── Active section detection on scroll (ScrollSpy) ── */
+  useEffect(() => {
+    if (pathname === '/about') {
+      setActiveNav('/about');
+      return;
+    }
+    if (pathname !== '/') return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const scrollPosition = scrollY + 140;
+
+      if (scrollY < 250) {
+        setActiveNav('/#ecosystem');
+        return;
+      }
+
+      if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60) {
+        setActiveNav('/#faq');
+        return;
+      }
+
+      for (let i = SECTION_IDS.length - 1; i >= 0; i--) {
+        const id = SECTION_IDS[i];
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveNav(`/#${id}`);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pathname]);
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     audioManager.playClick();
+    setActiveNav(href);
+    setIsControlPanelOpen(false);
     if (href.startsWith('/#')) {
       const targetId = href.replace('/#', '');
       const el = document.getElementById(targetId);
-      if (el && window.location.pathname === '/') {
+      if (el && pathname === '/') {
         e.preventDefault();
         const targetPos = el.getBoundingClientRect().top + window.scrollY - 88;
         window.scrollTo({ top: targetPos, behavior: 'smooth' });
@@ -80,18 +164,67 @@ export const Header: React.FC<HeaderProps> = ({
     setIsMobileMenuOpen(false);
   };
 
-  /* ── 8 Main Navigation Links (Chronological Page Sequence) ── */
-  const navLinks = [
-    { href: '/#services',           label: t('nav_ecosystem') },
-    { href: '/#dashboard-features', label: t('nav_features') },
-    { href: '/#roi',                label: t('nav_roi') },
-    { href: '/#pricing',            label: t('nav_pricing') },
-    { href: '/#partner-ecosystem',  label: t('nav_partners') },
-    { href: '/#booking-engine',     label: t('nav_booking') },
-    { href: '/#faq',                label: t('nav_faq') },
-    { href: '/about',               label: t('nav_about') },
+  const handleControlPanelMouseEnter = () => {
+    if (controlPanelTimerRef.current) clearTimeout(controlPanelTimerRef.current);
+    setIsControlPanelOpen(true);
+  };
+
+  const handleControlPanelMouseLeave = () => {
+    controlPanelTimerRef.current = setTimeout(() => {
+      setIsControlPanelOpen(false);
+    }, 180);
+  };
+
+  /* ── Control Panel Submenu Items ── */
+  const controlPanelSubItems = [
+    {
+      href: '/#dashboard-features',
+      label: t('nav_features_hub') || 'მართვის ცენტრი & IoT',
+      desc: t('nav_features_hub_desc') || 'ტურნიკეტები, ათლეტთა ბაზა, №01-15/ნ',
+      icon: Cpu,
+      badge: 'IoT Core',
+      color: '#00ff87',
+    },
+    {
+      href: '/#analytics-showcase',
+      label: t('nav_features_analytics') || 'ანალიტიკის სიმულატორი',
+      desc: t('nav_features_analytics_desc') || 'KPI, AI Churn, Heatmap, Win-back',
+      icon: BarChart3,
+      badge: 'AI Simulator',
+      color: '#00A3FF',
+    },
+    {
+      href: '/#business-stats',
+      label: t('nav_features_stats') || 'ბიზნეს მეტრიკები',
+      desc: t('nav_features_stats_desc') || 'LTV, 45სთ ეკონომია, შრომის უსაფრთხოება',
+      icon: TrendingUp,
+      badge: 'Metrics',
+      color: '#38BDF8',
+    },
+    {
+      href: '/#legacy-vs-artron',
+      label: t('nav_features_legacy') || 'Sport OS vs Legacy',
+      desc: t('nav_features_legacy_desc') || 'Excel vs Artron, 0% გაპარვა',
+      icon: Zap,
+      badge: 'Sport OS',
+      color: '#F59E0B',
+    },
   ];
 
+  /* ── Main Navigation Links (Chronological Page Sequence) ── */
+  const navLinks = [
+    { href: '/#ecosystem',          label: t('nav_ecosystem'), isDropdown: false },
+    { href: '/#dashboard-features', label: t('nav_features'),  isDropdown: true  },
+    { href: '/#mobile-app',         label: t('nav_mobile'),    isDropdown: false },
+    { href: '/#roi',                label: t('nav_roi'),       isDropdown: false },
+    { href: '/#pricing',            label: t('nav_pricing'),   isDropdown: false },
+    { href: '/#partner-ecosystem',  label: t('nav_partners'),  isDropdown: false },
+    { href: '/#booking-engine',     label: t('nav_booking'),   isDropdown: false },
+    { href: '/#faq',                label: t('nav_faq'),       isDropdown: false },
+    { href: '/about',               label: t('nav_about'),     isDropdown: false },
+  ];
+
+  const isControlPanelActive = CONTROL_PANEL_IDS.includes(activeNav);
   const systemAccessLabel = locale === 'ka' ? 'Sport OS-ის ჩართვა' : locale === 'ru' ? 'Запуск Sport OS' : 'Launch Sport OS';
   const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა & IOT' : locale === 'ru' ? 'Спортивная Экосистема & IOT' : 'SPORTS & IOT ECOSYSTEM';
 
@@ -150,7 +283,7 @@ export const Header: React.FC<HeaderProps> = ({
           </Link>
         </motion.div>
 
-        {/* ══ CENTER NAV (8 Links) — Reverse Kinetic from Letter T trajectory ══ */}
+        {/* ══ CENTER NAV (9 Links + Control Panel Submenu) ══ */}
         {!showBackToHome && (
           <motion.nav
             style={{
@@ -161,26 +294,179 @@ export const Header: React.FC<HeaderProps> = ({
             className="hidden xl:flex items-center gap-0.5 2xl:gap-1 bg-[#0F141C]/85 border border-white/[0.08] rounded-full px-2 2xl:px-3 py-1 backdrop-blur-md shrink-0 shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] will-change-transform"
             aria-label="Main navigation"
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                onMouseEnter={() => setHoveredNav(link.href)}
-                onMouseLeave={() => setHoveredNav(null)}
-                className="relative text-[10.5px] 2xl:text-[11.5px] font-semibold whitespace-nowrap px-2 2xl:px-3 py-1 rounded-full shrink-0 transition-colors duration-200 text-[#94A3B8] hover:text-white focus:outline-none focus:ring-1 focus:ring-[#00A3FF]/50 z-10 select-none"
-              >
-                {hoveredNav === link.href && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-white/[0.09] via-[#00A3FF]/10 to-white/[0.09] border border-white/[0.14] shadow-[0_2px_12px_rgba(0,163,255,0.15)]"
-                    initial={false}
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">{link.label}</span>
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isControlPanelLink = link.isDropdown;
+              const isActive = isControlPanelLink ? isControlPanelActive : activeNav === link.href;
+              const isHovered = hoveredNav === link.href;
+
+              if (isControlPanelLink) {
+                return (
+                  <div
+                    key={link.href}
+                    ref={controlPanelMenuRef}
+                    onMouseEnter={handleControlPanelMouseEnter}
+                    onMouseLeave={handleControlPanelMouseLeave}
+                    className="relative"
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      onMouseEnter={() => setHoveredNav(link.href)}
+                      onMouseLeave={() => setHoveredNav(null)}
+                      className={`relative text-[10.5px] 2xl:text-[11.5px] font-semibold whitespace-nowrap px-2.5 2xl:px-3 py-1 rounded-full shrink-0 transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-[#00A3FF]/50 z-10 select-none flex items-center gap-1 ${
+                        isActive
+                          ? 'text-white font-bold'
+                          : 'text-[#94A3B8] hover:text-white'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="active-nav-pill"
+                          className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00A3FF]/25 via-[#00A3FF]/15 to-[#00D2FF]/25 border border-[#00A3FF]/50 shadow-[0_0_14px_rgba(0,163,255,0.35)]"
+                          initial={false}
+                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                        />
+                      )}
+
+                      {!isActive && isHovered && (
+                        <motion.span
+                          layoutId="hover-nav-pill"
+                          className="absolute inset-0 rounded-full bg-white/[0.06] border border-white/[0.1] shadow-[0_2px_8px_rgba(255,255,255,0.05)]"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
+                        />
+                      )}
+
+                      <span className="relative z-10 flex items-center gap-1">
+                        {isActive && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse shrink-0" />
+                        )}
+                        <span>{link.label}</span>
+                        <ChevronDown className={`w-3 h-3 transition-transform duration-200 opacity-70 group-hover:opacity-100 ${isControlPanelOpen ? 'rotate-180 text-[#00A3FF]' : ''}`} />
+                      </span>
+                    </Link>
+
+                    {/* Desktop Floating Dropdown Menu for Control Panel Subsections */}
+                    <AnimatePresence>
+                      {isControlPanelOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-80 rounded-2xl border border-white/[0.12] bg-[#0B0F17]/98 p-2 backdrop-blur-2xl shadow-[0_20px_48px_rgba(0,0,0,0.8),0_0_30px_rgba(0,163,255,0.15)] z-[80]"
+                        >
+                          <div className="px-2.5 py-1.5 border-b border-white/[0.06] flex items-center justify-between">
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#00A3FF]">
+                              [ B2B CONTROL HUB MATRIX ]
+                            </span>
+                            <span className="text-[9px] font-mono text-emerald-400 font-semibold flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              4 MODULES
+                            </span>
+                          </div>
+
+                          <div className="mt-1 flex flex-col gap-1">
+                            {controlPanelSubItems.map((subItem) => {
+                              const isSubActive = activeNav === subItem.href;
+                              const SubIcon = subItem.icon;
+                              return (
+                                <Link
+                                  key={subItem.href}
+                                  href={subItem.href}
+                                  onClick={(e) => handleNavClick(e, subItem.href)}
+                                  className={`group/item flex items-start gap-2.5 p-2 rounded-xl transition-all duration-200 cursor-pointer ${
+                                    isSubActive
+                                      ? 'bg-[#00A3FF]/15 border border-[#00A3FF]/40 shadow-[0_0_15px_rgba(0,163,255,0.15)]'
+                                      : 'hover:bg-white/[0.05] border border-transparent'
+                                  }`}
+                                >
+                                  <div
+                                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border transition-transform duration-200 group-hover/item:scale-105"
+                                    style={{
+                                      backgroundColor: `${subItem.color}15`,
+                                      borderColor: `${subItem.color}35`,
+                                      color: subItem.color,
+                                    }}
+                                  >
+                                    <SubIcon className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-1">
+                                      <span className={`text-[11px] font-bold tracking-tight truncate ${isSubActive ? 'text-white' : 'text-slate-200 group-hover/item:text-white'}`}>
+                                        {subItem.label}
+                                      </span>
+                                      <span
+                                        className="text-[8px] font-mono px-1.5 py-0.5 rounded font-bold shrink-0 uppercase"
+                                        style={{
+                                          backgroundColor: `${subItem.color}15`,
+                                          color: subItem.color,
+                                        }}
+                                      >
+                                        {subItem.badge}
+                                      </span>
+                                    </div>
+                                    <p className="text-[9.5px] text-[#94A3B8] truncate leading-relaxed mt-0.5">
+                                      {subItem.desc}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  onMouseEnter={() => setHoveredNav(link.href)}
+                  onMouseLeave={() => setHoveredNav(null)}
+                  className={`relative text-[10.5px] 2xl:text-[11.5px] font-semibold whitespace-nowrap px-2.5 2xl:px-3 py-1 rounded-full shrink-0 transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-[#00A3FF]/50 z-10 select-none ${
+                    isActive
+                      ? 'text-white font-bold'
+                      : 'text-[#94A3B8] hover:text-white'
+                  }`}
+                >
+                  {/* Active Section Indicator Pill */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="active-nav-pill"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00A3FF]/25 via-[#00A3FF]/15 to-[#00D2FF]/25 border border-[#00A3FF]/50 shadow-[0_0_14px_rgba(0,163,255,0.35)]"
+                      initial={false}
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+
+                  {/* Hover Pill (when hovering an inactive tab) */}
+                  {!isActive && isHovered && (
+                    <motion.span
+                      layoutId="hover-nav-pill"
+                      className="absolute inset-0 rounded-full bg-white/[0.06] border border-white/[0.1] shadow-[0_2px_8px_rgba(255,255,255,0.05)]"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    />
+                  )}
+
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse shrink-0" />
+                    )}
+                    <span>{link.label}</span>
+                  </span>
+                </Link>
+              );
+            })}
           </motion.nav>
         )}
 
@@ -257,28 +543,28 @@ export const Header: React.FC<HeaderProps> = ({
               opacity: kinematics.lang.opacity,
             }}
             className="relative shrink-0 will-change-transform z-30"
-            ref={dropdownRef}
+            ref={langDropdownRef}
           >
             <button
               id="language-switcher-btn"
               onClick={() => {
                 audioManager.playClick();
-                setIsDropdownOpen(!isDropdownOpen);
+                setIsLangOpen(!isLangOpen);
               }}
               className="flex items-center gap-1.5 bg-[#111827]/90 hover:bg-[#1A2235] border border-white/[0.12] hover:border-[#00A3FF]/60 rounded-xl px-2.5 h-8.5 backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-[#00A3FF]/60 cursor-pointer select-none group shrink-0 shadow-[0_2px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_0_16px_rgba(0,163,255,0.25)]"
               aria-label="Select language"
-              aria-expanded={isDropdownOpen}
+              aria-expanded={isLangOpen}
               aria-haspopup="listbox"
             >
               <Globe className="w-3.5 h-3.5 text-[#00A3FF] group-hover:rotate-45 transition-transform duration-300 shrink-0" />
               <span className="text-[11px] font-black uppercase tracking-wider text-white">
                 {LANG_META[locale]?.label || 'KA'}
               </span>
-              <ChevronDown className={`w-3 h-3 text-[#94A3B8] transition-transform duration-300 shrink-0 ${isDropdownOpen ? 'rotate-180 text-[#00A3FF]' : ''}`} />
+              <ChevronDown className={`w-3 h-3 text-[#94A3B8] transition-transform duration-300 shrink-0 ${isLangOpen ? 'rotate-180 text-[#00A3FF]' : ''}`} />
             </button>
 
             <AnimatePresence>
-              {isDropdownOpen && (
+              {isLangOpen && (
                 <motion.div
                   role="listbox"
                   aria-label="Language options"
@@ -297,7 +583,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => {
                         audioManager.playClick();
                         setLocale(lang);
-                        setIsDropdownOpen(false);
+                        setIsLangOpen(false);
                       }}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 text-left rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer ${
                         locale === lang
@@ -345,26 +631,102 @@ export const Header: React.FC<HeaderProps> = ({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="xl:hidden overflow-hidden border-t border-white/[0.06] bg-[#0B0E14]/98 backdrop-blur-2xl"
+            className="xl:hidden overflow-hidden border-t border-white/[0.06] bg-[#0B0E14]/98 backdrop-blur-2xl max-h-[85vh] overflow-y-auto"
           >
             <div className="px-4 pb-4 pt-2 flex flex-col gap-1">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.025, duration: 0.18 }}
-                >
-                  <Link
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#94A3B8] hover:text-white hover:bg-white/[0.05] transition-all min-h-[44px]"
+              {navLinks.map((link, i) => {
+                const isControlPanelLink = link.isDropdown;
+                const isActive = isControlPanelLink ? isControlPanelActive : activeNav === link.href;
+
+                if (isControlPanelLink) {
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.025, duration: 0.18 }}
+                      className="flex flex-col rounded-xl overflow-hidden bg-white/[0.02] border border-white/[0.06]"
+                    >
+                      <div className="flex items-center justify-between px-3.5 py-2.5">
+                        <Link
+                          href={link.href}
+                          onClick={(e) => handleNavClick(e, link.href)}
+                          className={`flex items-center gap-2 text-sm font-semibold flex-1 ${
+                            isActive ? 'text-[#00E5FF] font-bold' : 'text-[#94A3B8] hover:text-white'
+                          }`}
+                        >
+                          {isActive && (
+                            <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse shrink-0" />
+                          )}
+                          <span>{link.label}</span>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setIsMobileControlPanelExpanded(!isMobileControlPanelExpanded)}
+                          className="p-1 text-[#94A3B8] hover:text-white rounded-lg"
+                        >
+                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileControlPanelExpanded ? 'rotate-180 text-[#00A3FF]' : ''}`} />
+                        </button>
+                      </div>
+
+                      {/* Expandable Sub-items in mobile */}
+                      {isMobileControlPanelExpanded && (
+                        <div className="px-2 pb-2 pt-1 flex flex-col gap-1 border-t border-white/[0.04] bg-black/20">
+                          {controlPanelSubItems.map((sub) => {
+                            const isSubActive = activeNav === sub.href;
+                            const SubIcon = sub.icon;
+                            return (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                onClick={(e) => handleNavClick(e, sub.href)}
+                                className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                                  isSubActive
+                                    ? 'bg-[#00A3FF]/20 text-white font-bold border border-[#00A3FF]/30'
+                                    : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2 truncate">
+                                  <SubIcon className="w-3.5 h-3.5 shrink-0" style={{ color: sub.color }} />
+                                  <span className="truncate">{sub.label}</span>
+                                </div>
+                                <ChevronRight className="w-3 h-3 text-[#00A3FF]/60 shrink-0" />
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                }
+
+                return (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.025, duration: 0.18 }}
                   >
-                    <span>{link.label}</span>
-                    <span className="text-[#00A3FF]/60 text-xs">→</span>
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all min-h-[44px] ${
+                        isActive
+                          ? 'bg-[#00A3FF]/20 text-[#00E5FF] border border-[#00A3FF]/40 font-bold shadow-[0_0_12px_rgba(0,163,255,0.2)]'
+                          : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.05] border border-transparent'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        {isActive && (
+                          <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse shrink-0" />
+                        )}
+                        <span>{link.label}</span>
+                      </span>
+                      <span className={isActive ? 'text-[#00E5FF] text-xs' : 'text-[#00A3FF]/60 text-xs'}>→</span>
+                    </Link>
+                  </motion.div>
+                );
+              })}
 
               {/* Mobile Language Selector */}
               <div className="mt-2 pt-2 border-t border-white/[0.08] flex items-center justify-between gap-2">

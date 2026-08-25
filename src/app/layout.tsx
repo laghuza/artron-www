@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Outfit, JetBrains_Mono, Noto_Sans_Georgian } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { PortalIgnitionProvider } from "@/components/ui/GlobalPortalIgnition";
@@ -79,11 +80,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         {/* High-Priority Video Asset Preload for 0ms Instant Portal Ignition */}
-        <link rel="preload" href="/video/portal-blast.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/video/portal-blast.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="/video/dark-minimalist-4k.mp4" as="video" type="video/mp4" />
 
         {/* Google Consent Mode v2 Defaults */}
-        <script
+        <Script
+          id="google-consent-mode-v2"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];

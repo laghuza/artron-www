@@ -8,6 +8,7 @@ import {
   ShieldCheck, 
   FileSpreadsheet, 
   RotateCcw, 
+  Play,
   ArrowRight, 
   CheckCircle2, 
   XCircle, 
@@ -294,7 +295,7 @@ export const LegacyVsArtronSection: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto shrink-0">
               <IgnitionButton
-                href="/sports-os"
+                href="/sports-os?node=1&action=migration"
                 variant="cyan"
                 size="md"
                 className="w-full sm:w-auto font-mono text-xs uppercase tracking-wider font-bold"
@@ -307,6 +308,7 @@ export const LegacyVsArtronSection: React.FC = () => {
                 href="/get-started?mode=demo"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-mono text-xs uppercase tracking-wider font-bold text-slate-200 bg-[#0d131f] hover:bg-[#131c2e] hover:text-white border border-white/10 hover:border-[#00A3FF]/40 transition-all"
               >
+                <Play className="w-3.5 h-3.5 fill-[#00A3FF]/30 text-[#00A3FF] shrink-0" />
                 <span>{t('migration.cta_book_demo')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>

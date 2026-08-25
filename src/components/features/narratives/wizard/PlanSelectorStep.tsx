@@ -20,7 +20,7 @@ export default function PlanSelectorStep({
   billingCycle,
   setBillingCycle,
 }: PlanSelectorStepProps) {
-  const [paymentProvider, setPaymentProvider] = useState<'TBC' | 'BOG' | 'STRIPE'>('TBC');
+  const [paymentProvider, setPaymentProvider] = useState<'BOG'>('BOG');
 
   const plans = [
     { id: 'STARTER', name: 'STARTER', basePrice: 350, features: ['1 Branch', 'Max 100 Members', 'QR Check-in & CRM'] },
@@ -100,26 +100,20 @@ export default function PlanSelectorStep({
           })}
         </div>
 
-        {/* Payment Gateways Selection (TBC, BOG, Stripe) */}
+        {/* Payment Gateways Selection (BOG iPay) */}
         <div className="space-y-2">
           <label className="block font-mono text-[9px] text-[#9CA3AF] tracking-widest uppercase">
             [ SELECT GATEWAY PROVIDER // გადახდის არხი ]
           </label>
-          <div className="grid grid-cols-3 gap-2">
-            {(['TBC', 'BOG', 'STRIPE'] as const).map((prov) => (
-              <button
-                key={prov}
-                type="button"
-                onClick={() => { soundEngine.playPulseNode(); setPaymentProvider(prov); }}
-                className={`py-2 px-3 border rounded font-mono text-[10px] font-bold tracking-widest text-center cursor-pointer transition-all ${
-                  paymentProvider === prov
-                    ? 'bg-[#121418] border-[#00ff87] text-[#00ff87]'
-                    : 'bg-[#121418]/30 border-white/5 text-gray-500 hover:text-white'
-                }`}
-              >
-                {prov} BANK
-              </button>
-            ))}
+          <div className="grid grid-cols-1 gap-2">
+            <button
+              type="button"
+              onClick={() => { soundEngine.playPulseNode(); setPaymentProvider('BOG'); }}
+              className="py-2.5 px-3 border rounded font-mono text-[10px] font-bold tracking-widest text-center cursor-pointer transition-all bg-[#121418] border-[#FF5E00]/60 text-[#FF7A00] shadow-[0_0_12px_rgba(255,94,0,0.15)] flex items-center justify-center gap-2"
+            >
+              <span>BANK OF GEORGIA (BOG iPay / Checkout)</span>
+              <span className="text-[8px] bg-[#FF5E00]/20 text-[#FF7A00] px-1.5 py-0.5 rounded border border-[#FF5E00]/30 font-mono">PRIMARY</span>
+            </button>
           </div>
         </div>
       </div>

@@ -11,11 +11,6 @@ import { LaserDataStreamConnectors } from '@/components/landing/kinetic/LaserDat
 import type { Metadata } from 'next';
 
 // ── Dynamically Imported Below-the-Fold Heavy Modules (Vercel Bundle Optimization) ──
-const ServicesShowcase = dynamic(
-  () => import('@/components/landing/ServicesShowcase').then((mod) => mod.ServicesShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="SERVICES ECOSYSTEM LOADING..." /> }
-);
-
 const DashboardFeaturesSection = dynamic(
   () => import('@/components/DashboardFeaturesSection').then((mod) => mod.DashboardFeaturesSection),
   { loading: () => <SectionSkeleton minHeight="min-h-[500px]" label="DASHBOARD MATRIX LOADING..." /> }
@@ -91,14 +86,13 @@ export default function Home() {
       <Header isSticky={true} hideOnInitialScroll={true} />
       <main className="flex-grow flex flex-col relative">
         <LaserDataStreamConnectors />
+        {/* 1. Kinetic Hero Header */}
         <KineticScrollHero />
         <SectionTransition variant="laser" />
+        {/* 2. Dual-Core Ecosystem Bridge (Web + App Sync) */}
         <DualCoreShowcase />
         <SectionTransition variant="laser" />
-        <B2CAthleteAdvantages />
-        <SectionTransition variant="laser" />
-        <ServicesShowcase />
-        <SectionTransition variant="laser" />
+        {/* 3. B2B Control Hub Cluster: CRM, IoT, Analytics, Stats & Sport OS */}
         <DashboardFeaturesSection />
         <SectionTransition variant="laser" />
         <AnalyticsShowcase />
@@ -107,16 +101,27 @@ export default function Home() {
         <SectionTransition variant="laser" />
         <LegacyVsArtronSection />
         <SectionTransition variant="laser" />
+
+        {/* 4. B2C Athlete Advantages: Mobile App for Members */}
+        <B2CAthleteAdvantages />
+        <SectionTransition variant="laser" />
+
+        {/* 5. Financial ROI Calculator */}
         <RoiCalculator />
         <SectionTransition variant="laser" />
+        {/* 9. Pricing Matrix */}
         <PricingSection />
         <SectionTransition variant="laser" />
+        {/* 10. Partner Ecosystem */}
         <PartnerEcosystem />
         <SectionTransition variant="laser" />
+        {/* 11. Instant Booking Engine */}
         <BookingEngine />
         <SectionTransition variant="laser" />
+        {/* 12. FAQ Knowledge Base */}
         <FaqSection />
         <SectionTransition variant="laser" />
+        {/* 13. Final Gateway CTA */}
         <SaaSGatewayCTA />
       </main>
       <Footer />

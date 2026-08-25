@@ -3,19 +3,21 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import geDict from "@/dictionaries/ge.json";
 import enDict from "@/dictionaries/en.json";
+import ruDict from "@/dictionaries/ru.json";
 
-export type Language = "GE" | "EN";
+export type Language = "GE" | "EN" | "RU";
 
 interface I18nContextType {
   lang: Language;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
-  t: (key: string) => any;
+  t: (key: string, fallback?: string) => any;
 }
 
 const dictionaries: Record<Language, Record<string, any>> = {
   GE: geDict,
   EN: enDict,
+  RU: ruDict,
 };
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -26,9 +28,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>("GE");
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as Language | null;
-    if (saved === "GE" || saved === "EN") {
-      setLangState(saved);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === "GE" || saved === "EN" || saved === "RU") {
+      setLangState(saved as Language);
+    } else if (saved === "ka") {
+      setLangState("GE");
+    } else if (saved === "en") {
+      setLangState("EN");
+    } else if (saved === "ru") {
+      setLangState("RU");
     }
   }, []);
 
@@ -42,10 +50,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleLang = () => {
-    setLang(lang === "GE" ? "EN" : "GE");
+    setLang(lang === "GE" ? "EN" : lang === "EN" ? "RU" : "GE");
   };
 
-  const t = (key: string): any => {
+  const t = (key: string, fallback?: string): any => {
     const resolveFromDict = (dict: Record<string, any>) => {
       if (!dict) return undefined;
       if (key in dict) return dict[key];
@@ -72,8 +80,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
     const res = resolveFromDict(dictionaries[lang]);
     if (res !== undefined) return res;
-    const fallback = resolveFromDict(dictionaries.EN);
-    return fallback !== undefined ? fallback : key;
+    const fallbackVal = resolveFromDict(dictionaries.EN) ?? resolveFromDict(dictionaries.GE);
+    if (fallbackVal !== undefined) return fallbackVal;
+    if (fallback !== undefined) return fallback;
+    return undefined;
   };
 
   return (

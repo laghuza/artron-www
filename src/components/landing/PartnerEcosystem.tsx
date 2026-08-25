@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { CreditCard, Cpu, Building2, Sparkles } from 'lucide-react';
-import { gymClients, hardwarePartners, fintechPartners } from './partners/PartnerData';
+import { CreditCard, Building2, Sparkles } from 'lucide-react';
+import { gymClients, fintechPartners } from './partners/PartnerData';
 import { GymClientCard } from './partners/GymClientCard';
 import { PartnerCard } from './partners/PartnerCard';
 
 export const PartnerEcosystem: React.FC = () => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'all' | 'clients' | 'hardware' | 'fintech'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'clients' | 'fintech'>('all');
 
   return (
     <section id="partner-ecosystem" className="py-20 md:py-28 relative overflow-hidden bg-[#0B0F17] border-b border-white/5 studio-grain">
@@ -32,7 +32,7 @@ export const PartnerEcosystem: React.FC = () => {
           </p>
 
           {/* Interactive Filter Tabs */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 bg-[#121722]/80 border border-white/10 rounded-2xl backdrop-blur-md max-w-xl mx-auto">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 bg-[#121722]/80 border border-white/10 rounded-2xl backdrop-blur-md max-w-md mx-auto">
             <button
               onClick={() => setActiveTab('all')}
               className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 min-h-[44px] cursor-pointer ${
@@ -53,17 +53,6 @@ export const PartnerEcosystem: React.FC = () => {
             >
               <Building2 className="w-4 h-4" />
               {t('partner_tab_clients')}
-            </button>
-            <button
-              onClick={() => setActiveTab('hardware')}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-1.5 min-h-[44px] cursor-pointer ${
-                activeTab === 'hardware'
-                  ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'
-                  : 'text-[#94A3B8] hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Cpu className="w-4 h-4" />
-              {t('partner_tab_hardware')}
             </button>
             <button
               onClick={() => setActiveTab('fintech')}
@@ -95,13 +84,13 @@ export const PartnerEcosystem: React.FC = () => {
                     </span>
                   </h3>
                   <p className="text-xs text-[#94A3B8]">
-                    დარბაზები, სადაც ართრონის სისტემა 24/7 რეჟიმში უზრუნველყოფს სრულ ავტომატიზაციას
+                    {t('partner_clients_desc')}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4.5 sm:gap-5">
               {gymClients.map((gym) => (
                 <GymClientCard key={gym.id} gym={gym} />
               ))}
@@ -109,52 +98,28 @@ export const PartnerEcosystem: React.FC = () => {
           </div>
         )}
 
-        {/* SECTION 2: HARDWARE & ACCESS CONTROL */}
-        {(activeTab === 'all' || activeTab === 'hardware') && (
-          <div className="mb-14">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
-              <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20">
-                <Cpu className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-black tracking-wide uppercase text-white font-mono">
-                  {t('partner_access')}
-                </h3>
-                <p className="text-xs text-[#94A3B8]">
-                  ბიომეტრიული სკანერები, ჭკვიანი საკეტები და ტურნიკეტების პირდაპირი ინტეგრაცია
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {hardwarePartners.map((p) => (
-                <PartnerCard key={p.id} partner={p} />
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* SECTION 3: FINTECH & BILLING */}
         {(activeTab === 'all' || activeTab === 'fintech') && (
-          <div>
-            <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
-              <div className="p-2 bg-[#635BFF]/10 rounded-xl text-[#635BFF] border border-[#635BFF]/20">
-                <CreditCard className="w-5 h-5" />
+          <div className="pt-4">
+            <div className="flex flex-col items-center text-center pb-6 mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FF5E00]/10 border border-[#FF5E00]/25 text-xs font-mono font-bold text-[#FFA066] mb-3 tracking-wider uppercase shadow-[0_0_15px_rgba(255,94,0,0.15)]">
+                <CreditCard className="w-3.5 h-3.5 text-[#FF5E00]" />
+                <span>BOG CHECKOUT & iPAY</span>
               </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-black tracking-wide uppercase text-white font-mono">
-                  {t('partner_fintech')}
-                </h3>
-                <p className="text-xs text-[#94A3B8]">
-                  საბანკო ეკვაირინგი, B2B გამოწერები და უსაფრთხო გადახდები
-                </p>
-              </div>
+              <h3 className="text-lg sm:text-xl font-black tracking-wide uppercase text-white font-mono">
+                {t('partner_fintech')}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#94A3B8] max-w-2xl mt-1.5 leading-relaxed">
+                {t('partner_fintech_desc')}
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {fintechPartners.map((p) => (
-                <PartnerCard key={p.id} partner={p} />
-              ))}
+            <div className="flex justify-center">
+              <div className="w-full max-w-2xl">
+                {fintechPartners.map((p) => (
+                  <PartnerCard key={p.id} partner={p} />
+                ))}
+              </div>
             </div>
           </div>
         )}

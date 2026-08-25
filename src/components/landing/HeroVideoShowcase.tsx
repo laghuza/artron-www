@@ -9,7 +9,7 @@ interface HeroVideoShowcaseProps {
 
 export const HeroVideoShowcase: React.FC<HeroVideoShowcaseProps> = ({
   className = '',
-  videoPath = '/video/ეს_ვიდეო_მომწონს_უბრალოდ_ცისფე.mp4'
+  videoPath = '/video/dark-minimalist-4k.mp4'
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);

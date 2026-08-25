@@ -2,73 +2,66 @@
 
 import { useState, useEffect } from 'react';
 
-// Global in-memory cache to prevent duplicate fetches across component re-renders
-let cachedVideoBlobUrl: string | null = null;
+// Global cache status
 let isGloballyPreloaded = false;
 let globalPreloadPromise: Promise<string | null> | null = null;
 
-const VIDEO_MP4_SRC = '/video/portal-blast.mp4';
-const VIDEO_WEBM_SRC = '/video/portal-blast.webm';
+const VIDEO_MP4_SRC = '/video/dark-minimalist-4k.mp4';
 
 /**
- * Preloads the portal explosion video asset into memory / blob URL
- * to guarantee 0ms instant playback without white/black flashing.
+ * Preloads the portal explosion video asset into memory/browser HTTP cache
+ * to guarantee 0ms instant playback without white/black flashing or decoding stalls.
  */
 export const preloadPortalVideo = async (): Promise<string | null> => {
   if (typeof window === 'undefined') return null;
-  if (cachedVideoBlobUrl) return cachedVideoBlobUrl;
+  if (isGloballyPreloaded) return VIDEO_MP4_SRC;
   if (globalPreloadPromise) return globalPreloadPromise;
 
   globalPreloadPromise = (async () => {
     try {
-      // Determine optimal source based on browser video support
-      const testVideo = document.createElement('video');
-      const canPlayWebm = testVideo.canPlayType('video/webm; codecs="vp9, opus"') || testVideo.canPlayType('video/webm');
-      const targetSrc = canPlayWebm ? VIDEO_WEBM_SRC : VIDEO_MP4_SRC;
-
-      // 1. Fetch via force-cache to cache bytes in HTTP cache
-      const response = await fetch(targetSrc, { cache: 'force-cache' });
+      // 1. Fetch via force-cache to cache bytes directly into native HTTP cache
+      const response = await fetch(VIDEO_MP4_SRC, { cache: 'force-cache' });
       if (!response.ok) {
-        // Fallback to MP4 if WebM fetch fails
-        const fallbackRes = await fetch(VIDEO_MP4_SRC, { cache: 'force-cache' });
-        if (!fallbackRes.ok) throw new Error('Failed to fetch video asset');
-        const blob = await fallbackRes.blob();
-        cachedVideoBlobUrl = URL.createObjectURL(blob);
-      } else {
-        const blob = await response.blob();
-        cachedVideoBlobUrl = URL.createObjectURL(blob);
+        isGloballyPreloaded = true;
+        return VIDEO_MP4_SRC;
       }
 
-      // 2. Warm up video decoder in memory
+      // 2. Pre-warm HTML5 video element with non-blocking timeout
       const warmUpVideo = document.createElement('video');
-      warmUpVideo.src = cachedVideoBlobUrl;
+      warmUpVideo.src = VIDEO_MP4_SRC;
       warmUpVideo.muted = true;
       warmUpVideo.playsInline = true;
       warmUpVideo.preload = 'auto';
 
       await new Promise<void>((resolve) => {
-        const onCanPlay = () => {
-          warmUpVideo.removeEventListener('canplaythrough', onCanPlay);
-          warmUpVideo.removeEventListener('error', onError);
+        const timeout = setTimeout(() => {
+          cleanup();
+          resolve();
+        }, 400);
+
+        const onDone = () => {
+          cleanup();
           resolve();
         };
-        const onError = () => {
-          warmUpVideo.removeEventListener('canplaythrough', onCanPlay);
-          warmUpVideo.removeEventListener('error', onError);
-          resolve(); // Resolve anyway to avoid hanging
+
+        const cleanup = () => {
+          clearTimeout(timeout);
+          warmUpVideo.removeEventListener('canplay', onDone);
+          warmUpVideo.removeEventListener('loadeddata', onDone);
+          warmUpVideo.removeEventListener('error', onDone);
         };
-        warmUpVideo.addEventListener('canplaythrough', onCanPlay);
-        warmUpVideo.addEventListener('error', onError);
+
+        warmUpVideo.addEventListener('canplay', onDone);
+        warmUpVideo.addEventListener('loadeddata', onDone);
+        warmUpVideo.addEventListener('error', onDone);
         warmUpVideo.load();
       });
 
       isGloballyPreloaded = true;
-      return cachedVideoBlobUrl;
+      return VIDEO_MP4_SRC;
     } catch {
-      // Fallback: Return raw src if blob creation fails
-      cachedVideoBlobUrl = VIDEO_MP4_SRC;
       isGloballyPreloaded = true;
-      return cachedVideoBlobUrl;
+      return VIDEO_MP4_SRC;
     }
   })();
 
@@ -83,39 +76,21 @@ export interface UseVideoPreloaderReturn {
 
 export function useVideoPreloader(): UseVideoPreloaderReturn {
   const [isVideoReady, setIsVideoReady] = useState(isGloballyPreloaded);
-  const [videoSrc, setVideoSrc] = useState<string>(cachedVideoBlobUrl || VIDEO_MP4_SRC);
+  const [videoSrc, setVideoSrc] = useState<string>(VIDEO_MP4_SRC);
 
   useEffect(() => {
-    if (isGloballyPreloaded && cachedVideoBlobUrl) {
+    if (isGloballyPreloaded) {
       setIsVideoReady(true);
-      setVideoSrc(cachedVideoBlobUrl);
       return;
     }
 
-    // Trigger preload during idle time or immediately after mount
-    const executePreload = () => {
-      preloadPortalVideo().then((src) => {
-        if (src) {
-          setVideoSrc(src);
-          setIsVideoReady(true);
-        }
-      });
-    };
-
-    if ('requestIdleCallback' in window) {
-      const idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(
-        executePreload,
-        { timeout: 1500 }
-      );
-      return () => {
-        if ('cancelIdleCallback' in window) {
-          (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
-        }
-      };
-    } else {
-      const timer = setTimeout(executePreload, 300);
-      return () => clearTimeout(timer);
-    }
+    // Non-blocking background prefetch
+    preloadPortalVideo().then((src) => {
+      if (src) {
+        setVideoSrc(src);
+        setIsVideoReady(true);
+      }
+    });
   }, []);
 
   return {

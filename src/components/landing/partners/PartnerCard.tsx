@@ -4,6 +4,7 @@ import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Partner } from './PartnerData';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
+import { Sparkles, Shield } from 'lucide-react';
 
 interface PartnerCardProps {
   partner: Partner;
@@ -24,42 +25,66 @@ export const PartnerCard: React.FC<PartnerCardProps> = ({
     return partner.descKa;
   };
 
+  const getPartnerSubtitle = () => {
+    if (locale === 'en') return partner.subtitleEn;
+    if (locale === 'ru') return partner.subtitleRu;
+    return partner.subtitleKa;
+  };
+
   const isHardware = partner.category === 'hardware';
-  const spotlight = isHardware ? 'rgba(16, 185, 129, 0.2)' : 'rgba(99, 91, 255, 0.2)';
+  const isPrimary = !!partner.isPrimary;
+
+  const spotlight = isPrimary
+    ? 'rgba(255, 94, 0, 0.25)'
+    : isHardware
+    ? 'rgba(16, 185, 129, 0.2)'
+    : 'rgba(99, 91, 255, 0.2)';
 
   return (
     <TiltSpotlightCard maxTilt={6} spotlightColor={spotlight} className="h-full">
       <div
-        className={`bg-[#05070a]/85 border border-[#8a99ad]/10 p-5 rounded-2xl transition-all duration-300 group flex flex-col justify-between relative overflow-hidden backdrop-blur-xl min-h-[220px] h-full ${
-          isHardware
-            ? 'hover:border-emerald-400/50 hover:shadow-[0_0_25px_rgba(16,185,129,0.15)]'
-            : 'hover:border-[#635BFF]/50 hover:shadow-[0_0_25px_rgba(99,91,255,0.15)]'
+        className={`bg-[#05070a]/90 border p-5 rounded-2xl transition-all duration-300 group flex flex-col justify-between relative overflow-hidden backdrop-blur-xl min-h-[260px] h-full ${
+          isPrimary
+            ? 'border-[#FF5E00]/40 shadow-[0_0_20px_rgba(255,94,0,0.12)] hover:border-[#FF5E00]/80 hover:shadow-[0_0_30px_rgba(255,94,0,0.25)] ring-1 ring-[#FF5E00]/20'
+            : isHardware
+            ? 'border-[#8a99ad]/10 hover:border-emerald-400/50 hover:shadow-[0_0_25px_rgba(16,185,129,0.15)]'
+            : 'border-[#8a99ad]/10 hover:border-[#635BFF]/50 hover:shadow-[0_0_25px_rgba(99,91,255,0.15)]'
         }`}
       >
         {/* L-Shape Corner Brackets */}
-        <div className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 ${isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
-        <div className={`absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 ${isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
-        <div className={`absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 ${isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
-        <div className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 ${isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
+        <div className={`absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 ${isPrimary ? 'border-[#FF5E00]/60' : isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
+        <div className={`absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 ${isPrimary ? 'border-[#FF5E00]/60' : isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
+        <div className={`absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 ${isPrimary ? 'border-[#FF5E00]/60' : isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
+        <div className={`absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 ${isPrimary ? 'border-[#FF5E00]/60' : isHardware ? 'border-emerald-500/30' : 'border-[#635BFF]/30'}`} />
 
         <div
-          className={`absolute top-0 left-0 w-[3px] h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-            isHardware ? 'bg-emerald-400' : 'bg-[#635BFF]'
+          className={`absolute top-0 left-0 w-[3px] h-full ${
+            isPrimary ? 'opacity-100 bg-gradient-to-b from-[#FF5E00] to-[#FF8C00]' : 'opacity-0 group-hover:opacity-100'
+          } transition-opacity duration-300 ${
+            isHardware ? 'bg-emerald-400' : isPrimary ? '' : 'bg-[#635BFF]'
           }`}
         />
 
         <div>
-          <div className="flex items-center justify-between gap-2 mb-3">
+          {/* Header row: Icon & Status Badge */}
+          <div className="flex items-center justify-between gap-2 mb-3.5">
             <div
-              className={`p-2.5 bg-white/5 border border-white/10 rounded-xl transition-all ${
-                isHardware ? 'group-hover:border-emerald-400/30' : 'group-hover:border-[#635BFF]/30'
+              className={`p-2 bg-white/5 border rounded-xl transition-all ${
+                isPrimary
+                  ? 'border-[#FF5E00]/30 shadow-[0_0_12px_rgba(255,94,0,0.2)]'
+                  : isHardware
+                  ? 'border-white/10 group-hover:border-emerald-400/30'
+                  : 'border-white/10 group-hover:border-[#635BFF]/30'
               }`}
             >
               {partner.icon}
             </div>
+
             <span
-              className={`text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full border ${
-                partner.statusType === 'official'
+              className={`text-[9px] font-mono font-extrabold px-2.5 py-1 rounded-full border inline-flex items-center gap-1 ${
+                partner.statusType === 'primary'
+                  ? 'text-amber-300 bg-gradient-to-r from-amber-500/20 to-[#FF5E00]/20 border-[#FF5E00]/40 shadow-[0_0_12px_rgba(255,94,0,0.25)]'
+                  : partner.statusType === 'official'
                   ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30'
                   : partner.statusType === 'talks'
                   ? 'text-cyan-300 bg-cyan-500/15 border-cyan-500/30'
@@ -68,24 +93,67 @@ export const PartnerCard: React.FC<PartnerCardProps> = ({
                   : 'text-[#635BFF] bg-[#635BFF]/10 border-[#635BFF]/30'
               }`}
             >
+              {isPrimary && <Sparkles className="w-2.5 h-2.5 text-[#FF5E00] animate-pulse" />}
               {partner.status}
             </span>
           </div>
 
-          <h4 className="text-sm font-black text-white mb-1.5">{partner.name}</h4>
-          <p className="text-xs text-[#94A3B8] leading-relaxed min-h-[38px]">
+          {/* Title & Subtitle */}
+          <div className="mb-2">
+            <h4 className="text-base font-black text-white flex items-center gap-2">
+              {partner.name}
+            </h4>
+            {getPartnerSubtitle() && (
+              <p className={`text-[11px] font-mono font-bold mt-0.5 ${isPrimary ? 'text-[#FF7A00]' : 'text-[#00A3FF]'}`}>
+                {getPartnerSubtitle()}
+              </p>
+            )}
+          </div>
+
+          <p className="text-xs text-[#94A3B8] leading-relaxed mb-3.5 min-h-[38px]">
             {getPartnerDesc()}
           </p>
+
+          {/* Badges / Supported Methods */}
+          {partner.badges && partner.badges.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {partner.badges.map((badge, idx) => (
+                <span
+                  key={idx}
+                  className={`text-[10px] font-medium px-2 py-0.5 rounded-md border transition-all ${
+                    isPrimary
+                      ? 'bg-[#FF5E00]/10 border-[#FF5E00]/25 text-[#FFA066]'
+                      : 'bg-white/5 border-white/10 text-slate-300'
+                  }`}
+                >
+                  {badge}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
+        {/* Footer info */}
         <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-[#64748B]">
-          <span>{isHardware ? 'PROTOCOL' : 'SECURITY'}</span>
-          <span className={isHardware ? 'text-emerald-400 font-bold' : 'text-[#635BFF] font-bold'}>
-            {isHardware ? protocolLabel : 'PCI-DSS / 3D SECURE'}
+          <span className="flex items-center gap-1">
+            <Shield className="w-3 h-3 text-[#64748B]" />
+            {isHardware ? 'PROTOCOL' : 'SECURITY'}
+          </span>
+          <span
+            className={
+              isPrimary
+                ? 'text-[#FF7A00] font-bold'
+                : isHardware
+                ? 'text-emerald-400 font-bold'
+                : 'text-[#635BFF] font-bold'
+            }
+          >
+            {isHardware ? protocolLabel : 'PCI-DSS LEVEL 1 / 3D SECURE'}
           </span>
         </div>
       </div>
     </TiltSpotlightCard>
   );
 };
+
 

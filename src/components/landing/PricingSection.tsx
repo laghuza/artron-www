@@ -34,47 +34,28 @@ const PricingCard: React.FC<{
   t: (key: string) => string;
 }> = ({ plan, index, currencySymbol, billingCycle, t }) => {
   const Icon = plan.icon;
-  const spotlightColor = plan.popular ? 'rgba(0, 163, 255, 0.28)' : 'rgba(0, 163, 255, 0.16)';
+  const spotlightColor = 'rgba(0, 163, 255, 0.20)';
 
   return (
     <TiltSpotlightCard
-      maxTilt={plan.popular ? 8 : 6}
+      maxTilt={6}
       spotlightColor={spotlightColor}
-      className={`h-full ${plan.popular ? 'md:-translate-y-3 z-10' : ''}`}
+      className="h-full group"
     >
       <div
-        className={`relative flex flex-col justify-between rounded-2xl p-6 lg:p-8 transition-[box-shadow,border-color] duration-300 h-full backdrop-blur-xl ${
-          plan.popular
-            ? 'bg-gradient-to-b from-[#0B1526]/95 to-[#0E1726]/95 border border-[#00A3FF]/40 shadow-[0_0_80px_rgba(0,163,255,0.3),0_20px_50px_rgba(0,163,255,0.15)] studio-grain'
-            : 'bg-[#05070a]/90 border border-[#8a99ad]/10 hover:border-[#00A3FF]/30'
-        }`}
+        className="relative flex flex-col justify-between rounded-2xl p-6 lg:p-8 transition-[box-shadow,border-color] duration-300 h-full backdrop-blur-xl bg-[#05070a]/90 border border-[#8a99ad]/10 hover:border-[#00A3FF]/40 hover:shadow-[0_0_35px_rgba(0,163,255,0.18)]"
       >
         {/* L-Shape Corner Brackets */}
-        <div className={`absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
-        <div className={`absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
-        <div className={`absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
-        <div className={`absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 ${plan.popular ? 'border-[#00D2FF]/60' : 'border-[#00A3FF]/30'}`} />
-
-        {/* Popular animated conic border */}
-        {plan.popular && (
-          <div
-            className="absolute -inset-[1.5px] rounded-[17px] pointer-events-none z-0 pro-card-border"
-            style={{ opacity: 0.9 }}
-          />
-        )}
-        {/* Popular Ribbon */}
-        {plan.popular && (
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0066FF] to-[#00D2FF] text-white text-[11px] font-black uppercase tracking-wider px-4 py-1 rounded-full shadow-[0_4px_12px_rgba(0,163,255,0.4)] flex items-center gap-1.5 z-30">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{plan.badge}</span>
-          </div>
-        )}
+        <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#00A3FF]/30 group-hover:border-[#00D2FF]/70 transition-colors" />
+        <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#00A3FF]/30 group-hover:border-[#00D2FF]/70 transition-colors" />
+        <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#00A3FF]/30 group-hover:border-[#00D2FF]/70 transition-colors" />
+        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#00A3FF]/30 group-hover:border-[#00D2FF]/70 transition-colors" />
 
         <div className="relative z-10">
           {/* Header info */}
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2">
-              <div className={`p-2 rounded-lg ${plan.popular ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-white/5 text-gray-400'}`}>
+              <div className="p-2 rounded-lg bg-[#00A3FF]/10 text-[#00A3FF] group-hover:bg-[#00A3FF]/20 transition-colors">
                 <Icon className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-black text-white tracking-wide uppercase">
@@ -103,7 +84,7 @@ const PricingCard: React.FC<{
           </div>
 
           {/* ROI Saver Calculator Badge */}
-          <div className="mb-6 p-3 rounded-xl bg-gradient-to-r from-[#00ff87]/10 to-[#00A3FF]/10 border border-[#00ff87]/20 relative overflow-hidden group">
+          <div className="mb-6 p-3 rounded-xl bg-gradient-to-r from-[#00ff87]/10 to-[#00A3FF]/10 border border-[#00ff87]/20 relative overflow-hidden group/roi">
             <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#00ff87]">
               <TrendingUp className="w-3.5 h-3.5 text-[#00ff87]" />
               <span>{plan.roiBadge}</span>
@@ -117,7 +98,7 @@ const PricingCard: React.FC<{
           <ul className="space-y-3 mb-8">
             {plan.features.map((feat, fIdx) => (
               <li key={fIdx} className="flex items-start gap-2.5 text-xs text-gray-300">
-                <div className={`mt-0.5 p-0.5 rounded-full ${plan.popular ? 'bg-[#00A3FF]/20 text-[#00A3FF]' : 'bg-[#00ff87]/20 text-[#00ff87]'}`}>
+                <div className="mt-0.5 p-0.5 rounded-full bg-[#00ff87]/20 text-[#00ff87]">
                   <Check className="w-3.5 h-3.5" />
                 </div>
                 <span className="leading-relaxed">{feat}</span>
@@ -132,9 +113,9 @@ const PricingCard: React.FC<{
             href={plan.ctaHref}
             onClick={() => soundEngine.playPulseNode()}
             fullWidth
-            variant={plan.popular ? 'primary' : 'secondary'}
-            shockwaveColor={plan.popular ? 'rgba(0, 163, 255, 0.7)' : 'rgba(255, 255, 255, 0.4)'}
-            className="w-full py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider"
+            variant="primary"
+            shockwaveColor="rgba(0, 163, 255, 0.7)"
+            className="w-full py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider font-bold"
           >
             <span>{plan.ctaText}</span>
             <ArrowRight className="w-4 h-4" />
@@ -174,7 +155,7 @@ export const PricingSection: React.FC = () => {
       price: starterPrice,
       badge: null,
       popular: false,
-      ctaText: t('pricing_btn_start'),
+      ctaText: t('pricing_btn_activate'),
       ctaHref: `/get-started?mode=register&plan=starter&cycle=${billingCycle.toLowerCase()}`,
       roiBadge: t('pricing_starter_roi'),
       roiSub: t('pricing_starter_roi_sub'),
@@ -194,9 +175,9 @@ export const PricingSection: React.FC = () => {
       name: t('pricing_pro_name'),
       desc: t('pricing_pro_desc'),
       price: proPrice,
-      badge: t('pricing_popular_badge'),
-      popular: true,
-      ctaText: t('pricing_btn_start'),
+      badge: null,
+      popular: false,
+      ctaText: t('pricing_btn_activate'),
       ctaHref: `/get-started?mode=register&plan=pro&cycle=${billingCycle.toLowerCase()}`,
       roiBadge: t('pricing_pro_roi'),
       roiSub: t('pricing_pro_roi_sub'),
@@ -218,7 +199,7 @@ export const PricingSection: React.FC = () => {
       price: enterprisePrice,
       badge: null,
       popular: false,
-      ctaText: t('pricing_btn_contact'),
+      ctaText: t('pricing_btn_activate'),
       ctaHref: `/get-started?mode=register&plan=enterprise&cycle=${billingCycle.toLowerCase()}`,
       roiBadge: t('pricing_enterprise_roi'),
       roiSub: t('pricing_enterprise_roi_sub'),
@@ -311,8 +292,6 @@ export const PricingSection: React.FC = () => {
             {t('pricing_guarantee')}
           </p>
           <div className="mt-4 flex items-center justify-center gap-6 text-[11px] text-gray-500 uppercase tracking-widest font-mono flex-wrap">
-            <span>🔒 TBC BANK</span>
-            <span>•</span>
             <span>🏛️ BANK OF GEORGIA</span>
             <span>•</span>
             <span>💳 VISA / MASTERCARD</span>

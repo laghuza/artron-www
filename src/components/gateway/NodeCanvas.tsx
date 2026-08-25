@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useI18n } from '@/context/I18nContext';
-import { ViewState, ArtronNode } from '@/types/gateway';
+import { ViewState, ArtronNode, FacilityPreset } from '@/types/gateway';
 import { Node01CanvasView } from './Node01CanvasView';
 import { Node02CanvasView } from './Node02CanvasView';
 import { Node03CanvasView } from './Node03CanvasView';
@@ -16,12 +16,10 @@ import { GhostTrigger } from './GhostTrigger';
 import { CyberAuthLoginCard } from './CyberAuthLoginCard';
 import { UnifiedRegistrationWizard, UnifiedRegistrationData } from './UnifiedRegistrationWizard';
 import { soundEngine } from '@/core';
-import { FacilityPreset } from '@/types/gateway';
-
 import { useRouter } from 'next/navigation';
-
 import Link from 'next/link';
 import { FacilityPresetBar } from './widgets/FacilityPresetBar';
+import { QuantumAmbientDust } from './QuantumAmbientDust';
 
 interface NodeCanvasProps {
   nodes: ArtronNode[];
@@ -39,6 +37,7 @@ interface NodeCanvasProps {
   onSelectPreset?: (preset: FacilityPreset) => void;
   isMuted?: boolean;
   onToggleMute?: () => void;
+  initialAction?: string | null;
 }
 
 const PRESET_NODES_MAP: Record<FacilityPreset, number[]> = {
@@ -62,22 +61,20 @@ const COLORS: Record<number, string> = {
 };
 
 const COORDS = [
-  { x: 200, y: 50,  align: "middle" as const, tx: 200, ty: 26 },
-  { x: 350, y: 50,  align: "start" as const,  tx: 366, ty: 45 },
-  { x: 350, y: 200, align: "start" as const,  tx: 366, ty: 203 },
-  { x: 350, y: 350, align: "start" as const,  tx: 366, ty: 358 },
-  { x: 200, y: 350, align: "middle" as const, tx: 200, ty: 378 },
-  { x: 50,  y: 350, align: "end" as const,    tx: 34,  ty: 358 },
-  { x: 50,  y: 200, align: "end" as const,    tx: 34,  ty: 203 },
-  { x: 50,  y: 50,  align: "end" as const,    tx: 34,  ty: 45 }
+  { x: 200, y: 50,  align: "middle" as const, tx: 200, ty: 22 },
+  { x: 350, y: 50,  align: "start" as const,  tx: 370, ty: 45 },
+  { x: 350, y: 200, align: "start" as const,  tx: 370, ty: 203 },
+  { x: 350, y: 350, align: "start" as const,  tx: 370, ty: 360 },
+  { x: 200, y: 350, align: "middle" as const, tx: 200, ty: 382 },
+  { x: 50,  y: 350, align: "end" as const,    tx: 30,  ty: 360 },
+  { x: 50,  y: 200, align: "end" as const,    tx: 30,  ty: 203 },
+  { x: 50,  y: 50,  align: "end" as const,    tx: 30,  ty: 45 }
 ];
 
 export const NodeCanvas: React.FC<NodeCanvasProps> = ({
-  nodes: _n,
   activeNodeId,
   activeSubChapterId,
   activePreset = 'ALL',
-  viewState: _v,
   onSelectNode,
   onPortalEntry,
   onAuthenticate,
@@ -85,12 +82,14 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
   onSelectPreset,
   isMuted = false,
   onToggleMute,
+  initialAction,
 }) => {
   const router = useRouter();
   const { t } = useI18n();
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const [showAuthCard, setShowAuthCard] = useState(false);
   const [showRegistrationCard, setShowRegistrationCard] = useState(false);
+
   const activeNode = activeNodeId || 0;
   const currentActive = hoveredNode !== null ? hoveredNode : activeNode;
   const isCenterActive = currentActive === 9;
@@ -99,14 +98,10 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
   const activeColor = activeNodeId ? (COLORS[activeNodeId] || "#00ff87") : "#00B0FF";
   const highlightedNodes = PRESET_NODES_MAP[activePreset] || PRESET_NODES_MAP.ALL;
 
-  const handleNodeHover = (id: number) => {
-    setHoveredNode(id);
-  };
-
-  const handleNodeSelect = (id: number) => {
+  const handleNodeSelect = useCallback((id: number) => {
     soundEngine.playPulseNode();
     onSelectNode(id);
-  };
+  }, [onSelectNode]);
 
   const handleRegistrationComplete = (data: UnifiedRegistrationData) => {
     setShowRegistrationCard(false);
@@ -122,32 +117,38 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
     }
   };
 
-  const nodeItems = COORDS.map((coord, i) => ({
-    id: i + 1,
-    ...coord,
-    label: t(`labels.node_${i + 1}`),
-    active: currentActive === i + 1,
-    isPresetMatch: highlightedNodes.includes(i + 1),
-    color: COLORS[i + 1] || "#9CA3AF"
-  }));
+  const nodeItems = useMemo(() => {
+    return COORDS.map((coord, i) => ({
+      id: i + 1,
+      ...coord,
+      label: t(`labels.node_${i + 1}`),
+      active: currentActive === i + 1,
+      isPresetMatch: highlightedNodes.includes(i + 1),
+      color: COLORS[i + 1] || "#9CA3AF"
+    }));
+  }, [currentActive, highlightedNodes, t]);
 
   return (
-    <div className="w-full h-full flex items-center justify-center relative select-none p-4 md:p-6 overflow-hidden">
-      {/* Ambient Radial Spotlight Glow */}
+    <div className="w-full h-full flex items-center justify-center relative select-none p-4 md:p-6 overflow-hidden bg-[#06080D]">
+      {/* 4K Cinematic Ambient Particles and Deep Space Glow */}
+      <QuantumAmbientDust primaryColor="#00A3FF" secondaryColor="#00ff87" />
+      
+      {/* Volumetric Radial Aura */}
       <div
-        className="absolute w-[450px] md:w-[600px] h-[450px] md:h-[600px] rounded-full blur-[140px] opacity-20 transition-all duration-1000 pointer-events-none z-0"
-        style={{ backgroundColor: COLORS[currentActive] || "#00B0FF" }}
+        className={`absolute w-[500px] md:w-[700px] h-[500px] md:h-[700px] rounded-full blur-[150px] transition-all duration-700 pointer-events-none z-0 ${
+          activeSubChapterId ? "opacity-10" : "opacity-25"
+        }`}
+        style={{ backgroundColor: COLORS[currentActive] || "#00A3FF" }}
       />
 
-      {/* Full-Screen Top Floating Cyber HUD (When not in split mode) */}
+      {/* Top Floating Cyber HUD */}
       {!isSplitMode && (
         <div className="absolute top-4 inset-x-4 md:inset-x-8 z-40 flex items-center justify-between pointer-events-auto animate-fadeIn">
-          {/* Left Navigation Controls */}
           <div className="flex items-center gap-2.5">
             <Link
               href="/"
               onClick={() => soundEngine.playPulseNode()}
-              className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-[#00A3FF] border border-white/10 hover:border-[#00A3FF]/60 bg-[#090D14]/80 backdrop-blur-md px-3 py-1.8 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-[#00A3FF] border border-white/10 hover:border-[#00A3FF]/60 bg-[#090D14]/85 backdrop-blur-md px-3 py-1.8 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
               <span>← {t('hud.return_to_main')}</span>
             </Link>
@@ -156,7 +157,7 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
               <button
                 type="button"
                 onClick={onToggleMute}
-                className="hidden sm:inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-white border border-white/10 hover:border-[#00A3FF]/60 bg-[#090D14]/80 backdrop-blur-md px-3 py-1.8 rounded-lg transition-all cursor-pointer shadow-sm"
+                className="hidden sm:inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#94A3B8] hover:text-white border border-white/10 hover:border-[#00A3FF]/60 bg-[#090D14]/85 backdrop-blur-md px-3 py-1.8 rounded-lg transition-all cursor-pointer shadow-sm"
               >
                 <span className={`w-1.5 h-1.5 rounded-full mr-2 ${!isMuted ? 'bg-[#00A3FF] animate-pulse shadow-[0_0_8px_#00A3FF]' : 'bg-gray-600'}`} />
                 <span>[ {isMuted ? t('hud.audio_muted') : t('hud.audio_on')} ]</span>
@@ -164,131 +165,88 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
             )}
           </div>
 
-          {/* Center Facility Preset Selector Bar */}
           {onSelectPreset && (
             <div className="hidden md:flex items-center justify-center">
-              <FacilityPresetBar
-                activePreset={activePreset}
-                onSelectPreset={onSelectPreset}
-                compact={true}
-              />
+              <FacilityPresetBar activePreset={activePreset} onSelectPreset={onSelectPreset} compact={true} />
             </div>
           )}
 
-          {/* Right Action Menu */}
           <div className="flex items-center">
             <GhostTrigger
-              onRegisterClick={() => {
-                soundEngine.playSystemAccess();
-                router.push('/get-started?mode=register');
-              }}
-              onGuestDemoClick={() => {
-                soundEngine.playPulseNode();
-                router.push('/get-started?mode=demo');
-              }}
-              onOperatorAuthClick={() => {
-                soundEngine.playPulseNode();
-                handleNodeSelect(9);
-                setShowAuthCard(true);
-              }}
-              onAccessClick={() => {
-                if (onPortalEntry) onPortalEntry();
-                else handleNodeSelect(9);
-              }}
+              onRegisterClick={() => { soundEngine.playSystemAccess(); router.push('/get-started?mode=register'); }}
+              onGuestDemoClick={() => { soundEngine.playPulseNode(); router.push('/get-started?mode=demo'); }}
+              onOperatorAuthClick={() => { soundEngine.playPulseNode(); handleNodeSelect(9); setShowAuthCard(true); }}
+              onAccessClick={() => { if (onPortalEntry) onPortalEntry(); else handleNodeSelect(9); }}
             />
           </div>
         </div>
       )}
 
-      {/* Top-Right Rotating Logo Trigger in Split Mode */}
+      {/* Split Mode Floating Trigger */}
       {isSplitMode && (
         <div className="absolute top-4 right-6 z-40">
           <GhostTrigger
-            onRegisterClick={() => {
-              soundEngine.playSystemAccess();
-              router.push('/get-started?mode=register');
-            }}
-            onGuestDemoClick={() => {
-              soundEngine.playPulseNode();
-              router.push('/get-started?mode=demo');
-            }}
-            onOperatorAuthClick={() => {
-              soundEngine.playPulseNode();
-              handleNodeSelect(9);
-              setShowAuthCard(true);
-            }}
-            onAccessClick={() => {
-              if (onPortalEntry) onPortalEntry();
-              else handleNodeSelect(9);
-            }}
+            onRegisterClick={() => { soundEngine.playSystemAccess(); router.push('/get-started?mode=register'); }}
+            onGuestDemoClick={() => { soundEngine.playPulseNode(); router.push('/get-started?mode=demo'); }}
+            onOperatorAuthClick={() => { soundEngine.playPulseNode(); handleNodeSelect(9); setShowAuthCard(true); }}
+            onAccessClick={() => { if (onPortalEntry) onPortalEntry(); else handleNodeSelect(9); }}
           />
         </div>
       )}
 
-      {/* Full-Screen Bottom Floating Action Hint (When not in split mode) */}
+      {/* Bottom Floating Action Hint */}
       {!isSplitMode && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none animate-fadeIn w-full px-4 text-center">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#090D14]/85 border border-[#00A3FF]/30 rounded-full backdrop-blur-md shadow-[0_0_20px_rgba(0,163,255,0.15)] font-mono text-[11px] text-gray-300">
-            <span className="w-2 h-2 rounded-full bg-[#00A3FF] animate-ping" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#090D14]/90 border border-[#00A3FF]/40 rounded-full backdrop-blur-md shadow-[0_0_24px_rgba(0,163,255,0.2)] font-mono text-[11px] text-gray-300">
+            <span className="w-2 h-2 rounded-full bg-[#00ff87] animate-ping" />
             <span className="text-[#00A3FF] font-bold">ARTRON SPORTS OS //</span>
             <span className="text-white">{t('system.select_node_hint')}</span>
           </div>
         </div>
       )}
 
-      {/* Overlay Stage Views for Interactive Nodes */}
+      {/* Active Stage Views */}
       {activeNodeId === 1 && (
-        <Node01CanvasView activeSubChapterId={activeSubChapterId || null} />
+        <Node01CanvasView
+          activeSubChapterId={activeSubChapterId || null}
+          initialAction={initialAction}
+          onLaunchConsole={() => {
+            if (onAuthenticate) {
+              onAuthenticate('FULL_B2B', {
+                username: 'operator@artron.ge',
+                orgName: 'ARTRON DEMO CLUB',
+                isTrial: true,
+              });
+            }
+          }}
+        />
       )}
-      {activeNodeId === 2 && (
-        <Node02CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
-      {activeNodeId === 3 && (
-        <Node03CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
-      {activeNodeId === 4 && (
-        <Node04CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
-      {activeNodeId === 5 && (
-        <Node05CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
-      {activeNodeId === 6 && (
-        <Node06CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
-      {activeNodeId === 7 && (
-        <Node07CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
-      {activeNodeId === 8 && (
-        <Node08CanvasView activeSubChapterId={activeSubChapterId || null} />
-      )}
+      {activeNodeId === 2 && <Node02CanvasView activeSubChapterId={activeSubChapterId || null} />}
+      {activeNodeId === 3 && <Node03CanvasView activeSubChapterId={activeSubChapterId || null} />}
+      {activeNodeId === 4 && <Node04CanvasView activeSubChapterId={activeSubChapterId || null} />}
+      {activeNodeId === 5 && <Node05CanvasView activeSubChapterId={activeSubChapterId || null} />}
+      {activeNodeId === 6 && <Node06CanvasView activeSubChapterId={activeSubChapterId || null} />}
+      {activeNodeId === 7 && <Node07CanvasView activeSubChapterId={activeSubChapterId || null} />}
+      {activeNodeId === 8 && <Node08CanvasView activeSubChapterId={activeSubChapterId || null} />}
       {activeNodeId === 9 && !showAuthCard && !showRegistrationCard && (
         <Node09CanvasView
           activeSubChapterId={activeSubChapterId || null}
-          onLaunchRegistration={() => {
-            soundEngine.playSystemAccess();
-            router.push('/get-started?mode=register');
-          }}
-          onLaunchDemo={() => {
-            soundEngine.playPulseNode();
-            router.push('/get-started?mode=demo');
-          }}
+          onLaunchRegistration={() => { soundEngine.playSystemAccess(); router.push('/get-started?mode=register'); }}
+          onLaunchDemo={() => { soundEngine.playPulseNode(); router.push('/get-started?mode=demo'); }}
           onLaunchAuth={() => setShowAuthCard(true)}
         />
       )}
 
-      {/* Overlay for Node #09 Full-Screen Immersive Auth Backdrop */}
+      {/* Full-Screen Immersive Auth Modal */}
       {isNode09Active && showAuthCard && onAuthenticate && (
         <CyberAuthLoginCard
           onAuthenticate={onAuthenticate}
           onClose={() => setShowAuthCard(false)}
-          onSwitchToRegister={() => {
-            setShowAuthCard(false);
-            setShowRegistrationCard(true);
-          }}
+          onSwitchToRegister={() => { setShowAuthCard(false); setShowRegistrationCard(true); }}
         />
       )}
 
-      {/* Overlay for Node #09 Unified 14-Day Onboarding / Sandbox Registration Modal */}
+      {/* Unified 14-Day Registration Modal */}
       {isNode09Active && showRegistrationCard && (
         <div className="fixed inset-0 z-[100] bg-[#060709]/95 overflow-y-auto flex items-center justify-center p-3 md:p-6 select-none font-sans animate-fadeIn">
           <div className="relative w-full max-w-2xl my-auto py-6">
@@ -304,93 +262,213 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
             <UnifiedRegistrationWizard
               onComplete={handleRegistrationComplete}
               onCancel={() => setShowRegistrationCard(false)}
-              onSwitchToLogin={() => {
-                setShowRegistrationCard(false);
-                setShowAuthCard(true);
-              }}
+              onSwitchToLogin={() => { setShowRegistrationCard(false); setShowAuthCard(true); }}
             />
           </div>
         </div>
       )}
 
+      {/* Main 9-Core Quantum SVG Matrix */}
       <svg
         viewBox="-170 0 740 400"
-        className={`w-full ${!isSplitMode ? "max-w-[760px] lg:max-w-[840px]" : "max-w-[640px]"} aspect-[740/400] cursor-pointer overflow-visible z-10 transition-all duration-700`}
+        className={`w-full ${!isSplitMode ? "max-w-[760px] lg:max-w-[860px]" : "max-w-[640px]"} aspect-[740/400] cursor-pointer overflow-visible z-10 transition-all duration-300 ${
+          activeSubChapterId ? "opacity-0 pointer-events-none invisible" : "opacity-100 visible"
+        }`}
         onMouseLeave={() => setHoveredNode(null)}
       >
         <defs>
-          <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={activeColor} stopOpacity="0.45" />
+          {/* High-Intensity Radial Glow Filters */}
+          <radialGradient id="core-glow-volumetric" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={activeColor} stopOpacity="0.8" />
+            <stop offset="40%" stopColor={activeColor} stopOpacity="0.35" />
             <stop offset="100%" stopColor={activeColor} stopOpacity="0" />
           </radialGradient>
+          <radialGradient id="node-outer-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
+            <stop offset="50%" stopColor="#00A3FF" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#00A3FF" stopOpacity="0" />
+          </radialGradient>
+          <filter id="neon-bloom" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
-        {/* 3x3 Bounding Matrix */}
-        <g className="stroke-[rgba(156,163,175,0.04)] stroke-[0.8] fill-none pointer-events-none">
-          <line x1="50" y1="50" x2="350" y2="50" />
-          <line x1="50" y1="200" x2="350" y2="200" />
-          <line x1="50" y1="350" x2="350" y2="350" />
-          <line x1="50" y1="50" x2="50" y2="350" />
-          <line x1="200" y1="50" x2="200" y2="350" />
-          <line x1="350" y1="50" x2="350" y2="350" />
+        {/* 3x3 Cyber Grid Matrix Wireframe */}
+        <g className="stroke-[rgba(0,163,255,0.08)] stroke-[1] fill-none pointer-events-none">
+          <line x1="50" y1="50" x2="350" y2="50" strokeDasharray="4 4" />
+          <line x1="50" y1="200" x2="350" y2="200" strokeDasharray="4 4" />
+          <line x1="50" y1="350" x2="350" y2="350" strokeDasharray="4 4" />
+          <line x1="50" y1="50" x2="50" y2="350" strokeDasharray="4 4" />
+          <line x1="200" y1="50" x2="200" y2="350" strokeDasharray="4 4" />
+          <line x1="350" y1="50" x2="350" y2="350" strokeDasharray="4 4" />
         </g>
 
-        {/* Animated Data Packets Flow */}
-        {(currentActive !== 0) && nodeItems.map((node) => {
-          const isBlurred = isAnyNodeActive && node.id !== activeNodeId;
-          const packetColor = COLORS[node.id] || "#00ff87";
-          return (
-            <circle key={`packet-${node.id}`} r="2.5" fill={packetColor} className="pointer-events-none" style={{ opacity: isBlurred ? 0.05 : 1 }}>
-              <animate attributeName="cx" from="200" to={node.x} dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="cy" from="200" to={node.y} dur="1.2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="1;0.8;0" keyTimes="0;0.7;1" dur="1.2s" repeatCount="indefinite" />
-            </circle>
-          );
-        })}
-
-        {/* Node connectors */}
-        {nodeItems.map((node) => {
+        {/* Subtle Guide Tracks & Inward Rhythmic Energy Pulses toward Node 09 */}
+        {nodeItems.map((node, i) => {
           const isActivePath = currentActive === node.id;
           const isBlurred = isAnyNodeActive && node.id !== activeNodeId;
           const isLaser = activeNodeId === node.id;
+          const pulseDur = isActivePath ? "1.4s" : "2.8s";
+          const delayBase = (i * 0.35).toFixed(2);
+          const delaySecondary = (i * 0.35 + (isActivePath ? 0.7 : 1.4)).toFixed(2);
 
           return (
-            <line
-              key={`line-${node.id}`}
-              x1="200"
-              y1="200"
-              x2={node.x}
-              y2={node.y}
-              stroke={isLaser ? node.color : (isActivePath ? node.color : "rgba(156,163,175,0.07)")}
-              strokeWidth={isLaser ? "2.5" : (isActivePath ? "1.5" : "0.8")}
-              className="transition-all duration-300"
-              style={{
-                filter: isBlurred ? 'blur(6px)' : (isLaser ? `drop-shadow(0 0 8px ${node.color})` : 'none'),
-                opacity: isBlurred ? 0.15 : 1
-              }}
-            />
+            <g key={`laser-group-${node.id}`}>
+              {/* Subtle Delicate Guide Track */}
+              <line
+                x1={node.x}
+                y1={node.y}
+                x2="200"
+                y2="200"
+                stroke={isLaser || isActivePath ? node.color : "rgba(148, 163, 184, 0.15)"}
+                strokeWidth={isLaser ? "1.8" : isActivePath ? "1.2" : "0.75"}
+                strokeDasharray={isLaser ? undefined : "3 4"}
+                strokeOpacity={isBlurred ? "0.06" : isLaser ? "0.8" : isActivePath ? "0.5" : "0.25"}
+                className="transition-all duration-300 pointer-events-none"
+              />
+
+              {/* Active Focused Beam Glow */}
+              {(isLaser || isActivePath) && (
+                <line
+                  x1={node.x}
+                  y1={node.y}
+                  x2="200"
+                  y2="200"
+                  stroke={node.color}
+                  strokeWidth="3.5"
+                  strokeOpacity="0.3"
+                  className="transition-all duration-300 pointer-events-none blur-[1px]"
+                />
+              )}
+
+              {/* Primary Inward Energy Pulse (Outer Node -> Node 09 Core) */}
+              <circle
+                r={isActivePath ? "3.5" : "2.2"}
+                fill={node.color}
+                className="pointer-events-none"
+                filter={isActivePath ? "url(#neon-bloom)" : undefined}
+              >
+                <animate
+                  attributeName="cx"
+                  from={node.x}
+                  to="200"
+                  dur={pulseDur}
+                  begin={`${delayBase}s`}
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="cy"
+                  from={node.y}
+                  to="200"
+                  dur={pulseDur}
+                  begin={`${delayBase}s`}
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="0;0.85;1;0.35;0"
+                  keyTimes="0;0.12;0.65;0.92;1"
+                  dur={pulseDur}
+                  begin={`${delayBase}s`}
+                  repeatCount="indefinite"
+                />
+              </circle>
+
+              {/* Secondary Trailing Micro-Photon Pulse (Smooth continuous flow toward center) */}
+              <circle
+                r={isActivePath ? "2.2" : "1.4"}
+                fill="#FFFFFF"
+                className="pointer-events-none"
+              >
+                <animate
+                  attributeName="cx"
+                  from={node.x}
+                  to="200"
+                  dur={pulseDur}
+                  begin={`${delaySecondary}s`}
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="cy"
+                  from={node.y}
+                  to="200"
+                  dur={pulseDur}
+                  begin={`${delaySecondary}s`}
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="0;0.7;0.85;0.2;0"
+                  keyTimes="0;0.15;0.65;0.92;1"
+                  dur={pulseDur}
+                  begin={`${delaySecondary}s`}
+                  repeatCount="indefinite"
+                />
+              </circle>
+            </g>
           );
         })}
 
-        {/* Central Core Element */}
-        <g onClick={() => handleNodeSelect(9)} onMouseEnter={() => handleNodeHover(9)} onMouseLeave={() => setHoveredNode(null)} className="cursor-pointer">
-          <circle cx="200" cy="200" r="40" fill="transparent" />
-          <circle cx="200" cy="200" r="48" fill="url(#core-glow)" className="pointer-events-none" />
-          {[38, 28].map((r) => (
-            <circle key={r} cx="200" cy="200" r={r} className="fill-none stroke-[0.8] opacity-25 pointer-events-none" style={{ stroke: activeColor }} />
-          ))}
-          <circle cx="200" cy="200" r="22" fill="none" stroke={activeColor} strokeWidth="0.8" className="opacity-20 pointer-events-none animate-ping" />
+        {/* Central Quantum Core (Node 09) */}
+        <g
+          onClick={() => handleNodeSelect(9)}
+          onMouseEnter={() => setHoveredNode(9)}
+          onMouseLeave={() => setHoveredNode(null)}
+          className="cursor-pointer"
+        >
+          <circle cx="200" cy="200" r="45" fill="transparent" />
+          <circle cx="200" cy="200" r="60" fill="url(#core-glow-volumetric)" className="pointer-events-none" />
           
-          <g className="transition-transform duration-300" style={{ transform: isCenterActive ? "scale(1.2)" : "scale(1)", transformOrigin: "200px 200px" }}>
-            <circle cx="200" cy="200" r="16" fill="#121418" stroke={activeColor} strokeWidth="1.2" style={{ fillOpacity: isCenterActive ? 0.9 : 0.4 }} />
-            <circle cx="200" cy="200" r="6" fill={activeColor} className={isAnyNodeActive ? "" : "animate-svg-emerald-ambient"} />
+          {/* Rotating Gyroscopic Reticle Rings */}
+          <circle
+            cx="200"
+            cy="200"
+            r="38"
+            fill="none"
+            stroke={activeColor}
+            strokeWidth="0.9"
+            strokeDasharray="6 8"
+            className="opacity-40 pointer-events-none animate-spin"
+            style={{ animationDuration: '24s' }}
+          />
+          <circle
+            cx="200"
+            cy="200"
+            r="28"
+            fill="none"
+            stroke={activeColor}
+            strokeWidth="1.2"
+            strokeDasharray="4 6"
+            className="opacity-60 pointer-events-none animate-spin"
+            style={{ animationDuration: '14s', animationDirection: 'reverse' }}
+          />
+
+          {/* Dynamic Concentric Shockwave Pulse */}
+          <circle cx="200" cy="200" r="22" fill="none" stroke={activeColor} strokeWidth="1.2" className="opacity-35 pointer-events-none animate-ping" />
+
+          {/* Central Glassmorphic Plasma Sphere */}
+          <g className="transition-transform duration-300" style={{ transform: isCenterActive ? "scale(1.22)" : "scale(1)", transformOrigin: "200px 200px" }}>
+            <circle cx="200" cy="200" r="16" fill="#0B111A" stroke={activeColor} strokeWidth="1.8" filter="url(#neon-bloom)" style={{ fillOpacity: 0.95 }} />
+            <circle cx="200" cy="200" r="7" fill={activeColor} className={isAnyNodeActive ? "" : "animate-svg-emerald-ambient"} />
+            <circle cx="200" cy="200" r="2.5" fill="#FFFFFF" />
           </g>
-          <text x="200" y="178" textAnchor="middle" className={`font-mono text-[7px] tracking-wider transition-opacity duration-300 ${isCenterActive ? "opacity-100" : "opacity-0"}`} fill={activeColor}>
+
+          <text
+            x="200"
+            y="174"
+            textAnchor="middle"
+            className={`font-mono text-[8px] font-bold tracking-widest transition-opacity duration-300 drop-shadow-[0_0_8px_rgba(0,255,135,0.8)] ${isCenterActive ? "opacity-100" : "opacity-0"}`}
+            fill={activeColor}
+          >
             {t('labels.node_9')}
           </text>
         </g>
 
-        {/* Outer Ennea Nodes */}
+        {/* 8 Outer Ennea Nodes */}
         {nodeItems.map((node) => {
           const isAct = node.active;
           const isBlurred = isAnyNodeActive && node.id !== activeNodeId;
@@ -402,21 +480,56 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
               key={node.id}
               transform={`translate(${node.x}, ${node.y})`}
               onClick={() => handleNodeSelect(node.id)}
-              onMouseEnter={() => handleNodeHover(node.id)}
+              onMouseEnter={() => setHoveredNode(node.id)}
               onMouseLeave={() => setHoveredNode(null)}
-              className="cursor-pointer transition-all duration-500"
-              style={{
-                filter: isBlurred ? 'blur(8px)' : 'none',
-                opacity: isBlurred ? 0.2 : (isPresetDimmed ? 0.35 : 1)
-              }}
+              className="cursor-pointer transition-opacity duration-300"
+              style={{ opacity: isBlurred ? 0.15 : isPresetDimmed ? 0.35 : 1 }}
             >
-              <circle r="20" fill="transparent" />
-              {isPresetHighlighted && (
-                <circle r="18" fill="none" stroke={node.color} strokeWidth="1.2" className="animate-ping opacity-30 pointer-events-none" />
+              <circle r="24" fill="transparent" />
+              
+              {/* Radiant Beacon Pulsing Aura on Active/Highlight */}
+              {(isAct || isPresetHighlighted) && (
+                <circle r="20" fill="none" stroke={node.color} strokeWidth="1.5" className="animate-ping opacity-45 pointer-events-none" />
               )}
-              <circle r={isAct || isPresetHighlighted ? 14 : 7} fill="none" stroke={node.color} strokeWidth={isAct ? 0.8 : 0.5} className={`${isAct || isPresetHighlighted ? "animate-ping opacity-35" : "animate-pulse opacity-15"} pointer-events-none`} />
-              <circle r="2.4" fill={isAct || isPresetHighlighted ? node.color : "#121418"} stroke={isAct || isPresetHighlighted ? node.color : "#9CA3AF"} strokeWidth="1.2" style={{ strokeOpacity: isAct || isPresetHighlighted ? 1.0 : 0.4 }} className="transition-all duration-300" />
-              <text x={node.tx - node.x} y={node.ty - node.y} textAnchor={node.align} fill={isAct || isPresetHighlighted ? "#F5F5F7" : "#9CA3AF"} className="font-mono text-[11px] uppercase tracking-wider transition-colors duration-300" style={{ fillOpacity: isAct || isPresetHighlighted ? 1.0 : 0.35 }}>
+
+              {/* Node Outer Orbit Ring */}
+              <circle
+                r={isAct || isPresetHighlighted ? 15 : 9}
+                fill="none"
+                stroke={node.color}
+                strokeWidth={isAct ? 1.4 : 0.8}
+                strokeDasharray={isAct ? "3 3" : undefined}
+                className={`${isAct ? "animate-spin" : isPresetHighlighted ? "animate-pulse opacity-40" : "opacity-30"} pointer-events-none`}
+                style={{ animationDuration: '8s' }}
+              />
+
+              {/* Solid Glass Core Node */}
+              <circle
+                r={isAct ? "4.5" : "3.2"}
+                fill={isAct || isPresetHighlighted ? node.color : "#0E1420"}
+                stroke={isAct || isPresetHighlighted ? "#FFFFFF" : node.color}
+                strokeWidth={isAct ? "1.8" : "1.2"}
+                className="transition-all duration-300"
+                filter={isAct ? "url(#neon-bloom)" : undefined}
+              />
+              
+              {/* Inner White Light Core */}
+              {(isAct || isPresetHighlighted) && (
+                <circle r="1.8" fill="#FFFFFF" className="pointer-events-none" />
+              )}
+
+              {/* Node Title Label with Neon Typography Glow */}
+              <text
+                x={node.tx - node.x}
+                y={node.ty - node.y}
+                textAnchor={node.align}
+                fill={isAct || isPresetHighlighted ? "#FFFFFF" : "#94A3B8"}
+                className="font-mono text-[11px] font-bold uppercase tracking-wider transition-colors duration-300 select-none"
+                style={{
+                  fillOpacity: isAct || isPresetHighlighted ? 1.0 : 0.6,
+                  filter: isAct ? `drop-shadow(0 0 6px ${node.color})` : undefined
+                }}
+              >
                 {node.label}
               </text>
             </g>
@@ -426,4 +539,3 @@ export const NodeCanvas: React.FC<NodeCanvasProps> = ({
     </div>
   );
 };
-

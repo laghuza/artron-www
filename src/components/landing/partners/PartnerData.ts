@@ -19,14 +19,19 @@ export interface GymClient {
 export interface Partner {
   id: string;
   name: string;
+  subtitleKa?: string;
+  subtitleEn?: string;
+  subtitleRu?: string;
   category: 'hardware' | 'fintech';
   icon: React.ReactNode;
   descKa: string;
   descEn: string;
   descRu: string;
   status: string;
-  statusType: 'live' | 'official' | 'talks';
+  statusType: 'live' | 'official' | 'talks' | 'primary';
   brandColor: string;
+  isPrimary?: boolean;
+  badges?: string[];
 }
 
 export const gymClients: GymClient[] = [
@@ -87,6 +92,55 @@ export const gymClients: GymClient[] = [
       React.createElement('span', { className: "text-[12px] font-black text-[#FF4D4D] tracking-tighter" }, 'FX')
     ),
   },
+  {
+    id: 'fitness-zona-15',
+    name: 'Fitness Zona 15',
+    subtitleKa: 'სპორტული დარბაზი',
+    subtitleEn: 'Sports Fitness Gym',
+    subtitleRu: 'Спортивный зал',
+    followers: '1,400+',
+    tags: ['IoT ტურნიკეტები', 'სპორტული დარბაზი', 'CRM', 'QR დაშვება'],
+    descKa: 'სრული ავტომატიზაცია, წევრების ბაზა და QR დაშვების სისტემა.',
+    descEn: 'Full facility automation, member database, and QR access control.',
+    descRu: 'Полная автоматизация зала, база клиентов и QR контроль доступа.',
+    brandColor: '#22C55E',
+    badge: React.createElement(
+      'div',
+      { className: "w-12 h-12 rounded-full bg-black border-2 border-[#22C55E] flex flex-col items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
+      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse" }),
+      React.createElement('span', { className: "text-[7.5px] font-black text-[#22C55E] tracking-tighter uppercase leading-tight" }, 'FITNESS'),
+      React.createElement('span', { className: "text-[9.5px] font-black text-white tracking-tighter leading-tight" }, 'ზონა 15')
+    ),
+  },
+  {
+    id: 'athletic-kutaisi',
+    name: 'Athletic.ათლეტიკი',
+    subtitleKa: 'ფიტნეს კლუბი & დარბაზი',
+    subtitleEn: 'Fitness Club & Gym',
+    subtitleRu: 'Фитнес-клуб и тренажерный зал',
+    followers: '840+',
+    tags: ['IoT ტურნიკეტები', 'ქუთაისი', 'ფიტნეს ცენტრი', 'QR დაშვება'],
+    descKa: 'სრული ავტომატიზაცია, წევრების ვიზიტების აღრიცხვა და QR კოდით დაშვების სისტემა.',
+    descEn: 'Full facility automation, member visit tracking, and smart QR access control.',
+    descRu: 'Полная автоматизация, учет посещений и система доступа по QR-коду.',
+    brandColor: '#FF9900',
+    badge: React.createElement(
+      'div',
+      { className: "w-12 h-12 rounded-full bg-black border-2 border-[#00A3FF] flex items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
+      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse z-10" }),
+      React.createElement(
+        'svg',
+        { viewBox: "0 0 120 120", className: "w-11 h-11 select-none", fill: "none", xmlns: "http://www.w3.org/2000/svg" },
+        React.createElement('rect', { x: "12", y: "34", width: "4", height: "52", rx: "1.5", fill: "#FFFFFF" }),
+        React.createElement('rect', { x: "19", y: "40", width: "4", height: "40", rx: "1.5", fill: "#CBD5E1" }),
+        React.createElement('rect', { x: "97", y: "40", width: "4", height: "40", rx: "1.5", fill: "#CBD5E1" }),
+        React.createElement('rect', { x: "104", y: "34", width: "4", height: "52", rx: "1.5", fill: "#FFFFFF" }),
+        React.createElement('path', { d: "M 27 72 L 39 34 L 51 72 L 44 72 L 39 56 L 34 72 Z", fill: "#FF9900" }),
+        React.createElement('text', { x: "47", y: "66", fill: "#FFFFFF", fontSize: "19", fontWeight: "900", fontFamily: "Impact, system-ui, sans-serif", letterSpacing: "-0.5" }, "THLETIC"),
+        React.createElement('text', { x: "60", y: "85", textAnchor: "middle", fill: "#FFB800", fontSize: "7.5", fontWeight: "900", fontFamily: "system-ui, sans-serif", letterSpacing: "0.4" }, "FITNESS CLUB GEORGIA")
+      )
+    ),
+  },
 ];
 
 export const hardwarePartners: Partner[] = [
@@ -144,37 +198,26 @@ export const fintechPartners: Partner[] = [
   {
     id: 'bog',
     name: 'Bank of Georgia',
+    subtitleKa: 'მთავარი საგადახდო პარტნიორი • Mobile & Web',
+    subtitleEn: 'Primary Payment Gateway • Mobile & Web',
+    subtitleRu: 'Основной платежный шлюз • Mobile & Web',
     category: 'fintech',
-    icon: React.createElement(Zap, { className: "w-6 h-6 text-[#FF5E00]" }),
-    descKa: 'B2B ლოკალური გადახდები, BOG განვადება, Apple Pay და Google Pay მხარდაჭერა.',
-    descEn: 'B2B acquiring, local BOG installment checkouts, Apple Pay & Google Pay.',
-    descRu: 'Локальный эквайринг, рассрочка BOG, Apple Pay и Google Pay.',
-    status: 'SECURE LINK',
-    statusType: 'live',
+    isPrimary: true,
+    icon: React.createElement(
+      'div',
+      { className: "w-7 h-7 rounded-lg bg-gradient-to-br from-[#FF5E00] to-[#FF8C00] flex items-center justify-center shadow-[0_0_15px_rgba(255,94,0,0.4)]" },
+      React.createElement(
+        'svg',
+        { viewBox: "0 0 24 24", className: "w-4.5 h-4.5 fill-white select-none", xmlns: "http://www.w3.org/2000/svg" },
+        React.createElement('path', { d: "M12 2L2 7l10 5 10-5-10-5zm0 8.5L4.5 7 12 3.25 19.5 7 12 10.5zM2 17l10 5 10-5v-2l-10 5-10-5v2zm0-5l10 5 10-5v-2l-10 5-10-5v2z" })
+      )
+    ),
+    descKa: 'მობილური აპლიკაციისა და ონლაინ გაყიდვების ცენტრალური ექვაირინგი: Apple Pay & Google Pay 1-კლიკით გადახდა, BOG 0% განვადება და ბარათების უსაფრთხო ტოკენიზაცია.',
+    descEn: 'Mobile App & online sales central acquiring: 1-click Apple Pay & Google Pay, BOG 0% installment checkout, and secure recurring card tokenization.',
+    descRu: 'Центральный эквайринг мобильного приложения и онлайн-продаж: Apple Pay и Google Pay в 1 клик, рассрочка BOG 0% и безопасная токенизация карт.',
+    status: 'PRIMARY MOBILE GATEWAY',
+    statusType: 'primary',
     brandColor: '#FF5E00',
-  },
-  {
-    id: 'tbc',
-    name: 'TBC Bank',
-    category: 'fintech',
-    icon: React.createElement(CheckCircle2, { className: "w-6 h-6 text-[#00A3FF]" }),
-    descKa: 'TBC Checkout ინტეგრაცია, პირდაპირი QR გადახდები და ბარათების უსაფრთხო ტოკენიზაცია.',
-    descEn: 'TBC acquiring integration, direct QR code payments, and card tokenization.',
-    descRu: 'Интеграция TBC Checkout, QR-оплата и безопасная токенизация карт.',
-    status: 'SECURE LINK',
-    statusType: 'live',
-    brandColor: '#00A3FF',
-  },
-  {
-    id: 'stripe',
-    name: 'Stripe',
-    category: 'fintech',
-    icon: React.createElement(CreditCard, { className: "w-6 h-6 text-[#635BFF]" }),
-    descKa: 'საერთაშორისო გამოწერები და 14-დღიანი თანხის ავტომატური დაბრუნების პროტოკოლი.',
-    descEn: 'Global subscription billing & 14-day statutory refund orchestration.',
-    descRu: 'Международные подписки и автоматический 14-дневный возврат средств.',
-    status: 'API CONNECTED',
-    statusType: 'live',
-    brandColor: '#635BFF',
+    badges: [' Apple Pay', 'G Pay', 'BOG განვადება 0%', 'ტოკენიზაცია'],
   },
 ];

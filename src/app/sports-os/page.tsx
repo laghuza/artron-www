@@ -31,6 +31,7 @@ function GatewayPageContent() {
   const [facilityPreset, setFacilityPreset] = useState<FacilityPreset>('ALL');
   const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
   const [activeSubChapterId, setActiveSubChapterId] = useState<string | null>(null);
+  const [initialAction, setInitialAction] = useState<string | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [sessionUser, setSessionUser] = useState<{
     username: string;
@@ -128,6 +129,15 @@ function GatewayPageContent() {
       if (params.get('demo') === 'true') {
         setAccessMode('TEMP_OTP');
         setPortalState('ENTERED');
+      }
+      const nodeParam = params.get('node');
+      const actionParam = params.get('action');
+      if (nodeParam === '1' || actionParam === 'migration') {
+        setActiveNodeId(1);
+        setViewState('NODE_SELECTED');
+        if (actionParam) {
+          setInitialAction(actionParam);
+        }
       }
     }
   }, []);
@@ -240,7 +250,7 @@ function GatewayPageContent() {
       />
 
       <main
-        className={`min-h-screen h-screen w-full flex flex-col justify-between overflow-hidden bg-[#090b0e] text-white transition-opacity duration-380 ${
+        className={`min-h-screen h-screen w-full flex flex-col justify-between overflow-hidden bg-[#06080D] text-white transition-opacity duration-380 ${
           portalState === 'EXPANDING' ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
@@ -297,6 +307,7 @@ function GatewayPageContent() {
               onSelectPreset={setFacilityPreset}
               isMuted={isMuted}
               onToggleMute={toggleMute}
+              initialAction={initialAction}
             />
           </div>
         </div>
