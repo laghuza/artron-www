@@ -38,30 +38,30 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
     setIsScrolledPast(latest > 260);
   });
 
-  // 1. Logo & Brand (Left block)
-  const logoX = useTransform(smoothProgress, [0, 1], [isDynamic ? -40 : 0, 0]);
-  const logoY = useTransform(smoothProgress, [0, 1], [isDynamic ? -20 : 0, 0]);
-  const logoRot = useTransform(smoothProgress, [0, 1], [isDynamic ? -4 : 0, 0]);
-  const logoScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.92 : 1, 1]);
+  // 1. Logo & Brand (Left block) - Pure vertical & scale convergence
+  const logoX = useTransform(smoothProgress, [0, 1], [0, 0]);
+  const logoY = useTransform(smoothProgress, [0, 1], [isDynamic ? -16 : 0, 0]);
+  const logoRot = useTransform(smoothProgress, [0, 1], [0, 0]);
+  const logoScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.95 : 1, 1]);
   const logoAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
 
   // 2. Central Navigation (Menu)
-  const navY = useTransform(smoothProgress, [0, 1], [isDynamic ? -30 : 0, 0]);
-  const navScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 1.05 : 1, 1]);
+  const navY = useTransform(smoothProgress, [0, 1], [isDynamic ? -20 : 0, 0]);
+  const navScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.98 : 1, 1]);
   const navAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
 
-  // 3. System Access (Right green CTA)
-  const accessX = useTransform(smoothProgress, [0, 1], [isDynamic ? 20 : 0, 0]);
-  const accessY = useTransform(smoothProgress, [0, 1], [isDynamic ? 20 : 0, 0]);
-  const accessRot = useTransform(smoothProgress, [0, 1], [isDynamic ? 4 : 0, 0]);
+  // 3. System Access (Right green CTA) - Keep inside viewport
+  const accessX = useTransform(smoothProgress, [0, 1], [0, 0]);
+  const accessY = useTransform(smoothProgress, [0, 1], [isDynamic ? -16 : 0, 0]);
+  const accessRot = useTransform(smoothProgress, [0, 1], [0, 0]);
   const accessScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.95 : 1, 1]);
   const accessAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
 
-  // 4. Language Switcher (Globe block)
-  const langX = useTransform(smoothProgress, [0, 1], [isDynamic ? 15 : 0, 0]);
-  const langY = useTransform(smoothProgress, [0, 1], [isDynamic ? -15 : 0, 0]);
-  const langRot = useTransform(smoothProgress, [0, 1], [isDynamic ? -4 : 0, 0]);
-  const langScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 1.05 : 1, 1]);
+  // 4. Language Switcher (Globe block) - Keep inside viewport without right-side overflow
+  const langX = useTransform(smoothProgress, [0, 1], [0, 0]);
+  const langY = useTransform(smoothProgress, [0, 1], [isDynamic ? -16 : 0, 0]);
+  const langRot = useTransform(smoothProgress, [0, 1], [0, 0]);
+  const langScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.95 : 1, 1]);
   const langAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
 
   // 5. Header Shell Surface & Backdrop

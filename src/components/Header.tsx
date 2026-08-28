@@ -22,6 +22,7 @@ import ArtronLogo from '@/components/ui/ArtronLogo';
 import { audioManager } from '@/lib/audioManager';
 import { useHeaderKinematics } from '@/core/hooks/useHeaderKinematics';
 import { IgnitionButton } from '@/components/ui/IgnitionButton';
+import PS5LanguageSelector from '@/components/navigation/PS5LanguageSelector';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -31,12 +32,6 @@ interface HeaderProps {
   className?: string;
   hideOnInitialScroll?: boolean;
 }
-
-const LANG_META: Record<string, { flag: string; label: string }> = {
-  ka: { flag: '🇬🇪', label: 'KA' },
-  en: { flag: '🇺🇸', label: 'EN' },
-  ru: { flag: '🇷🇺', label: 'RU' },
-};
 
 const SECTION_IDS = [
   'ecosystem',
@@ -70,13 +65,11 @@ export const Header: React.FC<HeaderProps> = ({
   const router = useRouter();
   const pathname = usePathname();
   const { locale, setLocale, t } = useLanguage();
-  const [isLangOpen, setIsLangOpen] = useState(false);
   const [isControlPanelOpen, setIsControlPanelOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileControlPanelExpanded, setIsMobileControlPanelExpanded] = useState(true);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [activeNav, setActiveNav] = useState<string>('/#ecosystem');
-  const langDropdownRef = useRef<HTMLDivElement>(null);
   const controlPanelMenuRef = useRef<HTMLDivElement>(null);
   const controlPanelTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -86,16 +79,12 @@ export const Header: React.FC<HeaderProps> = ({
   /* ── Outside-click and ESC key to close dropdowns ── */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
-        setIsLangOpen(false);
-      }
       if (controlPanelMenuRef.current && !controlPanelMenuRef.current.contains(event.target as Node)) {
         setIsControlPanelOpen(false);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsLangOpen(false);
         setIsControlPanelOpen(false);
         setIsMobileMenuOpen(false);
       }
@@ -518,7 +507,7 @@ export const Header: React.FC<HeaderProps> = ({
                   scale: kinematics.access.scale,
                   opacity: kinematics.access.opacity,
                 }}
-                className="will-change-transform shrink-0"
+                className="will-change-transform shrink-0 hidden sm:block"
               >
                 <IgnitionButton
                   href="/sports-os"
@@ -533,7 +522,7 @@ export const Header: React.FC<HeaderProps> = ({
             </>
           )}
 
-          {/* ══ LANGUAGE SWITCHER — Reverse Kinetic from Letter O trajectory ══ */}
+          {/* ══ PS5 AIRY LANGUAGE SWITCHER — Reverse Kinetic from Letter O trajectory ══ */}
           <motion.div
             style={{
               x: kinematics.lang.x,
@@ -543,64 +532,8 @@ export const Header: React.FC<HeaderProps> = ({
               opacity: kinematics.lang.opacity,
             }}
             className="relative shrink-0 will-change-transform z-30"
-            ref={langDropdownRef}
           >
-            <button
-              id="language-switcher-btn"
-              onClick={() => {
-                audioManager.playClick();
-                setIsLangOpen(!isLangOpen);
-              }}
-              className="flex items-center gap-1.5 bg-[#111827]/90 hover:bg-[#1A2235] border border-white/[0.12] hover:border-[#00A3FF]/60 rounded-xl px-2.5 h-8.5 backdrop-blur-md transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-[#00A3FF]/60 cursor-pointer select-none group shrink-0 shadow-[0_2px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_0_16px_rgba(0,163,255,0.25)]"
-              aria-label="Select language"
-              aria-expanded={isLangOpen}
-              aria-haspopup="listbox"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#00A3FF] group-hover:rotate-45 transition-transform duration-300 shrink-0" />
-              <span className="text-[11px] font-black uppercase tracking-wider text-white">
-                {LANG_META[locale]?.label || 'KA'}
-              </span>
-              <ChevronDown className={`w-3 h-3 text-[#94A3B8] transition-transform duration-300 shrink-0 ${isLangOpen ? 'rotate-180 text-[#00A3FF]' : ''}`} />
-            </button>
-
-            <AnimatePresence>
-              {isLangOpen && (
-                <motion.div
-                  role="listbox"
-                  aria-label="Language options"
-                  initial={{ opacity: 0, scale: 0.92, y: -6 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.92, y: -6 }}
-                  transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute right-0 top-full mt-2 w-36 rounded-xl border border-white/[0.12] bg-[#0B0F17]/98 p-1.5 backdrop-blur-2xl shadow-[0_20px_48px_rgba(0,0,0,0.7),0_0_24px_rgba(0,163,255,0.15)] z-[70]"
-                >
-                  {(['ka', 'en', 'ru'] as const).map((lang) => (
-                    <button
-                      key={lang}
-                      role="option"
-                      data-testid={`lang-option-${lang}`}
-                      aria-selected={locale === lang}
-                      onClick={() => {
-                        audioManager.playClick();
-                        setLocale(lang);
-                        setIsLangOpen(false);
-                      }}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-left rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer ${
-                        locale === lang
-                          ? 'bg-[#00A3FF]/20 text-[#00A3FF] border border-[#00A3FF]/30'
-                          : 'text-[#94A3B8] hover:bg-white/[0.06] hover:text-white border border-transparent'
-                      }`}
-                    >
-                      <span className="text-base leading-none">{LANG_META[lang].flag}</span>
-                      <span className="uppercase tracking-wider font-bold">{LANG_META[lang].label}</span>
-                      {locale === lang && (
-                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00A3FF] shadow-[0_0_8px_#00A3FF] shrink-0" />
-                      )}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <PS5LanguageSelector variant="header" />
           </motion.div>
 
           {/* ══ MOBILE HAMBURGER ══ */}
@@ -728,29 +661,12 @@ export const Header: React.FC<HeaderProps> = ({
                 );
               })}
 
-              {/* Mobile Language Selector */}
-              <div className="mt-2 pt-2 border-t border-white/[0.08] flex items-center justify-between gap-2">
-                <span className="text-xs font-mono text-[#94A3B8] uppercase">{t('lang_selector') || 'Language'}:</span>
-                <div className="flex items-center gap-1.5">
-                  {(['ka', 'en', 'ru'] as const).map((lang) => (
-                    <button
-                      key={lang}
-                      onClick={() => {
-                        audioManager.playClick();
-                        setLocale(lang);
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                        locale === lang
-                          ? 'bg-[#00A3FF]/20 text-[#00A3FF] border border-[#00A3FF]/40'
-                          : 'bg-white/[0.04] text-[#94A3B8] hover:text-white border border-transparent'
-                      }`}
-                    >
-                      <span>{LANG_META[lang].flag}</span>
-                      <span>{LANG_META[lang].label}</span>
-                    </button>
-                  ))}
-                </div>
+              {/* Mobile PS5 Language Selector */}
+              <div className="mt-2 pt-2 border-t border-white/[0.08]">
+                <PS5LanguageSelector
+                  variant="mobile"
+                  onSelectCallback={() => setIsMobileMenuOpen(false)}
+                />
               </div>
 
               {/* Mobile CTA */}

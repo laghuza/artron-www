@@ -76,7 +76,7 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
               className="inline-flex items-center justify-center font-mono text-[10px] uppercase tracking-[0.15em] text-[#00A3FF] hover:text-white border border-[#00A3FF]/40 hover:border-[#00A3FF] bg-[#00A3FF]/10 hover:bg-[#00A3FF]/20 px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-[0_0_12px_rgba(0,163,255,0.2)] font-bold"
               title="სრულ გრაფზე დაბრუნება (ESC)"
             >
-              <span>← {t('system.full_core_view') || 'გრაფის ხედვა (ESC)'}</span>
+              <span>{t('system.full_core_view') || '← გრაფის ხედვა (ESC)'}</span>
             </button>
 
             <button

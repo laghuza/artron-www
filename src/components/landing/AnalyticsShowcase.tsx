@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AnalyticsOkrTab } from './AnalyticsOkrTab';
 import { AnalyticsKpiTab } from './AnalyticsKpiTab';
 import { AnalyticsChurnTab } from './AnalyticsChurnTab';
 import { AnalyticsHeatmapTab } from './AnalyticsHeatmapTab';
@@ -11,7 +12,7 @@ import { AnalyticsWinbackTab } from './AnalyticsWinbackTab';
 
 export const AnalyticsShowcase: React.FC = () => {
   const { t, locale } = useLanguage();
-  const [activeSubTab, setActiveSubTab] = useState<'kpi' | 'churn' | 'heatmap' | 'winback'>('kpi');
+  const [activeSubTab, setActiveSubTab] = useState<'okr' | 'kpi' | 'churn' | 'heatmap' | 'winback'>('okr');
   
   // Churn predictions interactive state
   const [selectedUserIndex, setSelectedUserIndex] = useState<number>(0);
@@ -49,6 +50,8 @@ export const AnalyticsShowcase: React.FC = () => {
 
   const activeTabContent = useMemo(() => {
     switch (activeSubTab) {
+      case 'okr':
+        return <AnalyticsOkrTab t={t} locale={locale} />;
       case 'kpi':
         return <AnalyticsKpiTab t={t} locale={locale} />;
       case 'churn':
@@ -102,12 +105,13 @@ export const AnalyticsShowcase: React.FC = () => {
 
         {/* HUD Sub-Tabs */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {(['kpi', 'churn', 'heatmap', 'winback'] as const).map((tab) => {
+          {(['okr', 'kpi', 'churn', 'heatmap', 'winback'] as const).map((tab) => {
             const isActive = activeSubTab === tab;
-            const themeColor = (tab === 'churn' || tab === 'winback') ? '#00ff87' : '#00e5ff';
+            const themeColor = tab === 'okr' ? '#00A3FF' : (tab === 'churn' || tab === 'winback') ? '#00ff87' : '#00e5ff';
             
             let label = '';
-            if (tab === 'kpi') label = locale === 'ka' ? 'KPI პანელი' : locale === 'ru' ? 'Панель KPI' : 'KPI Dashboard';
+            if (tab === 'okr') label = t('analytics_tab_okr') || '🎯 OKR Engine';
+            else if (tab === 'kpi') label = locale === 'ka' ? 'KPI პანელი' : locale === 'ru' ? 'Панель KPI' : 'KPI Dashboard';
             else if (tab === 'churn') label = t('analytics_tab_churn');
             else if (tab === 'heatmap') label = t('analytics_tab_heatmap');
             else if (tab === 'winback') label = t('analytics_tab_winback');

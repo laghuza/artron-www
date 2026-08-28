@@ -24,12 +24,6 @@ export const Node01CanvasView: React.FC<Node01CanvasViewProps> = ({
   const [isMigrationSimulatorOpen, setIsMigrationSimulatorOpen] = useState(false);
 
   useEffect(() => {
-    if (initialAction === 'migration' && (!activeSubChapterId || activeSubChapterId === '01.6')) {
-      setIsMigrationSimulatorOpen(true);
-    }
-  }, [initialAction, activeSubChapterId]);
-
-  useEffect(() => {
     if (activeSubChapterId === '01.6') {
       setIsMigrationSimulatorOpen(true);
       setSelectedCardIndex(null);
@@ -89,14 +83,16 @@ export const Node01CanvasView: React.FC<Node01CanvasViewProps> = ({
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={handleOpenSimulator}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#00A3FF]/20 to-[#00ff87]/20 hover:from-[#00A3FF]/30 hover:to-[#00ff87]/30 border border-[#00A3FF]/50 text-white font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(0,163,255,0.2)] cursor-pointer"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-[#00A3FF]" />
-            <span>Excel მიგრაციის სიმულატორი</span>
-          </button>
+          {activeSubChapterId === '01.6' && (
+            <button
+              type="button"
+              onClick={handleOpenSimulator}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#00A3FF]/20 to-[#00ff87]/20 hover:from-[#00A3FF]/30 hover:to-[#00ff87]/30 border border-[#00A3FF]/50 text-white font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(0,163,255,0.2)] cursor-pointer"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-[#00A3FF]" />
+              <span>Excel მიგრაციის სიმულატორი</span>
+            </button>
+          )}
         </div>
       )}
 

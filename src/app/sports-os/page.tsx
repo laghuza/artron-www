@@ -132,11 +132,23 @@ function GatewayPageContent() {
       }
       const nodeParam = params.get('node');
       const actionParam = params.get('action');
-      if (nodeParam === '1' || actionParam === 'migration') {
+      const subParam = params.get('sub');
+
+      if (actionParam === 'migration') {
         setActiveNodeId(1);
+        setActiveSubChapterId(null);
+        setInitialAction('migration');
         setViewState('NODE_SELECTED');
-        if (actionParam) {
-          setInitialAction(actionParam);
+      } else if (nodeParam) {
+        const nId = parseInt(nodeParam, 10);
+        if (!isNaN(nId) && nId >= 1 && nId <= 9) {
+          setActiveNodeId(nId);
+          setViewState('NODE_SELECTED');
+          if (subParam) {
+            setActiveSubChapterId(subParam);
+          } else if (nId === 1) {
+            setActiveSubChapterId('01.1');
+          }
         }
       }
     }
@@ -157,7 +169,12 @@ function GatewayPageContent() {
 
   const handleSelectNode = (nodeId: number) => {
     setActiveNodeId(nodeId);
-    setActiveSubChapterId(null);
+    setInitialAction(null);
+    if (nodeId === 1) {
+      setActiveSubChapterId('01.1');
+    } else {
+      setActiveSubChapterId(null);
+    }
     setViewState('NODE_SELECTED');
   };
 

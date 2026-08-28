@@ -16,14 +16,15 @@ import {
   Layers, 
   Clock, 
   ShieldAlert,
-  DownloadCloud
+  DownloadCloud,
+  Target
 } from 'lucide-react';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 export const LegacyVsArtronSection: React.FC = () => {
   const { t, locale } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'all' | 'speed' | 'revenue' | 'compliance'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'speed' | 'revenue' | 'compliance' | 'winback' | 'okr'>('all');
 
   const comparisonRows = [
     {
@@ -107,6 +108,27 @@ export const LegacyVsArtronSection: React.FC = () => {
         detailEn: 'AI Pipeline & automated personalized SMS/Push triggers for retention',
         detailRu: 'AI Pipeline и автоматические SMS/Push триггеры возврата',
         badge: '+22% WIN-BACK',
+        status: 'positive',
+      },
+    },
+    {
+      id: 'okr',
+      category: t('comparison.okr_title') || 'სტრატეგიული მიზნები & OKR',
+      icon: Target,
+      accentColor: '#00A3FF',
+      legacy: {
+        title: t('comparison.okr_legacy'),
+        detail: 'ქაოსური ყოველდღიური დავალებები, არანაირი ციფრული მიზანი და კონტროლი',
+        detailEn: 'Chaotic ad-hoc tasks, zero measurable goals and lack of team accountability',
+        detailRu: 'Хаотичные задачи, отсутствие измеримых целей и контроля над командой',
+        status: 'negative',
+      },
+      artron: {
+        title: t('comparison.okr_artron'),
+        detail: 'როლებზე მორგებული OKR ძრავა, რეალურ ანალიტიკასთან ავტო-სინქრონიზაციით',
+        detailEn: 'Role-based OKR engine with real-time auto-sync to gym telemetry & analytics',
+        detailRu: 'Ролевая модель OKR с авто-синхронизацией с реальной телеметрией клуба',
+        badge: '100% ALIGNMENT',
         status: 'positive',
       },
     },

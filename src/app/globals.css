@@ -646,6 +646,30 @@ body {
   animation: screen-ignition-shockwave 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ==========================================
+   INFINITE CONTINUOUS GYM MARQUEE ANIMATION
+   ========================================== */
+@keyframes gym-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-gym-marquee {
+  display: flex;
+  width: max-content;
+  animation: gym-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+.animate-gym-marquee:hover,
+.animate-gym-marquee:focus-within {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cta-neon-border {
     animation: none !important;
