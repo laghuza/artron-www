@@ -86,12 +86,35 @@ export const Step5SystemLaunchSequence: React.FC<Step5SystemLaunchSequenceProps>
     };
   }, []);
 
-  const planDisplayName =
-    selectedPlan.toLowerCase() === 'starter'
-      ? `${t('ps5_onboarding.plan_starter_name')} (₾350)`
-      : selectedPlan.toLowerCase() === 'enterprise'
-      ? `${t('ps5_onboarding.plan_enterprise_name')} (₾950)`
-      : `${t('ps5_onboarding.plan_pro_name')} (₾565)`;
+  const planKey = selectedPlan.toLowerCase();
+  let planDisplayName = selectedPlan.toUpperCase();
+  if (planKey === 'custom') {
+    planDisplayName = `${t('pricing_mode_builder') || 'მორგებული პაკეტი'} (CUSTOM PLAN)`;
+  } else if (planKey.includes('studio-starter')) {
+    planDisplayName = `${t('pricing_tier_studio_starter_name')} (₾365)`;
+  } else if (planKey.includes('studio-pro')) {
+    planDisplayName = `${t('pricing_tier_studio_pro_name')} (₾485)`;
+  } else if (planKey.includes('studio-enterprise')) {
+    planDisplayName = `${t('pricing_tier_studio_enterprise_name')} (₾685)`;
+  } else if (planKey.includes('gym-starter')) {
+    planDisplayName = `${t('pricing_tier_gym_starter_name')} (₾565)`;
+  } else if (planKey.includes('gym-pro')) {
+    planDisplayName = `${t('pricing_tier_gym_pro_name')} (₾745)`;
+  } else if (planKey.includes('gym-enterprise')) {
+    planDisplayName = `${t('pricing_tier_gym_enterprise_name')} (₾1,150)`;
+  } else if (planKey.includes('pool-starter')) {
+    planDisplayName = `${t('pricing_tier_pool_starter_name')} (₾745)`;
+  } else if (planKey.includes('pool-pro')) {
+    planDisplayName = `${t('pricing_tier_pool_pro_name')} (₾980)`;
+  } else if (planKey.includes('pool-enterprise')) {
+    planDisplayName = `${t('pricing_tier_pool_enterprise_name')} (₾1,450)`;
+  } else if (planKey === 'starter') {
+    planDisplayName = `${t('ps5_onboarding.plan_starter_name')} (₾365)`;
+  } else if (planKey === 'enterprise') {
+    planDisplayName = `${t('ps5_onboarding.plan_enterprise_name')} (₾1,150)`;
+  } else if (planKey === 'pro') {
+    planDisplayName = `${t('ps5_onboarding.plan_pro_name')} (₾745)`;
+  }
 
   return (
     <div className="w-full flex flex-col items-center text-center py-4 px-2 select-none max-w-2xl mx-auto" data-testid="step5-system-launch">

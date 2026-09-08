@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Target, TrendingUp, ShieldAlert, RotateCcw, BarChart3, CheckCircle2, AlertTriangle, ArrowUpRight, Zap, Award, Sparkles } from 'lucide-react';
+import { Target, TrendingUp, ShieldAlert, RotateCcw, BarChart3, CheckCircle2, AlertTriangle, ArrowUpRight, Zap, Award, Sparkles, Crown, ClipboardList, Dumbbell, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
@@ -11,6 +11,12 @@ interface AnalyticsOkrTabProps {
 }
 
 type RoleType = 'director' | 'manager' | 'coach';
+
+const ROLE_ICONS: Record<RoleType, React.ElementType> = {
+  director: Crown,
+  manager: ClipboardList,
+  coach: Dumbbell,
+};
 
 export const AnalyticsOkrTab: React.FC<AnalyticsOkrTabProps> = ({ t, locale }) => {
   const [selectedRole, setSelectedRole] = useState<RoleType>('director');
@@ -157,7 +163,7 @@ export const AnalyticsOkrTab: React.FC<AnalyticsOkrTabProps> = ({ t, locale }) =
         <div>
           <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
             <Target className="w-5 h-5 text-[#00A3FF]" />
-            {t('analytics_okr_title') || '🎯 OKR Engine (მიზნებისა და საკვანძო შედეგების მართვა)'}
+            {t('analytics_okr_title') || 'OKR Engine (მიზნებისა და საკვანძო შედეგების მართვა)'}
           </h3>
           <p className="text-xs text-[#94A3B8]">
             {t('analytics_okr_subtitle') || 'გარდაქმენით ანალიტიკური მონაცემები გუნდის გაზომვად მიზნებად და რეალურ შედეგებად'}
@@ -168,20 +174,22 @@ export const AnalyticsOkrTab: React.FC<AnalyticsOkrTabProps> = ({ t, locale }) =
         <div className="flex p-0.5 bg-[#121722] border border-white/5 rounded-xl self-start sm:self-auto">
           {(['director', 'manager', 'coach'] as const).map((role) => {
             const isSelected = selectedRole === role;
+            const Icon = ROLE_ICONS[role];
             let roleLabel = '';
-            if (role === 'director') roleLabel = locale === 'ka' ? '👑 დირექტორი' : locale === 'ru' ? '👑 Директор' : '👑 Director';
-            if (role === 'manager') roleLabel = locale === 'ka' ? '📋 მენეჯერი' : locale === 'ru' ? '📋 Менеджер' : '📋 Manager';
-            if (role === 'coach') roleLabel = locale === 'ka' ? '🏋️‍♂️ მწვრთნელი' : locale === 'ru' ? '🏋️‍♂️ Тренер' : '🏋️‍♂️ Coach';
+            if (role === 'director') roleLabel = locale === 'ka' ? 'დირექტორი' : locale === 'ru' ? 'Директор' : 'Director';
+            if (role === 'manager') roleLabel = locale === 'ka' ? 'მენეჯერი' : locale === 'ru' ? 'Менеджер' : 'Manager';
+            if (role === 'coach') roleLabel = locale === 'ka' ? 'მწვრთნელი' : locale === 'ru' ? 'Тренер' : 'Coach';
 
             return (
               <button
                 key={role}
                 onClick={() => setSelectedRole(role)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition cursor-pointer relative overflow-hidden ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition cursor-pointer relative overflow-hidden ${
                   isSelected ? 'text-white' : 'text-[#64748B] hover:text-white'
                 }`}
                 style={{ minHeight: '32px' }}
               >
+                <Icon className={`w-3 h-3 relative z-10 ${isSelected ? 'text-[#00A3FF]' : 'text-[#64748B]'}`} />
                 <span className="relative z-10">{roleLabel}</span>
                 {isSelected && (
                   <motion.div
@@ -214,8 +222,9 @@ export const AnalyticsOkrTab: React.FC<AnalyticsOkrTabProps> = ({ t, locale }) =
                   <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#00A3FF]/20 text-[#00A3FF] border border-[#00A3FF]/30 uppercase">
                     Objective • {currentOkr.quarter}
                   </span>
-                  <span className="text-[10px] font-mono text-[#94A3B8]">
-                    ⏳ {currentOkr.daysLeft} {locale === 'ka' ? 'დღე დარჩენილი' : locale === 'ru' ? 'дней осталось' : 'days left'}
+                  <span className="text-[10px] font-mono text-[#94A3B8] flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-[#00A3FF]" />
+                    <span>{currentOkr.daysLeft} {locale === 'ka' ? 'დღე დარჩენილი' : locale === 'ru' ? 'дней осталось' : 'days left'}</span>
                   </span>
                 </div>
                 <h4 className="text-base md:text-lg font-bold text-white tracking-wide">
@@ -232,12 +241,13 @@ export const AnalyticsOkrTab: React.FC<AnalyticsOkrTabProps> = ({ t, locale }) =
                     <span className="text-[#00A3FF]">{currentOkr.overallProgress}%</span>
                   </div>
                 </div>
-                <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold uppercase border ${
+                <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold uppercase border flex items-center gap-1.5 ${
                   currentOkr.status === 'ON_TRACK'
                     ? 'bg-[#00ff87]/15 text-[#00ff87] border-[#00ff87]/30'
                     : 'bg-amber-400/15 text-amber-400 border-amber-400/30'
                 }`}>
-                  {currentOkr.status === 'ON_TRACK' ? '🟢 ON TRACK' : '🟡 AT RISK'}
+                  <span className={`w-1.5 h-1.5 rounded-full ${currentOkr.status === 'ON_TRACK' ? 'bg-[#00ff87]' : 'bg-amber-400'}`} />
+                  {currentOkr.status === 'ON_TRACK' ? 'ON TRACK' : 'AT RISK'}
                 </span>
               </div>
             </div>

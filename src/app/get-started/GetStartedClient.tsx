@@ -41,8 +41,10 @@ export default function GetStartedClient() {
     }
   };
 
-  const initialPlan = (searchParams.get('plan') || 'pro').toLowerCase();
+  const initialPlan = (searchParams.get('plan') || 'gym-pro').toLowerCase();
   const initialCycle = (searchParams.get('cycle') || 'monthly').toLowerCase();
+  const initialVertical = searchParams.get('vertical') || undefined;
+  const initialModules = searchParams.get('modules') ? (searchParams.get('modules')?.split(',') || []) : [];
 
   return (
     <PS5AuroraBackground>
@@ -69,6 +71,8 @@ export default function GetStartedClient() {
             onReset={handleBack}
             initialPlan={initialPlan}
             initialCycle={initialCycle}
+            initialVertical={initialVertical}
+            initialModules={initialModules}
             onStepChange={setCurrentStep}
           />
         ) : (

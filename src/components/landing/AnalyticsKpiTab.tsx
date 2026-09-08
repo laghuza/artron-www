@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { TrendingUp, Users, DollarSign, Target, Award, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
+import { KpiBusinessModulesGrid } from './KpiBusinessModulesGrid';
 
 interface AnalyticsKpiTabProps {
   t: (key: string) => string;
@@ -226,6 +227,29 @@ export const AnalyticsKpiTab: React.FC<AnalyticsKpiTabProps> = ({ t, locale }) =
           />
         </div>
       </motion.div>
+
+      {/* Core Operational Modules Grid */}
+      <div className="pt-6 border-t border-white/5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="space-y-0.5">
+            <span className="text-[9px] font-mono font-bold text-[#00A3FF] uppercase tracking-wider">
+              [SYS: CORE_OPERATIONAL_IMPACT]
+            </span>
+            <h4 className="text-base font-bold text-white tracking-tight">
+              {locale === 'ka' 
+                ? 'ბირთვული მოდულების ბიზნეს-გავლენა' 
+                : locale === 'ru' 
+                ? 'Бизнес-эффект ключевых модулей' 
+                : 'Core Operational Business Impact'}
+            </h4>
+          </div>
+          <span className="text-[10px] font-mono text-[#00ff87] bg-[#00ff87]/10 border border-[#00ff87]/20 px-2.5 py-1 rounded font-semibold uppercase self-start sm:self-auto">
+            4 Live Modules
+          </span>
+        </div>
+
+        <KpiBusinessModulesGrid t={t} />
+      </div>
     </div>
   );
 };

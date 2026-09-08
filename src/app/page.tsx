@@ -16,14 +16,24 @@ const DashboardFeaturesSection = dynamic(
   { loading: () => <SectionSkeleton minHeight="min-h-[500px]" label="DASHBOARD MATRIX LOADING..." /> }
 );
 
+const MultimodalAiShowcase = dynamic(
+  () => import('@/components/landing/MultimodalAiShowcase').then((mod) => mod.MultimodalAiShowcase),
+  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="MULTIMODAL AI ASSISTANT LOADING..." /> }
+);
+
 const AnalyticsShowcase = dynamic(
   () => import('@/components/landing/AnalyticsShowcase').then((mod) => mod.AnalyticsShowcase),
   { loading: () => <SectionSkeleton minHeight="min-h-[650px]" label="AI TELEMETRY & ANALYTICS LOADING..." /> }
 );
 
-const BusinessStatsShowcase = dynamic(
-  () => import('@/components/landing/BusinessStatsShowcase').then((mod) => mod.BusinessStatsShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[450px]" label="GROWTH STATS LOADING..." /> }
+const EnterpriseSecurityShowcase = dynamic(
+  () => import('@/components/landing/EnterpriseSecurityShowcase').then((mod) => mod.EnterpriseSecurityShowcase),
+  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="ENTERPRISE SECURITY & FINANCIAL SOVEREIGNTY LOADING..." /> }
+);
+
+const StaffAccessRolesShowcase = dynamic(
+  () => import('@/components/landing/StaffAccessRolesShowcase').then((mod) => mod.StaffAccessRolesShowcase),
+  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="STAFF ACCESS & DYNAMIC RBAC LOADING..." /> }
 );
 
 const LegacyVsArtronSection = dynamic(
@@ -31,10 +41,6 @@ const LegacyVsArtronSection = dynamic(
   { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="PARADIGM SHIFT MATRIX LOADING..." /> }
 );
 
-const RoiCalculator = dynamic(
-  () => import('@/components/landing/RoiCalculator').then((mod) => mod.RoiCalculator),
-  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="ROI CALCULATOR LOADING..." /> }
-);
 
 const PricingSection = dynamic(
   () => import('@/components/landing/PricingSection').then((mod) => mod.PricingSection),
@@ -95,9 +101,15 @@ export default function Home() {
         {/* 3. B2B Control Hub Cluster: CRM, IoT, Analytics, Stats & Sport OS */}
         <DashboardFeaturesSection />
         <SectionTransition variant="laser" />
+        {/* 3.1 Next-Gen Multimodal AI Assistant (Voice STT, Vision OCR, Chat Function Calling) */}
+        <MultimodalAiShowcase />
+        <SectionTransition variant="laser" />
         <AnalyticsShowcase />
         <SectionTransition variant="laser" />
-        <BusinessStatsShowcase />
+        {/* 3.5 Enterprise Cyber Security & Financial Sovereignty Engine */}
+        <EnterpriseSecurityShowcase />
+        <SectionTransition variant="laser" />
+        <StaffAccessRolesShowcase />
         <SectionTransition variant="laser" />
         <LegacyVsArtronSection />
         <SectionTransition variant="laser" />
@@ -106,9 +118,6 @@ export default function Home() {
         <B2CAthleteAdvantages />
         <SectionTransition variant="laser" />
 
-        {/* 5. Financial ROI Calculator */}
-        <RoiCalculator />
-        <SectionTransition variant="laser" />
         {/* 9. Pricing Matrix */}
         <PricingSection />
         <SectionTransition variant="laser" />

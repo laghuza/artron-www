@@ -22,6 +22,7 @@ export const Node08CanvasView: React.FC<Node08CanvasViewProps> = ({ activeSubCha
     '08.2': 1,
     '08.3': 2,
     '08.4': 3,
+    '08.5': 4,
   };
   const subIndex = activeSubChapterId ? subIdxMap[activeSubChapterId] : undefined;
 
@@ -87,7 +88,7 @@ export const Node08CanvasView: React.FC<Node08CanvasViewProps> = ({ activeSubCha
             {t('node_08_security.short_desc')}
           </p>
 
-          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px] text-gray-400">
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-[10px] text-gray-400">
             <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
               AES-256-GCM PII
             </div>
@@ -99,6 +100,9 @@ export const Node08CanvasView: React.FC<Node08CanvasViewProps> = ({ activeSubCha
             </div>
             <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
               ZERO-TRUST RLS
+            </div>
+            <div className="p-2 rounded bg-white/5 border border-white/10 text-[#00ff87]">
+              IP WHITELIST
             </div>
           </div>
         </div>

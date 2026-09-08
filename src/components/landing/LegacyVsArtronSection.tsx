@@ -17,14 +17,15 @@ import {
   Clock, 
   ShieldAlert,
   DownloadCloud,
-  Target
+  Target,
+  Fingerprint
 } from 'lucide-react';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 import { IgnitionButton } from '@/components/ui/IgnitionButton';
 
 export const LegacyVsArtronSection: React.FC = () => {
   const { t, locale } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'all' | 'speed' | 'revenue' | 'compliance' | 'winback' | 'okr'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'speed' | 'revenue' | 'compliance' | 'winback' | 'okr' | 'security'>('all');
 
   const comparisonRows = [
     {
@@ -129,6 +130,27 @@ export const LegacyVsArtronSection: React.FC = () => {
         detailEn: 'Role-based OKR engine with real-time auto-sync to gym telemetry & analytics',
         detailRu: 'Ролевая модель OKR с авто-синхронизацией с реальной телеметрией клуба',
         badge: '100% ALIGNMENT',
+        status: 'positive',
+      },
+    },
+    {
+      id: 'security',
+      category: 'ავტორიზაცია & კიბერდაცვა',
+      icon: Fingerprint,
+      accentColor: '#00ff87',
+      legacy: {
+        title: 'დაუცველი პაროლები & გაზიარება',
+        detail: 'ფურცელზე/სტიკერზე მიწერილი პაროლები, თანამშრომლებს შორის ექაუნთის გაზიარება, ფიშინგის მაღალი რისკი',
+        detailEn: 'Sticky-note passwords, staff credential sharing, high vulnerability to phishing & credential leaks',
+        detailRu: 'Пароли на стикерах, передача аккаунтов между сотрудниками, высокий риск фишинга и утечек',
+        status: 'negative',
+      },
+      artron: {
+        title: '1-წამიანი FIDO2 Passkey / Face ID',
+        detail: 'უპაროლო შესვლა Touch ID, Face ID ან ტელეფონის QR-ით. 0% ფიშინგის რისკი და მოწყობილობების სრული კონტროლი',
+        detailEn: '1-sec passwordless login via Touch ID, Face ID or Mobile QR. 0% phishing risk & instant device revoke',
+        detailRu: 'Беспарольный вход за 1 сек через Touch ID, Face ID или QR с телефона. 0% риска фишинга и контроль устройств',
+        badge: 'FIDO2 PASSKEY',
         status: 'positive',
       },
     },

@@ -1,25 +1,59 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AnalyticsRoiTab } from './AnalyticsRoiTab';
 import { AnalyticsOkrTab } from './AnalyticsOkrTab';
 import { AnalyticsKpiTab } from './AnalyticsKpiTab';
 import { AnalyticsChurnTab } from './AnalyticsChurnTab';
 import { AnalyticsHeatmapTab } from './AnalyticsHeatmapTab';
 import { AnalyticsWinbackTab } from './AnalyticsWinbackTab';
 
+type AnalyticsSubTab = 'roi' | 'okr' | 'kpi' | 'churn' | 'heatmap' | 'winback';
+
 export const AnalyticsShowcase: React.FC = () => {
   const { t, locale } = useLanguage();
-  const [activeSubTab, setActiveSubTab] = useState<'okr' | 'kpi' | 'churn' | 'heatmap' | 'winback'>('okr');
+  const [activeSubTab, setActiveSubTab] = useState<AnalyticsSubTab>('roi');
   
   // Churn predictions interactive state
   const [selectedUserIndex, setSelectedUserIndex] = useState<number>(0);
   
   // Capacity Heatmap interactive state
-  const [selectedCell, setSelectedCell] = useState<{ day: string, hour: string, load: number } | null>(null);
+  const [selectedCell, setSelectedCell] = useState<{ day: string; hour: string; load: number } | null>(null);
   const [selectedBranch, setSelectedBranch] = useState<'tbilisi' | 'batumi'>('tbilisi');
+
+  // External trigger listener (from Header dropdown or URL hash)
+  useEffect(() => {
+    const handleHashCheck = () => {
+      const hash = window.location.hash;
+      if (hash === '#roi') {
+        setActiveSubTab('roi');
+      } else if (hash.startsWith('#analytics-')) {
+        const tabPart = hash.replace('#analytics-', '') as AnalyticsSubTab;
+        if (['roi', 'okr', 'kpi', 'churn', 'heatmap', 'winback'].includes(tabPart)) {
+          setActiveSubTab(tabPart);
+        }
+      }
+    };
+
+    handleHashCheck();
+    window.addEventListener('hashchange', handleHashCheck);
+
+    const handleCustomTab = (e: Event) => {
+      const customEvent = e as CustomEvent<{ tab: AnalyticsSubTab }>;
+      if (customEvent.detail?.tab && ['roi', 'okr', 'kpi', 'churn', 'heatmap', 'winback'].includes(customEvent.detail.tab)) {
+        setActiveSubTab(customEvent.detail.tab);
+      }
+    };
+    window.addEventListener('artron-select-analytics-tab', handleCustomTab);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashCheck);
+      window.removeEventListener('artron-select-analytics-tab', handleCustomTab);
+    };
+  }, []);
 
   const churnMock = useMemo(() => [
     { 
@@ -50,6 +84,8 @@ export const AnalyticsShowcase: React.FC = () => {
 
   const activeTabContent = useMemo(() => {
     switch (activeSubTab) {
+      case 'roi':
+        return <AnalyticsRoiTab t={t} locale={locale} />;
       case 'okr':
         return <AnalyticsOkrTab t={t} locale={locale} />;
       case 'kpi':
@@ -84,6 +120,9 @@ export const AnalyticsShowcase: React.FC = () => {
 
   return (
     <section id="analytics-showcase" className="py-20 md:py-28 px-4 md:px-8 bg-[#0B0F17] relative overflow-hidden border-b border-white/5 studio-grain">
+      {/* Dual Anchor Target for backward compatibility with #roi */}
+      <div id="roi" className="absolute -top-24 pointer-events-none" />
+
       {/* Background Atmospheric Glow */}
       <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-[#00A3FF]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/3 right-1/3 w-[450px] h-[450px] bg-[#00ff87]/5 rounded-full blur-[140px] pointer-events-none" />
@@ -93,7 +132,7 @@ export const AnalyticsShowcase: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00e5ff]/10 border border-[#00e5ff]/20 text-xs font-mono font-bold text-[#00e5ff] mb-4 tracking-wider uppercase">
-            <Cpu className="w-3.5 h-3.5" /> [SYS: ANALYTICS_ENGINE]
+            <Cpu className="w-3.5 h-3.5" /> [SYS: ANALYTICS_&_ROI_ENGINE]
           </div>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
             {t('analytics_showcase_title')}
@@ -103,14 +142,15 @@ export const AnalyticsShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* HUD Sub-Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {(['okr', 'kpi', 'churn', 'heatmap', 'winback'] as const).map((tab) => {
+        {/* HUD Sub-Tabs (6 Interactive Tabs) */}
+        <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12">
+          {(['roi', 'okr', 'kpi', 'churn', 'heatmap', 'winback'] as const).map((tab) => {
             const isActive = activeSubTab === tab;
-            const themeColor = tab === 'okr' ? '#00A3FF' : (tab === 'churn' || tab === 'winback') ? '#00ff87' : '#00e5ff';
+            const themeColor = tab === 'roi' ? '#00E5FF' : tab === 'okr' ? '#00A3FF' : (tab === 'churn' || tab === 'winback') ? '#00ff87' : '#38BDF8';
             
             let label = '';
-            if (tab === 'okr') label = t('analytics_tab_okr') || '🎯 OKR Engine';
+            if (tab === 'roi') label = locale === 'ka' ? 'ინვესტიციის ROI' : locale === 'ru' ? 'Окупаемость ROI' : 'ROI Simulator';
+            else if (tab === 'okr') label = t('analytics_tab_okr') || '🎯 OKR Engine';
             else if (tab === 'kpi') label = locale === 'ka' ? 'KPI პანელი' : locale === 'ru' ? 'Панель KPI' : 'KPI Dashboard';
             else if (tab === 'churn') label = t('analytics_tab_churn');
             else if (tab === 'heatmap') label = t('analytics_tab_heatmap');
@@ -121,7 +161,7 @@ export const AnalyticsShowcase: React.FC = () => {
                 key={tab}
                 data-testid={`analytics-tab-${tab}`}
                 onClick={() => setActiveSubTab(tab)}
-                className={`relative px-5 py-3 rounded-xl text-xs font-mono font-bold tracking-wider uppercase border transition-all duration-300 cursor-pointer overflow-hidden ${
+                className={`relative px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs font-mono font-bold tracking-wider uppercase border transition-all duration-300 cursor-pointer overflow-hidden ${
                   isActive
                     ? 'border-transparent text-white'
                     : 'bg-[#121722]/50 border-white/5 text-[#94A3B8] hover:border-white/10 hover:text-white'
@@ -154,7 +194,6 @@ export const AnalyticsShowcase: React.FC = () => {
           <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#00e5ff]/35" />
           <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#00e5ff]/35" />
 
-
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSubTab}
@@ -167,10 +206,10 @@ export const AnalyticsShowcase: React.FC = () => {
               {activeTabContent}
             </motion.div>
           </AnimatePresence>
-
         </div>
 
       </div>
     </section>
   );
 };
+

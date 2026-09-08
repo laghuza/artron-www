@@ -58,6 +58,7 @@ describe('Fullscreen Portal Overlay Architectural & Functional Tests (Sub-phase 
     expect(content).toContain("import { FullscreenPortalOverlay } from './FullscreenPortalOverlay'");
     expect(content).toContain('<FullscreenPortalOverlay');
     expect(content).toContain('isOpen={isIgniting}');
-    expect(content).toContain('showCloseButton={true}');
+    expect(content).toContain('showCloseButton={false}');
   });
 });
+

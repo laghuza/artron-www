@@ -13,18 +13,23 @@ import { Step5SystemLaunchSequence } from './Step5SystemLaunchSequence';
 import { PS5DualSenseDock } from './PS5DualSenseDock';
 import { registerClubAction } from '../../actions';
 import { ps5Audio } from '../../core/ps5SoundEngine';
+import { VerticalType } from '@/types/pricing';
 
 export interface PS5RegistrationWizardProps {
   onReset: () => void;
   initialPlan?: string;
   initialCycle?: string;
+  initialVertical?: string;
+  initialModules?: string[];
   onStepChange?: (step: number) => void;
 }
 
 export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
   onReset,
-  initialPlan = 'pro',
+  initialPlan = 'gym-pro',
   initialCycle = 'monthly',
+  initialVertical,
+  initialModules = [],
   onStepChange,
 }) => {
   const { t } = useLanguage();
@@ -42,21 +47,34 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
     { number: 4, title: t('ps5_onboarding.stepper_step4_title'), subtitle: t('ps5_onboarding.stepper_step4_sub') },
   ], [t]);
 
-  const normalizedPlan = (['starter', 'pro', 'enterprise'].includes(initialPlan.toLowerCase())
-    ? initialPlan.toLowerCase()
-    : 'pro') as 'starter' | 'pro' | 'enterprise';
+  // Derive initial vertical from URL parameter or plan name
+  const derivedVertical: VerticalType = useMemo(() => {
+    if (initialVertical && ['studio', 'gym', 'pool'].includes(initialVertical.toLowerCase())) {
+      return initialVertical.toLowerCase() as VerticalType;
+    }
+    if (initialPlan.startsWith('studio')) return 'studio';
+    if (initialPlan.startsWith('pool')) return 'pool';
+    return 'gym';
+  }, [initialVertical, initialPlan]);
 
-  const [selectedPlan, setSelectedPlan] = useState<'starter' | 'pro' | 'enterprise'>(normalizedPlan);
+  const [facilityType, setFacilityType] = useState<string>(derivedVertical);
+  const [selectedPlan, setSelectedPlan] = useState<string>(initialPlan);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>(
     initialCycle.toLowerCase() === 'annual' ? 'annual' : 'monthly'
   );
+  const [customModules] = useState<string[]>(initialModules);
 
   // Form States across Steps 1-4
-  const [facilityType, setFacilityType] = useState('gym');
-  const [turnstilesCount, setTurnstilesCount] = useState(2);
+  const [turnstilesCount, setTurnstilesCount] = useState(
+    derivedVertical === 'studio' ? 1 : derivedVertical === 'pool' ? 3 : 2
+  );
   const [isAntiPassbackEnabled, setIsAntiPassbackEnabled] = useState(true);
-  const [membersCapacity, setMembersCapacity] = useState(500);
-  const [trainersCount, setTrainersCount] = useState(8);
+  const [membersCapacity, setMembersCapacity] = useState(
+    derivedVertical === 'studio' ? 200 : derivedVertical === 'pool' ? 600 : 500
+  );
+  const [trainersCount, setTrainersCount] = useState(
+    derivedVertical === 'studio' ? 5 : derivedVertical === 'pool' ? 12 : 8
+  );
   const [branchesCount, setBranchesCount] = useState('1 ფილიალი');
   const [clubName, setClubName] = useState('');
   const [clubLegalForm, setClubLegalForm] = useState('შპს');
@@ -77,8 +95,33 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
     onStepChange?.(step);
   }, [step, onStepChange]);
 
+  // Handle facility type change from Step 1 Matrix
+  const handleFacilitySelect = (item: FacilityTypeMatrixItem) => {
+    setFacilityType(item.id);
+    if (['studio', 'gym', 'pool'].includes(item.id)) {
+      const v = item.id as VerticalType;
+      // If plan is not custom, switch to corresponding tier of the new vertical
+      if (selectedPlan.toLowerCase() !== 'custom') {
+        const tierLevel = selectedPlan.includes('starter')
+          ? 'starter'
+          : selectedPlan.includes('enterprise')
+          ? 'enterprise'
+          : 'pro';
+        setSelectedPlan(`${v}-${tierLevel}`);
+      }
+      if (v === 'studio') {
+        setMembersCapacity((prev) => (prev > 300 ? 200 : prev));
+        setTrainersCount((prev) => (prev > 8 ? 5 : prev));
+        setTurnstilesCount(1);
+      } else if (v === 'pool') {
+        setMembersCapacity((prev) => Math.max(prev, 500));
+        setTurnstilesCount((prev) => Math.max(prev, 2));
+      }
+    }
+  };
+
   const isStep1Valid = facilityType.trim().length > 0;
-  const isStep2Valid = turnstilesCount >= 1 && membersCapacity >= 100 && branchesCount.length > 0;
+  const isStep2Valid = turnstilesCount >= 1 && membersCapacity >= 50 && branchesCount.length > 0;
   const isStep3Valid = clubName.trim().length > 0 && clubCode.replace(/\s/g, '').length === 9 && clubAddress.trim().length > 0;
   const isStep4Valid =
     firstName.trim().length > 0 &&
@@ -127,12 +170,22 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
       const fullAddress = `${city}, ${clubAddress}`;
       const hardwareDesc = `${turnstilesCount} ტურნიკეტი (Anti-passback: ${isAntiPassbackEnabled ? 'ON' : 'OFF'}) | ${trainersCount} მწვრთნელი`;
       const res = await registerClubAction({
-        clubName, clubLegalForm, clubCode,
-        clubServices: `${facilityType} | ${membersCapacity} წევრი`,
-        clubAddress: fullAddress, branchesCount, gatesCount: hardwareDesc,
-        clubFirstName: firstName, clubLastName: lastName, clubExecPosition: position,
-        clubContactMobile: phone, clubOfficialEmail: email, clubAccessCode: password,
-        personalId, plan: selectedPlan.toUpperCase(), billingCycle: billingCycle.toUpperCase(),
+        clubName,
+        clubLegalForm,
+        clubCode,
+        clubServices: `${facilityType.toUpperCase()} | ${membersCapacity} წევრი`,
+        clubAddress: fullAddress,
+        branchesCount,
+        gatesCount: hardwareDesc,
+        clubFirstName: firstName,
+        clubLastName: lastName,
+        clubExecPosition: position,
+        clubContactMobile: phone,
+        clubOfficialEmail: email,
+        clubAccessCode: password,
+        personalId,
+        plan: selectedPlan.toUpperCase(),
+        billingCycle: billingCycle.toUpperCase(),
       });
       if (res.success) {
         if (res.deploymentKey) setDeploymentKey(res.deploymentKey);
@@ -171,15 +224,23 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
   if (isSuccess) {
     return (
       <Step5SystemLaunchSequence
-        deploymentKey={deploymentKey} email={email} facilityName={clubName}
-        facilityType={facilityType} selectedPlan={selectedPlan} billingCycle={billingCycle} onReset={onReset}
+        deploymentKey={deploymentKey}
+        email={email}
+        facilityName={clubName}
+        facilityType={facilityType}
+        selectedPlan={selectedPlan}
+        billingCycle={billingCycle}
+        onReset={onReset}
       />
     );
   }
 
+  const activeVerticalForHologram: VerticalType =
+    ['studio', 'gym', 'pool'].includes(facilityType) ? (facilityType as VerticalType) : 'gym';
+
   return (
     <div className="w-full flex flex-col justify-between flex-grow relative overflow-hidden" data-testid="ps5-registration-wizard">
-      {/* Cosmic Morph Birth Aura Flash (Harmonizes with fading particle blast) */}
+      {/* Cosmic Morph Birth Aura Flash */}
       {!shouldReduceMotion && (
         <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden" aria-hidden="true">
           <motion.div
@@ -200,8 +261,13 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
       >
         <motion.div variants={hologram3DMorphVariants} className="lg:col-span-5 w-full">
           <PS5LiveHologram
-            selectedPlan={selectedPlan} billingCycle={billingCycle}
-            onSelectPlan={setSelectedPlan} onToggleBillingCycle={setBillingCycle} currentStep={step}
+            vertical={activeVerticalForHologram}
+            selectedPlan={selectedPlan}
+            billingCycle={billingCycle}
+            customModuleIds={customModules}
+            onSelectPlan={setSelectedPlan}
+            onToggleBillingCycle={setBillingCycle}
+            currentStep={step}
           />
         </motion.div>
 
@@ -223,8 +289,10 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
           <div className="flex-1">
             {step === 1 && (
               <Step1FacilityTypeMatrix
-                selectedFacility={facilityType} onSelectFacility={(item: FacilityTypeMatrixItem) => setFacilityType(item.id)}
-                onNext={handleNext} onCancel={handleBack}
+                selectedFacility={facilityType}
+                onSelectFacility={handleFacilitySelect}
+                onNext={handleNext}
+                onCancel={handleBack}
               />
             )}
             {step === 2 && (

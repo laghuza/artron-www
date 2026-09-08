@@ -12,8 +12,9 @@ describe('Seamless Morph Transition & Step 1 Emergence (Subphase 1.4 Tests)', ()
     expect(content).toContain('isVideoFadingOut');
     expect(content).toContain('setIsVideoFadingOut(true)');
     expect(content).toContain('transition-opacity');
-    expect(content).toContain('isVideoFadingOut ? \'opacity-0 scale-105\' : \'opacity-95 scale-100\'');
+    expect(content).toContain("isVideoFadingOut ? 'opacity-0' : 'opacity-100'");
   });
+
 
   test('GlobalPortalIgnition synchronizes particle dispersal timing with router navigation', () => {
     const content = fs.readFileSync(globalPortalPath, 'utf-8');

@@ -15,7 +15,15 @@ import {
   BarChart3, 
   TrendingUp, 
   Zap,
-  ChevronRight
+  ChevronRight,
+  Sparkles,
+  ShieldCheck,
+  Fingerprint,
+  Coins,
+  Target,
+  ShieldAlert,
+  Flame,
+  RotateCcw
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import ArtronLogo from '@/components/ui/ArtronLogo';
@@ -36,11 +44,12 @@ interface HeaderProps {
 const SECTION_IDS = [
   'ecosystem',
   'dashboard-features',
+  'multimodal-ai',
   'analytics-showcase',
-  'business-stats',
+  'enterprise-security',
+  'staff-access-roles',
   'legacy-vs-artron',
   'mobile-app',
-  'roi',
   'pricing',
   'partner-ecosystem',
   'booking-engine',
@@ -49,8 +58,9 @@ const SECTION_IDS = [
 
 const CONTROL_PANEL_IDS = [
   '/#dashboard-features',
-  '/#analytics-showcase',
-  '/#business-stats',
+  '/#multimodal-ai',
+  '/#enterprise-security',
+  '/#staff-access-roles',
   '/#legacy-vs-artron',
 ];
 
@@ -66,12 +76,16 @@ export const Header: React.FC<HeaderProps> = ({
   const pathname = usePathname();
   const { locale, setLocale, t } = useLanguage();
   const [isControlPanelOpen, setIsControlPanelOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileControlPanelExpanded, setIsMobileControlPanelExpanded] = useState(true);
+  const [isMobileControlPanelExpanded, setIsMobileControlPanelExpanded] = useState(false);
+  const [isMobileAnalyticsExpanded, setIsMobileAnalyticsExpanded] = useState(true);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [activeNav, setActiveNav] = useState<string>('/#ecosystem');
   const controlPanelMenuRef = useRef<HTMLDivElement>(null);
   const controlPanelTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const analyticsMenuRef = useRef<HTMLDivElement>(null);
+  const analyticsTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Scroll-driven Reverse Kinetic Assembly kinematics hook
   const kinematics = useHeaderKinematics(hideOnInitialScroll);
@@ -79,13 +93,18 @@ export const Header: React.FC<HeaderProps> = ({
   /* ── Outside-click and ESC key to close dropdowns ── */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (controlPanelMenuRef.current && !controlPanelMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (controlPanelMenuRef.current && !controlPanelMenuRef.current.contains(target)) {
         setIsControlPanelOpen(false);
+      }
+      if (analyticsMenuRef.current && !analyticsMenuRef.current.contains(target)) {
+        setIsAnalyticsOpen(false);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsControlPanelOpen(false);
+        setIsAnalyticsOpen(false);
         setIsMobileMenuOpen(false);
       }
     };
@@ -141,16 +160,26 @@ export const Header: React.FC<HeaderProps> = ({
     audioManager.playClick();
     setActiveNav(href);
     setIsControlPanelOpen(false);
+    setIsAnalyticsOpen(false);
+    setIsMobileMenuOpen(false);
+
     if (href.startsWith('/#')) {
-      const targetId = href.replace('/#', '');
-      const el = document.getElementById(targetId);
+      const [pathWithHash, query] = href.split('?');
+      const targetId = pathWithHash.replace('/#', '');
+      const tabMatch = query?.match(/tab=([a-z]+)/);
+      const tab = tabMatch ? tabMatch[1] : (targetId === 'roi' ? 'roi' : null);
+
+      if (tab && typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('artron-select-analytics-tab', { detail: { tab } }));
+      }
+
+      const el = document.getElementById(targetId) || (targetId === 'roi' ? document.getElementById('analytics-showcase') : null);
       if (el && pathname === '/') {
         e.preventDefault();
         const targetPos = el.getBoundingClientRect().top + window.scrollY - 88;
         window.scrollTo({ top: targetPos, behavior: 'smooth' });
       }
     }
-    setIsMobileMenuOpen(false);
   };
 
   const handleControlPanelMouseEnter = () => {
@@ -161,6 +190,17 @@ export const Header: React.FC<HeaderProps> = ({
   const handleControlPanelMouseLeave = () => {
     controlPanelTimerRef.current = setTimeout(() => {
       setIsControlPanelOpen(false);
+    }, 180);
+  };
+
+  const handleAnalyticsMouseEnter = () => {
+    if (analyticsTimerRef.current) clearTimeout(analyticsTimerRef.current);
+    setIsAnalyticsOpen(true);
+  };
+
+  const handleAnalyticsMouseLeave = () => {
+    analyticsTimerRef.current = setTimeout(() => {
+      setIsAnalyticsOpen(false);
     }, 180);
   };
 
@@ -175,20 +215,36 @@ export const Header: React.FC<HeaderProps> = ({
       color: '#00ff87',
     },
     {
-      href: '/#analytics-showcase',
-      label: t('nav_features_analytics') || 'ანალიტიკის სიმულატორი',
-      desc: t('nav_features_analytics_desc') || 'KPI, AI Churn, Heatmap, Win-back',
-      icon: BarChart3,
-      badge: 'AI Simulator',
-      color: '#00A3FF',
+      href: '/#multimodal-ai',
+      label: t('nav_features_ai') || 'AI რეგისტრაცია & ასისტენტი',
+      desc: t('nav_features_ai_desc') || '5 წამში რეგისტრაცია, კამერა, ქართული ხმა',
+      icon: Sparkles,
+      badge: 'Multimodal AI',
+      color: '#00E5FF',
     },
     {
-      href: '/#business-stats',
-      label: t('nav_features_stats') || 'ბიზნეს მეტრიკები',
-      desc: t('nav_features_stats_desc') || 'LTV, 45სთ ეკონომია, შრომის უსაფრთხოება',
+      href: '/#analytics-showcase?tab=kpi',
+      label: t('nav_features_stats') || 'ბიზნეს მეტრიკები & KPI',
+      desc: t('nav_features_stats_desc') || 'LTV, შრომის უსაფრთხოება, MRR & ROI',
       icon: TrendingUp,
-      badge: 'Metrics',
+      badge: 'Executive KPI',
       color: '#38BDF8',
+    },
+    {
+      href: '/#enterprise-security',
+      label: t('nav_features_security') || 'კიბერდაცვა & ლოკალური მართვა',
+      desc: t('nav_features_security_desc') || 'პირდაპირი საბანკო ნაკადები, მხოლოდ დარბაზიდან მართვა, AES-256',
+      icon: ShieldCheck,
+      badge: 'Zero-Trust',
+      color: '#00E5FF',
+    },
+    {
+      href: '/#staff-access-roles',
+      label: t('nav_features_staff') || 'თანამშრომელთა წვდომა & როლები',
+      desc: t('nav_features_staff_desc') || 'Face ID ლოგინი, 100% დინამიური როლები, სალაროს დაცვა',
+      icon: Fingerprint,
+      badge: 'Passkey & RBAC',
+      color: '#00ff87',
     },
     {
       href: '/#legacy-vs-artron',
@@ -200,20 +256,73 @@ export const Header: React.FC<HeaderProps> = ({
     },
   ];
 
+  /* ── Analytics & ROI Submenu Items (6 Core Modules) ── */
+  const analyticsSubItems = [
+    {
+      href: '/#analytics-showcase?tab=roi',
+      label: locale === 'ka' ? 'ROI კალკულატორი' : locale === 'ru' ? 'Калькулятор ROI' : 'ROI Calculator',
+      desc: locale === 'ka' ? 'ფინანსური სიმულატორი, დაზოგილი ხარჯები' : locale === 'ru' ? 'Финансовый симулятор, экономия' : 'Financial return & labor savings',
+      icon: Coins,
+      badge: 'Financial',
+      color: '#00E5FF',
+    },
+    {
+      href: '/#analytics-showcase?tab=okr',
+      label: locale === 'ka' ? 'მიზნები & OKR' : locale === 'ru' ? 'Цели и OKR' : 'Goals & OKR Hub',
+      desc: locale === 'ka' ? 'სტრატეგიული KPI & მიზნები' : locale === 'ru' ? 'Стратегические KPI и цели' : 'Strategic KPIs & progress tracking',
+      icon: Target,
+      badge: 'Strategy',
+      color: '#00A3FF',
+    },
+    {
+      href: '/#analytics-showcase?tab=kpi',
+      label: locale === 'ka' ? 'KPI პანელი' : locale === 'ru' ? 'Панель KPI' : 'KPI Dashboard',
+      desc: locale === 'ka' ? 'MRR, LTV, რეალურ დროში მეტრიკები' : locale === 'ru' ? 'MRR, LTV, метрики онлайн' : 'Real-time MRR, LTV, and retention',
+      icon: BarChart3,
+      badge: 'Real-Time',
+      color: '#38BDF8',
+    },
+    {
+      href: '/#analytics-showcase?tab=churn',
+      label: locale === 'ka' ? 'გადინების პროგნოზი' : locale === 'ru' ? 'Прогноз оттока' : 'AI Churn Prediction',
+      desc: locale === 'ka' ? 'AI რისკების ქულა 0–100%, ტრიგერები' : locale === 'ru' ? 'AI риск оттока 0–100%, триггеры' : '0–100% Risk scores & auto-triggers',
+      icon: ShieldAlert,
+      badge: 'AI Guard',
+      color: '#FF5757',
+    },
+    {
+      href: '/#analytics-showcase?tab=heatmap',
+      label: locale === 'ka' ? 'პიკური საათების რუკა' : locale === 'ru' ? 'Карта пиковых часов' : 'Capacity Heatmap',
+      desc: locale === 'ka' ? 'დარბაზის დატვირთვის სითბური ანალიზი' : locale === 'ru' ? 'Тепловая карта загруженности залов' : 'Facility load heatmap & branches',
+      icon: Flame,
+      badge: 'Heatmap',
+      color: '#00E5FF',
+    },
+    {
+      href: '/#analytics-showcase?tab=winback',
+      label: locale === 'ka' ? 'დაბრუნების ანალიტიკა' : locale === 'ru' ? 'Win-back аналитика' : 'Win-back ROI',
+      desc: locale === 'ka' ? 'პასიური წევრების რეაქტივაცია, კამპანიები' : locale === 'ru' ? 'Реактивация ушедших клиентов' : 'Lapsed members & campaign ROI',
+      icon: RotateCcw,
+      badge: 'Retention',
+      color: '#00ff87',
+    },
+  ];
+
   /* ── Main Navigation Links (Chronological Page Sequence) ── */
   const navLinks = [
-    { href: '/#ecosystem',          label: t('nav_ecosystem'), isDropdown: false },
-    { href: '/#dashboard-features', label: t('nav_features'),  isDropdown: true  },
-    { href: '/#mobile-app',         label: t('nav_mobile'),    isDropdown: false },
-    { href: '/#roi',                label: t('nav_roi'),       isDropdown: false },
-    { href: '/#pricing',            label: t('nav_pricing'),   isDropdown: false },
-    { href: '/#partner-ecosystem',  label: t('nav_partners'),  isDropdown: false },
-    { href: '/#booking-engine',     label: t('nav_booking'),   isDropdown: false },
-    { href: '/#faq',                label: t('nav_faq'),       isDropdown: false },
-    { href: '/about',               label: t('nav_about'),     isDropdown: false },
+    { href: '/#ecosystem',          label: t('nav_ecosystem'), dropdown: 'none' as const },
+    { href: '/#dashboard-features', label: t('nav_features'),  dropdown: 'control' as const },
+    { href: '/#mobile-app',         label: t('nav_mobile'),    dropdown: 'none' as const },
+    { href: '/#analytics-showcase', label: t('nav_analytics_roi') || 'ანალიტიკა & ROI', dropdown: 'analytics' as const },
+    { href: '/#pricing',            label: t('nav_pricing'),   dropdown: 'none' as const },
+    { href: '/#partner-ecosystem',  label: t('nav_partners'),  dropdown: 'none' as const },
+    { href: '/#booking-engine',     label: t('nav_booking'),   dropdown: 'none' as const },
+    { href: '/#faq',                label: t('nav_faq'),       dropdown: 'none' as const },
+    { href: '/about',               label: t('nav_about'),     dropdown: 'none' as const },
   ];
 
   const isControlPanelActive = CONTROL_PANEL_IDS.includes(activeNav);
+  const isAnalyticsActive = activeNav.startsWith('/#analytics-showcase') || activeNav === '/#roi' || activeNav.startsWith('/#analytics-');
   const systemAccessLabel = locale === 'ka' ? 'Sport OS-ის ჩართვა' : locale === 'ru' ? 'Запуск Sport OS' : 'Launch Sport OS';
   const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა & IOT' : locale === 'ru' ? 'Спортивная Экосистема & IOT' : 'SPORTS & IOT ECOSYSTEM';
 
@@ -284,8 +393,13 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label="Main navigation"
           >
             {navLinks.map((link) => {
-              const isControlPanelLink = link.isDropdown;
-              const isActive = isControlPanelLink ? isControlPanelActive : activeNav === link.href;
+              const isControlPanelLink = link.dropdown === 'control';
+              const isAnalyticsLink = link.dropdown === 'analytics';
+              const isActive = isControlPanelLink
+                ? isControlPanelActive
+                : isAnalyticsLink
+                ? isAnalyticsActive
+                : activeNav === link.href;
               const isHovered = hoveredNav === link.href;
 
               if (isControlPanelLink) {
@@ -345,7 +459,7 @@ export const Header: React.FC<HeaderProps> = ({
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 6, scale: 0.95 }}
                           transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-80 rounded-2xl border border-white/[0.12] bg-[#0B0F17]/98 p-2 backdrop-blur-2xl shadow-[0_20px_48px_rgba(0,0,0,0.8),0_0_30px_rgba(0,163,255,0.15)] z-[80]"
+                          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[360px] rounded-2xl border border-white/[0.12] bg-[#0B0F17]/98 p-2 backdrop-blur-2xl shadow-[0_20px_48px_rgba(0,0,0,0.8),0_0_30px_rgba(0,163,255,0.15)] z-[80]"
                         >
                           <div className="px-2.5 py-1.5 border-b border-white/[0.06] flex items-center justify-between">
                             <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#00A3FF]">
@@ -353,12 +467,136 @@ export const Header: React.FC<HeaderProps> = ({
                             </span>
                             <span className="text-[9px] font-mono text-emerald-400 font-semibold flex items-center gap-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                              4 MODULES
+                              {controlPanelSubItems.length} MODULES
                             </span>
                           </div>
 
                           <div className="mt-1 flex flex-col gap-1">
                             {controlPanelSubItems.map((subItem) => {
+                              const isSubActive = activeNav === subItem.href;
+                              const SubIcon = subItem.icon;
+                              return (
+                                <Link
+                                  key={subItem.href}
+                                  href={subItem.href}
+                                  onClick={(e) => handleNavClick(e, subItem.href)}
+                                  className={`group/item flex items-start gap-2.5 p-2 rounded-xl transition-all duration-200 cursor-pointer ${
+                                    isSubActive
+                                      ? 'bg-[#00A3FF]/15 border border-[#00A3FF]/40 shadow-[0_0_15px_rgba(0,163,255,0.15)]'
+                                      : 'hover:bg-white/[0.05] border border-transparent'
+                                  }`}
+                                >
+                                  <div
+                                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border transition-transform duration-200 group-hover/item:scale-105"
+                                    style={{
+                                      backgroundColor: `${subItem.color}15`,
+                                      borderColor: `${subItem.color}35`,
+                                      color: subItem.color,
+                                    }}
+                                  >
+                                    <SubIcon className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-1">
+                                      <span className={`text-[11px] font-bold tracking-tight truncate ${isSubActive ? 'text-white' : 'text-slate-200 group-hover/item:text-white'}`}>
+                                        {subItem.label}
+                                      </span>
+                                      <span
+                                        className="text-[8px] font-mono px-1.5 py-0.5 rounded font-bold shrink-0 uppercase"
+                                        style={{
+                                          backgroundColor: `${subItem.color}15`,
+                                          color: subItem.color,
+                                        }}
+                                      >
+                                        {subItem.badge}
+                                      </span>
+                                    </div>
+                                    <p className="text-[9.5px] text-[#94A3B8] truncate leading-relaxed mt-0.5">
+                                      {subItem.desc}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              }
+
+              if (isAnalyticsLink) {
+                return (
+                  <div
+                    key={link.href}
+                    ref={analyticsMenuRef}
+                    onMouseEnter={handleAnalyticsMouseEnter}
+                    onMouseLeave={handleAnalyticsMouseLeave}
+                    className="relative"
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      onMouseEnter={() => setHoveredNav(link.href)}
+                      onMouseLeave={() => setHoveredNav(null)}
+                      className={`relative text-[10.5px] 2xl:text-[11.5px] font-semibold whitespace-nowrap px-2.5 2xl:px-3 py-1 rounded-full shrink-0 transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-[#00A3FF]/50 z-10 select-none flex items-center gap-1 ${
+                        isActive
+                          ? 'text-white font-bold'
+                          : 'text-[#94A3B8] hover:text-white'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="active-nav-pill"
+                          className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00A3FF]/25 via-[#00A3FF]/15 to-[#00D2FF]/25 border border-[#00A3FF]/50 shadow-[0_0_14px_rgba(0,163,255,0.35)]"
+                          initial={false}
+                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                        />
+                      )}
+
+                      {!isActive && isHovered && (
+                        <motion.span
+                          layoutId="hover-nav-pill"
+                          className="absolute inset-0 rounded-full bg-white/[0.06] border border-white/[0.1] shadow-[0_2px_8px_rgba(255,255,255,0.05)]"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
+                        />
+                      )}
+
+                      <span className="relative z-10 flex items-center gap-1">
+                        {isActive && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse shrink-0" />
+                        )}
+                        <span>{link.label}</span>
+                        <ChevronDown className={`w-3 h-3 transition-transform duration-200 opacity-70 group-hover:opacity-100 ${isAnalyticsOpen ? 'rotate-180 text-[#00A3FF]' : ''}`} />
+                      </span>
+                    </Link>
+
+                    {/* Desktop Floating Dropdown Menu for Analytics & ROI Subsections */}
+                    <AnimatePresence>
+                      {isAnalyticsOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[370px] rounded-2xl border border-white/[0.12] bg-[#0B0F17]/98 p-2 backdrop-blur-2xl shadow-[0_20px_48px_rgba(0,0,0,0.8),0_0_30px_rgba(0,163,255,0.15)] z-[80]"
+                        >
+                          <div className="px-2.5 py-1.5 border-b border-white/[0.06] flex items-center justify-between">
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#00E5FF]">
+                              [ ANALYTICS & ROI SUITE ]
+                            </span>
+                            <span className="text-[9px] font-mono text-[#00ff87] font-semibold flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff87] animate-pulse" />
+                              {analyticsSubItems.length} METRIC MODULES
+                            </span>
+                          </div>
+
+                          <div className="mt-1 flex flex-col gap-1">
+                            {analyticsSubItems.map((subItem) => {
                               const isSubActive = activeNav === subItem.href;
                               const SubIcon = subItem.icon;
                               return (
@@ -568,8 +806,13 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <div className="px-4 pb-4 pt-2 flex flex-col gap-1">
               {navLinks.map((link, i) => {
-                const isControlPanelLink = link.isDropdown;
-                const isActive = isControlPanelLink ? isControlPanelActive : activeNav === link.href;
+                const isControlPanelLink = link.dropdown === 'control';
+                const isAnalyticsLink = link.dropdown === 'analytics';
+                const isActive = isControlPanelLink
+                  ? isControlPanelActive
+                  : isAnalyticsLink
+                  ? isAnalyticsActive
+                  : activeNav === link.href;
 
                 if (isControlPanelLink) {
                   return (
@@ -606,6 +849,68 @@ export const Header: React.FC<HeaderProps> = ({
                       {isMobileControlPanelExpanded && (
                         <div className="px-2 pb-2 pt-1 flex flex-col gap-1 border-t border-white/[0.04] bg-black/20">
                           {controlPanelSubItems.map((sub) => {
+                            const isSubActive = activeNav === sub.href;
+                            const SubIcon = sub.icon;
+                            return (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                onClick={(e) => handleNavClick(e, sub.href)}
+                                className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                                  isSubActive
+                                    ? 'bg-[#00A3FF]/20 text-white font-bold border border-[#00A3FF]/30'
+                                    : 'text-[#94A3B8] hover:text-white hover:bg-white/[0.04]'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2 truncate">
+                                  <SubIcon className="w-3.5 h-3.5 shrink-0" style={{ color: sub.color }} />
+                                  <span className="truncate">{sub.label}</span>
+                                </div>
+                                <ChevronRight className="w-3 h-3 text-[#00A3FF]/60 shrink-0" />
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                }
+
+                if (isAnalyticsLink) {
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.025, duration: 0.18 }}
+                      className="flex flex-col rounded-xl overflow-hidden bg-white/[0.02] border border-white/[0.06]"
+                    >
+                      <div className="flex items-center justify-between px-3.5 py-2.5">
+                        <Link
+                          href={link.href}
+                          onClick={(e) => handleNavClick(e, link.href)}
+                          className={`flex items-center gap-2 text-sm font-semibold flex-1 ${
+                            isActive ? 'text-[#00E5FF] font-bold' : 'text-[#94A3B8] hover:text-white'
+                          }`}
+                        >
+                          {isActive && (
+                            <span className="w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse shrink-0" />
+                          )}
+                          <span>{link.label}</span>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setIsMobileAnalyticsExpanded(!isMobileAnalyticsExpanded)}
+                          className="p-1 text-[#94A3B8] hover:text-white rounded-lg"
+                        >
+                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileAnalyticsExpanded ? 'rotate-180 text-[#00A3FF]' : ''}`} />
+                        </button>
+                      </div>
+
+                      {/* Expandable Analytics & ROI Sub-items in mobile */}
+                      {isMobileAnalyticsExpanded && (
+                        <div className="px-2 pb-2 pt-1 flex flex-col gap-1 border-t border-white/[0.04] bg-black/20">
+                          {analyticsSubItems.map((sub) => {
                             const isSubActive = activeNav === sub.href;
                             const SubIcon = sub.icon;
                             return (
