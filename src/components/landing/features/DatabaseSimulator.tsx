@@ -8,18 +8,13 @@ export const DatabaseSimulator: React.FC = () => {
   const { t } = useLanguage();
   const [revealID, setRevealID] = useState<boolean>(false);
   const [qrSeed, setQrSeed] = useState<number>(10293);
-  const [qrProgress, setQrProgress] = useState<number>(100);
+  const [resetKey, setResetKey] = useState<number>(0);
 
   useEffect(() => {
     const progressInterval = setInterval(() => {
-      setQrProgress((prev) => {
-        if (prev <= 2) {
-          setQrSeed(Math.floor(Math.random() * 90000) + 10000);
-          return 100;
-        }
-        return prev - 2;
-      });
-    }, 100);
+      setQrSeed(Math.floor(Math.random() * 90000) + 10000);
+      setResetKey((prev) => prev + 1);
+    }, 5000);
     return () => clearInterval(progressInterval);
   }, []);
 
@@ -109,15 +104,18 @@ export const DatabaseSimulator: React.FC = () => {
             </div>
           </div>
 
-          {/* Progress Bar (countdown to regenerate) */}
+          {/* Progress Bar (countdown to regenerate via CSS animation) */}
           <div className="w-full space-y-1.5">
             <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-              <div className="bg-[#00FF87] h-full transition-all duration-100" style={{ width: `${qrProgress}%` }}></div>
+              <div
+                key={resetKey}
+                className="bg-[#00FF87] h-full w-full origin-left animate-[pulse-bar_5s_linear_infinite]"
+              />
             </div>
             <button
               onClick={() => {
                 setQrSeed(Math.floor(Math.random() * 90000) + 10000);
-                setQrProgress(100);
+                setResetKey((k) => k + 1);
               }}
               className="text-[9px] font-mono font-bold text-[#94A3B8] hover:text-[#00ff87] flex items-center justify-center gap-1 cursor-pointer mx-auto"
             >

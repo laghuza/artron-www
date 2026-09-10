@@ -84,13 +84,32 @@ export function useVideoPreloader(): UseVideoPreloaderReturn {
       return;
     }
 
-    // Non-blocking background prefetch
-    preloadPortalVideo().then((src) => {
-      if (src) {
-        setVideoSrc(src);
-        setIsVideoReady(true);
+    // Non-blocking idle background prefetch (never block initial critical render)
+    const runIdlePrefetch = () => {
+      preloadPortalVideo().then((src) => {
+        if (src) {
+          setVideoSrc(src);
+          setIsVideoReady(true);
+        }
+      });
+    };
+
+    if (typeof window !== 'undefined') {
+      if ('requestIdleCallback' in window) {
+        const id = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number }).requestIdleCallback(
+          runIdlePrefetch,
+          { timeout: 4000 }
+        );
+        return () => {
+          if ('cancelIdleCallback' in window) {
+            (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+          }
+        };
+      } else {
+        const t = setTimeout(runIdlePrefetch, 2500);
+        return () => clearTimeout(t);
       }
-    });
+    }
   }, []);
 
   return {

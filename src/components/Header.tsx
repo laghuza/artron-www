@@ -45,11 +45,11 @@ const SECTION_IDS = [
   'ecosystem',
   'dashboard-features',
   'multimodal-ai',
-  'analytics-showcase',
   'enterprise-security',
   'staff-access-roles',
   'legacy-vs-artron',
   'mobile-app',
+  'analytics-showcase',
   'pricing',
   'partner-ecosystem',
   'booking-engine',
@@ -116,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, []);
 
-  /* ── Active section detection on scroll (ScrollSpy) ── */
+  /* ── Active section detection on scroll (Viewport ScrollSpy) ── */
   useEffect(() => {
     if (pathname === '/about') {
       setActiveNav('/about');
@@ -124,36 +124,38 @@ export const Header: React.FC<HeaderProps> = ({
     }
     if (pathname !== '/') return;
 
+    // Zero-overhead passive scroll check for top boundary
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const scrollPosition = scrollY + 140;
-
-      if (scrollY < 250) {
-        setActiveNav('/#ecosystem');
-        return;
-      }
-
-      if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 60) {
-        setActiveNav('/#faq');
-        return;
-      }
-
-      for (let i = SECTION_IDS.length - 1; i >= 0; i--) {
-        const id = SECTION_IDS[i];
-        const el = document.getElementById(id);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPosition >= top) {
-            setActiveNav(`/#${id}`);
-            break;
-          }
-        }
+      if (window.scrollY < 120) {
+        setActiveNav((prev) => (prev !== '/#ecosystem' ? '/#ecosystem' : prev));
       }
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // High-performance asynchronous IntersectionObserver (Zero layout thrashing / 0ms overhead)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.target.id) {
+            setActiveNav(`/#${entry.target.id}`);
+          }
+        }
+      },
+      {
+        rootMargin: '-15% 0px -65% 0px',
+        threshold: 0,
+      }
+    );
+
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, [pathname]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -328,7 +330,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   /* ── Glass header surface ── */
   const glassClass = kinematics.isScrolledPast
-    ? 'bg-[#080B10]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_4px_32px_rgba(0,0,0,0.6)]'
+    ? 'bg-[#080B10]/95 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_32px_rgba(0,0,0,0.6)]'
     : 'bg-[#0B0E14]/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_2px_20px_rgba(0,0,0,0.3)]';
 
   const positionClass = isSticky ? 'fixed top-0 left-0 right-0' : 'sticky top-0';
@@ -339,7 +341,6 @@ export const Header: React.FC<HeaderProps> = ({
         y: kinematics.headerY,
         opacity: kinematics.headerAlpha,
         pointerEvents: kinematics.isInteractive ? 'auto' : 'none',
-        WebkitBackdropFilter: kinematics.isScrolledPast ? 'blur(28px)' : 'blur(20px)',
       }}
       className={`${positionClass} z-50 w-full ${glassClass} ${className}`}
     >

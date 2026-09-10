@@ -29,15 +29,17 @@ export const PartnerEcosystem: React.FC = () => {
   const scrollLeftRef = useRef(0);
   const animationFrameIdRef = useRef<number | null>(null);
 
-  // Smooth auto-scroll with slower speed and wrap-around logic
+  // Smooth auto-scroll with slower speed, wrap-around logic, and IntersectionObserver pausing
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
     // Slower, elegant, smooth motion (~0.55px per tick)
     const speed = 0.55;
+    let isVisible = false;
 
     const step = () => {
+      if (!isVisible) return;
       if (container) {
         const halfWidth = container.scrollWidth / 2;
 
@@ -55,9 +57,26 @@ export const PartnerEcosystem: React.FC = () => {
       animationFrameIdRef.current = requestAnimationFrame(step);
     };
 
-    animationFrameIdRef.current = requestAnimationFrame(step);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          if (animationFrameIdRef.current) cancelAnimationFrame(animationFrameIdRef.current);
+          animationFrameIdRef.current = requestAnimationFrame(step);
+        } else {
+          if (animationFrameIdRef.current) {
+            cancelAnimationFrame(animationFrameIdRef.current);
+            animationFrameIdRef.current = null;
+          }
+        }
+      },
+      { rootMargin: '100px 0px' }
+    );
+
+    observer.observe(container);
 
     return () => {
+      observer.disconnect();
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current);
       }

@@ -7,7 +7,6 @@ import { Footer } from '@/components/landing/Footer';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { SectionTransition } from '@/components/ui/SectionTransition';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
-import { LaserDataStreamConnectors } from '@/components/landing/kinetic/LaserDataStreamConnectors';
 import type { Metadata } from 'next';
 
 // ── Dynamically Imported Below-the-Fold Heavy Modules (Vercel Bundle Optimization) ──
@@ -67,10 +66,6 @@ const SaaSGatewayCTA = dynamic(
   { loading: () => <SectionSkeleton minHeight="min-h-[400px]" label="GATEWAY CTA LOADING..." /> }
 );
 
-const AIBotWidget = dynamic(
-  () => import('@/components/landing/AIBotWidget').then((mod) => mod.AIBotWidget)
-);
-
 export const metadata: Metadata = {
   title: 'ARTRON | ფიტნეს დარბაზის პროგრამა, CRM & IoT ტურნიკეტები',
   description:
@@ -91,50 +86,83 @@ export default function Home() {
     <div className="flex flex-col min-h-screen relative bg-[#080B10] text-[#F8FAFC]">
       <Header isSticky={true} hideOnInitialScroll={true} />
       <main className="flex-grow flex flex-col relative">
-        <LaserDataStreamConnectors />
         {/* 1. Kinetic Hero Header */}
         <KineticScrollHero />
         <SectionTransition variant="laser" />
+
         {/* 2. Dual-Core Ecosystem Bridge (Web + App Sync) */}
         <DualCoreShowcase />
         <SectionTransition variant="laser" />
-        {/* 3. B2B Control Hub Cluster: CRM, IoT, Analytics, Stats & Sport OS */}
-        <DashboardFeaturesSection />
-        <SectionTransition variant="laser" />
-        {/* 3.1 Next-Gen Multimodal AI Assistant (Voice STT, Vision OCR, Chat Function Calling) */}
-        <MultimodalAiShowcase />
-        <SectionTransition variant="laser" />
-        <AnalyticsShowcase />
-        <SectionTransition variant="laser" />
-        {/* 3.5 Enterprise Cyber Security & Financial Sovereignty Engine */}
-        <EnterpriseSecurityShowcase />
-        <SectionTransition variant="laser" />
-        <StaffAccessRolesShowcase />
-        <SectionTransition variant="laser" />
-        <LegacyVsArtronSection />
-        <SectionTransition variant="laser" />
 
-        {/* 4. B2C Athlete Advantages: Mobile App for Members */}
-        <B2CAthleteAdvantages />
-        <SectionTransition variant="laser" />
+        {/* Below-the-fold sections with content-visibility: auto for 60-120 FPS scrolling */}
+        <div className="cv-auto">
+          {/* 3. B2B Control Hub Cluster: CRM, IoT & Labor Compliance */}
+          <DashboardFeaturesSection />
+          <SectionTransition variant="laser" />
+        </div>
 
-        {/* 9. Pricing Matrix */}
-        <PricingSection />
-        <SectionTransition variant="laser" />
-        {/* 10. Partner Ecosystem */}
-        <PartnerEcosystem />
-        <SectionTransition variant="laser" />
-        {/* 11. Instant Booking Engine */}
-        <BookingEngine />
-        <SectionTransition variant="laser" />
-        {/* 12. FAQ Knowledge Base */}
-        <FaqSection />
-        <SectionTransition variant="laser" />
-        {/* 13. Final Gateway CTA */}
-        <SaaSGatewayCTA />
+        <div className="cv-auto">
+          <MultimodalAiShowcase />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          <EnterpriseSecurityShowcase />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          <StaffAccessRolesShowcase />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          <LegacyVsArtronSection />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 4. B2C Athlete Advantages: Mobile App for Members */}
+          <B2CAthleteAdvantages />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 5. Business Intelligence & Analytics Showcase */}
+          <AnalyticsShowcase />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 6. Pricing Matrix */}
+          <PricingSection />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 7. Partner Ecosystem */}
+          <PartnerEcosystem />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 8. Instant Booking Engine */}
+          <BookingEngine />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 9. FAQ Knowledge Base */}
+          <FaqSection />
+          <SectionTransition variant="laser" />
+        </div>
+
+        <div className="cv-auto">
+          {/* 10. Final Gateway CTA */}
+          <SaaSGatewayCTA />
+        </div>
       </main>
       <Footer />
-      <AIBotWidget />
       <CookieConsentBanner />
     </div>
   );

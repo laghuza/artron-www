@@ -32,7 +32,7 @@ export const KineticTypoHeader: React.FC<KineticTypoHeaderProps> = ({
         scale: shouldReduceMotion ? 1 : titleScale,
         y: shouldReduceMotion ? '0%' : titleY,
       }}
-      className="absolute inset-0 flex flex-col items-center justify-center z-20 px-3 sm:px-4 text-center gpu-accelerated overflow-hidden max-w-full"
+      className="absolute inset-0 flex flex-col items-center justify-center z-20 px-3 sm:px-4 text-center gpu-accelerated overflow-visible max-w-full"
     >
       {/* Studio Micro-Index Badge */}
       <motion.div
@@ -50,18 +50,13 @@ export const KineticTypoHeader: React.FC<KineticTypoHeaderProps> = ({
       </motion.div>
 
       {/* Monumental Kinetic Geometric Wordmark (A R T R O N) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="flex justify-center items-center w-full max-w-full pointer-events-none"
-      >
+      <div className="flex justify-center items-center w-full max-w-full pointer-events-none">
         <ArtronGeometricWordmark
           scrollYProgress={scrollYProgress}
           shouldReduceMotion={shouldReduceMotion}
           className="my-1 sm:my-2"
         />
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

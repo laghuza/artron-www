@@ -61,19 +61,9 @@ export const KineticCentralMesh: React.FC<KineticCentralMeshProps> = ({
         {/* ── SVG Kinetic Mesh (Points & Moving Impulses Only) ── */}
         <svg
           viewBox="0 0 400 400"
-          className="absolute inset-0 w-full h-full overflow-visible select-none pointer-events-none drop-shadow-[0_0_30px_rgba(0,230,118,0.35)]"
+          className="absolute inset-0 w-full h-full overflow-visible select-none pointer-events-none"
         >
           <defs>
-            {/* Neon Glow Filter for Core and Impulses */}
-            <filter id="neonPulseGlow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-
             {/* Emerald Core Radial Gradient */}
             <radialGradient id="emeraldCoreGrad" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
@@ -85,7 +75,7 @@ export const KineticCentralMesh: React.FC<KineticCentralMeshProps> = ({
 
           {/* ── 1. Dynamic Moving Light Impulses Between Nodes (No static lines) ── */}
           {!shouldReduceMotion && (
-            <g filter="url(#neonPulseGlow)">
+            <g>
               {/* Radial Impulses: Center Emerald Core (200,200) <-> Perimeter Nodes */}
               {nodes.map((n, i) => (
                 <g key={`radial-pulse-${n.id}`}>

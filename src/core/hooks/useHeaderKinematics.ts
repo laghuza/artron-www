@@ -1,12 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useScroll, useTransform, useSpring, useMotionValueEvent, useReducedMotion } from 'framer-motion';
+import { useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion';
 
 /**
- * Hook for scroll-driven Reverse Kinetic Assembly of the Navigation Header.
- * Ties the convergence of each header module (Logo, Nav, Access CTA, Lang)
- * directly to the user's scroll speed and position across the Hero section.
+ * Hook for scroll-driven Unified Header Slide-Down Kinematics.
+ * Operates the header as a single, cohesive, high-performance glass bar.
  */
 export function useHeaderKinematics(hideOnInitialScroll: boolean) {
   const shouldReduceMotion = useReducedMotion();
@@ -14,59 +13,34 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
   const [isInteractive, setIsInteractive] = useState(!hideOnInitialScroll);
   const [isScrolledPast, setIsScrolledPast] = useState(false);
 
-  // Map scrollY range [30px, 320px] into a normalized assembly progress [0 -> 1]
-  const rawProgress = useTransform(scrollY, [30, 320], [0, 1]);
-  
-  // Apply a responsive spring to make manual wheel/touchpad scrolling feel organic and haptic
-  const smoothProgress = useSpring(rawProgress, {
-    stiffness: 280,
-    damping: 32,
-    mass: 0.4,
-  });
-
-  // Active progress value: if reduced motion or subpage, lock to 1 (fully assembled)
+  // Active progress value: if reduced motion or subpage, lock to fully docked
   const isDynamic = hideOnInitialScroll && !shouldReduceMotion;
 
-  // Track interaction state (prevent clicking invisible header when at top of hero)
+  // Unified slide-down progress: smoothly slides down as user leaves the hero [40px -> 180px]
+  const progress = useTransform(scrollY, [40, 180], [0, 1], { clamp: true });
+
+  // Header surface position: translates smoothly from -100% (tucked above) to 0% (docked)
+  const headerY = useTransform(progress, [0, 1], [isDynamic ? '-100%' : '0%', '0%']);
+  const headerAlpha = useTransform(progress, [0, 0.3, 1], [isDynamic ? 0 : 1, isDynamic ? 0.7 : 1, 1]);
+
+  // Track interaction state with strict memoization to eliminate React re-render thrashing
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (!hideOnInitialScroll) {
       setIsInteractive(true);
-      setIsScrolledPast(latest > 20);
+      const past = latest > 20;
+      setIsScrolledPast((prev) => (prev !== past ? past : prev));
       return;
     }
-    setIsInteractive(latest > 60);
-    setIsScrolledPast(latest > 260);
+    const nextInteractive = latest > 60;
+    const nextScrolledPast = latest > 180;
+    setIsInteractive((prev) => (prev !== nextInteractive ? nextInteractive : prev));
+    setIsScrolledPast((prev) => (prev !== nextScrolledPast ? nextScrolledPast : prev));
   });
 
-  // 1. Logo & Brand (Left block) - Pure vertical & scale convergence
-  const logoX = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const logoY = useTransform(smoothProgress, [0, 1], [isDynamic ? -16 : 0, 0]);
-  const logoRot = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const logoScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.95 : 1, 1]);
-  const logoAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
-
-  // 2. Central Navigation (Menu)
-  const navY = useTransform(smoothProgress, [0, 1], [isDynamic ? -20 : 0, 0]);
-  const navScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.98 : 1, 1]);
-  const navAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
-
-  // 3. System Access (Right green CTA) - Keep inside viewport
-  const accessX = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const accessY = useTransform(smoothProgress, [0, 1], [isDynamic ? -16 : 0, 0]);
-  const accessRot = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const accessScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.95 : 1, 1]);
-  const accessAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
-
-  // 4. Language Switcher (Globe block) - Keep inside viewport without right-side overflow
-  const langX = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const langY = useTransform(smoothProgress, [0, 1], [isDynamic ? -16 : 0, 0]);
-  const langRot = useTransform(smoothProgress, [0, 1], [0, 0]);
-  const langScale = useTransform(smoothProgress, [0, 1], [isDynamic ? 0.95 : 1, 1]);
-  const langAlpha = useTransform(smoothProgress, [0, 0.2, 1], [isDynamic ? 0 : 1, isDynamic ? 0.6 : 1, 1]);
-
-  // 5. Header Shell Surface & Backdrop
-  const headerAlpha = useTransform(smoothProgress, [0, 0.15, 1], [isDynamic ? 0 : 1, isDynamic ? 0.4 : 1, 1]);
-  const headerY = useTransform(smoothProgress, [0, 1], [isDynamic ? '-15%' : '0%', '0%']);
+  // Sub-elements remain stationary relative to the header bar (no loose internal wobbling)
+  const neutral = useTransform(() => 0);
+  const neutralScale = useTransform(() => 1);
+  const neutralAlpha = useTransform(() => 1);
 
   return {
     isInteractive,
@@ -74,9 +48,9 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
     shouldReduceMotion,
     headerAlpha,
     headerY,
-    logo: { x: logoX, y: logoY, rotate: logoRot, scale: logoScale, opacity: logoAlpha },
-    nav: { y: navY, scale: navScale, opacity: navAlpha },
-    access: { x: accessX, y: accessY, rotate: accessRot, scale: accessScale, opacity: accessAlpha },
-    lang: { x: langX, y: langY, rotate: langRot, scale: langScale, opacity: langAlpha },
+    logo: { x: neutral, y: neutral, rotate: neutral, scale: neutralScale, opacity: neutralAlpha },
+    nav: { y: neutral, scale: neutralScale, opacity: neutralAlpha },
+    access: { x: neutral, y: neutral, rotate: neutral, scale: neutralScale, opacity: neutralAlpha },
+    lang: { x: neutral, y: neutral, rotate: neutral, scale: neutralScale, opacity: neutralAlpha },
   };
 }
