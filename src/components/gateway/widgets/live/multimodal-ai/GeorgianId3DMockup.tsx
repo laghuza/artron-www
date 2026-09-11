@@ -66,9 +66,14 @@ export const GeorgianId3DMockup: React.FC<GeorgianId3DMockupProps> = ({
                 <Cpu className="w-2.5 h-2.5 text-[#00E5FF]" />
                 <span>GEORGIA ID // CHIP</span>
               </div>
-              <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/70 backdrop-blur-md border border-emerald-500/40 text-[9px] font-mono text-emerald-400 font-bold">
-                <ShieldCheck className="w-2.5 h-2.5" />
-                <span>AES-256</span>
+              <div className="flex items-center gap-1.5">
+                <span className="px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/40 text-[8px] font-mono text-amber-300 font-bold uppercase tracking-wider backdrop-blur-md">
+                  SPECIMEN / ნიმუში
+                </span>
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/70 backdrop-blur-md border border-emerald-500/40 text-[9px] font-mono text-emerald-400 font-bold">
+                  <ShieldCheck className="w-2.5 h-2.5" />
+                  <span>AES-256</span>
+                </div>
               </div>
             </div>
 

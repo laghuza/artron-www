@@ -205,7 +205,11 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
             <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
               <div className="text-[10px] text-[#94A3B8]">სახელი / გვარი</div>
               <div className="text-white font-bold flex items-center gap-1 mt-0.5 text-[11px] truncate">
-                <span>დავით თოდუა</span>
+                <span>
+                  {ocrStep === 'SCANNING'
+                    ? (locale === 'ka' ? 'ამოცნობა...' : 'Detecting...')
+                    : (locale === 'ka' ? 'ნინო გონგაძე' : 'Nino Gongadze')}
+                </span>
                 {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400 shrink-0" />}
               </div>
             </div>
@@ -213,7 +217,11 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
             <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
               <div className="text-[10px] text-[#94A3B8]">პირადი ნომერი</div>
               <div className="text-white font-bold flex items-center gap-1 mt-0.5 text-[11px]">
-                <span>01024098***</span>
+                <span>
+                  {ocrStep === 'SCANNING'
+                    ? (locale === 'ka' ? 'ამოცნობა...' : 'Extracting...')
+                    : '12345678***'}
+                </span>
                 {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400 shrink-0" />}
               </div>
             </div>
@@ -221,7 +229,11 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
             <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
               <div className="text-[10px] text-[#94A3B8]">დაბადების თარიღი</div>
               <div className="text-white font-bold flex items-center gap-1 mt-0.5 text-[11px]">
-                <span>14.05.1994</span>
+                <span>
+                  {ocrStep === 'SCANNING'
+                    ? (locale === 'ka' ? 'ამოცნობა...' : 'Reading...')
+                    : '01.01.1980'}
+                </span>
                 {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400 shrink-0" />}
               </div>
             </div>
@@ -229,7 +241,11 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
             <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
               <div className="text-[10px] text-[#94A3B8]">AES-256 დაშიფვრა</div>
               <div className="text-emerald-400 font-bold flex items-center gap-1 mt-0.5 text-[11px]">
-                <span>დაცულია</span>
+                <span>
+                  {ocrStep === 'SCANNING' 
+                    ? (locale === 'ka' ? 'შიფრაცია...' : 'Encrypting...') 
+                    : (locale === 'ka' ? 'დაცულია' : 'Secured')}
+                </span>
                 <Check className="w-3 h-3 text-emerald-400 shrink-0" />
               </div>
             </div>
