@@ -18,9 +18,28 @@ export const AIBotWidget: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Listen to open/toggle events from FloatingContactWidget or any trigger
+  // Listen to open/toggle events from FloatingContactWidget, Elevator Dock or any trigger
   useEffect(() => {
-    const handleOpen = () => setIsOpen(true);
+    const handleOpen = (e: Event) => {
+      const customEvent = e as CustomEvent<{ prompt?: string; section?: string }>;
+      setIsOpen(true);
+      if (customEvent.detail?.prompt) {
+        const promptText = customEvent.detail.prompt;
+        setMessages((prev) => {
+          if (prev.length === 0 || prev[prev.length - 1].text !== promptText) {
+            return [
+              ...prev,
+              {
+                id: `bot-context-${Date.now()}`,
+                sender: 'bot',
+                text: promptText,
+              },
+            ];
+          }
+          return prev;
+        });
+      }
+    };
     const handleToggle = () => setIsOpen((prev) => !prev);
     window.addEventListener('artron-open-chatbot', handleOpen);
     window.addEventListener('artron-toggle-chatbot', handleToggle);
@@ -116,9 +135,9 @@ export const AIBotWidget: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col items-end">
       {/* Chat Dialog Window */}
-      <div className="w-[320px] sm:w-[380px] h-[480px] md:h-[520px] bg-[#05070a]/95 border border-[#8a99ad]/20 backdrop-blur-xl rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,255,135,0.15)] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+      <div className="w-[320px] sm:w-[380px] h-[480px] md:h-[520px] bg-[#05070a]/95 border border-[#00E5FF]/20 backdrop-blur-xl rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(0,229,255,0.2)] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
         {/* Header */}
-        <div className="p-4 bg-gradient-to-r from-[#00ff87] via-[#00e5ff] to-[#00A3FF] text-slate-950 flex items-center justify-between shadow-md">
+        <div className="p-4 bg-gradient-to-r from-[#00E5FF] via-[#00A3FF] to-[#0066FF] text-slate-950 flex items-center justify-between shadow-md">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-slate-950/15 flex items-center justify-center border border-slate-950/20 shadow-inner">
               <Bot className="w-5 h-5 text-slate-950" />
@@ -153,14 +172,14 @@ export const AIBotWidget: React.FC = () => {
                 }`}
               >
                 <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs ${
-                  isBot ? 'bg-[#00ff87]/10 text-[#00ff87] border border-[#00ff87]/20 font-mono' : 'bg-white/10 text-white'
+                  isBot ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30 font-mono' : 'bg-white/10 text-white'
                 }`}>
                   {isBot ? <Bot className="w-4.5 h-4.5" /> : <User className="w-4.5 h-4.5" />}
                 </div>
                 <div className={`p-3 rounded-xl text-xs md:text-sm leading-relaxed ${
                   isBot 
                     ? 'bg-white/5 border border-white/5 text-[#E2E8F0] rounded-tl-none' 
-                    : 'bg-gradient-to-r from-[#00ff87] to-[#00e5ff] text-slate-950 font-bold rounded-tr-none'
+                    : 'bg-gradient-to-r from-[#00A3FF] to-[#00E5FF] text-slate-950 font-bold rounded-tr-none shadow-[0_0_12px_rgba(0,229,255,0.3)]'
                 }`}>
                   {msg.text}
                 </div>
@@ -170,11 +189,11 @@ export const AIBotWidget: React.FC = () => {
 
           {isTyping && (
             <div className="flex gap-2.5 max-w-[85%] self-start">
-              <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center bg-[#00ff87]/10 text-[#00ff87] border border-[#00ff87]/20 text-xs font-mono">
+              <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30 text-xs font-mono">
                 <Bot className="w-4.5 h-4.5" />
               </div>
               <div className="p-3 bg-white/5 border border-white/5 text-[#94A3B8] rounded-xl rounded-tl-none text-xs flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#00ff87] drop-shadow-[0_0_8px_#00ff87] animate-spin" />
+                <Sparkles className="w-3.5 h-3.5 text-[#00E5FF] drop-shadow-[0_0_8px_#00E5FF] animate-spin" />
                 <span>{t('ai_widget_typing')}</span>
               </div>
             </div>
@@ -187,7 +206,7 @@ export const AIBotWidget: React.FC = () => {
           <div className="px-4 py-2 border-t border-white/5 bg-white/2 flex flex-col gap-1.5 shrink-0">
             <button
               onClick={() => handleQuickQuestion('setup', t('ai_widget_quick_1'))}
-              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00ff87]/50 hover:bg-[#00ff87]/5 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
+              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
               style={{ minHeight: '36px' }}
             >
               <HelpCircle className="w-3.5 h-3.5 text-[#00e5ff] shrink-0" />
@@ -195,7 +214,7 @@ export const AIBotWidget: React.FC = () => {
             </button>
             <button
               onClick={() => handleQuickQuestion('labor', t('ai_widget_quick_2'))}
-              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00ff87]/50 hover:bg-[#00ff87]/5 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
+              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
               style={{ minHeight: '36px' }}
             >
               <HelpCircle className="w-3.5 h-3.5 text-[#00e5ff] shrink-0" />
@@ -203,7 +222,7 @@ export const AIBotWidget: React.FC = () => {
             </button>
             <button
               onClick={() => handleQuickQuestion('refund', t('ai_widget_quick_3'))}
-              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00ff87]/50 hover:bg-[#00ff87]/5 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
+              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
               style={{ minHeight: '36px' }}
             >
               <HelpCircle className="w-3.5 h-3.5 text-[#00e5ff] shrink-0" />
@@ -225,7 +244,7 @@ export const AIBotWidget: React.FC = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={t('ai_widget_placeholder')}
-            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm text-white placeholder-[#94A3B8] focus:outline-none focus:border-[#00ff87] focus:ring-1 focus:ring-[#00ff87]"
+            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm text-white placeholder-[#94A3B8] focus:outline-none focus:border-[#00E5FF] focus:ring-1 focus:ring-[#00E5FF]"
             style={{ minHeight: '40px' }}
           />
           <button
@@ -233,7 +252,7 @@ export const AIBotWidget: React.FC = () => {
             disabled={!inputValue.trim()}
             className={`p-2.5 rounded-xl transition-all flex items-center justify-center shrink-0 cursor-pointer ${
               inputValue.trim()
-                ? 'bg-[#00ff87] text-slate-950 hover:brightness-110'
+                ? 'bg-[#00E5FF] text-slate-950 hover:brightness-110 shadow-[0_0_12px_rgba(0,229,255,0.4)]'
                 : 'bg-white/5 text-[#94A3B8] cursor-not-allowed border border-white/5'
             }`}
             style={{ minWidth: '40px', minHeight: '40px' }}

@@ -10,6 +10,11 @@ import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import type { Metadata } from 'next';
 
 // ── Dynamically Imported Below-the-Fold Heavy Modules (Vercel Bundle Optimization) ──
+const PureSportsMirror = dynamic(
+  () => import('@/components/landing/pure-sports-mirror/PureSportsMirror').then((mod) => mod.PureSportsMirror),
+  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="THE PURE SPORTS MIRROR LOADING..." /> }
+);
+
 const DashboardFeaturesSection = dynamic(
   () => import('@/components/DashboardFeaturesSection').then((mod) => mod.DashboardFeaturesSection),
   { loading: () => <SectionSkeleton minHeight="min-h-[500px]" label="DASHBOARD MATRIX LOADING..." /> }
@@ -25,14 +30,9 @@ const AnalyticsShowcase = dynamic(
   { loading: () => <SectionSkeleton minHeight="min-h-[650px]" label="AI TELEMETRY & ANALYTICS LOADING..." /> }
 );
 
-const EnterpriseSecurityShowcase = dynamic(
-  () => import('@/components/landing/EnterpriseSecurityShowcase').then((mod) => mod.EnterpriseSecurityShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="ENTERPRISE SECURITY & FINANCIAL SOVEREIGNTY LOADING..." /> }
-);
-
-const StaffAccessRolesShowcase = dynamic(
-  () => import('@/components/landing/StaffAccessRolesShowcase').then((mod) => mod.StaffAccessRolesShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="STAFF ACCESS & DYNAMIC RBAC LOADING..." /> }
+const ControlPanelSecurityShowcase = dynamic(
+  () => import('@/components/landing/ControlPanelSecurityShowcase').then((mod) => mod.ControlPanelSecurityShowcase),
+  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="CONTROL PANEL DEFENSE & ZERO-FRAUD LOADING..." /> }
 );
 
 const LegacyVsArtronSection = dynamic(
@@ -90,6 +90,10 @@ export default function Home() {
         <KineticScrollHero />
         <SectionTransition variant="laser" />
 
+        {/* 1.5 The Pure Sports Mirror (Systemic Mirror) */}
+        <PureSportsMirror />
+        <SectionTransition variant="laser" />
+
         {/* 2. Dual-Core Ecosystem Bridge (Web + App Sync) */}
         <DualCoreShowcase />
         <SectionTransition variant="laser" />
@@ -107,12 +111,7 @@ export default function Home() {
         </div>
 
         <div className="cv-auto">
-          <EnterpriseSecurityShowcase />
-          <SectionTransition variant="laser" />
-        </div>
-
-        <div className="cv-auto">
-          <StaffAccessRolesShowcase />
+          <ControlPanelSecurityShowcase />
           <SectionTransition variant="laser" />
         </div>
 

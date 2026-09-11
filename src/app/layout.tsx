@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { PortalIgnitionProvider } from "@/components/ui/GlobalPortalIgnition";
 import { FloatingContactWidget } from "@/components/FloatingContactWidget";
 import { AIBotWidget } from "@/components/landing/AIBotWidget";
+import { KineticElevatorDock } from "@/components/navigation/KineticElevatorDock";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-[#0B0F17] text-white">
         <LanguageProvider>
           <PortalIgnitionProvider>
+            <KineticElevatorDock />
             {children}
             <FloatingContactWidget />
             <AIBotWidget />

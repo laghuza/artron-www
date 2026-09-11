@@ -234,19 +234,11 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       href: '/#enterprise-security',
-      label: t('nav_features_security') || 'კიბერდაცვა & ლოკალური მართვა',
-      desc: t('nav_features_security_desc') || 'პირდაპირი საბანკო ნაკადები, მხოლოდ დარბაზიდან მართვა, AES-256',
+      label: t('nav_features_security') || 'პანელის თავდაცვა & როლები',
+      desc: t('nav_features_security_desc') || 'პირდაპირი ბანკი, 0% შიდა თაღლითობა, Passkey & RBAC',
       icon: ShieldCheck,
-      badge: 'Zero-Trust',
+      badge: 'Zero-Fraud',
       color: '#00E5FF',
-    },
-    {
-      href: '/#staff-access-roles',
-      label: t('nav_features_staff') || 'თანამშრომელთა წვდომა & როლები',
-      desc: t('nav_features_staff_desc') || 'Face ID ლოგინი, 100% დინამიური როლები, სალაროს დაცვა',
-      icon: Fingerprint,
-      badge: 'Passkey & RBAC',
-      color: '#00ff87',
     },
     {
       href: '/#legacy-vs-artron',

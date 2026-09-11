@@ -155,10 +155,10 @@ export const FloatingContactWidget: React.FC = () => {
 
   return (
     <div
-      className={`fixed z-[45] flex flex-col items-end gap-3 transition-all duration-500 ${
+      className={`fixed z-[45] md:hidden flex flex-col items-end gap-3 transition-all duration-500 ${
         chatbotOpen
-          ? 'bottom-6 right-6 md:right-[412px] md:bottom-8 max-md:opacity-0 max-md:pointer-events-none'
-          : 'bottom-6 right-6 md:bottom-8 md:right-8'
+          ? 'bottom-6 right-6 max-md:opacity-0 max-md:pointer-events-none'
+          : 'bottom-6 right-6'
       }`}
     >
       {/* ── Expanded action items shooting upwards from the hub button ── */}
