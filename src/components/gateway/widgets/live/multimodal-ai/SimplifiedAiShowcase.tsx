@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { soundEngine } from '@/core';
 import { 
   Mic, 
   ScanLine, 
@@ -17,6 +18,7 @@ import {
   ShieldCheck,
   Zap
 } from 'lucide-react';
+import { GeorgianId3DMockup } from './GeorgianId3DMockup';
 
 export type AiShowcaseTab = 'VOICE' | 'OCR' | 'CONCIERGE';
 
@@ -55,10 +57,12 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
 
   // Handle Voice Sim trigger
   const runVoiceSim = () => {
+    soundEngine.playPulseNode();
     setVoiceStep('LISTENING');
     setTimeout(() => {
       setVoiceStep('EXTRACTED');
       setTimeout(() => {
+        soundEngine.playSystemAccess();
         setVoiceStep('DONE');
       }, 900);
     }, 1300);
@@ -66,8 +70,10 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
 
   // Handle OCR Sim trigger
   const runOcrSim = () => {
+    soundEngine.playPulseNode();
     setOcrStep('SCANNING');
     setTimeout(() => {
+      soundEngine.playSystemAccess();
       setOcrStep('DONE');
     }, 1400);
   };
@@ -178,8 +184,8 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
 
       {/* 2. OCR ID SCANNER VIEW */}
       {activeTab === 'OCR' && (
-        <div className="space-y-5 animate-in fade-in duration-300">
-          <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="space-y-4 animate-in fade-in duration-300">
+          <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#00A3FF] animate-pulse" />
               <span className="text-xs font-mono font-bold text-[#00A3FF] uppercase tracking-wider">
@@ -191,67 +197,46 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
             </span>
           </div>
 
-          {/* Interactive ID Card Mockup with Laser Beam */}
-          <div className="relative p-5 rounded-2xl bg-gradient-to-br from-[#0e1626] to-[#080d17] border border-white/20 overflow-hidden shadow-2xl">
-            {/* Laser Scan Beam */}
-            {ocrStep === 'SCANNING' && (
-              <div 
-                className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF] animate-bounce pointer-events-none"
-                style={{ animationDuration: '1.2s' }}
-              />
-            )}
+          {/* 3D Georgian ID Card Model Simulation */}
+          <GeorgianId3DMockup ocrStep={ocrStep} locale={locale} />
 
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white">
-                  <CreditCard className="w-5 h-5 text-[#00E5FF]" />
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono uppercase text-[#94A3B8]">GEORGIA ID CARD</div>
-                  <div className="text-xs font-bold text-white">საქართველოს მოქალაქე</div>
-                </div>
+          {/* Scanned Fields */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+            <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+              <div className="text-[10px] text-[#94A3B8]">სახელი / გვარი</div>
+              <div className="text-white font-bold flex items-center gap-1 mt-0.5 text-[11px] truncate">
+                <span>დავით თოდუა</span>
+                {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400 shrink-0" />}
               </div>
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
             </div>
 
-            {/* Scanned Fields */}
-            <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
-                <div className="text-[10px] text-[#94A3B8]">სახელი / გვარი</div>
-                <div className="text-white font-bold flex items-center gap-1 mt-0.5">
-                  <span>დავით თოდუა</span>
-                  {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400" />}
-                </div>
+            <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+              <div className="text-[10px] text-[#94A3B8]">პირადი ნომერი</div>
+              <div className="text-white font-bold flex items-center gap-1 mt-0.5 text-[11px]">
+                <span>01024098***</span>
+                {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400 shrink-0" />}
               </div>
+            </div>
 
-              <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
-                <div className="text-[10px] text-[#94A3B8]">პირადი ნომერი</div>
-                <div className="text-white font-bold flex items-center gap-1 mt-0.5">
-                  <span>01024098***</span>
-                  {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400" />}
-                </div>
+            <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+              <div className="text-[10px] text-[#94A3B8]">დაბადების თარიღი</div>
+              <div className="text-white font-bold flex items-center gap-1 mt-0.5 text-[11px]">
+                <span>14.05.1994</span>
+                {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400 shrink-0" />}
               </div>
+            </div>
 
-              <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
-                <div className="text-[10px] text-[#94A3B8]">დაბადების თარიღი</div>
-                <div className="text-white font-bold flex items-center gap-1 mt-0.5">
-                  <span>14.05.1994</span>
-                  {ocrStep === 'DONE' && <Check className="w-3 h-3 text-emerald-400" />}
-                </div>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
-                <div className="text-[10px] text-[#94A3B8]">დაშიფვრა (AES-256)</div>
-                <div className="text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
-                  <span>დაცულია</span>
-                  <Check className="w-3 h-3 text-emerald-400" />
-                </div>
+            <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+              <div className="text-[10px] text-[#94A3B8]">AES-256 დაშიფვრა</div>
+              <div className="text-emerald-400 font-bold flex items-center gap-1 mt-0.5 text-[11px]">
+                <span>დაცულია</span>
+                <Check className="w-3 h-3 text-emerald-400 shrink-0" />
               </div>
             </div>
           </div>
 
           {/* Action Trigger */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-1">
             <button
               onClick={runOcrSim}
               disabled={ocrStep === 'SCANNING'}
@@ -264,7 +249,11 @@ export const SimplifiedAiShowcase: React.FC<SimplifiedAiShowcaseProps> = ({
                   : (locale === 'ka' ? 'დაასკანირეთ პირადობა' : 'Scan ID Card')}
               </span>
             </button>
-            <span className="text-[11px] font-mono text-[#94A3B8]">მყისიერი მონაცემთა ექსტრაქცია</span>
+            <span className="text-[11px] font-mono text-[#94A3B8]">
+              {ocrStep === 'SCANNING' 
+                ? (locale === 'ka' ? 'მიმდინარეობს OCR ანალიზი...' : 'Analyzing Vision OCR...') 
+                : (locale === 'ka' ? 'მყისიერი მონაცემთა ექსტრაქცია' : 'Instant 1s Data Extraction')}
+            </span>
           </div>
         </div>
       )}
