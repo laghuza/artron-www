@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SubPillItem } from './mirrorDataMatrix';
+import { MirrorIcon } from './MirrorIcon';
 import { useTypewriter } from './useTypewriter';
 
 interface MirrorPresentationDeckProps {
@@ -142,16 +143,16 @@ export const MirrorPresentationDeck: React.FC<MirrorPresentationDeckProps> = ({
               className="grid grid-cols-1 sm:grid-cols-2 gap-2.5"
             >
               {/* Chip 1: Scale */}
-              <GlassChip label={passport.scaleLabel} value={passport.scale} icon="🌐" />
+              <GlassChip label={passport.scaleLabel} value={passport.scale} icon="globe" />
               {/* Chip 2: Disciplines */}
-              <GlassChip label={passport.disciplinesLabel} value={passport.disciplines} icon="⚡" />
+              <GlassChip label={passport.disciplinesLabel} value={passport.disciplines} icon="zap" />
               {/* Chip 3: Key Area */}
-              <GlassChip label={passport.keyAreaLabel} value={passport.keyArea} icon="🎯" />
+              <GlassChip label={passport.keyAreaLabel} value={passport.keyArea} icon="target" />
               {/* Chip 4: Highest Standard — Emerald Pulse */}
               <GlassChip
                 label={passport.highestStandardLabel}
                 value={passport.highestStandard}
-                icon="🏆"
+                icon="trophy"
                 isHighlight
               />
             </motion.div>
@@ -214,7 +215,7 @@ function GlassChip({ label, value, icon, isHighlight = false }: GlassChipProps) 
       )}
 
       <div className="relative z-10 flex items-start gap-2">
-        <span className="text-sm leading-none mt-0.5 shrink-0">{icon}</span>
+        <MirrorIcon name={icon} isActive={isHighlight} size={14} className="mt-0.5 shrink-0" />
         <div className="flex-1 min-w-0">
           <span
             className={`block text-[10px] font-mono uppercase tracking-wider mb-0.5 ${

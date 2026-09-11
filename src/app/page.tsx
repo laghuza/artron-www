@@ -20,26 +20,10 @@ const DashboardFeaturesSection = dynamic(
   { loading: () => <SectionSkeleton minHeight="min-h-[500px]" label="DASHBOARD MATRIX LOADING..." /> }
 );
 
-const MultimodalAiShowcase = dynamic(
-  () => import('@/components/landing/MultimodalAiShowcase').then((mod) => mod.MultimodalAiShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="MULTIMODAL AI ASSISTANT LOADING..." /> }
+const ArtronAiSection = dynamic(
+  () => import('@/components/landing/ArtronAiSection').then((mod) => mod.ArtronAiSection),
+  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="AI NEURAL ENGINE LOADING..." /> }
 );
-
-const AnalyticsShowcase = dynamic(
-  () => import('@/components/landing/AnalyticsShowcase').then((mod) => mod.AnalyticsShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[650px]" label="AI TELEMETRY & ANALYTICS LOADING..." /> }
-);
-
-const ControlPanelSecurityShowcase = dynamic(
-  () => import('@/components/landing/ControlPanelSecurityShowcase').then((mod) => mod.ControlPanelSecurityShowcase),
-  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="CONTROL PANEL DEFENSE & ZERO-FRAUD LOADING..." /> }
-);
-
-const LegacyVsArtronSection = dynamic(
-  () => import('@/components/landing/LegacyVsArtronSection').then((mod) => mod.LegacyVsArtronSection),
-  { loading: () => <SectionSkeleton minHeight="min-h-[600px]" label="PARADIGM SHIFT MATRIX LOADING..." /> }
-);
-
 
 const PricingSection = dynamic(
   () => import('@/components/landing/PricingSection').then((mod) => mod.PricingSection),
@@ -51,19 +35,9 @@ const PartnerEcosystem = dynamic(
   { loading: () => <SectionSkeleton minHeight="min-h-[500px]" label="PARTNER NETWORK LOADING..." /> }
 );
 
-const BookingEngine = dynamic(
-  () => import('@/components/landing/BookingEngine').then((mod) => mod.BookingEngine),
-  { loading: () => <SectionSkeleton minHeight="min-h-[550px]" label="INSTANT BOOKING GATEWAY LOADING..." /> }
-);
-
 const FaqSection = dynamic(
   () => import('@/components/landing/FaqSection').then((mod) => mod.FaqSection),
   { loading: () => <SectionSkeleton minHeight="min-h-[400px]" label="KNOWLEDGE BASE LOADING..." /> }
-);
-
-const SaaSGatewayCTA = dynamic(
-  () => import('@/components/landing/SaaSGatewayCTA').then((mod) => mod.SaaSGatewayCTA),
-  { loading: () => <SectionSkeleton minHeight="min-h-[400px]" label="GATEWAY CTA LOADING..." /> }
 );
 
 export const metadata: Metadata = {
@@ -100,35 +74,20 @@ export default function Home() {
 
         {/* Below-the-fold sections with content-visibility: auto for 60-120 FPS scrolling */}
         <div className="cv-auto">
-          {/* 3. B2B Control Hub Cluster: CRM, IoT & Labor Compliance */}
+          {/* 3. B2B Control Hub: 4-Node Core Matrix (Operations & Security) & 6-Node Analytics */}
           <DashboardFeaturesSection />
           <SectionTransition variant="laser" />
         </div>
 
         <div className="cv-auto">
-          <MultimodalAiShowcase />
-          <SectionTransition variant="laser" />
-        </div>
-
-        <div className="cv-auto">
-          <ControlPanelSecurityShowcase />
-          <SectionTransition variant="laser" />
-        </div>
-
-        <div className="cv-auto">
-          <LegacyVsArtronSection />
-          <SectionTransition variant="laser" />
-        </div>
-
-        <div className="cv-auto">
-          {/* 4. B2C Athlete Advantages: Mobile App for Members */}
+          {/* 4. B2C Athlete Digital Freedom: Mobile App for Members */}
           <B2CAthleteAdvantages />
           <SectionTransition variant="laser" />
         </div>
 
         <div className="cv-auto">
-          {/* 5. Business Intelligence & Analytics Showcase */}
-          <AnalyticsShowcase />
+          {/* 5. Dedicated Multimodal AI Neural Engine Section */}
+          <ArtronAiSection />
           <SectionTransition variant="laser" />
         </div>
 
@@ -139,26 +98,14 @@ export default function Home() {
         </div>
 
         <div className="cv-auto">
-          {/* 7. Partner Ecosystem */}
+          {/* 7. Partner Ecosystem & Live Coverage Network */}
           <PartnerEcosystem />
           <SectionTransition variant="laser" />
         </div>
 
         <div className="cv-auto">
-          {/* 8. Instant Booking Engine */}
-          <BookingEngine />
-          <SectionTransition variant="laser" />
-        </div>
-
-        <div className="cv-auto">
-          {/* 9. FAQ Knowledge Base */}
+          {/* 8. FAQ Knowledge Base */}
           <FaqSection />
-          <SectionTransition variant="laser" />
-        </div>
-
-        <div className="cv-auto">
-          {/* 10. Final Gateway CTA */}
-          <SaaSGatewayCTA />
         </div>
       </main>
       <Footer />

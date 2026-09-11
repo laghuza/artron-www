@@ -74,11 +74,12 @@ export const LeftFloatingNavDock: React.FC = () => {
       icon: HelpCircle,
     },
     {
-      id: 'booking-engine',
-      href: '#booking-engine',
+      id: 'demo-booking',
+      href: '/get-started?mode=demo',
       labelKey: 'nav_booking',
       fallbackLabel: { ka: 'დემო ჯავშანი', en: 'Book Demo', ru: 'Демо запись' },
       icon: Calendar,
+      isPage: true,
     },
     {
       id: 'about',
@@ -96,7 +97,7 @@ export const LeftFloatingNavDock: React.FC = () => {
     // Show dock once user starts scrolling down
     setIsVisible(scrollY > 80);
 
-    const sectionIds = ['hero', 'services', 'roi', 'pricing', 'partner-ecosystem', 'faq', 'booking-engine'];
+    const sectionIds = ['hero', 'services', 'roi', 'pricing', 'partner-ecosystem', 'faq'];
     const scrollPosition = scrollY + 240;
 
     for (let i = sectionIds.length - 1; i >= 0; i--) {

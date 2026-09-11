@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SubPillItem } from './mirrorDataMatrix';
+import { MirrorIcon } from './MirrorIcon';
 
 interface MirrorMasterDockProps {
   pills: SubPillItem[];
@@ -58,23 +59,25 @@ export const MirrorMasterDock: React.FC<MirrorMasterDockProps> = ({
               whileTap={{ scale: 0.96 }}
               transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.6 }}
               className={`
-                snap-start relative flex-shrink-0 flex flex-col items-center justify-between p-3
+                group snap-start relative flex-shrink-0 flex flex-col items-center justify-between p-3
                 w-[110px] sm:w-[124px] lg:w-[132px] h-[110px] sm:h-[120px]
-                rounded-2xl select-none transition-colors duration-200
+                rounded-2xl select-none transition-all duration-300
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00E5FF]
+                border-[1.5px]
                 ${isActive
-                  ? 'bg-gradient-to-b from-[#00A3FF]/25 via-[#0066FF]/15 to-[#060910] text-white'
-                  : 'bg-[#0A0E18]/85 hover:bg-[#111827] text-slate-400 hover:text-slate-200'
+                  ? 'bg-gradient-to-b from-[#00A3FF]/25 via-[#0066FF]/15 to-[#060910] text-white border-[#00E5FF] shadow-[0_10px_30px_rgba(0,229,255,0.35),inset_0_1px_0_rgba(0,229,255,0.4)]'
+                  : 'bg-[#0A0E18]/60 hover:bg-[#0D1524]/85 text-slate-400 hover:text-white border-transparent hover:border-[#00E5FF]/40 shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_0_24px_rgba(0,229,255,0.22),inset_0_1px_0_rgba(255,255,255,0.08)]'
                 }
               `}
-              style={isActive ? {
-                border: '1.5px solid #00E5FF',
-                boxShadow: '0 10px 30px rgba(0, 229, 255, 0.35), inset 0 1px 0 rgba(0, 229, 255, 0.4)',
-              } : {
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
-              }}
             >
+              {/* Subtle ambient hover glow backdrop for unselected cards */}
+              {!isActive && (
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-b from-[#00E5FF]/10 via-[#00A3FF]/5 to-transparent"
+                  aria-hidden="true"
+                />
+              )}
+
               {/* Glow base under active tile */}
               {isActive && (
                 <motion.div
@@ -108,27 +111,26 @@ export const MirrorMasterDock: React.FC<MirrorMasterDockProps> = ({
                 )}
               </div>
 
-              {/* 40x40px Dedicated 3D/Vector Symbol Container */}
+              {/* 40x40px Dedicated High-Tech Vector Symbol Container */}
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
                   isActive
-                    ? 'bg-[#00E5FF]/15 border border-[#00E5FF]/40 scale-110'
-                    : 'bg-white/[0.04] border border-white/[0.06]'
+                    ? 'bg-gradient-to-br from-[#00E5FF]/20 via-[#00A3FF]/15 to-[#0066FF]/25 border border-[#00E5FF]/50 scale-110 shadow-[0_0_16px_rgba(0,229,255,0.35)]'
+                    : 'bg-white/[0.03] border border-transparent group-hover:border-[#00E5FF]/35 group-hover:bg-[#00E5FF]/10 group-hover:shadow-[0_0_14px_rgba(0,229,255,0.25)]'
                 }`}
-                style={isActive ? { boxShadow: '0 0 16px rgba(0,229,255,0.3)' } : undefined}
               >
-                <span
-                  className="text-2xl sm:text-3xl leading-none select-none"
-                  style={isActive ? { filter: 'drop-shadow(0 0 8px rgba(0,229,255,0.75))' } : undefined}
-                >
-                  {pill.icon}
-                </span>
+                <MirrorIcon
+                  name={pill.icon}
+                  isActive={isActive}
+                  size={22}
+                  strokeWidth={isActive ? 2 : 1.8}
+                />
               </div>
 
               {/* Label */}
               <span
-                className={`text-[11px] sm:text-xs font-bold tracking-tight text-center leading-tight px-1 transition-colors ${
-                  isActive ? 'text-[#00E5FF]' : 'text-slate-300'
+                className={`text-[11px] sm:text-xs font-bold tracking-tight text-center leading-tight px-1 transition-colors duration-200 ${
+                  isActive ? 'text-[#00E5FF]' : 'text-slate-400 group-hover:text-[#00E5FF]'
                 }`}
                 style={{ fontFamily: 'var(--font-noto-sans-georgian, system-ui)' }}
               >

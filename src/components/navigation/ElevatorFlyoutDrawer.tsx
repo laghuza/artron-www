@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { audioManager } from '@/lib/audioManager';
@@ -273,16 +274,13 @@ export const ElevatorFlyoutDrawer: React.FC<ElevatorFlyoutDrawerProps> = ({ isOp
             {/* Footer Quick Action */}
             <div className="pt-3 mt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
               <span className="font-mono">7 CORE MODULES</span>
-              <a
-                href="#booking-engine"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleItemClick('booking-engine');
-                }}
+              <Link
+                href="/get-started?mode=demo"
+                onClick={() => onClose()}
                 className="text-[#00A3FF] hover:underline font-semibold flex items-center gap-1"
               >
                 {lang === 'ka' ? 'დემო ჩვენება →' : lang === 'ru' ? 'Демо показ →' : 'Live Demo →'}
-              </a>
+              </Link>
             </div>
           </motion.div>
         </>

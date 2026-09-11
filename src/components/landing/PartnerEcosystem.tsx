@@ -6,6 +6,7 @@ import { CreditCard, Building2, Sparkles, Layers } from 'lucide-react';
 import { gymClients, fintechPartners } from './partners/PartnerData';
 import { GymClientCard } from './partners/GymClientCard';
 import { PartnerCard } from './partners/PartnerCard';
+import { PartnerNetworkRadar } from './partners/PartnerNetworkRadar';
 
 export const PartnerEcosystem: React.FC = () => {
   const { t } = useLanguage();
@@ -278,6 +279,10 @@ export const PartnerEcosystem: React.FC = () => {
             </div>
           </div>
         )}
+        {/* SECTION 3: NATIONWIDE COVERAGE & LIVE RADAR */}
+        <div className="mt-12 sm:mt-16">
+          <PartnerNetworkRadar />
+        </div>
       </div>
     </section>
   );

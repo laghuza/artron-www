@@ -25,10 +25,11 @@ This document defines the strict organizational structure, role responsibilities
 
 ---
 
-### 🎨 LEVEL 2: UI/UX VISUAL ARCHITECT & BRANDING
-*Mandate:* Transforms Level 1 legal/architectural constraints and Level 1.5 business specs into world-class visual interfaces.
+### 🎨 LEVEL 2: UI/UX VISUAL ARCHITECT, BRANDING & BEHAVIORAL PSYCHOLOGY
+*Mandate:* Transforms Level 1 legal/architectural constraints and Level 1.5 business specs into world-class, emotionally resonant and trusted visual interfaces.
 7. **`artron-brand-guidelines`** — Brandbook Guardian (Persona, Philosophy, Tone of Voice).
 8. **`artron-ui-ux-designer-agent`** — Lead UI/UX Designer (Design System, CSS tokens `#00A3FF`, Framer Motion 60 FPS, Dual-Core Showcase, 3-Language KA/EN/RU layouts).
+9. **`artron-cognitive-psychology-agent`** — Cognitive UX & Behavioral Psychology Specialist (Emotional Journey Mapping, Cognitive Load, Trust Architecture, Fear/Friction Reduction).
 
 ---
 

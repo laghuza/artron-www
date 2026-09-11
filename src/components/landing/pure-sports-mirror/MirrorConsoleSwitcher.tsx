@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MasterDimensionId, MIRROR_DIMENSIONS } from './mirrorDataMatrix';
+import { MirrorIcon } from './MirrorIcon';
 
 interface MirrorConsoleSwitcherProps {
   activeTab: MasterDimensionId;
@@ -13,9 +14,9 @@ interface MirrorConsoleSwitcherProps {
 }
 
 const TABS: { id: MasterDimensionId; label: string; icon: string; shortLabel: string }[] = [
-  { id: 'venues', label: '🏛️ I. სპორტული სივრცეები', icon: '🏛️', shortLabel: 'I. სივრცეები' },
-  { id: 'workforce', label: '👥 II. ადამიანური კაპიტალი', icon: '👥', shortLabel: 'II. კაპიტალი' },
-  { id: 'mastery', label: '🏅 III. ოსტატობა & ტიტულები', icon: '🏅', shortLabel: 'III. ოსტატობა' },
+  { id: 'venues', label: 'I. სპორტული სივრცეები', icon: 'landmark', shortLabel: 'I. სივრცეები' },
+  { id: 'workforce', label: 'II. ადამიანური კაპიტალი', icon: 'users', shortLabel: 'II. კაპიტალი' },
+  { id: 'mastery', label: 'III. ოსტატობა & ტიტულები', icon: 'trophy', shortLabel: 'III. ოსტატობა' },
 ];
 
 export const MirrorConsoleSwitcher: React.FC<MirrorConsoleSwitcherProps> = ({
@@ -61,8 +62,8 @@ export const MirrorConsoleSwitcher: React.FC<MirrorConsoleSwitcherProps> = ({
                   className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#0055FF]/30 via-[#00A3FF]/20 to-[#00E5FF]/20 border border-[#00A3FF]/60 shadow-[0_0_24px_rgba(0,163,255,0.4)]"
                 />
               )}
-              <span className="relative z-10 text-base sm:text-lg leading-none">{tab.icon}</span>
-              <span className="relative z-10 hidden sm:inline tracking-wide">{tab.label.replace(/^.*? /, '')}</span>
+              <MirrorIcon name={tab.icon} isActive={isActive} size={16} className="relative z-10" />
+              <span className="relative z-10 hidden sm:inline tracking-wide">{tab.label}</span>
               <span className="relative z-10 sm:hidden tracking-tight">{tab.shortLabel}</span>
               {isActive && (
                 <span className="relative z-10 w-1.5 h-1.5 rounded-full bg-[#00A3FF] shadow-[0_0_8px_#00A3FF]" />

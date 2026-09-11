@@ -4,21 +4,31 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SubPillItem, MasterDimensionId } from './mirrorDataMatrix';
 import { useTypewriter } from './useTypewriter';
-import { MirrorHologramBlueprints } from './MirrorHologramBlueprints';
+import { MirrorReactiveBackdrop } from './MirrorReactiveBackdrop';
+import { MirrorClickableSpecTiles } from './MirrorClickableSpecTiles';
 
 interface MirrorUnifiedStageProps {
   pills: SubPillItem[];
   activePillId: string;
   dimensionId: MasterDimensionId;
+  playTactileClick: () => void;
 }
 
 export const MirrorUnifiedStage: React.FC<MirrorUnifiedStageProps> = ({
   pills,
   activePillId,
   dimensionId,
+  playTactileClick,
 }) => {
   const currentPill = pills.find((p) => p.id === activePillId) || pills[0];
   const { passport } = currentPill;
+
+  const [activeTileIndex, setActiveTileIndex] = React.useState<number>(0);
+
+  // Reset selected spec tile on pill change
+  React.useEffect(() => {
+    setActiveTileIndex(0);
+  }, [activePillId]);
 
   // Fast typewriter streams — resets on pill change
   const { displayedText: displayedTitle } = useTypewriter(passport.title, activePillId, 16, 60);
@@ -45,19 +55,12 @@ export const MirrorUnifiedStage: React.FC<MirrorUnifiedStageProps> = ({
         boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 163, 255, 0.12)',
       }}
     >
-      {/* ── 1. BACKGROUND AMBIENCE: Integrated Vector Hologram Overlay ── */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={dimensionId}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 pointer-events-none"
-        >
-          <MirrorHologramBlueprints dimensionId={dimensionId} />
-        </motion.div>
-      </AnimatePresence>
+      {/* ── 1. BACKGROUND AMBIENCE: Reactive Dynamic Holographic Backdrop ── */}
+      <MirrorReactiveBackdrop
+        dimensionId={dimensionId}
+        activePillId={activePillId}
+        activeTileIndex={activeTileIndex}
+      />
 
       {/* Ambient Micro-Dot Matrix Overlay */}
       <div
@@ -73,7 +76,7 @@ export const MirrorUnifiedStage: React.FC<MirrorUnifiedStageProps> = ({
       <div className="absolute -bottom-16 left-0 w-80 h-64 bg-gradient-to-tr from-[#10B981]/12 via-transparent to-transparent pointer-events-none rounded-full blur-[90px]" />
       <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#00E5FF]/60 to-transparent pointer-events-none" />
 
-      {/* ── 2. STAGE CONTENT (Single-Stage Monolithic Flow) ── */}
+      {/* ── 2. STAGE CONTENT (Single-Stage Monolithic Flow — NO SPLIT BOXES!) ── */}
       <div className="relative z-10 p-5 sm:p-7 lg:p-9 flex flex-col gap-6">
 
         {/* ── STEP 1: STREAMING HEADER ── */}
@@ -94,7 +97,7 @@ export const MirrorUnifiedStage: React.FC<MirrorUnifiedStageProps> = ({
                 className="text-[10px] font-mono px-2.5 py-0.5 rounded-full text-slate-300 uppercase tracking-wider"
                 style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
               >
-                SPORT-OS v3.2 • UNIFIED STAGE
+                SPORT-OS v3.3 • UNIFIED STAGE
               </span>
             </div>
           </div>
@@ -162,43 +165,21 @@ export const MirrorUnifiedStage: React.FC<MirrorUnifiedStageProps> = ({
           </motion.div>
         </AnimatePresence>
 
-        {/* ── STEP 3: 4 GEOMETRIC SPECIFICATION TILES (Single Horizontal Row on Desktop) ── */}
+        {/* ── STEP 3: 4 FULLY-CLICKABLE SPECIFICATION TILES & INLINE REVEAL ── */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activePillId + '_tiles'}
+            key={activePillId + '_spec_tiles'}
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.22 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
           >
-            {/* Tile 1: Role / Scale */}
-            <GeometricSpecTile
-              label={passport.scaleLabel}
-              value={passport.scale}
-              icon="🌐"
-            />
-
-            {/* Tile 2: Responsibility / Disciplines */}
-            <GeometricSpecTile
-              label={passport.disciplinesLabel}
-              value={passport.disciplines}
-              icon="⚡"
-            />
-
-            {/* Tile 3: Key Area */}
-            <GeometricSpecTile
-              label={passport.keyAreaLabel}
-              value={passport.keyArea}
-              icon="🎯"
-            />
-
-            {/* Tile 4: Systemic Advantage / Highest Standard (Emerald Highlighted) */}
-            <GeometricSpecTile
-              label={passport.highestStandardLabel}
-              value={passport.highestStandard}
-              icon="🏆"
-              isHighlight
+            <MirrorClickableSpecTiles
+              passport={passport}
+              activePillId={activePillId}
+              activeTileIndex={activeTileIndex}
+              onSelectTile={setActiveTileIndex}
+              playTactileClick={playTactileClick}
             />
           </motion.div>
         </AnimatePresence>
@@ -211,76 +192,10 @@ export const MirrorUnifiedStage: React.FC<MirrorUnifiedStageProps> = ({
           </div>
           <div className="flex items-center gap-3">
             <span className="text-slate-500 hidden sm:inline">SINGLE-STAGE ARCHITECTURE</span>
-            <span className="text-[#00E5FF] font-semibold">ARTRON SPORT-OS CORE</span>
+            <span className="text-[#00E5FF] font-semibold">ARTRON SPORT-OS CORE v3.3</span>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-// ── Geometric Specification Tile Component ─────────────────────────────
-interface GeometricSpecTileProps {
-  label: string;
-  value: string;
-  icon: string;
-  isHighlight?: boolean;
-}
-
-function GeometricSpecTile({
-  label,
-  value,
-  icon,
-  isHighlight = false,
-}: GeometricSpecTileProps) {
-  return (
-    <div
-      className={`relative p-4 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between min-h-[92px] ${
-        isHighlight ? 'hover:scale-[1.02]' : 'hover:scale-[1.01]'
-      }`}
-      style={
-        isHighlight
-          ? {
-              background:
-                'linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(0, 163, 255, 0.10) 60%, rgba(11, 16, 27, 0.9) 100%)',
-              border: '1px solid rgba(16, 185, 129, 0.45)',
-              boxShadow:
-                '0 0 25px rgba(16, 185, 129, 0.16), inset 0 1px 0 rgba(0, 229, 255, 0.2)',
-            }
-          : {
-              background: 'rgba(11, 16, 27, 0.65)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)',
-            }
-      }
-    >
-      {/* Top shimmer line for highlight tile */}
-      {isHighlight && (
-        <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#10B981] to-transparent" />
-      )}
-
-      {/* Header with Icon + Label */}
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-base leading-none shrink-0">{icon}</span>
-        <span
-          className={`text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-semibold truncate ${
-            isHighlight ? 'text-[#10B981]' : 'text-slate-400'
-          }`}
-        >
-          {label}
-        </span>
-      </div>
-
-      {/* Main Value Content */}
-      <div className="relative z-10">
-        <p
-          className={`text-xs sm:text-[13px] font-bold leading-snug tracking-tight ${
-            isHighlight ? 'text-white drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]' : 'text-slate-100'
-          }`}
-        >
-          {value}
-        </p>
-      </div>
-    </div>
-  );
-}

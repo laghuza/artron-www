@@ -102,7 +102,7 @@ export const KineticElevatorDock: React.FC = () => {
 
   const scrollToBottom = () => {
     playTactileFeedback();
-    const target = document.getElementById('booking-engine') || document.getElementById('saas-gateway-cta');
+    const target = document.getElementById('faq') || document.getElementById('partner-ecosystem');
     if (target) {
       window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
     }

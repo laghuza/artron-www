@@ -8,12 +8,13 @@ import {
 } from './mirrorDataMatrix';
 import { MirrorMasterDock } from './MirrorMasterDock';
 import { MirrorUnifiedStage } from './MirrorUnifiedStage';
+import { MirrorIcon } from './MirrorIcon';
 import { useTactileAudio } from './useTactileAudio';
 
 const MASTER_TABS: { id: MasterDimensionId; label: string; icon: string; shortLabel: string }[] = [
-  { id: 'venues', label: 'I. სპორტული სივრცეები', icon: '🏛️', shortLabel: 'I. სივრცეები' },
-  { id: 'workforce', label: 'II. ადამიანური კაპიტალი', icon: '👥', shortLabel: 'II. კაპიტალი' },
-  { id: 'mastery', label: 'III. ოსტატობა & ტიტულები', icon: '🏅', shortLabel: 'III. ოსტატობა' },
+  { id: 'venues', label: 'I. სპორტული სივრცეები', icon: 'landmark', shortLabel: 'I. სივრცეები' },
+  { id: 'workforce', label: 'II. ადამიანური კაპიტალი', icon: 'users', shortLabel: 'II. კაპიტალი' },
+  { id: 'mastery', label: 'III. ოსტატობა & ტიტულები', icon: 'trophy', shortLabel: 'III. ოსტატობა' },
 ];
 
 // ── Floating Ambient Particles (CSS/motion lightweight) ───────────────
@@ -132,7 +133,7 @@ export const MirrorUnifiedCockpit: React.FC = () => {
       {/* Top window reflection line */}
       <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#00E5FF]/60 to-transparent pointer-events-none z-10" />
 
-      {/* ── [●●●] SPORT-OS CONSOLE v3.2 TOP BAR ── */}
+      {/* ── [●●●] SPORT-OS CONSOLE v3.3 TOP BAR ── */}
       <div
         className="relative z-10 flex flex-row items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-3.5 border-b border-white/[0.08]"
         style={{ background: 'rgba(6, 9, 16, 0.9)', backdropFilter: 'blur(12px)' }}
@@ -152,7 +153,7 @@ export const MirrorUnifiedCockpit: React.FC = () => {
               className="hidden sm:inline text-[10px] font-mono px-2 py-0.5 rounded text-slate-400"
               style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
             >
-              v3.2 SYSTEMIC MIRROR
+              v3.3 SYSTEMIC MIRROR
             </span>
           </div>
         </div>
@@ -222,7 +223,12 @@ export const MirrorUnifiedCockpit: React.FC = () => {
                     }}
                   />
                 )}
-                <span className="relative z-10 text-lg sm:text-xl leading-none">{tab.icon}</span>
+                <MirrorIcon
+                  name={tab.icon}
+                  isActive={isActive}
+                  size={18}
+                  className="relative z-10"
+                />
                 <span className="relative z-10 tracking-tight">{tab.label}</span>
               </button>
             );
@@ -255,6 +261,7 @@ export const MirrorUnifiedCockpit: React.FC = () => {
               pills={activeDimension.subPills}
               activePillId={activePillId}
               dimensionId={activeDimensionId}
+              playTactileClick={playTactileClick}
             />
           </motion.div>
         </AnimatePresence>

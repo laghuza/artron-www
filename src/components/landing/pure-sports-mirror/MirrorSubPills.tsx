@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { SubPillItem } from './mirrorDataMatrix';
+import { MirrorIcon } from './MirrorIcon';
 
 interface MirrorSubPillsProps {
   pills: SubPillItem[];
@@ -39,7 +40,7 @@ export const MirrorSubPills: React.FC<MirrorSubPillsProps> = ({
                   : 'bg-[#0D121B]/70 border-white/10 text-slate-400 hover:text-slate-200 hover:border-white/20 hover:bg-[#121824]'
               }`}
             >
-              <span className="text-sm sm:text-base">{pill.icon}</span>
+              <MirrorIcon name={pill.icon} isActive={isActive} size={16} />
               <span className="tracking-tight">{pill.label}</span>
               {isActive && (
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF] ml-0.5" />

@@ -21,6 +21,7 @@
 18. **[i18n Localization & B2B SEO Strategist]** (`artron-seo-localization-specialist.md`) - პასუხისმგებელია სამენოვან ლოკალიზაციაზე (KA/EN/RU) და ორგანული B2B საძიებო სიტყვების ოპტიმიზაციაზე (SEO).
 19. **[Penetration Testing & Red-Team Auditor]** (`artron-security-penetration-tester.md`) - პასუხისმგებელია API-ების, ფორმებისა და ავტორიზაციის უსაფრთხოების ტესტირებაზე (Penetration Testing).
 20. **[BI & Data Visualization Analyst]** (`artron-bi-data-visualization-analyst.md`) - პასუხისმგებელია ანალიტიკური მონაცემების, დიაგრამების, SVG გრაფებისა და ROI მეტრიკების ვიზუალიზაციაზე.
+21. **[Cognitive UX & Behavioral Psychology Specialist]** (`artron-cognitive-psychology-agent.md`) - პასუხისმგებელია ლენდინგის, აპლიკაციისა და სამართავი პანელის ემოციურ აუდიტზე, ნეირომარკეტინგზე, ნდობის ფსიქოლოგიასა და კოგნიტური დატვირთვის მინიმიზაციაზე.
 
 
 ---
@@ -51,6 +52,7 @@
 - **[i18n Localization & B2B SEO Strategist]** ↔️ **[Frontend, Copywriter, Product Manager]**: უზრუნველყოფს 3-ენოვანი კონტენტის სისწორეს, თავსებადობას და საძიებო სიტყვების ოპტიმიზაციას. იყენებს `writing-guidelines` და `web-design-guidelines` უნარებს.
 - **[Penetration Testing & Red-Team Auditor]** ↔️ **[Backend, SecOps, IoT]**: ამოწმებს უსაფრთხოებას, SQLi/XSS მოწყვლადობებს, Socket კავშირებს და PII AES შიფრაციას.
 - **[BI & Data Visualization Analyst]** ↔️ **[Frontend, Sports Analytics, Product Manager]**: ქმნის საოპერაციო, ფინანსური და ტელემეტრიული მონაცემების SVG/Canvas ვიზუალიზაციებს.
+- **[Cognitive UX & Behavioral Psychology Specialist]** ↔️ **[Brand UI Designer, Copywriter, Growth & CRO]**: უზრუნველყოფს ემოციურ რეზონანსს, ნდობის ფსიქოლოგიურ ტრიგერებს და კოგნიტური დატვირთვის მინიმიზაციას.
 
 ---
 

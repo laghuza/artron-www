@@ -18,12 +18,16 @@ export interface PassportData {
   badge: string;
   scale: string;
   scaleLabel: string;
+  scaleDetail: string;
   disciplines: string;
   disciplinesLabel: string;
+  disciplinesDetail: string;
   keyArea: string;
   keyAreaLabel: string;
+  keyAreaDetail: string;
   highestStandard: string;
   highestStandardLabel: string;
+  highestStandardDetail: string;
 }
 
 export interface SubPillItem {

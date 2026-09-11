@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SubPillItem, HotspotItem } from './mirrorDataMatrix';
+import { MirrorIcon } from './MirrorIcon';
 
 interface MirrorMobileCardsProps {
   pills: SubPillItem[];
@@ -33,7 +34,7 @@ export const MirrorMobileCards: React.FC<MirrorMobileCardsProps> = ({
       <div className="w-full rounded-2xl bg-[#0D131F] border border-[#00A3FF]/30 p-5 shadow-[0_12px_36px_rgba(0,0,0,0.5)]">
         <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-white/10">
           <div className="flex items-center gap-2">
-            <span className="text-xl">{activePill.icon}</span>
+            <MirrorIcon name={activePill.icon} isActive size={20} />
             <span className="text-xs font-mono tracking-wider text-[#00E5FF] uppercase font-bold">
               {activePill.passport.badge}
             </span>

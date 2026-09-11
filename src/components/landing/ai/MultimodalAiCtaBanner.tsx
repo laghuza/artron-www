@@ -1,17 +1,9 @@
 "use client";
 
-import React from 'react';
+import Link from 'next/link';
 import { Calendar, MessageCircle, Check } from 'lucide-react';
 
 export const MultimodalAiCtaBanner: React.FC = () => {
-  const handleScrollToBooking = () => {
-    const el = document.getElementById('booking-engine');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.location.hash = '#booking-engine';
-    }
-  };
 
   return (
     <div className="relative p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-[#0C121E] via-[#0E1626] to-[#0A101C] border border-[#00A3FF]/30 shadow-[0_12px_40px_rgba(0,163,255,0.12)] overflow-hidden">
@@ -49,13 +41,13 @@ export const MultimodalAiCtaBanner: React.FC = () => {
 
         {/* CTA Buttons Cluster */}
         <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto shrink-0">
-          <button
-            onClick={handleScrollToBooking}
+          <Link
+            href="/get-started?mode=demo"
             className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#0066FF] to-[#00A3FF] hover:from-[#0052cc] hover:to-[#008fe0] text-white font-mono text-xs sm:text-sm font-bold tracking-wide shadow-[0_0_25px_rgba(0,163,255,0.45)] hover:shadow-[0_0_35px_rgba(0,163,255,0.6)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2"
           >
             <Calendar className="w-4 h-4" />
             <span>დაჯავშნეთ ონლაინ დემო</span>
-          </button>
+          </Link>
 
           <a
             href="https://wa.me/995599000000?text=%E1%83%92%E1%83%90%E1%83%9B%E1%83%90%E1%83%A0%E1%83%AF%E1%83%9D%E1%83%91%E1%83%90%2C%20%E1%83%9B%E1%83%A1%E1%83%A3%E1%83%A0%E1%83%A1%20Artron%20AI%20%E1%83%90%E1%83%A1%E1%83%98%E1%83%A1%E1%83%A2%E1%83%94%E1%83%9C%E1%83%A2%E1%83%98%E1%83%A1%20%E1%83%93%E1%83%94%E1%83%9B%E1%83%9D%20%E1%83%9E%E1%83%A0%E1%83%94%E1%83%96%E1%83%94%E1%83%9C%E1%83%A2%E1%83%90%E1%83%AA%E1%83%98%E1%83%90."

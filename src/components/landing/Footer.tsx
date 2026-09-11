@@ -6,6 +6,7 @@ import { Shield, Mail, MapPin, Landmark, Info, ShieldCheck, FileText, FileCode, 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CONTACT_CONFIG } from '@/config/contact';
+import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -27,7 +28,35 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[#070A0F] border-t border-white/10 text-[#94A3B8] relative z-10">
-      {/* Upper Footer: Branding & Grids */}
+      {/* Upper Footer: Official Mobile App Badges & Store Review Availability */}
+      <div className="border-b border-white/5 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col text-center lg:text-left space-y-1.5 max-w-xl">
+              <div className="inline-flex items-center gap-2 justify-center lg:justify-start">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff87] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ff87]"></span>
+                </span>
+                <span className="text-[11px] font-mono font-bold text-[#00ff87] tracking-wider uppercase">
+                  {t('store_status_pill')}
+                </span>
+              </div>
+              <h3 className="text-base md:text-lg font-bold text-white tracking-tight">
+                {t('store_b2c_desc')}
+              </h3>
+              <p className="text-xs md:text-sm text-[#94A3B8] leading-relaxed">
+                {t('store_review_info')}
+              </p>
+            </div>
+            <div className="shrink-0">
+              <AppStoreBadges align="center" showIndicator={false} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer: Branding & Grids */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {/* Column 1: Branding & Intro */}
