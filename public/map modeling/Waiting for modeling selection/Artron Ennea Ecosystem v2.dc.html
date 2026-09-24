@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Georgian:wght@400;500;600&display=swap" rel="stylesheet" />
+<script type="module" src="./ennea-sphere.js"></script>
+<script type="module" src="./ennea-audio.js"></script>
+<style>
+  body { margin: 0; background: #0A0D12; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+  a { color: #7FD4FF; text-decoration: none; }
+  a:hover { color: #C9E9FF; }
+  @keyframes blip { 0%,100% { opacity: 1; } 50% { opacity: 0.28; } }
+  @keyframes badgeIn { from { opacity: 0; transform: translate(-6px, 6px); } to { opacity: 1; transform: translate(0,0); } }
+  @keyframes panelIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .ennea-scroll::-webkit-scrollbar { width: 6px; }
+  .ennea-scroll::-webkit-scrollbar-thumb { background: rgba(127,212,255,0.22); }
+  .ennea-scroll::-webkit-scrollbar-track { background: transparent; }
+</style>
+</helmet>
+
+<section data-screen-label="Ennea Ecosystem" style="display:flex;flex-wrap:nowrap;align-items:stretch;height:100vh;background:#0A0D12;color:#EAF4FF;font-family:'Space Grotesk',system-ui,sans-serif;position:relative;overflow:hidden">
+
+  <sc-if value="{{ collapsed }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:0 0 auto;width:56px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 0;background:#0D1117;border-right:1px solid rgba(255,255,255,0.07);z-index:10">
+      <span style="width:7px;height:7px;border-radius:50%;background:#7FD4FF;box-shadow:0 0 12px 2px rgba(127,212,255,0.85);animation:blip 2.2s ease-in-out infinite"></span>
+      <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.3em;color:{{ railColor }};text-transform:uppercase;writing-mode:vertical-rl;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:60%">{{ railLabel }}</span>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+        <sc-if value="{{ canStepBack }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ stepBack }}" aria-label="{{ backAria }}" title="{{ backAria }}" style="appearance:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(127,212,255,0.14);border:1px solid rgba(127,212,255,0.45);cursor:pointer;color:#EAF4FF;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1;transition:background .18s" style-hover="background:rgba(127,212,255,0.26)">&#8592;</button>
+        </sc-if>
+        <button type="button" onClick="{{ toggleCollapse }}" aria-label="Expand panel" style="appearance:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);cursor:pointer;color:#8AA3B2;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1;transition:color .18s,border-color .18s" style-hover="color:#EAF4FF;border-color:rgba(127,212,255,0.45)">&#187;</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ expanded }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:0 1 37%;min-width:330px;max-width:470px;box-sizing:border-box;display:flex;flex-direction:column;background:#0D1117;border-right:1px solid rgba(255,255,255,0.07);z-index:10;overflow:hidden">
+
+      <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:12px;padding:18px 24px 14px;border-bottom:1px solid rgba(255,255,255,0.07)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <span style="flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:#7FD4FF;box-shadow:0 0 12px 2px rgba(127,212,255,0.85);animation:blip 2.2s ease-in-out infinite"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#6E8DA0;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Ennea Core // Ecosystem</span>
+          </div>
+          <button type="button" onClick="{{ toggleCollapse }}" aria-label="Collapse panel" style="appearance:none;flex:0 0 auto;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid rgba(255,255,255,0.1);cursor:pointer;color:#6E8DA0;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1;transition:color .18s,border-color .18s" style-hover="color:#EAF4FF;border-color:rgba(127,212,255,0.45)">&#171;</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{ crumbs }}" as="c" hint-placeholder-count="1">
+            <div style="display:flex;align-items:center;gap:6px">
+              <button type="button" onClick="{{ c.go }}" style="appearance:none;background:transparent;border:0;padding:2px 0;cursor:{{ c.cursor }};font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;color:{{ c.color }};transition:color .18s" style-hover="color:#EAF4FF">{{ c.label }}</button>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#3A5464;opacity:{{ c.sep }}">&#9656;</span>
+            </div>
+          </sc-for>
+        </div>
+
+      </div>
+
+      <div style="position:relative;flex:1 1 auto;min-height:190px;display:flex">
+        <div class="ennea-scroll" style="flex:1 1 auto;min-width:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column">
+
+          <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:14px;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.07)">
+            <h1 style="margin:0;font-size:clamp(21px,3.1vh,33px);line-height:1.08;font-weight:600;letter-spacing:-0.03em;color:#F4FAFF;white-space:pre-line;font-family:'Noto Sans Georgian','Space Grotesk',sans-serif">{{ title }}</h1>
+            <sc-if value="{{ showLead }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0;max-width:44ch;font-family:'Noto Sans Georgian','Space Grotesk',sans-serif;font-size:13.5px;line-height:1.65;color:#8AA3B2;text-wrap:pretty">{{ lead }}</p>
+            </sc-if>
+            <button type="button" onClick="{{ ctaAct }}" style="appearance:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;text-align:left;cursor:pointer;background:{{ ctaBg }};border:1px solid {{ ctaBorder }};transition:background .2s,border-color .2s" style-hover="border-color:rgba(127,212,255,0.6)">
+              <span style="flex:1;min-width:0;font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:0.14em;line-height:1.4;color:#EAF4FF">{{ ctaLabel }}</span>
+              <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7FD4FF">{{ ctaGlyph }}</span>
+            </button>
+          </div>
+
+          <sc-if value="{{ scopeVisible }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:9px;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.07)">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.24em;color:#4A6A7C;text-transform:uppercase">{{ scopeLabel }}</span>
+              <div style="display:flex;gap:2px;padding:2px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07)">
+                <sc-for list="{{ scopes }}" as="s" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ s.pick }}" style="appearance:none;flex:1 1 0;min-width:0;min-height:34px;padding:0 10px;border:0;cursor:pointer;font-family:'Noto Sans Georgian','Space Grotesk',sans-serif;font-size:11.5px;font-weight:500;letter-spacing:0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:{{ s.bg }};color:{{ s.fg }};transition:background .2s,color .2s" style-hover="background:{{ s.hover }}">{{ s.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showCores }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ cores }}" as="c" hint-placeholder-count="9">
+                <button type="button" onClick="{{ c.pick }}" style="position:relative;appearance:none;background:{{ c.bg }};border:0;border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 24px;display:flex;align-items:center;gap:14px;text-align:left;cursor:{{ c.cursor }};opacity:{{ c.mute }};transition:opacity .25s,background .18s" style-hover="background:{{ c.hover }}">
+                  <span style="position:absolute;left:0;top:0;bottom:0;width:2px;background:{{ c.accent }};box-shadow:0 0 12px {{ c.accent }};opacity:{{ c.on }};transition:opacity .22s"></span>
+                  <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:{{ c.codeColor }};min-width:40px">{{ c.code }}</span>
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                    <span style="font-size:13.5px;font-weight:500;letter-spacing:-0.005em;color:{{ c.nameColor }};line-height:1.25">{{ c.name }}</span>
+                    <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.05em;color:{{ c.metaColor }};line-height:1.35">{{ c.meta }}</span>
+                  </span>
+                  <span style="flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:{{ c.accent }};opacity:{{ c.dotOpacity }}"></span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showVenues }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ venues }}" as="v" hint-placeholder-count="5">
+                <button type="button" onClick="{{ v.pick }}" style="position:relative;appearance:none;background:{{ v.bg }};border:0;border-bottom:1px solid rgba(255,255,255,0.06);padding:13px 24px;display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;transition:background .18s" style-hover="background:{{ v.hover }}">
+                  <span style="position:absolute;left:0;top:0;bottom:0;width:2px;background:{{ v.accent }};opacity:{{ v.on }};transition:opacity .22s"></span>
+                  <span style="flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:{{ v.accent }};box-shadow:0 0 10px 1px {{ v.accent }}"></span>
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                    <span style="font-family:'Noto Sans Georgian','Space Grotesk',sans-serif;font-size:13.5px;font-weight:500;color:{{ v.nameColor }};line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ v.name }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.05em;color:{{ v.metaColor }};line-height:1.35">{{ v.meta }}</span>
+                  </span>
+                  <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;color:{{ v.metaColor }}">{{ v.members }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:18px;padding:22px 24px;animation:panelIn .28s ease both">
+              <div style="display:flex;align-items:center;gap:9px;min-height:36px;padding:0 12px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25)">
+                <span style="flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 10px 2px rgba(34,197,94,0.7);animation:blip 1.8s ease-in-out infinite"></span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.13em;color:#B9F3CE">{{ venueStatus }}</span>
+              </div>
+
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08)">
+                <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:#5F8296;text-transform:uppercase">{{ capacityLabel }}</span>
+                <span style="font-size:26px;font-weight:600;letter-spacing:-0.025em;color:#F4FAFF">{{ venueMembers }}</span>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:#5F8296;text-transform:uppercase">{{ techLabel }}</span>
+                <span style="display:flex;align-items:flex-start;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.5;color:#CFE6F2">
+                  <span style="flex:0 0 auto;margin-top:5px;width:4px;height:4px;border-radius:50%;background:#7FD4FF"></span>{{ venueTurnstile }}
+                </span>
+                <span style="display:flex;align-items:flex-start;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.5;color:#CFE6F2">
+                  <span style="flex:0 0 auto;margin-top:5px;width:4px;height:4px;border-radius:50%;background:#FF9900"></span>{{ venueGateway }}
+                </span>
+              </div>
+
+              <button type="button" onClick="{{ closeVenue }}" style="appearance:none;display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;cursor:pointer;background:transparent;border:1px solid rgba(255,255,255,0.1);color:#8AA3B2;font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;transition:color .18s,border-color .18s" style-hover="color:#EAF4FF;border-color:rgba(127,212,255,0.45)">{{ backToListLabel }}</button>
+            </div>
+          </sc-if>
+
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(180deg, rgba(13,17,23,0), #0D1117);pointer-events:none"></div>
+      </div>
+
+      <sc-if value="{{ showStats }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:0 0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:18px 24px;border-top:1px solid rgba(255,255,255,0.07)">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+              <span style="font-size:clamp(17px,1.65vw,24px);font-weight:600;letter-spacing:-0.025em;color:#F4FAFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.v }}</span>
+              <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.12em;color:#6E8DA0;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.k }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <div style="flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:11px 24px;background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.07)">
+        <span style="flex:0 0 auto;width:4px;height:4px;border-radius:50%;background:{{ readoutDot }}"></span>
+        <span style="flex:1;min-width:0;font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:9.5px;line-height:1.4;letter-spacing:0.14em;color:#5F8296;text-transform:uppercase;text-wrap:pretty">{{ readout }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="flex:1 1 0;min-width:260px;box-sizing:border-box;position:relative;display:flex">
+    <div style="position:absolute;inset:0;background:radial-gradient(62% 58% at 52% 46%, rgba(127,212,255,0.09), rgba(10,13,18,0) 72%);pointer-events:none;z-index:1"></div>
+
+    <x-import component-from-global-scope="ennea-sphere" accent="{{ accent }}" autorotate="{{ rotate }}" depthfade="{{ depthFade }}" hint-size="100%,100%" style="position:absolute;inset:0;width:100%;height:100%">
+      <div style="position:absolute;left:var(--bx,50%);top:var(--by,50%);width:0;height:0;opacity:var(--bvis,0);transition:opacity .3s;z-index:6;pointer-events:none">
+        <div style="position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#F4FAFF;box-shadow:0 0 14px 3px rgba(127,212,255,0.9)"></div>
+        <div style="position:absolute;left:0;top:0;width:104px;height:1px;background:linear-gradient(90deg, rgba(127,212,255,0.85), rgba(127,212,255,0.35));transform-origin:left center;transform:rotate(var(--brot,-45deg))"></div>
+        <div style="position:absolute;left:var(--blx,74px);top:var(--bty,-74px);transform:translate(var(--bsx,0%),var(--bsy,-100%));padding:9px 0;animation:badgeIn .4s ease both">
+          <div style="display:flex;flex-direction:column;gap:5px;white-space:nowrap;padding:9px 13px;background:rgba(13,17,23,0.82);border:1px solid {{ badgeBorder }};box-shadow:0 16px 40px rgba(0,0,0,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:0.16em;color:#EAF4FF">GEORGIA // ACTIVE CORE</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.13em;color:#7FA6BA">{{ badgeSub }}</span>
+          </div>
+        </div>
+        <button type="button" onClick="{{ selectBeacon }}" aria-label="Select Georgia core" style="position:absolute;left:-25px;top:-25px;width:50px;height:50px;appearance:none;background:transparent;border:0;cursor:pointer;pointer-events:auto"></button>
+      </div>
+    </x-import>
+
+    <div style="position:absolute;top:20px;right:20px;z-index:8;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+        <sc-for list="{{ tools }}" as="t" hint-placeholder-count="4">
+          <button type="button" onClick="{{ t.act }}" aria-label="{{ t.aria }}" style="appearance:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:{{ t.bg }};border:0;cursor:pointer;color:{{ t.fg }};font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1;transition:background .18s,color .18s" style-hover="background:rgba(127,212,255,0.14);color:#F4FAFF">{{ t.glyph }}</button>
+        </sc-for>
+      </div>
+      <span style="display:flex;align-items:center;gap:5px;padding:4px 7px;background:rgba(13,17,23,0.7);border:1px solid rgba(255,255,255,0.07);font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;color:{{ sndFg }};white-space:nowrap">
+        <span style="width:4px;height:4px;border-radius:50%;background:{{ sndDot }}"></span>{{ sndLabel }}
+      </span>
+    </div>
+  </div>
+
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;locale&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Georgian&quot;,&quot;English&quot;],&quot;default&quot;:&quot;Georgian&quot;,&quot;tsType&quot;:&quot;'Georgian' | 'English'&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#7FD4FF&quot;,&quot;options&quot;:[&quot;#7FD4FF&quot;,&quot;#C9D8E0&quot;,&quot;#8FE3C6&quot;,&quot;#B79BFF&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;autoRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showStats&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;depthFade&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.15,&quot;min&quot;:0.1,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe&quot;}}">
+const CORES = [
+  { code: 'EC-01', name: 'Ingress & Turnstile Core', meta: '5 Venues', g: 'V' },
+  { code: 'EC-02', name: 'Biometric & IoT Grid', meta: 'ZKTeco Active', g: 'F' },
+  { code: 'EC-03', name: 'Member Telemetry', meta: '20,000+ Athletes', g: 'V' },
+  { code: 'EC-04', name: 'FinTech Settlement Ledger', meta: 'Bank of Georgia 1-Click', g: 'F' },
+  { code: 'EC-05', name: 'Attendance Compliance', meta: 'ბრძანება № 01-15/ნ', g: 'V' },
+  { code: 'EC-06', name: 'Dynamic QR Vault', meta: 'Sub-0.2s Access', g: 'F' },
+  { code: 'EC-07', name: 'Offline Relay Autonomy', meta: '100% Uptime', g: 'F' },
+  { code: 'EC-08', name: 'Venue Capacity Analytics', meta: 'Real-time Flow', g: 'V' },
+  { code: 'EC-09', name: 'Federation Integration Mesh', meta: 'Federations & Academies', g: 'F' },
+];
+
+const CYAN = '#7FD4FF';
+const AMBER = '#FF9900';
+
+const KA = {
+  titleGlobe: 'ცხრა ბირთვი.\nერთი სპორტული ქსელი.',
+  titleGeo: 'საქართველოს ქსელი',
+  leadGlobe: 'საქართველოს წამყვანი სპორტული ინფრასტრუქტურის ცენტრალიზებული ბირთვი.',
+  leadGeo: 'აირჩიე ჰაბი ან ობიექტი — რუკაზე ან სიიდან.',
+  leadHub: 'ჰაბის ობიექტები ერთ პროტოკოლზე.',
+  scopeCores: 'ბირთვების ფილტრი',
+  scopeHubs: 'ჰაბი',
+  filters: ['ყველა', 'დარბაზები', 'ფინტეხი & IoT'],
+  allHubs: 'ყველა ჰაბი',
+  crumbWorld: 'მსოფლიო',
+  crumbGeo: 'საქართველო',
+  ctaEnter: 'საქართველოს ქსელი',
+  ctaExit: 'დაბრუნება მსოფლიოზე',
+  ctaVenue: 'ობიექტების სია',
+  backToList: '← ობიექტების სიაში',
+  capacity: 'წევრთა ტევადობა',
+  tech: 'ინტეგრირებული ტექნოლოგია',
+  kAthletes: 'ათლეტი',
+  kVenues: 'დარბაზი',
+  kCores: 'ბირთვი',
+  kAccess: 'დაშვება',
+  kAutonomy: 'ავტონომია',
+  kHubs: 'ჰაბი',
+  kMembers: 'წევრი',
+  kLayer: 'შრე',
+  kStatus: 'სტატუსი',
+  layerV: 'დარბაზები',
+  layerF: 'ფინტეხი / IoT',
+  hintGlobe: 'გადაათრიე ორბიტისთვის · სკროლი მასშტაბისთვის',
+  hintIsolated: 'იზოლირებული',
+  hintPins: 'ცოცხალი ობიექტები · 5 · დააჭირე პინს',
+  hintLoading: 'ADM1 ვექტორების დამუშავება…',
+  hintError: 'ADM1 ვექტორული წყარო მიუწვდომელია',
+  live: 'ცოცხალი',
+};
+
+const EN = {
+  titleGlobe: 'Nine Cores.\nOne Sports Mesh.',
+  titleGeo: 'Georgia Mesh',
+  leadGlobe: 'The centralized nucleus of Georgia\u2019s leading sports infrastructure.',
+  leadGeo: 'Pick a hub or a venue — on the map or in the list.',
+  leadHub: 'Hub venues on one protocol.',
+  scopeCores: 'Core filter',
+  scopeHubs: 'Hub',
+  filters: ['All', 'Venues', 'FinTech & IoT'],
+  allHubs: 'All hubs',
+  crumbWorld: 'World',
+  crumbGeo: 'Georgia',
+  ctaEnter: 'EXPLORE GEORGIA',
+  ctaExit: 'BACK TO GLOBE',
+  ctaVenue: 'VENUE LIST',
+  backToList: '← Back to venues',
+  capacity: 'Member capacity',
+  tech: 'Integrated tech',
+  kAthletes: 'Athletes',
+  kVenues: 'Venues',
+  kCores: 'Cores',
+  kAccess: 'Access',
+  kAutonomy: 'Autonomy',
+  kHubs: 'Hubs',
+  kMembers: 'Members',
+  kLayer: 'Layer',
+  kStatus: 'Status',
+  layerV: 'Venue layer',
+  layerF: 'FinTech / IoT',
+  hintGlobe: 'drag to orbit · scroll to zoom',
+  hintIsolated: 'isolated',
+  hintPins: 'live venues · 5 · click a pin',
+  hintLoading: 'resolving ADM1 vectors…',
+  hintError: 'ADM1 vector source unreachable',
+  live: 'live',
+};
+
+const sumMembers = (list) => {
+  const n = list.reduce((a, v) => a + (parseInt(String(v.members || '').replace(/[^0-9]/g, ''), 10) || 0), 0);
+  return n.toLocaleString('en-US') + '+';
+};
+
+class Component extends DCLogic {
+  state = { core: -1, filter: 0, selected: true, visible: true, mode: 'GLOBE', venue: null, region: null, mapStatus: 'LOADING', sound: false, collapsed: false, stageReady: false, vh: typeof window !== 'undefined' ? window.innerHeight : 900 };
+
+  audio() { return window.ArtronAudio || null; }
+  snd(cue) { const a = this.audio(); if (a) a.play(cue); }
+  stage() { return document.querySelector('ennea-sphere'); }
+  call(fn, arg) { const s = this.stage(); if (s && s[fn]) s[fn](arg); }
+
+  componentDidMount() {
+    this._onVis = (e) => this.setState({ visible: !!(e.detail && e.detail.visible) });
+    this._onMode = (e) => this.setState({ mode: (e.detail && e.detail.mode) || 'GLOBE' });
+    // the stage sets its own _region when a venue is picked but only emits
+    // venueselect — mirror the hub here so crumbs/scopes/stepBack share one truth
+    this._onVenue = (e) => {
+      const v = (e.detail && e.detail.venue) || null;
+      this.setState((s) => ({ venue: v, region: v ? v.hub : s.region }));
+    };
+    this._onResize = () => this.setState({ vh: window.innerHeight });
+    this._onRegion = (e) => this.setState({ region: (e.detail && e.detail.id) || null });
+    this._onMap = (e) => this.setState({ mapStatus: (e.detail && e.detail.status) || 'LOADING' });
+    window.addEventListener('beaconvisibility', this._onVis);
+    window.addEventListener('viewmode', this._onMode);
+    window.addEventListener('venueselect', this._onVenue);
+    window.addEventListener('regionselect', this._onRegion);
+    window.addEventListener('mapstatus', this._onMap);
+    this._onKey = (e) => { if (e.key === 'Escape') this.stepBack(); };
+    window.addEventListener('keydown', this._onKey);
+    this._onSound = (e) => this.setState({ sound: !!(e.detail && e.detail.on) });
+    window.addEventListener('artron-sound', this._onSound);
+    window.addEventListener('resize', this._onResize);
+    this._poll = setInterval(() => {
+      const s = this.stage();
+      const a = this.audio();
+      if (s && s.venues && !this.state.stageReady) this.setState({ stageReady: true });
+      if (a && a.enabled !== this.state.sound) this.setState({ sound: a.enabled });
+      if (s && s.venues && a) clearInterval(this._poll);
+    }, 300);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beaconvisibility', this._onVis);
+    window.removeEventListener('viewmode', this._onMode);
+    window.removeEventListener('venueselect', this._onVenue);
+    window.removeEventListener('regionselect', this._onRegion);
+    window.removeEventListener('mapstatus', this._onMap);
+    window.removeEventListener('keydown', this._onKey);
+    window.removeEventListener('artron-sound', this._onSound);
+    window.removeEventListener('resize', this._onResize);
+    clearInterval(this._poll);
+  }
+
+  // one shared "one level up" action: venue → hub → georgia → globe.
+  // wired to Escape, the panel breadcrumb, the collapsed rail and the globe toolbar
+  // so the exit is never trapped inside the panel.
+  stepBack() {
+    const { venue, region, mode } = this.state;
+    this.snd('close');
+    if (venue) { this.call('selectVenue', null); return; }
+    if (region) { this.call('selectRegion', null); return; }
+    if (mode === 'GEORGIA_DETAIL') { this.call('exitToGlobe'); return; }
+    this.call('resetView');
+  }
+
+  allVenues() { const s = this.stage(); return (s && s.venues) || []; }
+  allHubs() { const s = this.stage(); return (s && s.hubs) || []; }
+
+  renderVals() {
+    const L = (this.props.locale ?? 'Georgian') === 'English' ? EN : KA;
+    const accent = this.props.accent ?? CYAN;
+    const { core, filter, selected, mode, venue, region, mapStatus, sound, collapsed } = this.state;
+    const detail = mode === 'GEORGIA_DETAIL';
+    const allow = filter === 0 ? null : (filter === 1 ? 'V' : 'F');
+    const active = core >= 0 ? CORES[core] : null;
+    const hubs = this.allHubs();
+    const venuesAll = this.allVenues();
+    const scoped = region ? venuesAll.filter((v) => v.hub === region) : venuesAll;
+    const hub = region ? hubs.find((h) => h.id === region) : null;
+
+    let title = L.titleGlobe;
+    let lead = L.leadGlobe;
+    if (venue) { title = venue.name; lead = venue.category + ' · ' + venue.city; }
+    else if (detail && hub) { title = hub.name; lead = L.leadHub; }
+    else if (detail) { title = L.titleGeo; lead = L.leadGeo; }
+
+    let stats;
+    if (venue) {
+      stats = [
+        { v: venue.members, k: L.kMembers },
+        { v: '0.18s', k: L.kAccess },
+        { v: L.live, k: L.kStatus },
+      ];
+    } else if (detail) {
+      stats = [
+        { v: String(region ? 1 : hubs.length || 2), k: L.kHubs },
+        { v: String(scoped.length || 5), k: L.kVenues },
+        { v: scoped.length ? sumMembers(scoped) : '18,200+', k: L.kMembers },
+      ];
+    } else if (active) {
+      stats = [
+        { v: active.code, k: L.kCores },
+        { v: active.g === 'V' ? L.layerV : L.layerF, k: L.kLayer },
+        { v: '100%', k: L.kAutonomy },
+      ];
+    } else {
+      stats = [
+        { v: '20,000+', k: L.kAthletes },
+        { v: '5+', k: L.kVenues },
+        { v: '9', k: L.kCores },
+      ];
+    }
+
+    const scopes = detail && !venue
+      ? [{ id: null, label: L.allHubs }].concat(hubs.map((h) => ({ id: h.id, label: h.name.replace(' Hub', '') })))
+          .map((o) => ({
+            label: o.label,
+            bg: region === o.id ? '#EAF4FF' : 'transparent',
+            fg: region === o.id ? '#0A0D12' : '#8AA3B2',
+            hover: region === o.id ? '#EAF4FF' : 'rgba(127,212,255,0.08)',
+            pick: () => { this.snd('filter'); this.call('selectVenue', null); this.call('selectRegion', o.id); },
+          }))
+      : L.filters.map((label, i) => ({
+          label,
+          bg: i === filter ? '#EAF4FF' : 'transparent',
+          fg: i === filter ? '#0A0D12' : '#8AA3B2',
+          hover: i === filter ? '#EAF4FF' : 'rgba(127,212,255,0.08)',
+          pick: () => { if (i !== filter) this.snd('filter'); this.setState({ filter: i, core: -1 }); this.call('setActiveCore', -1); },
+        }));
+
+    const crumbs = [
+      { key: 'w', label: L.crumbWorld, last: !detail && !venue, go: () => { this.snd('tick'); this.call('exitToGlobe'); this.call('resetView'); } },
+    ];
+    if (detail || venue) crumbs.push({ key: 'g', label: L.crumbGeo, last: !hub, go: () => { this.snd('tick'); this.call('selectVenue', null); this.call('selectRegion', null); this.call('enterGeorgia'); } });
+    if (hub) crumbs.push({ key: 'h', label: hub.name.replace(' Hub', ''), last: !venue, go: () => { this.snd('tick'); this.call('selectVenue', null); this.call('selectRegion', hub.id); } });
+    if (venue) crumbs.push({ key: 'v', label: venue.name, last: true, go: () => {} });
+
+    return {
+      accent,
+      rotate: (this.props.autoRotate ?? true) ? 'on' : 'off',
+      depthFade: String(this.props.depthFade ?? 0.15),
+      showStats: this.props.showStats ?? true,
+      collapsed,
+      expanded: !collapsed,
+      toggleCollapse: () => { this.snd('tick'); this.setState({ collapsed: !collapsed }); },
+
+      title,
+      lead,
+      // short viewports: drop the lead so the list is above the fold
+      showLead: (this.state.vh || 900) >= 700,
+      crumbs: crumbs.map((c, i) => ({
+        label: c.last ? '[ ' + c.label + ' ]' : c.label,
+        color: c.last ? '#EAF4FF' : '#5F8296',
+        cursor: c.last ? 'default' : 'pointer',
+        sep: i === crumbs.length - 1 ? 0 : 1,
+        go: c.last ? (() => {}) : c.go,
+      })),
+
+      ctaLabel: venue ? L.ctaVenue : (detail ? L.ctaExit : L.ctaEnter),
+      ctaGlyph: venue ? '←' : (detail ? '◎' : '→'),
+      ctaBg: detail || venue ? 'rgba(255,255,255,0.03)' : 'rgba(127,212,255,0.07)',
+      ctaBorder: detail || venue ? 'rgba(255,255,255,0.1)' : 'rgba(127,212,255,0.4)',
+      ctaAct: () => {
+        if (venue) { this.snd('close'); this.call('selectVenue', null); }
+        else if (detail) { this.snd('close'); this.call('exitToGlobe'); }
+        else { this.snd('select'); this.call('enterGeorgia'); }
+      },
+
+      scopeVisible: !venue,
+      scopeLabel: detail ? L.scopeHubs : L.scopeCores,
+      scopes,
+
+      showCores: !detail && !venue,
+      showVenues: detail && !venue,
+      showDetail: !!venue,
+
+      cores: CORES.map((c, i) => {
+        const dim = allow && c.g !== allow;
+        const on = i === core;
+        const ac = c.g === 'V' ? CYAN : AMBER;
+        return {
+          code: c.code,
+          name: c.name,
+          meta: c.meta,
+          accent: ac,
+          mute: dim ? 0.24 : 1,
+          cursor: dim ? 'default' : 'pointer',
+          on: on ? 1 : 0,
+          dotOpacity: on ? 0 : 0.45,
+          bg: on ? '#EAF4FF' : 'transparent',
+          hover: on ? '#EAF4FF' : 'rgba(127,212,255,0.05)',
+          nameColor: on ? '#0A0D12' : '#E6F3FB',
+          metaColor: on ? '#33505F' : '#5F8296',
+          codeColor: on ? '#33505F' : '#5B7C8E',
+          pick: () => {
+            if (dim) return;
+            const next = core === i ? -1 : i;
+            this.snd(next >= 0 ? 'select' : 'deselect');
+            this.setState({ core: next });
+            this.call('setActiveCore', next);
+          },
+        };
+      }),
+
+      venues: scoped.map((v) => {
+        const on = !!(venue && venue.id === v.id);
+        return {
+          name: v.name,
+          meta: v.category + ' · ' + v.city,
+          members: v.members,
+          accent: v.accent,
+          on: on ? 1 : 0,
+          bg: on ? 'rgba(127,212,255,0.1)' : 'transparent',
+          hover: on ? 'rgba(127,212,255,0.14)' : 'rgba(255,255,255,0.04)',
+          nameColor: '#E6F3FB',
+          metaColor: '#5F8296',
+          pick: () => { this.snd(on ? 'deselect' : 'select'); this.call('selectVenue', on ? null : v.id); },
+        };
+      }),
+
+      venueStatus: venue ? venue.status : '',
+      venueMembers: venue ? venue.members : '',
+      venueTurnstile: venue ? venue.turnstile : '',
+      venueGateway: venue ? venue.gateway : '',
+      capacityLabel: L.capacity,
+      techLabel: L.tech,
+      backToListLabel: L.backToList,
+      closeVenue: () => { this.snd('close'); this.call('selectVenue', null); },
+
+      stats,
+
+      readoutDot: detail ? (mapStatus === 'READY' ? '#22C55E' : (mapStatus === 'ERROR' ? '#FF4D4D' : '#FF9900')) : '#7FD4FF',
+      readout: venue
+        ? venue.category + ' · ' + venue.city + ' · ' + venue.members
+        : (detail
+          ? (mapStatus === 'READY' ? L.hintPins : (mapStatus === 'ERROR' ? L.hintError : L.hintLoading))
+          : (active ? active.code + ' · ' + L.hintIsolated : L.hintGlobe)),
+
+      railLabel: venue ? venue.name : (hub ? hub.name.replace(' Hub', '') : (detail ? L.crumbGeo : 'Ennea Core')),
+      railColor: detail || venue ? '#EAF4FF' : '#5F8296',
+      canStepBack: !!(detail || venue),
+      backAria: venue ? L.ctaVenue : (hub ? L.crumbGeo : L.ctaExit),
+      stepBack: () => this.stepBack(),
+
+      tools: (detail || venue ? [{
+        glyph: '←',
+        aria: venue ? L.ctaVenue : (hub ? L.crumbGeo : L.ctaExit),
+        bg: 'rgba(127,212,255,0.16)',
+        fg: '#EAF4FF',
+        act: () => this.stepBack(),
+      }] : []).concat([
+        { glyph: '+', aria: 'Zoom in', bg: 'rgba(13,17,23,0.78)', fg: '#A9C6D6', act: () => { this.snd('tick'); this.call('zoomIn'); } },
+        { glyph: '−', aria: 'Zoom out', bg: 'rgba(13,17,23,0.78)', fg: '#A9C6D6', act: () => { this.snd('tick'); this.call('zoomOut'); } },
+        { glyph: '◎', aria: 'Reset view', bg: 'rgba(13,17,23,0.78)', fg: '#A9C6D6', act: () => { this.snd('close'); this.call('resetView'); } },
+        {
+          glyph: sound ? '◂))' : '◂',
+          aria: 'Toggle sound',
+          bg: sound ? 'rgba(127,212,255,0.16)' : 'rgba(13,17,23,0.78)',
+          fg: sound ? '#F4FAFF' : '#6E8DA0',
+          act: () => { const a = this.audio(); if (!a) return; const on = a.toggle(); if (!on) this.snd('close'); this.setState({ sound: on }); },
+        },
+      ]),
+      sndFg: sound ? '#F4FAFF' : '#6E8DA0',
+      sndDot: sound ? CYAN : '#3A5464',
+      sndLabel: sound ? 'SOUND ON' : 'SOUND OFF',
+
+      badgeBorder: selected ? 'rgba(127,212,255,0.55)' : 'rgba(255,255,255,0.1)',
+      badgeSub: active ? active.code + ' · ' + active.meta : '41.7°N / 44.8°E · 9 CORES LIVE',
+      selectBeacon: () => { const n = !selected; this.snd(n ? 'select' : 'deselect'); this.setState({ selected: n }); this.call('setSelected', n); },
+    };
+  }
+}
+
+</script>
+</body>
+</html>

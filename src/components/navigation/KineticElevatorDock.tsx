@@ -66,8 +66,9 @@ export const KineticElevatorDock: React.FC = () => {
     setScrollProgress(progress);
 
     const firstSection = document.getElementById(SECTION_NODES[0].id);
+    const firstSectionTop = firstSection ? firstSection.getBoundingClientRect().top + scrollY : 0;
     const triggerOffset = firstSection
-      ? Math.max(firstSection.offsetTop - 320, 250)
+      ? Math.max(firstSectionTop - 320, 250)
       : 350;
     setIsVisible(scrollY >= triggerOffset);
 
@@ -75,12 +76,21 @@ export const KineticElevatorDock: React.FC = () => {
     if (scrollDebounceTimer.current) clearTimeout(scrollDebounceTimer.current);
     scrollDebounceTimer.current = setTimeout(() => setIsScrolling(false), 450);
 
-    const scrollPos = scrollY + 280;
+    const scrollBottom = scrollY + window.innerHeight;
+    if (docHeight > 0 && scrollBottom >= document.documentElement.scrollHeight - 60) {
+      setActiveNodeIndex(SECTION_NODES.length - 1);
+      return;
+    }
+
+    const scrollPos = scrollY + (typeof window !== 'undefined' ? window.innerHeight * 0.42 : 280);
     for (let i = SECTION_NODES.length - 1; i >= 0; i--) {
       const el = document.getElementById(SECTION_NODES[i].id);
-      if (el && scrollPos >= el.offsetTop) {
-        setActiveNodeIndex(i);
-        return;
+      if (el) {
+        const top = el.getBoundingClientRect().top + scrollY;
+        if (scrollPos >= top) {
+          setActiveNodeIndex(i);
+          return;
+        }
       }
     }
     setActiveNodeIndex(0);
@@ -311,7 +321,7 @@ export const KineticElevatorDock: React.FC = () => {
         </button>
 
         <span className="font-mono text-xs font-bold text-[#00E5FF] px-2 py-1 rounded-lg bg-[#00E5FF]/15 border border-[#00E5FF]/30">
-          {SECTION_NODES[activeNodeIndex]?.index || '01'}/05
+          {SECTION_NODES[activeNodeIndex]?.index || '01'}/{String(SECTION_NODES.length).padStart(2, '0')}
         </span>
 
         <button

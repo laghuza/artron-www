@@ -14,6 +14,9 @@ export interface GymClient {
   descRu: string;
   brandColor: string;
   badge: React.ReactNode;
+  regionName?: string;
+  regionCity?: string;
+  logoSrc?: string;
 }
 
 export interface Partner {
@@ -47,6 +50,8 @@ export const gymClients: GymClient[] = [
     descEn: 'Fully automated turnstile access, dynamic QR pass, and unified central CRM control panel.',
     descRu: 'Полная автоматизация турникетов, динамические QR-пропуска и единая CRM панель.',
     brandColor: '#CCFF00',
+    regionName: 'იმერეთი',
+    regionCity: 'ქუთაისი',
     badge: React.createElement(
       'div',
       { className: "w-12 h-12 rounded-full bg-black border-2 border-white/20 flex flex-col items-center justify-center relative overflow-hidden shadow-lg shrink-0" },
@@ -66,6 +71,8 @@ export const gymClients: GymClient[] = [
     descEn: 'Trainer management, labor time-tracking under Order №01-15/N, and member attendance telemetry.',
     descRu: 'Управление тренерами, учет рабочего времени по Приказу №01-15/н и телеметрия визитов.',
     brandColor: '#00D2FF',
+    regionName: 'იმერეთი',
+    regionCity: 'ქუთაისი',
     badge: React.createElement(
       'div',
       { className: "w-12 h-12 rounded-full bg-[#0d121d] border-2 border-[#00D2FF] flex items-center justify-center relative shadow-lg shrink-0" },
@@ -85,6 +92,8 @@ export const gymClients: GymClient[] = [
     descEn: 'Automated sales engine, customer flow management, and real-time revenue analytics.',
     descRu: 'Модуль автоматических продаж, управление потоком клиентов и финансовая аналитика.',
     brandColor: '#FF4D4D',
+    regionName: 'იმერეთი',
+    regionCity: 'ქუთაისი',
     badge: React.createElement(
       'div',
       { className: "w-12 h-12 rounded-full bg-[#0e1420] border-2 border-[#00A3FF] flex items-center justify-center relative shadow-lg shrink-0" },
@@ -104,6 +113,8 @@ export const gymClients: GymClient[] = [
     descEn: 'Full facility automation, member database, and QR access control.',
     descRu: 'Полная автоматизация зала, база клиентов и QR контроль доступа.',
     brandColor: '#22C55E',
+    regionName: 'იმერეთი',
+    regionCity: 'თერჯოლა',
     badge: React.createElement(
       'div',
       { className: "w-12 h-12 rounded-full bg-black border-2 border-[#22C55E] flex flex-col items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
@@ -124,6 +135,8 @@ export const gymClients: GymClient[] = [
     descEn: 'Full facility automation, member visit tracking, and smart QR access control.',
     descRu: 'Полная автоматизация, учет посещений и система доступа по QR-коду.',
     brandColor: '#FF9900',
+    regionName: 'იმერეთი',
+    regionCity: 'ქუთაისი',
     badge: React.createElement(
       'div',
       { className: "w-12 h-12 rounded-full bg-black border-2 border-[#00A3FF] flex items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
@@ -141,33 +154,31 @@ export const gymClients: GymClient[] = [
       )
     ),
   },
+  {
+    id: 'fencing-federation',
+    name: 'საქართველოს ფარიკაობის ფედერაცია',
+    subtitleKa: 'ეროვნული ფედერაცია · Since 1992',
+    subtitleEn: 'Georgian Fencing Federation · Since 1992',
+    subtitleRu: 'Федерация фехтования Грузии · С 1992',
+    followers: '—',
+    tags: ['ფედერაცია', 'CRM პანელი', 'სპორტსმენები', 'IoT ტურნიკეტები'],
+    descKa: 'საქართველოს ფარიკაობის ფედერაციის ცენტრალიზებული სპორტსმენთა მართვა და წვდომის კონტროლი.',
+    descEn: 'Centralized athlete management and IoT access control for Georgian Fencing Federation.',
+    descRu: 'Централизованное управление спортсменами и контроль доступа для Федерации фехтования Грузии.',
+    brandColor: '#1E3A5F',
+    regionName: 'თბილისი',
+    regionCity: 'თბილისი',
+    logoSrc: '/logo/client logo/fencing-federation.png',
+    badge: React.createElement(
+      'div',
+      { className: "w-12 h-12 rounded-full bg-white border-2 border-[#1E3A5F]/40 flex items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
+      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse z-10" }),
+      React.createElement('img', { src: '/logo/client logo/fencing-federation.png', alt: 'საქართველოს ფარიკაობის ფედერაცია', className: 'w-10 h-10 object-contain' })
+    ),
+  },
 ];
 
 export const hardwarePartners: Partner[] = [
-  {
-    id: 'zkteco',
-    name: 'ZKTeco Georgia',
-    category: 'hardware',
-    icon: React.createElement(Cpu, { className: "w-6 h-6 text-emerald-400" }),
-    descKa: 'ოფიციალური წარმომადგენელი საქართველოში: ბიომეტრიული სკანერები, სახის ამოცნობა და RFID ტურნიკეტები.',
-    descEn: 'Official Representative in Georgia: Biometric scanners, facial recognition terminals, and RFID turnstiles.',
-    descRu: 'Официальный представитель в Грузии: Биометрические сканеры, распознавание лиц и RFID турникеты.',
-    status: 'OFFICIAL DISTRIBUTOR / GE',
-    statusType: 'official',
-    brandColor: '#00E599',
-  },
-  {
-    id: 'gantner',
-    name: 'GANTNER Electronic',
-    category: 'hardware',
-    icon: React.createElement(Lock, { className: "w-6 h-6 text-[#00A3FF]" }),
-    descKa: 'მოლაპარაკების ეტაპზე: ევროპული ლიდერი ჭკვიან საკეტებში (Smart Lockers), RFID/NFC სამაჯურებსა და დაშვებაში.',
-    descEn: 'In Partnership Negotiations: European leader in Smart Lockers, RFID/NFC wristbands, and access solutions.',
-    descRu: 'В процессе переговоров: Европейский лидер в умных замках (Smart Lockers) и RFID/NFC браслетах.',
-    status: 'IN PARTNERSHIP TALKS',
-    statusType: 'talks',
-    brandColor: '#00A3FF',
-  },
   {
     id: 'hikvision',
     name: 'Hikvision',

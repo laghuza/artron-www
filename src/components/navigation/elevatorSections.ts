@@ -66,4 +66,24 @@ export const SECTION_NODES: SectionNode[] = [
       ru: 'Хотите ознакомиться с тарифами Artron или забронировать 15-минутную демо-презентацию для вашего комплекса?',
     },
   },
+  {
+    index: '07',
+    id: 'partner-ecosystem',
+    label: { ka: '07 • პარტნიორები & დარბაზები', en: '07 • Partners & Client Gyms', ru: '07 • Партнеры и клубы' },
+    aiPrompt: {
+      ka: 'გაინტერესებთ ართრონის პარტნიორი სპორტული ობიექტები და ტექნოლოგიური ინტეგრაციები (გადახდები, ტურნიკეტები, ბანკები)?',
+      en: 'Interested in Artron partner sports facilities and technology integrations (payments, turnstiles, banks)?',
+      ru: 'Интересуют спортивные объекты партнеров Artron и технологические интеграции (платежи, турникеты, банки)?',
+    },
+  },
+  {
+    index: '08',
+    id: 'faq',
+    label: { ka: '08 • ხშირად დასმული კითხვები', en: '08 • FAQ & Knowledge Base', ru: '08 • Часто задаваемые вопросы' },
+    aiPrompt: {
+      ka: 'გაქვთ კითხვები ართრონის დანერგვასთან, მონაცემთა მიგრაციასთან ან უსაფრთხოებასთან დაკავშირებით?',
+      en: 'Do you have questions regarding Artron deployment, data migration, or enterprise security?',
+      ru: 'У вас есть вопросы по внедрению Artron, переносу данных или безопасности?',
+    },
+  },
 ];

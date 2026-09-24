@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#06080C;color:#eef1f6;font-family:'Noto Sans Georgian',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+*{scrollbar-width:none}*::-webkit-scrollbar{display:none}
+a{color:#eef1f6;text-decoration:none}a:hover{color:#ffffff;text-decoration:underline}
+button{-webkit-tap-highlight-color:transparent}
+@keyframes ccPulse{0%,100%{opacity:1}50%{opacity:.4}}
+@media (prefers-reduced-motion: reduce){*{transition-duration:1ms!important}}
+</style>
+</helmet>
+
+<main data-screen-label="FAQ Console" style="position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;background:radial-gradient(ellipse 55% 50% at 76% 30%, rgba(38,64,140,.16), transparent 70%), radial-gradient(ellipse 45% 40% at 0% 100%, rgba(22,46,110,.14), transparent 65%), radial-gradient(ellipse 40% 30% at 20% 0%, rgba(60,50,120,.08), transparent 70%), linear-gradient(180deg,#0A0E14 0%,#06080C 100%)">
+  <sc-for list="{{ glows }}" as="g" hint-placeholder-count="1">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:{{ g.bg }};opacity:{{ g.op }};transition:opacity 900ms cubic-bezier(0.16,1,0.3,1)"></div>
+  </sc-for>
+  <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%)"></div>
+
+  <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative;height:100%;display:grid;grid-template-columns:45% 55%">
+      <section aria-labelledby="faq-title" style="min-height:0;display:flex;flex-direction:column;gap:clamp(16px,3vh,32px);padding:clamp(28px,6vh,64px) clamp(24px,3vw,48px) clamp(20px,4vh,40px) clamp(28px,4.5vw,72px)">
+        <header style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:13px;font-weight:500;letter-spacing:.04em;color:#8d96a6">{{ t.eyebrow }}</span>
+          <h1 id="faq-title" style="margin:0;font-size:clamp(24px,3.6vh,38px);line-height:1.2;font-weight:600;letter-spacing:-.01em;text-wrap:balance">{{ t.title }}</h1>
+        </header>
+        <div role="tablist" aria-label="{{ t.eyebrow }}" style="display:flex;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="3">
+            <button role="tab" aria-selected="{{ tab.active }}" onClick="{{ tab.onClick }}" style="min-height:40px;padding:0 16px;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;background:{{ tab.bg }};color:{{ tab.color }};box-shadow:{{ tab.shadow }};transition:all 450ms cubic-bezier(0.16,1,0.3,1)">
+              <span>{{ tab.label }}</span>
+              <sc-if value="{{ tab.hasTag }}" hint-placeholder-val="{{ false }}">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">{{ tab.tag }}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <nav ref="{{ navRef }}" aria-label="{{ t.eyebrow }}" style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:6px 10px;margin:-6px -10px">
+          <sc-for list="{{ items }}" as="it" hint-placeholder-count="7">
+            <button data-id="{{ it.id }}" onClick="{{ it.onClick }}" onFocus="{{ it.onClick }}" aria-current="{{ it.active }}" style="flex-shrink:0;width:100%;border:0;outline:none;cursor:pointer;text-align:left;font-family:inherit;display:grid;grid-template-columns:8px minmax(0,1fr);align-items:center;gap:16px;padding:clamp(10px,1.7vh,16px) 22px;border-radius:18px;font-size:clamp(14px,1.95vh,16px);line-height:1.45;text-wrap:pretty;background:{{ it.bg }};box-shadow:{{ it.shadow }};color:{{ it.color }};font-weight:{{ it.fw }};transform:{{ it.tf }};transition:all 500ms cubic-bezier(0.16,1,0.3,1)">
+              <span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:{{ it.dot }};box-shadow:{{ it.dotGlow }};transition:all 500ms cubic-bezier(0.16,1,0.3,1)"></span>
+              <span>{{ it.q }}</span>
+            </button>
+          </sc-for>
+        </nav>
+        <div style="flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 8px 4px 22px;border-top:1px solid rgba(255,255,255,.06)">
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <span style="font-size:14px;font-weight:500;color:#c4cad4;line-height:1.35">{{ t.ctaTitle }}</span>
+            <span style="font-size:12.5px;color:#7d8594;line-height:1.4">{{ t.ctaSub }}</span>
+            <span style="display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11.5px;line-height:1.4;color:#7d8594">{{ slaDot }}<span>{{ t.slaLabel }} <span style="color:#c4cad4">{{ t.sla }}</span></span></span>
+          </div>
+          <a href="#contact" style="display:flex;align-items:center;gap:9px;min-height:40px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#a1a1aa;text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap;transition:background 300ms cubic-bezier(0.16,1,0.3,1), color 300ms cubic-bezier(0.16,1,0.3,1), border-color 300ms cubic-bezier(0.16,1,0.3,1), transform 150ms ease" style-hover="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:#ffffff;text-decoration:none" style-active="background:rgba(255,255,255,.05);transform:scale(.97)">{{ pulseDot }}<span>{{ t.ctaBtn }}</span></a>
+        </div>
+      </section>
+
+      <section aria-live="polite" style="position:relative;min-height:0;display:flex;flex-direction:column;padding:clamp(28px,6vh,64px) clamp(28px,4.5vw,72px) clamp(20px,4vh,40px) clamp(8px,1.5vw,24px)">
+        <div style="position:relative;flex:1;min-height:160px">
+          <div ref="{{ hostDesk }}" style="position:absolute;inset:-40px -40px 0 -40px"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:12px;pointer-events:none">
+            <span style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:#dfe4ec">
+              <span style="width:6px;height:6px;border-radius:50%;background:{{ topicColor }};box-shadow:0 0 12px {{ topicColor }};transition:all 600ms cubic-bezier(0.16,1,0.3,1)"></span>{{ topicLabel }}
+            </span>
+            <span style="font-size:12px;color:#6c7586">{{ t.drag }}</span>
+          </div>
+        </div>
+        <article style="position:relative;flex-shrink:0;max-height:54%;overflow-y:auto;margin-top:-24px;padding:clamp(20px,3.4vh,32px) clamp(22px,2.4vw,36px);border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.018));backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 0 0 1px rgba(255,255,255,.07), 0 40px 100px rgba(0,0,0,.65)">
+          <div aria-hidden="true" style="position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,{{ topicColor }},transparent);opacity:.8"></div>
+          <div style="display:flex;flex-direction:column;gap:clamp(10px,1.8vh,16px);opacity:{{ ansOp }};transform:{{ ansTf }};transition:opacity 420ms cubic-bezier(0.16,1,0.3,1), transform 520ms cubic-bezier(0.16,1,0.3,1)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+              <h2 style="margin:0;font-size:clamp(18px,2.6vh,24px);line-height:1.35;font-weight:600;text-wrap:balance">{{ ans.q }}</h2>
+              <button onClick="{{ ans.onCopy }}" aria-label="{{ t.copy }}" style="flex-shrink:0;display:flex;align-items:center;gap:7px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#a1a1aa;font-family:inherit;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;transition:background 300ms cubic-bezier(0.16,1,0.3,1), color 300ms cubic-bezier(0.16,1,0.3,1), transform 150ms ease" style-hover="background:rgba(255,255,255,.08);color:#ffffff" style-active="transform:scale(.96)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                <span>{{ t.copy }}</span>
+              </button>
+            </div>
+            <p style="margin:0;font-size:clamp(14px,2vh,16px);line-height:1.65;color:#c9cfd9;text-wrap:pretty">{{ ans.a }}</p>
+            <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ ans.points }}" as="p" hint-placeholder-count="3">
+                <li style="display:grid;grid-template-columns:6px minmax(0,1fr);gap:12px;align-items:baseline;font-size:clamp(13px,1.8vh,14px);line-height:1.55;color:#9aa3b2">
+                  <span style="width:5px;height:5px;border-radius:50%;background:{{ topicColor }};transform:translateY(-2px)"></span><span>{{ p }}</span>
+                </li>
+              </sc-for>
+            </ul>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px 20px;flex-wrap:wrap;padding-top:clamp(8px,1.4vh,12px);border-top:1px solid rgba(255,255,255,.06)">
+              <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:12px;min-width:0">
+                <span style="color:#6c7586">{{ t.basis }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;color:#dfe4ec">{{ ans.basis }}</span>
+              </div>
+              <div style="display:grid;align-items:center;justify-items:end">
+                <div style="grid-area:1/1;display:flex;align-items:center;gap:6px;font-size:12px;color:#8d96a6;opacity:{{ ans.fbBtnOp }};pointer-events:{{ ans.fbPe }};transition:opacity 400ms cubic-bezier(0.16,1,0.3,1)">
+                  <span style="margin-right:4px">{{ t.helpful }}</span>
+                  <button onClick="{{ ans.onUp }}" aria-label="👍" style="width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:14px;cursor:pointer;filter:grayscale(1);opacity:.75;transition:all 300ms cubic-bezier(0.16,1,0.3,1)" style-hover="filter:grayscale(0);opacity:1;background:rgba(255,255,255,.08)" style-active="transform:scale(.92)">👍</button>
+                  <button onClick="{{ ans.onDown }}" aria-label="👎" style="width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:14px;cursor:pointer;filter:grayscale(1);opacity:.75;transition:all 300ms cubic-bezier(0.16,1,0.3,1)" style-hover="filter:grayscale(0);opacity:1;background:rgba(255,255,255,.08)" style-active="transform:scale(.92)">👎</button>
+                </div>
+                <span style="grid-area:1/1;font-size:12px;color:#c4cad4;opacity:{{ ans.fbAckOp }};transform:{{ ans.fbAckTf }};pointer-events:none;transition:opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)">{{ t.thanks }}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+      <div aria-hidden="true" style="position:absolute;right:clamp(28px,4.5vw,72px);bottom:clamp(2px,1.2vh,12px);display:inline-flex;align-items:center;gap:16px;pointer-events:none;user-select:none;z-index:5">
+        <span style="display:inline-flex;align-items:center;gap:6px">
+          <kbd style="display:inline-flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:2px 6px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.3;box-shadow:0 1px 2px rgba(0,0,0,.05)">↑</kbd>
+          <kbd style="display:inline-flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:2px 6px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.3;box-shadow:0 1px 2px rgba(0,0,0,.05)">↓</kbd>
+          <span style="margin-left:2px;color:#71717a;font-size:11px;letter-spacing:.025em">{{ t.nav }}</span>
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:6px">
+          <kbd style="display:inline-flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:2px 6px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.3;box-shadow:0 1px 2px rgba(0,0,0,.05)">↵</kbd>
+          <span style="margin-left:2px;color:#71717a;font-size:11px;letter-spacing:.025em">{{ t.pick }}</span>
+        </span>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="position:relative;height:100%;display:flex;flex-direction:column">
+      <div style="position:relative;height:35%;flex-shrink:0">
+        <div ref="{{ hostMob }}" style="position:absolute;inset:0"></div>
+        <div style="position:absolute;top:0;left:0;right:0;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;pointer-events:none">
+          <span style="font-size:12px;font-weight:500;color:#8d96a6">{{ t.eyebrow }}</span>
+          <span style="font-size:11px;color:#6c7586">{{ t.drag }}</span>
+        </div>
+        <div style="position:absolute;left:20px;bottom:10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:#dfe4ec;pointer-events:none">
+          <span style="width:6px;height:6px;border-radius:50%;background:{{ topicColor }};box-shadow:0 0 10px {{ topicColor }}"></span>{{ topicLabel }}
+        </div>
+      </div>
+      <div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:12px;padding-top:6px">
+        <div role="tablist" aria-label="{{ t.eyebrow }}" style="display:flex;gap:6px;overflow-x:auto;padding:4px 20px;flex-shrink:0">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="3">
+            <button role="tab" aria-selected="{{ tab.active }}" onClick="{{ tab.onClick }}" style="flex-shrink:0;min-height:44px;padding:0 16px;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;white-space:nowrap;background:{{ tab.bg }};color:{{ tab.color }};box-shadow:{{ tab.shadow }};transition:all 450ms cubic-bezier(0.16,1,0.3,1)">
+              <span>{{ tab.label }}</span>
+              <sc-if value="{{ tab.hasTag }}" hint-placeholder-val="{{ false }}">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.6">{{ tab.tag }}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <div ref="{{ deckRef }}" onScroll="{{ onDeckScroll }}" style="flex:1;min-height:0;display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:8px 8%;scroll-padding:0 8%;-webkit-overflow-scrolling:touch">
+          <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+            <article data-id="{{ it.id }}" onClick="{{ it.onClick }}" style="flex:0 0 84%;min-width:0;scroll-snap-align:center;scroll-snap-stop:always;display:flex;flex-direction:column;border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.025));backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:{{ it.cardShadow }};opacity:{{ it.cardOp }};transform:{{ it.cardTf }};transition:all 500ms cubic-bezier(0.16,1,0.3,1);cursor:pointer">
+              <div style="flex:1;min-height:0;overflow-y:auto;padding:20px 20px 18px;display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:11px;font-weight:500;letter-spacing:.03em;color:#8d96a6">{{ it.topic }}</span>
+                <h2 style="margin:0;font-size:17px;line-height:1.4;font-weight:600;color:#fff;text-wrap:pretty">{{ it.q }}</h2>
+                <p style="margin:0;font-size:14.5px;line-height:1.6;color:#c9cfd9;text-wrap:pretty">{{ it.a }}</p>
+                <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px">
+                  <sc-for list="{{ it.points }}" as="p" hint-placeholder-count="3">
+                    <li style="display:grid;grid-template-columns:5px minmax(0,1fr);gap:10px;align-items:baseline;font-size:13px;line-height:1.5;color:#9aa3b2">
+                      <span style="width:5px;height:5px;border-radius:50%;background:{{ it.color3d }};transform:translateY(-2px)"></span><span>{{ p }}</span>
+                    </li>
+                  </sc-for>
+                </ul>
+                <span style="margin-top:auto;padding-top:4px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8d96a6">{{ it.basis }}</span>
+                <div style="flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)">
+                  <button onClick="{{ it.onCopy }}" aria-label="{{ t.copy }}" style="width:44px;height:44px;flex-shrink:0;display:grid;place-items:center;margin-left:-10px;border:0;border-radius:50%;background:transparent;color:#a1a1aa;cursor:pointer" style-active="background:rgba(255,255,255,.08);transform:scale(.94)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
+                  <div style="display:grid;align-items:center;justify-items:end;min-width:0">
+                    <div style="grid-area:1/1;display:flex;align-items:center;gap:2px;font-size:12px;color:#8d96a6;opacity:{{ it.fbBtnOp }};pointer-events:{{ it.fbPe }};transition:opacity 400ms cubic-bezier(0.16,1,0.3,1)">
+                      <span style="margin-right:4px">{{ t.helpful }}</span>
+                      <button onClick="{{ it.onUp }}" aria-label="👍" style="width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;font-size:16px;cursor:pointer;filter:grayscale(1);opacity:.8" style-active="filter:grayscale(0);transform:scale(.9)">👍</button>
+                      <button onClick="{{ it.onDown }}" aria-label="👎" style="width:44px;height:44px;margin-right:-10px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;font-size:16px;cursor:pointer;filter:grayscale(1);opacity:.8" style-active="filter:grayscale(0);transform:scale(.9)">👎</button>
+                    </div>
+                    <span style="grid-area:1/1;font-size:12px;color:#c4cad4;opacity:{{ it.fbAckOp }};transform:{{ it.fbAckTf }};pointer-events:none;transition:opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)">{{ t.thanks }}</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+        <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;margin-bottom:-4px;font-size:11px;line-height:1.3;color:#7d8594">{{ slaDot }}<span>{{ t.slaLabel }} <span style="color:#c4cad4">{{ t.sla }}</span></span></div>
+        <div style="flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 20px max(14px, env(safe-area-inset-bottom))">
+          <div aria-hidden="true" style="display:flex;gap:5px;align-items:center">
+            <sc-for list="{{ items }}" as="it" hint-placeholder-count="7">
+              <span style="height:6px;border-radius:999px;width:{{ it.dotW }};background:{{ it.dotBg }};transition:all 500ms cubic-bezier(0.16,1,0.3,1)"></span>
+            </sc-for>
+          </div>
+          <a href="#contact" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#a1a1aa;text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap;transition:background 300ms cubic-bezier(0.16,1,0.3,1), color 300ms cubic-bezier(0.16,1,0.3,1), transform 150ms ease" style-hover="background:rgba(255,255,255,.08);color:#ffffff;text-decoration:none" style-active="background:rgba(255,255,255,.05);transform:scale(.97)">{{ pulseDot }}<span>{{ t.ctaBtn }}</span></a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <div role="status" aria-live="polite" style="position:absolute;left:50%;top:max(20px, env(safe-area-inset-top));z-index:20;display:flex;align-items:center;gap:9px;padding:10px 16px;border-radius:999px;background:rgba(18,22,30,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 40px rgba(0,0,0,.5);font-size:13px;font-weight:500;color:#eef1f6;white-space:nowrap;pointer-events:none;opacity:{{ toastOp }};transform:{{ toastTf }};transition:opacity 350ms cubic-bezier(0.16,1,0.3,1), transform 450ms cubic-bezier(0.16,1,0.3,1)"><span style="width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399"></span><span>{{ t.copied }}</span></div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ge&quot;,&quot;en&quot;,&quot;ru&quot;],&quot;default&quot;:&quot;ge&quot;,&quot;tsType&quot;:&quot;'ge'|'en'|'ru'&quot;},&quot;autoRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const DICT = {
+  ge: {
+    ui: {
+      eyebrow: 'ხშირად დასმული კითხვები',
+      title: 'პასუხები, სანამ კითხვას დასვამთ',
+      sub: 'დარბაზების მფლობელებისთვის და სპორტსმენებისთვის — დანერგვა, მონაცემთა უსაფრთხოება, კანონმდებლობა და საშვები.',
+      all: 'ყველა', b2b: 'დარბაზებისთვის', b2c: 'სპორტსმენებისთვის',
+      catB2B: 'B2B · დარბაზი', catB2C: 'B2C · სპორტსმენი', catHybrid: 'B2B + B2C',
+      search: 'მოძებნეთ: QR, დაბრუნება, ტაბელი…',
+      basis: 'საფუძველი',
+      empty: 'ამ მოთხოვნით პასუხი ვერ მოიძებნა.',
+      askBot: 'ჰკითხეთ ასისტენტს',
+      ctaTitle: 'ვერ იპოვეთ პასუხი?',
+      ctaSub: 'ასისტენტი პასუხობს ქართულად, ინგლისურად და რუსულად.',
+      ctaBtn: 'ასისტენტთან საუბარი',
+      botTitle: 'ARTRON ასისტენტი',
+      botHello: 'გამარჯობა! აირჩიეთ პოპულარული კითხვა ან დაწერეთ საკუთარი.',
+      botPlaceholder: 'დაწერეთ კითხვა…',
+      botSend: 'გაგზავნა',
+      botOpen: 'სრული პასუხი',
+      botFallback: 'ზუსტი პასუხი ვერ ვიპოვე. სცადეთ სხვა სიტყვა — მაგალითად „QR“, „დაბრუნება“ ან „ტაბელი“ — ან დაუკავშირდით ჩვენს გუნდს.',
+    },
+    q: {
+      1: { q: 'რამდენ ხანში მონტაჟდება IoT ტურნიკეტები?',
+        a: 'ფიზიკური ინსტალაცია სრულდება 1–3 სამუშაო დღეში — ვადა დამოკიდებულია შესასვლელების რაოდენობაზე. დარბაზს მუშაობის შეჩერება არ სჭირდება.',
+        p: ['დღე 1 — ტურნიკეტების მონტაჟი და კაბელირება', 'დღე 2 — კონტროლერის კონფიგურაცია და კლუბის ანგარიშთან სინქრონიზაცია', 'დღე 3 — ტესტირება და პერსონალის ინსტრუქტაჟი', 'სამუშაოები შეიძლება ჩატარდეს არასამუშაო საათებში'],
+        b: 'დანერგვის სტანდარტი: 1–3 სამუშაო დღე' },
+      2: { q: 'როგორ არის დაცული ჩვენი კლუბის მონაცემები სხვა კლუბებისგან?',
+        a: 'თითოეული კლუბის მონაცემები იზოლირებულია მონაცემთა ბაზის დონეზე. სხვა კლუბს, მათ შორის კონკურენტს, თქვენს ჩანაწერებზე წვდომა ტექნიკურად არ აქვს.',
+        p: ['Row-Level Security (RLS): ყოველი მოთხოვნა იფილტრება კლუბის იდენტიფიკატორით', 'პირადი ნომრები ინახება AES-256-GCM შიფრაციით', 'პერსონალის წვდომა განისაზღვრება როლით: მფლობელი, მენეჯერი, ადმინისტრატორი'],
+        b: 'Multi-Tenancy · RLS · AES-256-GCM' },
+      3: { q: 'შეესაბამება თუ არა სისტემა ბრძანება №01-15/ნ-ის მოთხოვნებს?',
+        a: 'დიახ. თანამშრომლის შესვლა-გასვლა ტურნიკეტზე ავტომატურად აისახება სამუშაო დროის აღრიცხვის ელექტრონულ ტაბელში, შრომის ინსპექციის მოთხოვნების შესაბამისად. ეს კლუბს იცავს ჯარიმებისგან.',
+        p: ['ტაბელი ივსება ავტომატურად, ხელით შეყვანის გარეშე', 'ტაბელის ექსპორტი ინსპექტირებისთვის მზა ფორმატში', 'ცვლები და ზეგანაკვეთური საათები ჩანს ცალ-ცალკე'],
+        b: 'ბრძანება №01-15/ნ · შრომის ინსპექცია' },
+      4: { q: 'რა ემართება ჩვენს მონაცემებს ხელშეკრულების შეწყვეტისას?',
+        a: 'შეწყვეტიდან 30 დღის განმავლობაში შეგიძლიათ სრულად გაიტანოთ საოპერაციო მონაცემები. სისტემაზე მიბმა არ ხდება (No Vendor Lock-in).',
+        p: ['30 დღე — წევრების, აბონემენტებისა და ვიზიტების სრული ექსპორტი (CSV / JSON)', 'საგადასახადო ჩანაწერები ინახება 3 წელი, საგადასახადო კოდექსის მოთხოვნით', 'ვადების გასვლის შემდეგ მონაცემები იშლება'],
+        b: '30-დღიანი ექსპორტი · 3-წლიანი საგადასახადო არქივი' },
+      5: { q: 'შემიძლია აბონემენტის თანხის დაბრუნება?',
+        a: 'აპლიკაციით შეძენილ აბონემენტზე მოქმედებს 14-დღიანი დაბრუნების უფლება, თუ მისით სარგებლობა ჯერ არ დაგიწყიათ.',
+        p: ['სარგებლობის დაწყება = პირველი შესვლა ტურნიკეტზე', 'მოთხოვნა: აპლიკაცია → აბონემენტები → თანხის დაბრუნება', 'თანხა ბრუნდება იმავე ბარათზე'],
+        b: 'მომხმარებელთა უფლებების დაცვის შესახებ კანონი · 14 დღე' },
+      6: { q: 'რამდენად უსაფრთხოა QR საშვი? შეიძლება მისი გაზიარება?',
+        a: 'არა. QR კოდი ავტომატურად ახლდება ყოველ 15 წამში, ამიტომ სკრინშოტი ან გადაგზავნილი სურათი რამდენიმე წამში უვარგისი ხდება.',
+        p: ['დინამიური კოდი — განახლება ყოველ 15 წამში', 'Anti-screenshot: სტატიკური სურათი ტურნიკეტს ვერ გააღებს', 'Anti-passback: ერთი საშვით ხელახლა შესვლა გასვლის გარეშე შეუძლებელია'],
+        b: 'დინამიური QR · Anti-passback' },
+      7: { q: 'იმუშავებს შესვლა, თუ ინტერნეტი გაითიშა?',
+        a: 'დიახ. ტურნიკეტის კონტროლერი ინახავს მოქმედი საშვების ადგილობრივ ქეშს, ამიტომ შესვლა-გასვლა ინტერნეტის გარეშეც გრძელდება.',
+        p: ['Edge ქეში — საშვი მოწმდება ადგილზე', 'ოფლაინ პერიოდის ყველა ვიზიტი ინახება მოწყობილობაზე', 'კავშირის აღდგენისას მონაცემები მყისიერად სინქრონიზდება'],
+        b: 'Edge Cache · ავტომატური სინქრონიზაცია' },
+      8: { q: 'გვაქვს ძველი ტურნიკეტები — აუცილებელია ახლის ყიდვა თუ არსებულზე მიერთდება?',
+        a: 'სისტემა სრულად თავსებადია 95%+ არსებულ ტურნიკეტებთან (Came, ZKTeco, Hikvision და სხვ.). მონტაჟდება მხოლოდ ჩვენი კომპაქტური IoT კონტროლერი, რაც 4-ჯერ ამცირებს ხარჯებს ახალი აპარატურის შეძენასთან შედარებით.',
+        p: ['მიერთება სტანდარტული ინტერფეისებით: რელე (dry contact), Wiegand, RS-485', 'არსებული კორპუსი, მექანიკა და კაბელები ადგილზე რჩება', 'კონტროლერი თავსდება ტურნიკეტის კორპუსში'],
+        b: 'Came · ZKTeco · Hikvision · 95%+ თავსებადობა' },
+    },
+  },
+  en: {
+    ui: {
+      eyebrow: 'Frequently asked questions',
+      title: 'Answers before you have to ask',
+      sub: 'For gym owners and athletes — rollout, data security, compliance and access passes.',
+      all: 'All', b2b: 'For gyms', b2c: 'For athletes',
+      catB2B: 'B2B · Gym', catB2C: 'B2C · Athlete', catHybrid: 'B2B + B2C',
+      search: 'Search: QR, refund, timesheet…',
+      basis: 'Basis',
+      empty: 'No answer matches this search.',
+      askBot: 'Ask the assistant',
+      ctaTitle: "Didn't find your answer?",
+      ctaSub: 'The assistant replies in Georgian, English and Russian.',
+      ctaBtn: 'Chat with assistant',
+      botTitle: 'ARTRON Assistant',
+      botHello: 'Hi! Pick a popular question or type your own.',
+      botPlaceholder: 'Type a question…',
+      botSend: 'Send',
+      botOpen: 'Full answer',
+      botFallback: "I couldn't find an exact answer. Try another word — e.g. “QR”, “refund” or “timesheet” — or contact our team.",
+    },
+    q: {
+      1: { q: 'How long does IoT turnstile installation take?',
+        a: 'Physical installation takes 1–3 business days, depending on the number of entry points. Your gym does not need to close.',
+        p: ['Day 1 — turnstile mounting and cabling', 'Day 2 — controller configuration and sync with your club account', 'Day 3 — testing and staff briefing', 'Work can be scheduled outside opening hours'],
+        b: 'Rollout standard: 1–3 business days' },
+      2: { q: "How is our club's data kept separate from other clubs?",
+        a: "Each club's data is isolated at the database level. No other club — competitors included — can technically access your records.",
+        p: ['Row-Level Security (RLS): every query is scoped to your club ID', 'Personal ID numbers are stored with AES-256-GCM encryption', 'Staff access is role-based: owner, manager, front desk'],
+        b: 'Multi-Tenancy · RLS · AES-256-GCM' },
+      3: { q: 'Does the system comply with Order №01-15/n?',
+        a: "Yes. Staff entries and exits at the turnstile are logged automatically into an electronic working-time timesheet that meets Labour Inspection requirements — protecting the club from fines.",
+        p: ['Timesheets fill themselves — no manual entry', 'Inspection-ready timesheet export', 'Shifts and overtime hours shown separately'],
+        b: 'Order №01-15/n · Labour Inspection' },
+      4: { q: 'What happens to our data if we end the contract?',
+        a: 'You have 30 days after termination to export all operational data. No vendor lock-in.',
+        p: ['30 days — full export of members, memberships and visits (CSV / JSON)', 'Tax records are retained for 3 years as required by the Tax Code', 'Data is deleted once these periods end'],
+        b: '30-day export · 3-year tax archive' },
+      5: { q: 'Can I get a refund on my membership?',
+        a: "Memberships bought in the app carry a 14-day refund right, as long as you haven't started using them.",
+        p: ['“Started using” = first entry through a turnstile', 'Request: App → Memberships → Refund', 'Money returns to the same card'],
+        b: 'Law on Consumer Rights Protection · 14 days' },
+      6: { q: 'How secure is the QR pass? Can I share it?',
+        a: 'No. The QR code refreshes every 15 seconds, so a screenshot or forwarded image stops working within seconds.',
+        p: ['Dynamic code — refreshes every 15 seconds', 'Anti-screenshot: a static image will not open the turnstile', 'Anti-passback: the same pass cannot enter twice without exiting'],
+        b: 'Dynamic QR · Anti-passback' },
+      7: { q: 'Does entry still work if the internet goes down?',
+        a: 'Yes. Turnstile controllers keep a local cache of valid passes, so entry and exit continue offline.',
+        p: ['Edge cache — passes are verified on site', 'All offline visits are stored on the device', 'Data syncs instantly once the connection returns'],
+        b: 'Edge Cache · Automatic sync' },
+      8: { q: 'We have old turnstiles — do we need new ones, or can you connect to what we have?',
+        a: 'The system is fully compatible with 95%+ of existing turnstiles (Came, ZKTeco, Hikvision and others). Only our compact IoT controller is installed — about 4× cheaper than buying new hardware.',
+        p: ['Connects via standard interfaces: relay (dry contact), Wiegand, RS-485', 'Existing housing, mechanics and cabling stay in place', 'The controller fits inside the turnstile housing'],
+        b: 'Came · ZKTeco · Hikvision · 95%+ compatibility' },
+    },
+  },
+  ru: {
+    ui: {
+      eyebrow: 'Частые вопросы',
+      title: 'Ответы до того, как вы спросите',
+      sub: 'Для владельцев залов и спортсменов — внедрение, безопасность данных, законодательство и пропуска.',
+      all: 'Все', b2b: 'Для залов', b2c: 'Для спортсменов',
+      catB2B: 'B2B · Зал', catB2C: 'B2C · Спортсмен', catHybrid: 'B2B + B2C',
+      search: 'Поиск: QR, возврат, табель…',
+      basis: 'Основание',
+      empty: 'По этому запросу ответ не найден.',
+      askBot: 'Спросить ассистента',
+      ctaTitle: 'Не нашли ответ?',
+      ctaSub: 'Ассистент отвечает на грузинском, английском и русском.',
+      ctaBtn: 'Написать ассистенту',
+      botTitle: 'Ассистент ARTRON',
+      botHello: 'Здравствуйте! Выберите популярный вопрос или напишите свой.',
+      botPlaceholder: 'Напишите вопрос…',
+      botSend: 'Отправить',
+      botOpen: 'Полный ответ',
+      botFallback: 'Точный ответ не найден. Попробуйте другое слово — например «QR», «возврат» или «табель» — или свяжитесь с нашей командой.',
+    },
+    q: {
+      1: { q: 'Сколько времени занимает монтаж IoT-турникетов?',
+        a: 'Физическая установка занимает 1–3 рабочих дня в зависимости от количества входов. Закрывать зал не нужно.',
+        p: ['День 1 — монтаж турникетов и прокладка кабеля', 'День 2 — настройка контроллера и синхронизация с аккаунтом клуба', 'День 3 — тестирование и инструктаж персонала', 'Работы можно провести в нерабочие часы'],
+        b: 'Стандарт внедрения: 1–3 рабочих дня' },
+      2: { q: 'Как данные нашего клуба защищены от других клубов?',
+        a: 'Данные каждого клуба изолированы на уровне базы данных. Другой клуб, включая конкурента, технически не имеет доступа к вашим записям.',
+        p: ['Row-Level Security (RLS): каждый запрос ограничен ID клуба', 'Личные номера хранятся с шифрованием AES-256-GCM', 'Доступ персонала — по ролям: владелец, менеджер, администратор'],
+        b: 'Multi-Tenancy · RLS · AES-256-GCM' },
+      3: { q: 'Соответствует ли система приказу №01-15/н?',
+        a: 'Да. Входы и выходы сотрудников через турникет автоматически попадают в электронный табель учёта рабочего времени в соответствии с требованиями Инспекции труда — это защищает клуб от штрафов.',
+        p: ['Табель заполняется автоматически, без ручного ввода', 'Экспорт табеля в формате, готовом к проверке', 'Смены и сверхурочные часы учитываются отдельно'],
+        b: 'Приказ №01-15/н · Инспекция труда' },
+      4: { q: 'Что происходит с данными при расторжении договора?',
+        a: 'В течение 30 дней после расторжения вы можете полностью выгрузить операционные данные. Привязки к системе нет (No Vendor Lock-in).',
+        p: ['30 дней — полный экспорт клиентов, абонементов и посещений (CSV / JSON)', 'Налоговые записи хранятся 3 года согласно Налоговому кодексу', 'По истечении сроков данные удаляются'],
+        b: 'Экспорт 30 дней · Налоговый архив 3 года' },
+      5: { q: 'Можно ли вернуть деньги за абонемент?',
+        a: 'На абонементы, купленные в приложении, действует право возврата в течение 14 дней, если вы ещё не начали ими пользоваться.',
+        p: ['«Начало использования» = первый проход через турникет', 'Запрос: Приложение → Абонементы → Возврат', 'Деньги возвращаются на ту же карту'],
+        b: 'Закон о защите прав потребителей · 14 дней' },
+      6: { q: 'Насколько безопасен QR-пропуск? Можно ли его передать?',
+        a: 'Нет. QR-код обновляется каждые 15 секунд, поэтому скриншот или пересланное изображение перестаёт работать через несколько секунд.',
+        p: ['Динамический код — обновление каждые 15 секунд', 'Anti-screenshot: статичное изображение не откроет турникет', 'Anti-passback: повторный вход по одному пропуску без выхода невозможен'],
+        b: 'Динамический QR · Anti-passback' },
+      7: { q: 'Будет ли работать вход, если пропадёт интернет?',
+        a: 'Да. Контроллеры турникетов хранят локальный кэш действующих пропусков, поэтому вход и выход продолжают работать офлайн.',
+        p: ['Edge-кэш — пропуск проверяется на месте', 'Все офлайн-посещения сохраняются на устройстве', 'При восстановлении связи данные мгновенно синхронизируются'],
+        b: 'Edge Cache · Автоматическая синхронизация' },
+      8: { q: 'У нас старые турникеты — нужно покупать новые или можно подключить существующие?',
+        a: 'Система полностью совместима с 95%+ существующих турникетов (Came, ZKTeco, Hikvision и др.). Устанавливается только наш компактный IoT-контроллер — это в 4 раза дешевле покупки нового оборудования.',
+        p: ['Подключение по стандартным интерфейсам: реле (dry contact), Wiegand, RS-485', 'Корпус, механика и кабели остаются на месте', 'Контроллер размещается внутри корпуса турникета'],
+        b: 'Came · ZKTeco · Hikvision · совместимость 95%+' },
+    },
+  },
+};
+const FAQ = [{ id: 1, cat: 'b2b' }, { id: 2, cat: 'b2b' }, { id: 3, cat: 'b2b' }, { id: 4, cat: 'b2b' }, { id: 8, cat: 'b2b' }, { id: 5, cat: 'b2c' }, { id: 6, cat: 'b2c' }, { id: 7, cat: 'hybrid' }];
+const TOPIC = { 1: 'turnstile', 2: 'shield', 3: 'shield', 4: 'shield', 5: 'card', 6: 'card', 7: 'turnstile', 8: 'turnstile' };
+const VIS = { 1: 'turnstile', 2: 'vault', 3: 'badge', 4: 'cloud', 5: 'wallet', 6: 'qr', 7: 'hub', 8: 'bridge' };
+const QC = { 1: '#5cc8ff', 2: '#a88bff', 3: '#f7cf5e', 4: '#6f9dff', 5: '#3fe4a4', 6: '#ff72d2', 7: '#ff9a5e', 8: '#c6f25e' };
+const rgba = (h, a) => { const n = parseInt(h.slice(1), 16); return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')'; };
+const UI = {
+  ge: { eyebrow: 'ხშირად დასმული კითხვები', title: 'პასუხები, სანამ კითხვას დასვამთ', all: 'ყველა', b2b: 'დარბაზებისთვის', b2c: 'სპორტსმენებისთვის', basis: 'საფუძველი', ctaTitle: 'ვერ იპოვეთ პასუხი?', ctaSub: 'მიიღეთ პასუხი 5 წუთში', ctaBtn: 'პირდაპირი კავშირი', drag: 'გადაატრიალეთ', nav: 'ნავიგაცია', pick: 'არჩევა', copy: 'ბმულის კოპირება', copied: 'ბმული დაკოპირდა', helpful: 'გამოგადგათ პასუხი?', thanks: 'მადლობა შეფასებისთვის', slaLabel: 'სისტემის სტატუსი:', sla: '99.98% ხელმისაწვდომობა (SLA)',
+    topics: { turnstile: 'IoT და ტურნიკეტები', shield: 'მონაცემთა უსაფრთხოება და კანონი', card: 'QR საშვი და წვდომა' } },
+  en: { eyebrow: 'Frequently asked questions', title: 'Answers before you have to ask', all: 'All', b2b: 'For Gyms', b2c: 'For Athletes', basis: 'Basis', ctaTitle: "Didn't find your answer?", ctaSub: 'Get a reply within 5 minutes', ctaBtn: 'Direct contact', drag: 'Drag to rotate', nav: 'Navigate', pick: 'Select', copy: 'Copy link', copied: 'Link copied', helpful: 'Was this helpful?', thanks: 'Thanks for your feedback', slaLabel: 'System status:', sla: '99.98% uptime (SLA)',
+    topics: { turnstile: 'IoT & Turnstiles', shield: 'Data Security & Legal', card: 'QR Pass & Access' } },
+  ru: { eyebrow: 'Частые вопросы', title: 'Ответы до того, как вы спросите', all: 'Все', b2b: 'Для залов', b2c: 'Для спортсменов', basis: 'Основание', ctaTitle: 'Не нашли ответ?', ctaSub: 'Ответим в течение 5 минут', ctaBtn: 'Прямая связь', drag: 'Потяните, чтобы повернуть', nav: 'Навигация', pick: 'Выбор', copy: 'Скопировать ссылку', copied: 'Ссылка скопирована', helpful: 'Ответ был полезен?', thanks: 'Спасибо за оценку', slaLabel: 'Статус системы:', sla: '99.98% доступности (SLA)',
+    topics: { turnstile: 'IoT и турникеты', shield: 'Безопасность данных и право', card: 'QR-пропуск и доступ' } },
+};
+
+function kit(T) {
+  const mats = [];
+  const L = (c, o) => { const m = new T.LineBasicMaterial({ color: c, transparent: true, opacity: o, blending: T.AdditiveBlending, depthWrite: false }); m.userData.base = o; mats.push(m); return m; };
+  const S = (c, o) => { const m = new T.MeshBasicMaterial({ color: c, transparent: true, opacity: o, blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide }); m.userData.base = o; mats.push(m); return m; };
+  const E = (geo, m, th) => new T.LineSegments(new T.EdgesGeometry(geo, th || 1), m);
+  const circle = (r, n, m) => { const p = []; for (let i = 0; i <= n; i++) { const a = i / n * Math.PI * 2; p.push(new T.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0)); } return new T.Line(new T.BufferGeometry().setFromPoints(p), m); };
+  const dashed = (r, n, gap, m) => { const p = []; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, b = a + (Math.PI * 2 / n) * (1 - gap); p.push(new T.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0), new T.Vector3(Math.cos(b) * r, Math.sin(b) * r, 0)); } return new T.LineSegments(new T.BufferGeometry().setFromPoints(p), m); };
+  return { mats, L, S, E, circle, dashed };
+}
+
+function buildTurnstile(T, c) {
+  const k = kit(T), g = new T.Group();
+  const cab = new T.BoxGeometry(0.8, 1.9, 0.7);
+  const body = new T.Group(); body.position.set(-0.5, 0, 0);
+  body.add(new T.Mesh(cab, k.S(c, 0.05)), k.E(cab, k.L(c, 0.9)));
+  const panel = new T.Mesh(new T.PlaneGeometry(0.5, 0.2), k.S(c, 0.55)); panel.position.set(0, 0.7, 0.352); body.add(panel);
+  const reader = k.circle(0.17, 28, k.L(c, 0.9)); reader.rotation.x = Math.PI / 2; reader.position.y = 0.952; body.add(reader);
+  const readerIn = k.circle(0.08, 20, k.L(c, 0.6)); readerIn.rotation.x = Math.PI / 2; readerIn.position.y = 0.952; body.add(readerIn);
+  g.add(body);
+  const tilt = new T.Group(); tilt.position.set(-0.08, 0.4, 0); tilt.rotation.z = -0.6; g.add(tilt);
+  const rotor = new T.Group(); tilt.add(rotor);
+  const hub = new T.CylinderGeometry(0.13, 0.13, 0.26, 8); hub.rotateZ(Math.PI / 2);
+  rotor.add(new T.Mesh(hub, k.S(c, 0.25)), k.E(hub, k.L(c, 0.9)));
+  const armG = new T.CylinderGeometry(0.035, 0.035, 1.15, 6); armG.translate(0, 0.575, 0);
+  const armM = k.S(c, 0.95);
+  for (let i = 0; i < 3; i++) { const a = new T.Mesh(armG, armM); a.position.x = 0.06; a.rotation.x = i * Math.PI * 2 / 3; rotor.add(a); }
+  const floor = new T.Group(); floor.position.y = -0.95; floor.rotation.x = Math.PI / 2; g.add(floor);
+  const r1 = k.circle(1.25, 64, k.L(c, 0.5)), r2 = k.dashed(1.6, 48, 0.55, k.L(c, 0.3)), pulse = k.circle(1, 64, k.L(c, 0.6));
+  floor.add(r1, r2, pulse);
+  const scanM = k.S(c, 0.2);
+  const scan = new T.Mesh(new T.PlaneGeometry(1.05, 0.95), scanM); scan.rotation.x = -Math.PI / 2; scan.position.x = -0.5; g.add(scan);
+  g.position.x = 0.2;
+  const ease = p => 1 - Math.pow(1 - p, 4);
+  const update = t => {
+    const s = t * 0.55, f = Math.floor(s), p = s - f;
+    rotor.rotation.x = (f + (p < 0.45 ? ease(p / 0.45) : 1)) * Math.PI * 2 / 3;
+    const ph = (t * 0.45) % 1;
+    scan.position.y = -0.95 + ph * 1.9; scanM.userData.base = 0.22 * Math.sin(ph * Math.PI);
+    const pp = (t * 0.6) % 1; pulse.scale.setScalar(0.4 + pp * 1.4); pulse.material.userData.base = 0.6 * (1 - pp);
+    r2.rotation.z = t * 0.2;
+  };
+  return { g, mats: k.mats, update };
+}
+
+function buildShield(T, c) {
+  const k = kit(T), g = new T.Group();
+  const s = new T.Shape();
+  s.moveTo(0, 1.1); s.bezierCurveTo(0.45, 0.96, 0.75, 0.92, 0.9, 0.86); s.lineTo(0.86, 0.1);
+  s.bezierCurveTo(0.8, -0.5, 0.42, -0.9, 0, -1.15); s.bezierCurveTo(-0.42, -0.9, -0.8, -0.5, -0.86, 0.1);
+  s.lineTo(-0.9, 0.86); s.bezierCurveTo(-0.75, 0.92, -0.45, 0.96, 0, 1.1);
+  const hole = new T.Path();
+  hole.moveTo(-0.09, 0.08); hole.lineTo(-0.16, -0.42); hole.lineTo(0.16, -0.42); hole.lineTo(0.09, 0.08);
+  hole.absarc(0, 0.22, 0.1664, Math.atan2(-0.14, 0.09), Math.atan2(-0.14, -0.09) + Math.PI * 2, false);
+  s.holes.push(hole);
+  const geo = new T.ExtrudeGeometry(s, { depth: 0.16, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1, curveSegments: 12 });
+  geo.center();
+  g.add(new T.Mesh(geo, k.S(c, 0.07)), k.E(geo, k.L(c, 0.85), 25));
+  const coreM = k.S(c, 0.8);
+  const core = new T.Mesh(new T.ShapeGeometry(new T.Shape(hole.getPoints(16))), coreM); core.position.set(0, 0.025, 0); g.add(core);
+  const inner = new T.Line(new T.BufferGeometry().setFromPoints(s.getPoints(12).map(p => new T.Vector3(p.x * 0.8, p.y * 0.8 + 0.02, 0.15))), k.L(c, 0.35));
+  g.add(inner);
+  const rings = new T.Group(); rings.rotation.x = 1.15; g.add(rings);
+  const ra = k.circle(1.55, 72, k.L(c, 0.4)), rb = k.dashed(1.75, 36, 0.6, k.L(c, 0.55));
+  rings.add(ra, rb);
+  const rings2 = new T.Group(); rings2.rotation.set(-0.5, 0.9, 0); g.add(rings2);
+  const rc = k.dashed(1.4, 60, 0.7, k.L(c, 0.4)); rings2.add(rc);
+  const bits = new T.Group(); rings.add(bits);
+  const bitG = new T.BoxGeometry(0.07, 0.07, 0.07), bitM = k.S(c, 0.9);
+  for (let i = 0; i < 6; i++) { const b = new T.Mesh(bitG, bitM); const a = i / 6 * Math.PI * 2; b.position.set(Math.cos(a) * 1.75, Math.sin(a) * 1.75, 0); bits.add(b); }
+  const update = t => {
+    rb.rotation.z = t * 0.35; bits.rotation.z = t * 0.35; ra.rotation.z = -t * 0.1; rc.rotation.z = -t * 0.5;
+    coreM.userData.base = 0.55 + 0.35 * (0.5 + 0.5 * Math.sin(t * 2.4));
+  };
+  return { g, mats: k.mats, update };
+}
+
+function rr(T, w, h, r) {
+  const s = new T.Shape();
+  s.moveTo(-w / 2 + r, -h / 2); s.lineTo(w / 2 - r, -h / 2); s.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+  s.lineTo(w / 2, h / 2 - r); s.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2); s.lineTo(-w / 2 + r, h / 2);
+  s.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); s.lineTo(-w / 2, -h / 2 + r); s.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+  return s;
+}
+const slab = (T, k, shape, depth, c, fo, lo) => {
+  const geo = new T.ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 1, curveSegments: 6 });
+  geo.center(); const grp = new T.Group(); grp.add(new T.Mesh(geo, k.S(c, fo)), k.E(geo, k.L(c, lo), 30)); return grp;
+};
+
+function buildVault(T, c) {
+  const o = buildShield(T, c), k = kit(T);
+  const hexG = new T.CylinderGeometry(1.95, 1.95, 2.5, 6, 1, true);
+  const hex = k.E(hexG, k.L(c, 0.28)); o.g.add(hex);
+  const wallM = k.S(c, 0.035); const wall = new T.Mesh(hexG, wallM); o.g.add(wall);
+  const sweepM = k.S(c, 0.5);
+  const sweep = new T.Mesh(new T.CylinderGeometry(1.96, 1.96, 0.02, 6, 1, true), sweepM); o.g.add(sweep);
+  const up = o.update;
+  return { g: o.g, mats: o.mats.concat(k.mats), update: t => {
+    up(t); hex.rotation.y = t * 0.12; wall.rotation.y = hex.rotation.y; sweep.rotation.y = hex.rotation.y;
+    const p = (t * 0.4) % 1; sweep.position.y = -1.25 + p * 2.5; sweepM.userData.base = 0.5 * Math.sin(p * Math.PI);
+  } };
+}
+
+function buildBadge(T, c) {
+  const k = kit(T), g = new T.Group(), inner = new T.Group(); g.add(inner);
+  const s = new T.Shape(), n = 28;
+  for (let i = 0; i <= n * 2; i++) { const a = i / (n * 2) * Math.PI * 2 + Math.PI / 2, r = i % 2 ? 0.91 : 1; const x = Math.cos(a) * r, y = Math.sin(a) * r; if (i) s.lineTo(x, y); else s.moveTo(x, y); }
+  const geo = new T.ExtrudeGeometry(s, { depth: 0.12, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 1 }); geo.center();
+  inner.add(new T.Mesh(geo, k.S(c, 0.08)), k.E(geo, k.L(c, 0.8), 20));
+  const Z = 0.1;
+  const r1 = k.circle(0.76, 64, k.L(c, 0.75)); r1.position.z = Z;
+  const r2 = k.dashed(0.64, 40, 0.5, k.L(c, 0.45)); r2.position.z = Z;
+  const disc = new T.Mesh(new T.CircleGeometry(0.74, 48), k.S(c, 0.07)); disc.position.z = Z - 0.01;
+  inner.add(r1, r2, disc);
+  const V = (x, y) => new T.Vector3(x, y, Z + 0.03), path = new T.CurvePath();
+  path.add(new T.LineCurve3(V(-0.34, 0.02), V(-0.1, -0.24))); path.add(new T.LineCurve3(V(-0.1, -0.24), V(0.36, 0.3)));
+  const tg = new T.TubeGeometry(path, 48, 0.05, 8, false), chkM = k.S(c, 0.95);
+  inner.add(new T.Mesh(tg, chkM));
+  const total = tg.index.count;
+  [-1, 1].forEach(sd => {
+    const r = new T.Shape(); r.moveTo(sd * 0.2, -0.7); r.lineTo(sd * 0.62, -0.62); r.lineTo(sd * 0.62, -1.6); r.lineTo(sd * 0.41, -1.42); r.lineTo(sd * 0.2, -1.6); r.lineTo(sd * 0.2, -0.7);
+    const m = new T.Mesh(new T.ShapeGeometry(r), k.S(c, 0.12)); m.position.z = -0.12; m.rotation.y = sd * 0.15;
+    const l = new T.Line(new T.BufferGeometry().setFromPoints(r.getPoints().map(p => new T.Vector3(p.x, p.y, 0))), k.L(c, 0.7)); l.position.z = -0.12; l.rotation.y = sd * 0.15;
+    inner.add(m, l);
+  });
+  const orb = new T.Group(); orb.rotation.x = 1.2; g.add(orb);
+  const oring = k.dashed(1.4, 56, 0.6, k.L(c, 0.4)); orb.add(oring);
+  const spG = new T.Group(); orb.add(spG);
+  const sp = new T.Mesh(new T.OctahedronGeometry(0.07), k.S(c, 1)); sp.position.x = 1.4; spG.add(sp);
+  g.position.y = 0.25;
+  const update = t => {
+    const pr = Math.min(1, (t % 4) / 0.9), e = 1 - Math.pow(1 - pr, 3);
+    tg.setDrawRange(0, Math.floor(total * e / 48) * 48);
+    chkM.userData.base = 0.75 + 0.25 * Math.sin(t * 3);
+    r2.rotation.z = -t * 0.3; spG.rotation.z = t * 0.9; oring.rotation.z = t * 0.2;
+    inner.rotation.y = Math.sin(t * 0.8) * 0.28;
+  };
+  return { g, mats: k.mats, update };
+}
+
+function buildCloud(T, c) {
+  const k = kit(T), g = new T.Group();
+  const box = new T.Group(); box.position.y = -0.85; g.add(box);
+  const bg = new T.BoxGeometry(1.4, 0.8, 0.95); box.add(new T.Mesh(bg, k.S(c, 0.06)), k.E(bg, k.L(c, 0.85)));
+  const lab = k.E(new T.PlaneGeometry(0.5, 0.16), k.L(c, 0.7)); lab.position.set(0, 0.05, 0.48); box.add(lab);
+  const lidG = new T.BoxGeometry(1.5, 0.14, 1.05), lid = new T.Group();
+  lid.add(new T.Mesh(lidG, k.S(c, 0.1)), k.E(lidG, k.L(c, 0.9))); lid.position.y = 0.47; box.add(lid);
+  const cloud = new T.Group(); cloud.position.y = 0.95; g.add(cloud);
+  [[-0.5, -0.05, 0.4], [0, 0.12, 0.55], [0.5, -0.05, 0.42]].forEach(([x, y, r]) => {
+    const ig = new T.IcosahedronGeometry(r, 1);
+    const e = k.E(ig, k.L(c, 0.45)); e.position.set(x, y, 0);
+    const f = new T.Mesh(ig, k.S(c, 0.035)); f.position.set(x, y, 0);
+    cloud.add(e, f);
+  });
+  const bp = []; for (let y = -0.35; y < 0.5; y += 0.1) bp.push(new T.Vector3(0, y, 0), new T.Vector3(0, y + 0.05, 0));
+  g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(bp), k.L(c, 0.3)));
+  const cg = new T.BoxGeometry(0.11, 0.11, 0.11), cubes = [];
+  for (let i = 0; i < 7; i++) { const m = k.S(c, 0.9), mesh = new T.Mesh(cg, m); g.add(mesh); cubes.push({ mesh, m, off: i / 7, x: (Math.random() - 0.5) * 0.7, z: (Math.random() - 0.5) * 0.5 }); }
+  const floor = new T.Group(); floor.position.y = -1.25; floor.rotation.x = Math.PI / 2; g.add(floor);
+  const fr = k.circle(1.2, 64, k.L(c, 0.45)), pulse = k.circle(1, 64, k.L(c, 0.6)); floor.add(fr, pulse);
+  const update = t => {
+    const o = 0.5 + 0.5 * Math.sin(t * 1.6); lid.position.y = 0.47 + 0.14 * o; lid.rotation.z = 0.07 * o;
+    cubes.forEach(q => { const p = (t * 0.35 + q.off) % 1; q.mesh.position.set(q.x * (1 - p), -0.4 + p * 1.35, q.z * (1 - p)); q.mesh.rotation.set(t + q.off * 6, t * 1.3, 0); q.m.userData.base = 0.9 * Math.sin(p * Math.PI); q.mesh.scale.setScalar(1 - 0.5 * p); });
+    cloud.rotation.y = t * 0.25;
+    const pp = (t * 0.5) % 1; pulse.scale.setScalar(0.4 + pp * 1.3); pulse.material.userData.base = 0.6 * (1 - pp);
+  };
+  return { g, mats: k.mats, update };
+}
+
+function buildWallet(T, c) {
+  const k = kit(T), g = new T.Group(), w = new T.Group(); g.add(w);
+  w.add(slab(T, k, rr(T, 2.1, 1.35, 0.16), 0.28, c, 0.07, 0.85));
+  const flap = new T.Group(); flap.position.set(0.72, -0.05, 0.2); w.add(flap);
+  const fs = rr(T, 0.8, 0.56, 0.12);
+  flap.add(new T.Mesh(new T.ShapeGeometry(fs), k.S(c, 0.1)), new T.Line(new T.BufferGeometry().setFromPoints(fs.getPoints().map(p => new T.Vector3(p.x, p.y, 0))), k.L(c, 0.8)));
+  const btn = new T.Mesh(new T.CircleGeometry(0.07, 20), k.S(c, 0.9)); btn.position.set(0.2, 0, 0.01); flap.add(btn);
+  const card = new T.Group(); w.add(card);
+  card.add(slab(T, k, rr(T, 1.75, 1.1, 0.1), 0.02, c, 0.1, 0.9));
+  const stripe = new T.Mesh(new T.PlaneGeometry(1.75, 0.14), k.S(c, 0.35)); stripe.position.set(0, 0.28, 0.03); card.add(stripe);
+  const chip = k.E(new T.PlaneGeometry(0.26, 0.2), k.L(c, 0.8)); chip.position.set(-0.55, 0, 0.03); card.add(chip);
+  const arr = new T.Group(); arr.rotation.x = 0.25; g.add(arr);
+  const R = 1.55, arcM = k.S(c, 0.85), headM = k.S(c, 0.95);
+  [0, Math.PI].forEach(b => {
+    const pts = []; for (let a = b + 0.25; a <= b + 2.55; a += 0.1) pts.push(new T.Vector3(Math.cos(a) * R, Math.sin(a) * R, 0));
+    arr.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), 48, 0.028, 6, false), arcM));
+    const a1 = b + 2.55, head = new T.Mesh(new T.ConeGeometry(0.09, 0.24, 12), headM);
+    head.position.set(Math.cos(a1) * R - Math.sin(a1) * 0.08, Math.sin(a1) * R + Math.cos(a1) * 0.08, 0); head.rotation.z = a1; arr.add(head);
+  });
+  const update = t => {
+    arr.rotation.z = t * 1.1;
+    arcM.userData.base = 0.65 + 0.3 * Math.sin(t * 2.2);
+    const ph = 0.5 - 0.5 * Math.cos(t * 1.2); card.position.set(-0.08, 0.05 + 0.65 * ph, 0);
+    w.rotation.y = Math.sin(t * 0.6) * 0.22; g.position.y = Math.sin(t * 1.1) * 0.05;
+  };
+  return { g, mats: k.mats, update };
+}
+
+function buildQR(T, c) {
+  const k = kit(T), g = new T.Group(), spin = new T.Group(); g.add(spin);
+  spin.add(slab(T, k, rr(T, 1.5, 2.05, 0.16), 0.05, c, 0.07, 0.9));
+  const Z = 0.05;
+  const slot = k.E(new T.PlaneGeometry(0.4, 0.08), k.L(c, 0.8)); slot.position.set(0, 0.84, Z); spin.add(slot);
+  const tl = new T.Mesh(new T.PlaneGeometry(0.7, 0.05), k.S(c, 0.5)); tl.position.set(0, 0.62, Z); spin.add(tl);
+  const N = 11, cell = 0.085, oy = -0.02, cells = [];
+  const cellG = new T.PlaneGeometry(cell * 0.84, cell * 0.84), cellM = k.S(c, 0.95);
+  const finder = (i, j) => (i < 3 && j < 3) || (i > 7 && j < 3) || (i < 3 && j > 7);
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+    const m = new T.Mesh(cellG, cellM); m.position.set((i - 5) * cell, oy + (5 - j) * cell, Z); spin.add(m);
+    if (!finder(i, j)) cells.push(m);
+  }
+  const frame = k.E(new T.PlaneGeometry(N * cell + 0.12, N * cell + 0.12), k.L(c, 0.55)); frame.position.set(0, oy, Z); spin.add(frame);
+  const barM = k.S(c, 0.8), bar = new T.Mesh(new T.PlaneGeometry(1, 0.04), barM); bar.position.set(0, -0.72, Z); spin.add(bar);
+  const track = k.E(new T.PlaneGeometry(1, 0.04), k.L(c, 0.3)); track.position.set(0, -0.72, Z); spin.add(track);
+  const scanM = k.S(c, 0.6), scan = new T.Mesh(new T.PlaneGeometry(N * cell + 0.16, 0.012), scanM); spin.add(scan);
+  const base = new T.Group(); base.position.y = -1.45; g.add(base);
+  const b1 = k.circle(0.62, 64, k.L(c, 0.8)), b2 = k.dashed(0.9, 40, 0.55, k.L(c, 0.45));
+  b1.rotation.x = b2.rotation.x = Math.PI / 2; base.add(b1, b2);
+  const cone = new T.Mesh(new T.CylinderGeometry(0.95, 0.62, 0.45, 40, 1, true), k.S(c, 0.06)); cone.position.y = 0.23; base.add(cone);
+  g.position.y = 0.2;
+  const refresh = () => cells.forEach(m => { m.visible = Math.random() > 0.48; });
+  refresh(); let last = 0;
+  const update = t => {
+    if (t - last > 1.5 || t < last) { last = t; refresh(); }
+    const ph = (t - last) / 1.5;
+    bar.scale.x = Math.max(0.001, 1 - ph); bar.position.x = -0.5 * ph;
+    scan.position.set(0, oy + N * cell / 2 - ph * N * cell, Z + 0.01); scanM.userData.base = 0.7 * Math.sin(ph * Math.PI);
+    spin.rotation.y = t * 0.8; spin.position.y = Math.sin(t * 1.3) * 0.05; b2.rotation.z = t * 0.4;
+  };
+  return { g, mats: k.mats, update };
+}
+
+function buildHub(T, c) {
+  const k = kit(T), g = new T.Group(), hub = new T.Group(); hub.position.y = -0.35; g.add(hub);
+  const hb = new T.BoxGeometry(1.7, 0.36, 1.05); hub.add(new T.Mesh(hb, k.S(c, 0.07)), k.E(hb, k.L(c, 0.9)));
+  const top = k.E(new T.PlaneGeometry(1.3, 0.7), k.L(c, 0.35)); top.rotation.x = -Math.PI / 2; top.position.y = 0.185; hub.add(top);
+  const coreM = k.S(c, 0.8), core = new T.Mesh(new T.CircleGeometry(0.16, 32), coreM); core.rotation.x = -Math.PI / 2; core.position.y = 0.19; hub.add(core);
+  const coreR = k.circle(0.26, 40, k.L(c, 0.6)); coreR.rotation.x = Math.PI / 2; coreR.position.y = 0.19; hub.add(coreR);
+  const leds = [], ledG = new T.PlaneGeometry(0.12, 0.05);
+  for (let i = 0; i < 6; i++) { const m = k.S(c, 0.6), l = new T.Mesh(ledG, m); l.position.set(-0.62 + i * 0.18, 0, 0.53); hub.add(l); leds.push(m); }
+  const port = k.E(new T.PlaneGeometry(0.22, 0.12), k.L(c, 0.7)); port.position.set(0.6, 0, 0.53); hub.add(port);
+  const tips = [];
+  [-0.7, 0.7].forEach(x => {
+    const ag = new T.CylinderGeometry(0.018, 0.018, 0.8, 6); ag.translate(0, 0.4, 0);
+    const a = new T.Mesh(ag, k.S(c, 0.7)); a.position.set(x, 0.18, -0.4); hub.add(a);
+    const m = k.S(c, 0.9), tip = new T.Mesh(new T.SphereGeometry(0.05, 10, 8), m); tip.position.set(x, 0.98, -0.4); hub.add(tip); tips.push(m);
+  });
+  const nodes = new T.Group(); g.add(nodes);
+  const C = new T.Vector3(0, -0.2, 0), pk = [], octG = new T.OctahedronGeometry(0.13), hy = [0.45, -0.1, 0.75, 0.1, 0.6, -0.25];
+  for (let i = 0; i < 6; i++) {
+    const a = i / 6 * Math.PI * 2, P = new T.Vector3(Math.cos(a) * 1.75, hy[i], Math.sin(a) * 1.75);
+    const o = new T.Group(); o.position.copy(P); o.add(new T.Mesh(octG, k.S(c, 0.15)), k.E(octG, k.L(c, 0.8))); nodes.add(o);
+    nodes.add(new T.Line(new T.BufferGeometry().setFromPoints([P, C]), k.L(c, 0.22)));
+    const m = k.S(c, 0.9), s = new T.Mesh(new T.SphereGeometry(0.035, 8, 6), m); nodes.add(s); pk.push({ s, m, P, off: i / 6 });
+  }
+  const floor = new T.Group(); floor.position.y = -0.55; floor.rotation.x = Math.PI / 2; g.add(floor);
+  const pa = k.circle(1, 64, k.L(c, 0.6)), pb = k.circle(1, 64, k.L(c, 0.6)), fr = k.dashed(1.3, 48, 0.55, k.L(c, 0.3)); floor.add(pa, pb, fr);
+  const update = t => {
+    leds.forEach((m, i) => { m.userData.base = 0.2 + 0.75 * Math.max(0, Math.sin(t * 4 - i * 0.8)); });
+    const cp = 0.5 + 0.5 * Math.sin(t * 3); coreM.userData.base = 0.45 + 0.5 * cp; coreR.scale.setScalar(1 + 0.25 * cp);
+    tips.forEach((m, i) => { m.userData.base = 0.4 + 0.55 * (0.5 + 0.5 * Math.sin(t * 5 + i * 2)); });
+    pk.forEach(q => { const p = (t * 0.5 + q.off) % 1; q.s.position.lerpVectors(q.P, C, p); q.m.userData.base = 0.9 * Math.sin(p * Math.PI); });
+    nodes.rotation.y = t * 0.15; fr.rotation.z = t * 0.2;
+    [pa, pb].forEach((r, i) => { const p = (t * 0.55 + i * 0.5) % 1; r.scale.setScalar(0.3 + p * 1.6); r.material.userData.base = 0.6 * (1 - p); });
+  };
+  return { g, mats: k.mats, update };
+}
+
+function buildBridge(T, c) {
+  const k = kit(T), g = new T.Group();
+  const legacy = new T.Group(); legacy.position.set(-1.05, 0, 0); g.add(legacy);
+  const lg = new T.BoxGeometry(0.6, 1.8, 0.6);
+  legacy.add(new T.Mesh(lg, k.S(c, 0.03)), k.E(lg, k.L(c, 0.38)));
+  const slots = [];
+  for (let i = 0; i < 4; i++) { const m = k.L(c, 0.25), p = k.E(new T.PlaneGeometry(0.38, 0.1), m); p.position.set(0, 0.6 - i * 0.2, 0.302); legacy.add(p); slots.push(m); }
+  const armG = new T.BoxGeometry(0.06, 0.06, 1.05); armG.translate(0, 0, 0.525);
+  const arm = new T.Group(); arm.position.set(0, 0.25, 0.3); arm.add(new T.Mesh(armG, k.S(c, 0.18)), k.E(armG, k.L(c, 0.55))); legacy.add(arm);
+  const lport = k.E(new T.PlaneGeometry(0.16, 0.1), k.L(c, 0.8)); lport.rotation.y = Math.PI / 2; lport.position.set(0.302, -0.35, 0); legacy.add(lport);
+  const hs = k.circle(0.12, 32, k.L(c, 0.7)); hs.rotation.y = Math.PI / 2; hs.position.set(0.31, -0.35, 0); legacy.add(hs);
+  const ctl = new T.Group(); ctl.position.set(0.95, -0.55, 0); g.add(ctl);
+  const cb = new T.BoxGeometry(0.7, 0.4, 0.5);
+  ctl.add(new T.Mesh(cb, k.S(c, 0.1)), k.E(cb, k.L(c, 0.95)));
+  const leds = [], ledG = new T.PlaneGeometry(0.07, 0.04);
+  for (let i = 0; i < 4; i++) { const m = k.S(c, 0.6), l = new T.Mesh(ledG, m); l.position.set(-0.2 + i * 0.11, 0.06, 0.251); ctl.add(l); leds.push(m); }
+  for (let i = 0; i < 3; i++) { const p = k.E(new T.PlaneGeometry(0.1, 0.07), k.L(c, 0.6)); p.position.set(-0.15 + i * 0.15, -0.08, 0.251); ctl.add(p); }
+  const antG = new T.CylinderGeometry(0.015, 0.015, 0.5, 6); antG.translate(0, 0.25, 0);
+  const ant = new T.Mesh(antG, k.S(c, 0.7)); ant.position.set(0.25, 0.2, -0.15); ctl.add(ant);
+  const tipM = k.S(c, 0.9), tip = new T.Mesh(new T.SphereGeometry(0.045, 10, 8), tipM); tip.position.set(0.25, 0.72, -0.15); ctl.add(tip);
+  const wave = k.circle(0.1, 32, k.L(c, 0.6)); wave.rotation.x = Math.PI / 2; wave.position.set(0.25, 0.72, -0.15); ctl.add(wave);
+  const halo = k.dashed(0.62, 36, 0.55, k.L(c, 0.45)); halo.rotation.x = Math.PI / 2; halo.position.y = -0.2; ctl.add(halo);
+  const curve = new T.CatmullRomCurve3([new T.Vector3(-0.74, -0.35, 0), new T.Vector3(-0.35, -0.8, 0.15), new T.Vector3(0.25, -0.78, 0.1), new T.Vector3(0.6, -0.55, 0)]);
+  g.add(new T.Mesh(new T.TubeGeometry(curve, 48, 0.018, 6, false), k.S(c, 0.5)));
+  const pk = [], pG = new T.SphereGeometry(0.035, 8, 6);
+  for (let i = 0; i < 4; i++) { const m = k.S(c, 0.95), s = new T.Mesh(pG, m); g.add(s); pk.push({ s, m, off: i / 4, rev: i % 2 === 1 }); }
+  const floor = new T.Group(); floor.position.y = -0.95; floor.rotation.x = Math.PI / 2; g.add(floor);
+  const fr = k.dashed(1.7, 56, 0.55, k.L(c, 0.28)), pulse = k.circle(1, 64, k.L(c, 0.55)); pulse.position.x = 0.95; floor.add(fr, pulse);
+  g.position.y = 0.1;
+  const update = t => {
+    const s = (t * 0.4) % 1, open = Math.max(0, Math.sin((s - 0.5) * Math.PI * 2));
+    arm.rotation.x = -1.35 * Math.pow(open, 0.6);
+    slots.forEach((m, i) => { m.userData.base = 0.2 + 0.5 * open * (i === 0 ? 1 : 0.4); });
+    pk.forEach(q => { const p = (t * 0.45 + q.off) % 1; q.s.position.copy(curve.getPointAt(q.rev ? 1 - p : p)); q.m.userData.base = 0.95 * Math.sin(p * Math.PI); });
+    leds.forEach((m, i) => { m.userData.base = 0.25 + 0.7 * Math.max(0, Math.sin(t * 5 - i * 0.9)); });
+    const hp = (t * 0.9) % 1; hs.scale.setScalar(1 + hp * 1.6); hs.material.userData.base = 0.7 * (1 - hp);
+    const wp = (t * 0.7) % 1; wave.scale.setScalar(1 + wp * 3); wave.material.userData.base = 0.6 * (1 - wp);
+    tipM.userData.base = 0.5 + 0.45 * Math.sin(t * 4);
+    halo.rotation.z = t * 0.4; fr.rotation.z = -t * 0.12;
+    const pp = (t * 0.5) % 1; pulse.scale.setScalar(0.25 + pp * 0.9); pulse.material.userData.base = 0.55 * (1 - pp);
+  };
+  return { g, mats: k.mats, update };
+}
+
+class Component extends DCLogic {
+  state = (() => {
+    const m = (typeof location !== 'undefined' && (location.hash || '').match(/faq-0?(\d+)/));
+    const id = m && TOPIC[Number(m[1])] ? Number(m[1]) : 1;
+    return { tab: 'all', activeId: id, shownId: id, fade: false, fb: {}, toast: false, isMobile: typeof window !== 'undefined' && window.innerWidth < 1024 };
+  })();
+  deckRef = React.createRef();
+  navRef = React.createRef();
+  slaDot = React.createElement('span', { key: 'sd', 'aria-hidden': 'true', style: { width: 6, height: 6, flexShrink: 0, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px rgba(52,211,153,.8)', animation: 'ccPulse 2s cubic-bezier(0.4,0,0.6,1) infinite' } });
+  pulseDot = React.createElement('span', { key: 'pd', 'aria-hidden': 'true', style: { width: 6, height: 6, flexShrink: 0, borderRadius: '50%', background: 'rgba(52,211,153,.8)', animation: 'ccPulse 2s cubic-bezier(0.4,0,0.6,1) infinite' } });
+  yaw = 0; pitch = 0; vel = 0; cur = null;
+  hostDesk = el => { if (el) { this.host = el; this.attach(); } };
+  hostMob = el => { if (el) { this.host = el; this.attach(); } };
+
+  componentDidMount() {
+    this.onResize = () => { const mob = window.innerWidth < 1024; if (mob !== this.state.isMobile) this.setState({ isMobile: mob }); };
+    this.onKey = e => {
+      const next = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!next || /INPUT|TEXTAREA/.test(document.activeElement && document.activeElement.tagName)) return;
+      const vis = this.visible(this.state.tab), i = vis.findIndex(v => v.id === this.state.activeId);
+      const n = vis[Math.max(0, Math.min(vis.length - 1, i + next))];
+      if (!n) return;
+      e.preventDefault(); this.select(n.id);
+      const nav = this.navRef.current;
+      if (nav && !this.state.isMobile) {
+        const b = nav.querySelector('[data-id="' + n.id + '"]');
+        if (b && nav.contains(document.activeElement)) b.focus({ preventScroll: true });
+        this.revealNav(n.id);
+      }
+    };
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+    this.initThree();
+    if (this.state.isMobile && this.state.activeId !== 1) setTimeout(() => this.scrollDeck(this.state.activeId, 'auto'), 100);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    cancelAnimationFrame(this.raf); clearTimeout(this.poll); clearTimeout(this.ft); clearTimeout(this.tt);
+    if (this.ro) this.ro.disconnect();
+    if (this.three) this.three.r.dispose();
+  }
+
+  initThree() {
+    const T = window.THREE;
+    if (!T) { this.poll = setTimeout(() => this.initThree(), 60); return; }
+    const r = new T.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); r.setClearColor(0x000000, 0);
+    const cv = r.domElement;
+    Object.assign(cv.style, { width: '100%', height: '100%', display: 'block', touchAction: 'none', cursor: 'grab' });
+    const scene = new T.Scene(), cam = new T.PerspectiveCamera(35, 1, 0.1, 100);
+    cam.position.set(0, 0.4, 7); cam.lookAt(0, 0, 0);
+    const root = new T.Group(); scene.add(root);
+    this.objs = {};
+    [[1, buildTurnstile], [2, buildVault], [3, buildBadge], [4, buildCloud], [5, buildWallet], [6, buildQR], [7, buildHub], [8, buildBridge]].forEach(([id, fn]) => {
+      const key = VIS[id], o = fn(T, QC[id]), wrap = new T.Group(); wrap.add(o.g); root.add(wrap);
+      this.objs[key] = { ...o, wrap, k: 0, dir: -1 };
+    });
+    const pts = [];
+    for (let i = 0; i < 180; i++) pts.push((Math.random() - 0.5) * 9, (Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5 - 1);
+    const pg = new T.BufferGeometry(); pg.setAttribute('position', new T.Float32BufferAttribute(pts, 3));
+    const dust = new T.Points(pg, new T.PointsMaterial({ color: 0xa9bcff, size: 0.022, transparent: true, opacity: 0.5, depthWrite: false, blending: T.AdditiveBlending }));
+    scene.add(dust);
+    const gc = document.createElement('canvas'); gc.width = gc.height = 128;
+    const gx = gc.getContext('2d'), gr = gx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.35, 'rgba(255,255,255,.22)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    gx.fillStyle = gr; gx.fillRect(0, 0, 128, 128);
+    const glow = new T.Sprite(new T.SpriteMaterial({ map: new T.CanvasTexture(gc), color: new T.Color(QC[this.state.activeId]), transparent: true, opacity: 0.3, blending: T.AdditiveBlending, depthWrite: false }));
+    glow.scale.set(6.5, 6.5, 1); glow.position.z = -1.5; scene.add(glow);
+    this.tcol = new T.Color();
+    let drag = null;
+    cv.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY }; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; });
+    cv.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag = { x: e.clientX, y: e.clientY };
+      this.vel = dx * 0.008; this.yaw += this.vel; this.pitch = Math.max(-0.45, Math.min(0.45, this.pitch + dy * 0.005));
+    });
+    const up = () => { drag = null; cv.style.cursor = 'grab'; };
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    this.three = { T, r, scene, cam, root, dust, glow, cv, isDrag: () => !!drag };
+    this.ro = new ResizeObserver(() => this.resize());
+    this.attach();
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let last = performance.now(), t = 0;
+    const tick = now => {
+      this.raf = requestAnimationFrame(tick);
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (document.hidden || !this.host) return;
+      t += dt * (reduce ? 0.3 : 1);
+      this.frame(t, dt);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+  attach() {
+    const th = this.three;
+    if (!th || !this.host) return;
+    if (th.cv.parentNode !== this.host) {
+      this.host.appendChild(th.cv);
+      this.ro.disconnect(); this.ro.observe(this.host);
+    }
+    this.resize();
+  }
+  resize() {
+    const th = this.three, el = this.host;
+    if (!th || !el) return;
+    const w = el.clientWidth || 1, h = el.clientHeight || 1, a = w / h;
+    th.r.setSize(w, h, false);
+    th.cam.aspect = a; th.cam.position.z = a < 1.1 ? 7.4 / a * 1.05 : 7.2; th.cam.updateProjectionMatrix();
+  }
+  frame(t, dt) {
+    const th = this.three, tp = VIS[this.state.activeId] || 'turnstile';
+    if (tp !== this.cur) { if (this.cur) this.objs[this.cur].dir = 1; this.objs[tp].dir = -1; this.cur = tp; }
+    const f = 1 - Math.exp(-dt * 5);
+    Object.keys(this.objs).forEach(key => {
+      const o = this.objs[key];
+      o.k += ((key === tp ? 1 : 0) - o.k) * f;
+      o.wrap.visible = o.k > 0.004;
+      if (!o.wrap.visible) return;
+      o.update(t, dt);
+      const e = o.k;
+      o.wrap.scale.setScalar(0.5 + 0.5 * e);
+      o.wrap.rotation.y = (1 - e) * o.dir * 1.8;
+      o.wrap.position.y = (1 - e) * -0.25;
+      o.mats.forEach(m => { m.opacity = m.userData.base * e; });
+    });
+    if (!th.isDrag()) { this.vel *= 0.94; this.yaw += this.vel; this.pitch *= 0.97; }
+    const auto = (this.props.autoRotate ?? true) ? Math.sin(t * 0.35) * 0.4 : 0;
+    th.root.rotation.y = this.yaw + auto; th.root.rotation.x = 0.06 + this.pitch;
+    th.dust.rotation.y = t * 0.02;
+    this.tcol.set(QC[this.state.activeId] || '#5cc8ff');
+    th.glow.material.color.lerp(this.tcol, f * 0.6); th.dust.material.color.lerp(this.tcol, f * 0.3);
+    th.glow.material.opacity = 0.26 + 0.05 * Math.sin(t * 1.5);
+    th.r.render(th.scene, th.cam);
+  }
+
+  visible(tab) { return FAQ.filter(i => tab === 'all' || i.cat === tab || i.cat === 'hybrid'); }
+  select(id) {
+    if (id === this.state.activeId) return;
+    this.setState({ activeId: id, fade: true });
+    clearTimeout(this.ft);
+    this.ft = setTimeout(() => this.setState({ shownId: id, fade: false }), 170);
+    if (this.fromScroll) this.fromScroll = false; else this.scrollDeck(id);
+    try { history.replaceState(null, '', '#faq-0' + id); } catch (e) {}
+  }
+  revealNav(id) {
+    const nav = this.navRef.current, b = nav && nav.querySelector('[data-id="' + id + '"]');
+    if (!b) return;
+    const nr = nav.getBoundingClientRect(), br = b.getBoundingClientRect();
+    if (br.top < nr.top + 8) nav.scrollBy({ top: br.top - nr.top - 8, behavior: 'smooth' });
+    else if (br.bottom > nr.bottom - 8) nav.scrollBy({ top: br.bottom - nr.bottom + 8, behavior: 'smooth' });
+  }
+  copyLink(id) {
+    const url = location.href.split('#')[0] + '#faq-0' + id;
+    const done = () => { this.setState({ toast: true }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: false }), 1800); };
+    const legacy = () => {
+      const ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', '');
+      Object.assign(ta.style, { position: 'fixed', top: '0', opacity: '0' }); document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (e) {} ta.remove(); done();
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, legacy); else legacy();
+  }
+  rate(id, v) { this.setState(s => ({ fb: { ...s.fb, [id]: v } })); }
+  fbVals(id) {
+    const d = !!this.state.fb[id];
+    return { onCopy: () => this.copyLink(id), onUp: () => this.rate(id, 'up'), onDown: () => this.rate(id, 'down'),
+      fbBtnOp: d ? 0 : 1, fbPe: d ? 'none' : 'auto', fbAckOp: d ? 1 : 0, fbAckTf: d ? 'translateY(0)' : 'translateY(4px)' };
+  }
+  scrollDeck(id, behavior) {
+    const el = this.deckRef.current;
+    if (!el) return;
+    const card = el.querySelector('[data-id="' + id + '"]');
+    if (!card) return;
+    const er = el.getBoundingClientRect(), cr = card.getBoundingClientRect();
+    this.progUntil = performance.now() + 650;
+    el.scrollTo({ left: el.scrollLeft + (cr.left + cr.width / 2) - (er.left + er.width / 2), behavior: behavior || 'smooth' });
+  }
+  onDeckScroll = () => {
+    if (this.sraf || performance.now() < (this.progUntil || 0)) return;
+    this.sraf = requestAnimationFrame(() => {
+      this.sraf = 0;
+      const el = this.deckRef.current;
+      if (!el) return;
+      const er = el.getBoundingClientRect(), c = er.left + er.width / 2;
+      let best = null, bd = 1e9;
+      el.querySelectorAll('[data-id]').forEach(ch => { const r = ch.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - c); if (d < bd) { bd = d; best = ch; } });
+      const id = best && Number(best.getAttribute('data-id'));
+      if (id && id !== this.state.activeId) { this.fromScroll = true; this.select(id); }
+    });
+  };
+  setTab(tab) {
+    const vis = this.visible(tab);
+    const keep = vis.some(v => v.id === this.state.activeId);
+    const id = keep ? this.state.activeId : vis[0].id;
+    this.setState({ tab, activeId: id, shownId: id, fade: false }, () => setTimeout(() => this.scrollDeck(id, 'auto'), 30));
+  }
+
+  renderVals() {
+    const lang = DICT[this.props.lang] ? this.props.lang : 'ge';
+    const Q = DICT[lang].q, t = UI[lang] || UI.ge;
+    const { tab, activeId, shownId, fade, isMobile } = this.state;
+    const tp = TOPIC[activeId] || 'turnstile';
+    const sd = Q[shownId];
+    return {
+      t, isMobile, isDesktop: !isMobile,
+      hostDesk: this.hostDesk, hostMob: this.hostMob, deckRef: this.deckRef, onDeckScroll: this.onDeckScroll,
+      pulseDot: this.pulseDot, slaDot: this.slaDot, navRef: this.navRef,
+      toastOp: this.state.toast ? 1 : 0, toastTf: this.state.toast ? 'translate(-50%,0)' : 'translate(-50%,-8px)',
+      glows: FAQ.map(i => ({ bg: 'radial-gradient(circle at 72% 36%, ' + rgba(QC[i.id], 0.2) + ', transparent 48%)', op: i.id === activeId ? 1 : 0 })),
+      topicColor: QC[activeId], topicLabel: t.topics[tp],
+      tabs: ['all', 'b2b', 'b2c'].map(k => {
+        const on = k === tab;
+        return { label: t[k], tag: k === 'all' ? '' : k.toUpperCase(), hasTag: k !== 'all', active: on, onClick: () => this.setTab(k),
+          bg: on ? '#f4f6fa' : 'rgba(255,255,255,.05)', color: on ? '#0a0d16' : '#b4bcc9',
+          shadow: on ? '0 0 22px rgba(160,190,255,.35)' : 'none' };
+      }),
+      items: this.visible(tab).map(i => {
+        const d = Q[i.id], on = i.id === activeId, top = TOPIC[i.id], c = QC[i.id];
+        return {
+          id: i.id, q: d.q, a: d.a, points: d.p, basis: d.b, active: on, topic: t.topics[top], color3d: c, ...this.fbVals(i.id),
+          onClick: () => this.select(i.id),
+          bg: on ? 'rgba(255,255,255,.1)' : 'transparent',
+          shadow: on ? '0 0 0 1.5px rgba(255,255,255,.92), 0 0 34px 2px ' + rgba(c, 0.38) + ', 0 16px 44px rgba(0,0,0,.55)' : '0 0 0 0 rgba(255,255,255,0)',
+          color: on ? '#ffffff' : '#8d96a6', fw: on ? 600 : 500, tf: on ? 'scale(1.015)' : 'scale(1)',
+          dot: on ? c : 'rgba(255,255,255,.16)', dotGlow: on ? '0 0 14px ' + c : 'none',
+          cardShadow: on ? '0 0 0 1.5px rgba(255,255,255,.9), 0 0 34px ' + rgba(c, 0.35) + ', 0 20px 50px rgba(0,0,0,.6)' : 'inset 0 1px 0 rgba(255,255,255,.08)',
+          cardOp: on ? 1 : 0.5, cardTf: on ? 'scale(1)' : 'scale(.95)',
+          dotW: on ? '18px' : '6px', dotBg: on ? '#ffffff' : 'rgba(255,255,255,.22)',
+        };
+      }),
+      ans: { q: sd.q, a: sd.a, points: sd.p, basis: sd.b, ...this.fbVals(shownId) },
+      ansOp: fade ? 0 : 1, ansTf: fade ? 'translateY(10px)' : 'translateY(0)',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -67,8 +67,8 @@ export const B2CAthleteAdvantages: React.FC = () => {
   return (
     <section id="mobile-app" className="py-20 md:py-28 relative overflow-hidden bg-[#07090E] border-t border-white/5 studio-grain">
       {/* Glow Backdrops */}
-      <div className="absolute top-1/3 left-1/4 w-[600px] h-[350px] bg-[#00A3FF]/10 blur-[140px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-1/4 w-[500px] h-[300px] bg-[#00ff87]/8 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/3 left-1/4 w-[600px] h-[350px] bg-[#00A3FF]/10 blur-[140px] rounded-full pointer-events-none -z-10 [transform:translate3d(0,0,0)]" />
+      <div className="absolute bottom-10 right-1/4 w-[500px] h-[300px] bg-[#00ff87]/8 blur-[120px] rounded-full pointer-events-none -z-10 [transform:translate3d(0,0,0)]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         

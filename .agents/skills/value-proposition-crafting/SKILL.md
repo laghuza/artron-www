@@ -22,7 +22,7 @@ graph TD
     Hero["1. The Hero<br/>(Gym / Pool / Studio Owner)"] --> Problem["2. The Problem<br/>(Chaotic Excel, Unpaid Entries, Order №01-15/ნ Fines)"]
     Problem --> Guide["3. Meets the Guide<br/>(ARTRON - Enterprise SaaS Platform)"]
     Guide --> Plan["4. Who Gives Them a Plan<br/>(1. Cloud Setup ➔ 2. IoT Hardware Sync ➔ 3. Mobile App Launch)"]
-    Plan --> CTA["5. Calls Them to Action<br/>('მოითხოვეთ უფასო დემო' / 'დაიწყეთ 14 დღე')"]
+    Plan --> CTA["5. Calls Them to Action<br/>('მოითხოვეთ უფასო დემო' / 'დაჯავშნეთ პრეზენტაცია')"]
     CTA --> AvoidFail["6. Avoids Failure<br/>(Zero lost revenue, zero labor inspection fines)"]
     CTA --> Success["7. Ends in Success<br/>(Thriving, automated, profitable sports facility)"]
 ```
@@ -70,7 +70,7 @@ Use these verified value propositions across UI components and landing sections:
 
 Avoid weak, generic CTAs like *"გაგზავნა"* or *"დაგვიკავშირდით"*. Always use **Value-Packed, Risk-Free Action CTAs**:
 
-- **Primary B2B CTA:** `"მოითხოვეთ პერსონალური დემო"` / `"დაიწყეთ 14 დღე უფასოდ"`
+- **Primary B2B CTA:** `"მოითხოვეთ პერსონალური დემო"` / `"დაჯავშნეთ სისტემის პრეზენტაცია"`
 - **Direct Messaging CTA:** `"დაგვიკავშირდით WhatsApp-ში"` / `"დაგვიკავშირდით Telegram-ში"`
 - **Micro-copy under CTA:** `"💳 საკრედიტო ბარათი არ არის საჭირო • ⏱️ ინსტალაცია 24 საათში • 🔒 GDPR & კანონმდებლობასთან სრული შესაბამისობა"`
 

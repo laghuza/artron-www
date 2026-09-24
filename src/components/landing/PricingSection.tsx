@@ -39,7 +39,7 @@ export const PricingSection: React.FC = () => {
   return (
     <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 relative bg-[#0B0E14] border-t border-white/5">
       {/* Background Glows */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 [transform:translate3d(0,0,0)]">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[750px] h-[400px] bg-[#00A3FF]/10 blur-[140px] rounded-full" />
         <div className="absolute bottom-10 right-10 w-[450px] h-[300px] bg-[#00ff87]/5 blur-[120px] rounded-full" />
       </div>

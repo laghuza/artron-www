@@ -1,0 +1,138 @@
+/* Scoped Styles for ARTRON About & Vision Experience */
+
+.vision-root {
+  --obsidian: #090A0F;
+  --abyss: #0B132B;
+  --snow: rgba(248, 250, 252, 0.95);
+  --patina: #94A3B8;
+  --titanium: #64748B;
+  --gold: #D4AF37;
+  --bronze: #CD7F32;
+  --emerald: #10B981;
+  --diamond: #E2E8F0;
+  --pad: clamp(20px, 4.2vw, 72px);
+  --rail: 0px;
+  background: linear-gradient(180deg, #090A0F 0%, #090A0F 30%, #0B132B 100%);
+  color: var(--snow);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (min-width: 901px) {
+  .vision-root {
+    --rail: 56px;
+  }
+}
+
+.vision-grid {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 calc(var(--pad) + var(--rail)) 0 var(--pad);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 2vw, 32px);
+}
+
+.vision-mono {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--patina);
+  font-weight: 400;
+}
+
+.vision-mono b {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.vision-metal {
+  background: linear-gradient(100deg, #64748B 0%, #F8FAFC 20%, #94A3B8 38%, #F8FAFC 55%, #7c8799 75%, #E2E8F0 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: vision-sheen 14s ease-in-out infinite alternate;
+}
+
+@keyframes vision-sheen {
+  from { background-position: 0% 0; }
+  to { background-position: 100% 0; }
+}
+
+.vision-rule {
+  position: relative;
+  height: 1px;
+  overflow: hidden;
+  background: linear-gradient(90deg, transparent, rgba(226, 232, 240, 0.07) 12%, rgba(226, 232, 240, 0.42) 50%, rgba(226, 232, 240, 0.07) 88%, transparent);
+}
+
+.vision-rule::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: vision-pulse 7s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+@keyframes vision-pulse {
+  0% { transform: translateX(-160px); }
+  60%, 100% { transform: translateX(100vw); }
+}
+
+.vision-divider {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  grid-column: 1 / -1;
+}
+
+.vision-divider .vision-rule {
+  flex: 1;
+}
+
+.vision-divider i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--bronze);
+  transform: rotate(45deg);
+  flex: none;
+}
+
+/* Scroll reveal classes */
+.vision-rv {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.2s cubic-bezier(0.2, 0.7, 0.1, 1), transform 1.2s cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+.vision-rv.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .vision-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .vision-grid > * {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-metal, .vision-rule::after {
+    animation: none;
+  }
+  .vision-rv {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

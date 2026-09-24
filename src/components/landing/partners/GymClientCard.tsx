@@ -41,6 +41,11 @@ export const GymClientCard: React.FC<GymClientCardProps> = ({ gym }) => {
             <p className="text-xs text-[#94A3B8] font-medium truncate">
               {getGymSubtitle()}
             </p>
+            {gym.regionName && (
+              <p className="text-[10px] text-[#6E8DA0] font-mono mt-0.5 truncate">
+                📍 {gym.regionName}{gym.regionCity && gym.regionCity !== gym.regionName ? `, ${gym.regionCity}` : ''}
+              </p>
+            )}
           </div>
         </div>
 

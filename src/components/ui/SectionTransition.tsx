@@ -18,7 +18,7 @@ export const SectionTransition: React.FC<SectionTransitionProps> = ({
 }) => {
   return (
     <div
-      className={`relative w-full h-16 sm:h-20 overflow-hidden pointer-events-none select-none z-10 ${className}`}
+      className={`relative w-full h-16 sm:h-20 overflow-hidden pointer-events-none select-none z-10 [contain:strict] [transform:translate3d(0,0,0)] ${className}`}
       aria-hidden="true"
       role="presentation"
     >

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Georgian:wght@400;500;600&display=swap" rel="stylesheet" />
+<script type="module" src="./ennea-sphere.js"></script>
+<script type="module" src="./ennea-audio.js"></script>
+<style>
+  body { margin: 0; background: #0A0D12; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+  a { color: #7FD4FF; text-decoration: none; }
+  a:hover { color: #C9E9FF; }
+  @keyframes blip { 0%,100% { opacity: 1; } 50% { opacity: 0.28; } }
+  @keyframes badgeIn { from { opacity: 0; transform: translate(-6px, 6px); } to { opacity: 1; transform: translate(0,0); } }
+</style>
+</helmet>
+
+<section data-screen-label="Ennea Ecosystem" style="display:flex;flex-wrap:nowrap;align-items:stretch;height:100vh;background:#0A0D12;color:#EAF4FF;font-family:'Space Grotesk',system-ui,sans-serif;position:relative;overflow:hidden">
+
+  <div style="flex:0 1 35%;min-width:290px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:28px 30px;overflow:hidden;background:rgba(13,17,23,0.72);backdrop-filter:blur(28px) saturate(1.25);-webkit-backdrop-filter:blur(28px) saturate(1.25);border-right:1px solid rgba(255,255,255,0.06);z-index:10">
+
+    <div style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="width:7px;height:7px;border-radius:50%;background:#7FD4FF;box-shadow:0 0 12px 2px rgba(127,212,255,0.85);animation:blip 2.2s ease-in-out infinite"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.28em;color:#6E8DA0;text-transform:uppercase">Ennea Core // Ecosystem</span>
+      </div>
+
+      <h1 style="margin:0;font-size:clamp(28px,2.9vw,42px);line-height:1.06;font-weight:600;letter-spacing:-0.03em;color:#F4FAFF;text-wrap:balance">Nine Cores.<br />One Sports Mesh.</h1>
+
+      <p style="margin:0;max-width:46ch;font-family:'Noto Sans Georgian','Space Grotesk',sans-serif;font-size:14.5px;line-height:1.7;color:#8AA3B2;text-wrap:pretty">{{ subtitle }}</p>
+
+      <button type="button" onClick="{{ toggleView }}" style="appearance:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;text-align:left;cursor:pointer;background:{{ ctaBg }};border:1px solid {{ ctaBorder }};transition:background .2s,border-color .2s" style-hover="border-color:rgba(127,212,255,0.55)">
+        <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:0.16em;color:#EAF4FF">{{ ctaLabel }}</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7FD4FF">{{ ctaGlyph }}</span>
+      </button>
+
+      <div style="flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,0.07)">
+        <sc-for list="{{ cores }}" as="c" hint-placeholder-count="9">
+          <button type="button" onClick="{{ c.pick }}" style="position:relative;appearance:none;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,0.07);padding:10px 12px;display:flex;align-items:baseline;gap:14px;text-align:left;cursor:{{ c.cursor }};color:#DCEAF4;opacity:{{ c.mute }};transition:opacity .25s,background .2s" style-hover="background:rgba(127,212,255,0.05)">
+            <span style="position:absolute;left:0;top:0;bottom:0;width:2px;background:#7FD4FF;box-shadow:0 0 12px rgba(127,212,255,0.9);opacity:{{ c.on }};transition:opacity .22s"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;color:#5B7C8E;min-width:42px">{{ c.code }}</span>
+            <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500;letter-spacing:0.005em;color:#E6F3FB;line-height:1.3">{{ c.name }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#5F8296;line-height:1.3">{{ c.meta }}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ showStats }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px;flex:0 0 auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07)">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+            <span style="font-size:clamp(17px,1.55vw,23px);font-weight:600;letter-spacing:-0.025em;color:#F4FAFF;white-space:nowrap">{{ s.v }}</span>
+            <span style="font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#6E8DA0;text-transform:uppercase">{{ s.k }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="flex:1 1 0;min-width:260px;box-sizing:border-box;position:relative;display:flex">
+    <div style="position:absolute;inset:0;background:radial-gradient(62% 58% at 52% 46%, rgba(127,212,255,0.09), rgba(10,13,18,0) 72%);pointer-events:none;z-index:1"></div>
+
+    <x-import component-from-global-scope="ennea-sphere" accent="{{ accent }}" autorotate="{{ rotate }}" depthfade="{{ depthFade }}" depthfade="{{ depthFade }}" hint-size="100%,100%" style="position:absolute;inset:0;width:100%;height:100%">
+      <div style="position:absolute;left:var(--bx,50%);top:var(--by,50%);width:0;height:0;opacity:var(--bvis,0);transition:opacity .3s;z-index:6;pointer-events:none">
+        <div style="position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#F4FAFF;box-shadow:0 0 14px 3px rgba(127,212,255,0.9)"></div>
+        <div style="position:absolute;left:0;top:0;width:104px;height:1px;background:linear-gradient(90deg, rgba(127,212,255,0.85), rgba(127,212,255,0.35));transform-origin:left center;transform:rotate(var(--brot,-45deg))"></div>
+        <div style="position:absolute;left:var(--blx,74px);top:var(--bty,-74px);transform:translate(var(--bsx,0%),var(--bsy,-100%));padding:9px 0;animation:badgeIn .4s ease both">
+          <div style="display:flex;flex-direction:column;gap:5px;white-space:nowrap;padding:9px 13px;background:rgba(13,17,23,0.82);border:1px solid {{ badgeBorder }};box-shadow:0 16px 40px rgba(0,0,0,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:0.16em;color:#EAF4FF">GEORGIA // ACTIVE CORE</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.13em;color:#7FA6BA">{{ badgeSub }}</span>
+          </div>
+        </div>
+        <button type="button" onClick="{{ selectBeacon }}" aria-label="Select Georgia core" style="position:absolute;left:-25px;top:-25px;width:50px;height:50px;appearance:none;background:transparent;border:0;cursor:pointer;pointer-events:auto"></button>
+      </div>
+    </x-import>
+
+    <div style="position:absolute;top:20px;left:20px;z-index:8;display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(13,17,23,0.66);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+      <sc-for list="{{ crumbs }}" as="c" hint-placeholder-count="2">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button type="button" onClick="{{ c.go }}" style="appearance:none;background:transparent;border:0;padding:2px 3px;cursor:{{ c.cursor }};font-family:'Noto Sans Georgian','IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;white-space:nowrap;color:{{ c.color }}" style-hover="color:#EAF4FF">{{ c.label }}</button>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#3A5464;opacity:{{ c.sep }}">&#9656;</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="position:absolute;top:20px;right:20px;z-index:8;display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+      <sc-for list="{{ zoomBtns }}" as="z" hint-placeholder-count="3">
+        <button type="button" onClick="{{ z.act }}" aria-label="{{ z.aria }}" style="appearance:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(13,17,23,0.78);border:0;cursor:pointer;color:#A9C6D6;font-family:'IBM Plex Mono',monospace;font-size:15px;line-height:1;transition:background .18s,color .18s" style-hover="background:rgba(127,212,255,0.14);color:#F4FAFF">{{ z.glyph }}</button>
+      </sc-for>
+    </div>
+
+    <div style="position:absolute;top:178px;right:20px;z-index:8;display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+      <button type="button" onClick="{{ toggleSound }}" aria-label="Toggle sound" style="appearance:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ sndBg }};border:1px solid {{ sndBorder }};backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:{{ sndFg }};font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1;transition:background .18s,color .18s,border-color .18s" style-hover="border-color:rgba(127,212,255,0.55)">{{ sndGlyph }}</button>
+      <span style="display:flex;align-items:center;gap:5px;padding:3px 7px;background:rgba(13,17,23,0.7);border:1px solid rgba(255,255,255,0.07);font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;color:{{ sndFg }};white-space:nowrap">
+        <span style="width:4px;height:4px;border-radius:50%;background:{{ sndDot }}"></span>{{ sndLabel }}
+      </span>
+    </div>
+
+    <sc-if value="{{ detail }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;top:74px;left:20px;z-index:8;display:flex;flex-direction:column;gap:1px;background:rgba(13,17,23,0.66);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+        <span style="padding:8px 12px 4px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.24em;color:#4A6A7C">ACTIVE HUBS</span>
+        <sc-for list="{{ hubs }}" as="h" hint-placeholder-count="2">
+          <button type="button" onClick="{{ h.pick }}" style="appearance:none;display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:168px;padding:8px 12px;border:0;text-align:left;cursor:pointer;background:{{ h.bg }};color:{{ h.fg }};transition:background .2s" style-hover="background:rgba(255,255,255,0.05)">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em">{{ h.name }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;color:#5F8296">{{ h.count }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ venue }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;bottom:100px;right:20px;z-index:12;width:300px;box-sizing:border-box;padding:20px;background:rgba(13,17,23,0.82);border:1px solid rgba(255,255,255,0.12);box-shadow:0 28px 70px rgba(0,0,0,0.6);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3)">
+        <span style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, {{ venueAccent }}, rgba(255,255,255,0))"></span>
+        <button type="button" onClick="{{ closeVenue }}" aria-label="Close" style="position:absolute;right:10px;top:10px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;appearance:none;background:transparent;border:0;cursor:pointer;color:#6E8DA0;font-family:'IBM Plex Mono',monospace;font-size:13px" style-hover="color:#EAF4FF">&#10005;</button>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="display:flex;align-items:center;gap:8px">
+              <span style="width:8px;height:8px;border-radius:50%;background:{{ venueAccent }};box-shadow:0 0 12px 2px {{ venueAccent }}"></span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#7FA6BA">{{ venueMeta }}</span>
+            </span>
+            <h2 style="margin:0;font-size:19px;font-weight:600;letter-spacing:-0.02em;line-height:1.2;color:#F4FAFF">{{ venueName }}</h2>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25)">
+            <span style="width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 10px 2px rgba(34,197,94,0.7);animation:blip 1.8s ease-in-out infinite"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.14em;color:#B9F3CE">{{ venueStatus }}</span>
+          </div>
+
+          <div style="display:flex;align-items:baseline;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:#5F8296">MEMBER CAPACITY</span>
+            <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#F4FAFF">{{ venueMembers }}</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:#5F8296">INTEGRATED TECH</span>
+            <span style="display:flex;align-items:flex-start;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.5;color:#CFE6F2">
+              <span style="flex:0 0 auto;margin-top:5px;width:4px;height:4px;border-radius:50%;background:#7FD4FF"></span>{{ venueTurnstile }}
+            </span>
+            <span style="display:flex;align-items:flex-start;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.5;color:#CFE6F2">
+              <span style="flex:0 0 auto;margin-top:5px;width:4px;height:4px;border-radius:50%;background:#FF9900"></span>{{ venueGateway }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:8;display:flex;gap:2px;padding:3px;background:rgba(13,17,23,0.7);border:1px solid rgba(255,255,255,0.09);border-radius:999px;box-shadow:0 18px 44px rgba(0,0,0,0.45);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="3">
+        <button type="button" onClick="{{ f.pick }}" style="appearance:none;min-height:38px;padding:0 18px;border:0;border-radius:999px;cursor:pointer;font-family:'Noto Sans Georgian','Space Grotesk',sans-serif;font-size:12.5px;letter-spacing:0.01em;white-space:nowrap;background:{{ f.bg }};color:{{ f.fg }};transition:background .22s,color .22s">{{ f.label }}</button>
+      </sc-for>
+    </div>
+
+    <div style="position:absolute;bottom:72px;right:24px;z-index:7;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.2em;color:#4A6A7C;text-transform:uppercase;white-space:nowrap;pointer-events:none">{{ readout }}</div>
+  </div>
+
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;locale&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Georgian&quot;,&quot;English&quot;],&quot;default&quot;:&quot;Georgian&quot;,&quot;tsType&quot;:&quot;'Georgian' | 'English'&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#7FD4FF&quot;,&quot;options&quot;:[&quot;#7FD4FF&quot;,&quot;#C9D8E0&quot;,&quot;#8FE3C6&quot;,&quot;#B79BFF&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;autoRotate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showStats&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;depthFade&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.15,&quot;min&quot;:0.1,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe&quot;}}">
+const CORES = [
+  { code: 'EC-01', name: 'Ingress & Turnstile Core', meta: '5 Venues',                      g: 'V' },
+  { code: 'EC-02', name: 'Biometric & IoT Grid',     meta: 'ZKTeco Active',                 g: 'F' },
+  { code: 'EC-03', name: 'Member Telemetry',         meta: '20,000+ Athletes',              g: 'V' },
+  { code: 'EC-04', name: 'FinTech Settlement Ledger',meta: 'Bank of Georgia 1-Click',       g: 'F' },
+  { code: 'EC-05', name: 'Attendance Compliance',    meta: '\u10d1\u10e0\u10eb\u10d0\u10dc\u10d4\u10d1\u10d0 \u2116 01-15/\u10dc', g: 'V' },
+  { code: 'EC-06', name: 'Dynamic QR Vault',         meta: 'Sub-0.2s Access',               g: 'F' },
+  { code: 'EC-07', name: 'Offline Relay Autonomy',   meta: '100% Uptime',                   g: 'F' },
+  { code: 'EC-08', name: 'Venue Capacity Analytics', meta: 'Real-time Flow',                g: 'V' },
+  { code: 'EC-09', name: 'Federation Integration Mesh', meta: 'Federations & Academies',    g: 'F' },
+];
+
+const KA = {
+  subtitle: '\u10e1\u10d0\u10e5\u10d0\u10e0\u10d7\u10d5\u10d4\u10da\u10dd\u10e1 \u10ec\u10d0\u10db\u10e7\u10d5\u10d0\u10dc\u10d8 \u10e1\u10dd\u10e0\u10e2\u10e3\u10da\u10d8 \u10d8\u10dc\u10e4\u10e0\u10d0\u10e1\u10e2\u10e0\u10e3\u10e5\u10e2\u10e3\u10e0\u10d8\u10e1 \u10ea\u10d4\u10dc\u10e2\u10e0\u10d0\u10da\u10d8\u10d6\u10d4\u10d1\u10e3\u10da\u10d8 \u10d1\u10d8\u10e0\u10d7\u10d5\u10d8.',
+  stats: ['\u10d0\u10d7\u10da\u10d4\u10e2\u10d8', '\u10d3\u10d0\u10e0\u10d1\u10d0\u10d6\u10d8', '\u10d3\u10d0\u10e8\u10d5\u10d4\u10d1\u10d0', '\u10d0\u10d5\u10e2\u10dd\u10dc\u10dd\u10db\u10d8\u10d0'],
+  filters: ['\u10e7\u10d5\u10d4\u10da\u10d0', '\u10d3\u10d0\u10e0\u10d1\u10d0\u10d6\u10d4\u10d1\u10d8', '\u10e4\u10d8\u10dc\u10e2\u10d4\u10ee\u10d8 & IoT'],
+  crumbs: ['\u10db\u10e1\u10dd\u10e4\u10da\u10d8\u10dd', '\u10e1\u10d0\u10e5\u10d0\u10e0\u10d7\u10d5\u10d4\u10da\u10dd'],
+};
+
+const EN = {
+  subtitle: 'The centralized nucleus of Georgia\u2019s leading sports infrastructure \u2014 venues, biometrics, settlement and compliance on one mesh.',
+  stats: ['Athletes', 'Venues', 'Access', 'Autonomy'],
+  filters: ['All', 'Venues', 'FinTech & IoT'],
+  crumbs: ['World', 'Georgia'],
+};
+
+const BACK = '\u2190 \u10d3\u10d0\u10d1\u10e0\u10e3\u10dc\u10d4\u10d1\u10d0 \u10db\u10e1\u10dd\u10e4\u10da\u10d8\u10dd\u10d6\u10d4';
+
+const HUBS = [
+  { id: 'tbilisi', name: 'Tbilisi Hub' },
+  { id: 'imereti', name: 'Imereti / Kutaisi Hub' },
+];
+
+const VENUE_DEFS = [
+  { id: 'x-area', hub: 'tbilisi' },
+  { id: 'flex', hub: 'tbilisi' },
+  { id: 'pixl', hub: 'tbilisi' },
+  { id: 'zona-15', hub: 'tbilisi' },
+  { id: 'athletic', hub: 'imereti' },
+];
+
+class Component extends DCLogic {
+  state = { core: -1, filter: 0, selected: true, visible: true, mode: 'GLOBE', venue: null, region: null, mapStatus: 'LOADING', sound: false };
+
+  audio() { return window.ArtronAudio || null; }
+  snd(cue) { const a = this.audio(); if (a) a.play(cue); }
+
+  componentDidMount() {
+    this._onVis = (e) => this.setState({ visible: !!(e.detail && e.detail.visible) });
+    this._onMode = (e) => this.setState({ mode: (e.detail && e.detail.mode) || 'GLOBE' });
+    this._onVenue = (e) => this.setState({ venue: (e.detail && e.detail.venue) || null });
+    this._onRegion = (e) => this.setState({ region: (e.detail && e.detail.id) || null });
+    this._onMap = (e) => this.setState({ mapStatus: (e.detail && e.detail.status) || 'LOADING' });
+    window.addEventListener('beaconvisibility', this._onVis);
+    window.addEventListener('viewmode', this._onMode);
+    window.addEventListener('venueselect', this._onVenue);
+    window.addEventListener('regionselect', this._onRegion);
+    window.addEventListener('mapstatus', this._onMap);
+    this._onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (this.state.venue) this.call('selectVenue', null);
+      else if (this.state.mode === 'GEORGIA_DETAIL') this.call('exitToGlobe');
+    };
+    window.addEventListener('keydown', this._onKey);
+    this._onSound = (e) => this.setState({ sound: !!(e.detail && e.detail.on) });
+    window.addEventListener('artron-sound', this._onSound);
+    this._sndPoll = setInterval(() => {
+      const a = this.audio();
+      if (a && a.enabled !== this.state.sound) this.setState({ sound: a.enabled });
+      if (a) clearInterval(this._sndPoll);
+    }, 250);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('beaconvisibility', this._onVis);
+    window.removeEventListener('viewmode', this._onMode);
+    window.removeEventListener('venueselect', this._onVenue);
+    window.removeEventListener('regionselect', this._onRegion);
+    window.removeEventListener('mapstatus', this._onMap);
+    window.removeEventListener('keydown', this._onKey);
+    window.removeEventListener('artron-sound', this._onSound);
+    clearInterval(this._sndPoll);
+  }
+
+  stage() { return document.querySelector('ennea-sphere'); }
+  call(fn, arg) { const s = this.stage(); if (s && s[fn]) s[fn](arg); }
+
+  renderVals() {
+    const L = (this.props.locale ?? 'Georgian') === 'English' ? EN : KA;
+    const accent = this.props.accent ?? '#7FD4FF';
+    const { core, filter, selected, mode, venue, region, mapStatus, sound } = this.state;
+    const allow = filter === 0 ? null : (filter === 1 ? 'V' : 'F');
+    const active = core >= 0 ? CORES[core] : null;
+    const detail = mode === 'GEORGIA_DETAIL';
+
+    const statVals = ['20,000+', '5+', '0.18s', '100%'];
+
+    return {
+      accent,
+      rotate: (this.props.autoRotate ?? true) ? 'on' : 'off',
+      showStats: this.props.showStats ?? true,
+      subtitle: L.subtitle,
+      stats: statVals.map((v, i) => ({ v, k: L.stats[i] })),
+      cores: CORES.map((c, i) => {
+        const dim = allow && c.g !== allow;
+        return {
+          code: c.code,
+          name: c.name,
+          meta: c.meta,
+          mute: dim ? 0.26 : 1,
+          cursor: dim ? 'default' : 'pointer',
+          on: i === core ? 1 : 0,
+          pick: () => {
+            if (dim) return;
+            const next = core === i ? -1 : i;
+            this.snd(next >= 0 ? 'select' : 'deselect');
+            this.setState({ core: next });
+            this.call('setActiveCore', next);
+          },
+        };
+      }),
+      filters: L.filters.map((label, i) => ({
+        label,
+        bg: i === filter ? '#EAF4FF' : 'transparent',
+        fg: i === filter ? '#0A0D12' : '#8AA3B2',
+        pick: () => { if (i !== filter) this.snd('filter'); this.setState({ filter: i, core: -1 }); this.call('setActiveCore', -1); },
+      })),
+      detail,
+      hubs: HUBS.map((h) => ({
+        name: h.name,
+        count: String(VENUE_DEFS.filter((v) => v.hub === h.id).length),
+        bg: region === h.id ? 'rgba(127,212,255,0.12)' : 'transparent',
+        fg: region === h.id ? '#F4FAFF' : '#8AA3B2',
+        pick: () => this.call('selectRegion', region === h.id ? null : h.id),
+      })),
+      ctaLabel: detail ? BACK : (L === EN ? 'EXPLORE GEORGIA' : 'EXPLORE GEORGIA // \u10e1\u10d0\u10e5\u10d0\u10e0\u10d7\u10d5\u10d4\u10da\u10dd'),
+      ctaGlyph: detail ? '\u25CE' : '\u2192',
+      ctaBg: detail ? 'rgba(255,255,255,0.03)' : 'rgba(127,212,255,0.07)',
+      ctaBorder: detail ? 'rgba(255,255,255,0.1)' : 'rgba(127,212,255,0.4)',
+      toggleView: () => this.call(detail ? 'exitToGlobe' : 'enterGeorgia'),
+      venue: !!venue,
+      venueName: venue ? venue.name : '',
+      venueMeta: venue ? venue.category + ' \u00B7 ' + venue.city : '',
+      venueStatus: venue ? venue.status : '',
+      venueMembers: venue ? venue.members : '',
+      venueTurnstile: venue ? venue.turnstile : '',
+      venueGateway: venue ? venue.gateway : '',
+      venueAccent: venue ? venue.accent : '#7FD4FF',
+      closeVenue: () => this.call('selectVenue', null),
+      crumbs: detail
+        ? [{ label: '[ ' + BACK + ' ]', color: '#EAF4FF', cursor: 'pointer', sep: 0, go: () => this.call('exitToGlobe') }]
+        : [
+            { label: '[ ' + L.crumbs[0] + ' ]', color: '#EAF4FF', cursor: 'pointer', sep: 1, go: () => { this.snd('tick'); this.call('resetView'); } },
+            { label: '[ ' + L.crumbs[1] + ' ]', color: '#6E8DA0', cursor: 'pointer', sep: 0, go: () => this.call('enterGeorgia') },
+          ],
+      zoomBtns: [
+        { glyph: '+', aria: 'Zoom in', act: () => { this.snd('tick'); this.call('zoomIn'); } },
+        { glyph: '\u2212', aria: 'Zoom out', act: () => { this.snd('tick'); this.call('zoomOut'); } },
+        { glyph: '\u25CE', aria: 'Reset view', act: () => { this.snd('close'); this.call('resetView'); } },
+      ],
+      depthFade: String(this.props.depthFade ?? 0.15),
+      sound,
+      sndGlyph: sound ? '\u25C2))' : '\u25C2',
+      sndBg: sound ? 'rgba(127,212,255,0.14)' : 'rgba(13,17,23,0.78)',
+      sndBorder: sound ? 'rgba(127,212,255,0.45)' : 'rgba(255,255,255,0.08)',
+      sndFg: sound ? '#F4FAFF' : '#6E8DA0',
+      sndDot: sound ? '#7FD4FF' : '#3A5464',
+      sndLabel: sound ? 'SOUND ON' : 'SOUND OFF',
+      toggleSound: () => {
+        const a = this.audio();
+        if (!a) return;
+        const on = a.toggle();
+        if (!on) this.snd('close');
+        this.setState({ sound: on });
+      },
+      badgeBorder: selected ? 'rgba(127,212,255,0.55)' : 'rgba(255,255,255,0.1)',
+      badgeSub: active ? active.code + ' \u00B7 ' + active.meta : '41.7\u00B0N / 44.8\u00B0E \u00B7 9 CORES LIVE',
+      selectBeacon: () => { const n = !selected; this.snd(n ? 'select' : 'deselect'); this.setState({ selected: n }); this.call('setSelected', n); },
+      readout: detail
+        ? (mapStatus === 'READY' ? 'LIVE VENUES \u00B7 5 \u00B7 CLICK A PIN' : (mapStatus === 'ERROR' ? 'ADM1 VECTOR SOURCE UNREACHABLE' : 'RESOLVING ADM1 VECTORS\u2026'))
+        : (active ? active.code + ' isolated' : 'drag to orbit \u00B7 scroll to zoom'),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

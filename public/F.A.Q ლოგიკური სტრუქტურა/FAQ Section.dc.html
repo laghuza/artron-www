@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#05070a;color:#e8ecef;font-family:'Noto Sans Georgian',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#00ff87;text-decoration:none}a:hover{text-decoration:underline}
+input::placeholder{color:#6b7580}
+@keyframes artronPulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</helmet>
+
+<main style="min-height:100vh;background:#05070a;padding:72px 20px 120px;box-sizing:border-box">
+  <section aria-labelledby="faq-title" style="max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:32px">
+
+    <header style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.12em;color:#00ff87">[ FAQ ] {{ t.eyebrow }}</span>
+        <div role="group" aria-label="Language" style="display:flex;gap:4px;border:1px solid rgba(255,255,255,.08);padding:3px">
+          <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+            <button onClick="{{ l.onClick }}" aria-pressed="{{ l.active }}" style="min-width:44px;min-height:36px;border:0;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;background:{{ l.bg }};color:{{ l.color }}">{{ l.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <h2 id="faq-title" style="margin:0;font-size:clamp(28px,4.4vw,44px);line-height:1.2;font-weight:700;letter-spacing:-.01em;text-wrap:balance">{{ t.title }}</h2>
+      <p style="margin:0;max-width:620px;font-size:16px;line-height:1.65;color:#9aa4ae;text-wrap:pretty">{{ t.sub }}</p>
+    </header>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div role="tablist" aria-label="FAQ" style="display:flex;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="3">
+          <button role="tab" aria-selected="{{ tab.active }}" onClick="{{ tab.onClick }}" style="min-height:44px;padding:0 16px;display:flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;background:{{ tab.bg }};color:{{ tab.color }};border:1px solid {{ tab.border }}">
+            <span>{{ tab.label }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.7">{{ tab.count }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <label style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border:1px solid rgba(255,255,255,.08);background:#0a0e13">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00ff87">&gt;_</span>
+        <input type="search" value="{{ query }}" onChange="{{ onQuery }}" placeholder="{{ t.search }}" aria-label="{{ t.search }}" style="flex:1;min-width:0;background:transparent;border:0;outline:none;color:#e8ecef;font-family:inherit;font-size:15px;min-height:44px">
+      </label>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ items }}" as="item" hint-placeholder-count="7">
+        <article id="{{ item.anchor }}" style="position:relative;background:#0a0e13;border:1px solid {{ item.border }};transition:border-color 200ms">
+          <span aria-hidden="true" style="position:absolute;top:-1px;left:-1px;width:12px;height:12px;border-top:2px solid {{ item.corner }};border-left:2px solid {{ item.corner }}"></span>
+          <span aria-hidden="true" style="position:absolute;top:-1px;right:-1px;width:12px;height:12px;border-top:2px solid {{ item.corner }};border-right:2px solid {{ item.corner }}"></span>
+          <span aria-hidden="true" style="position:absolute;bottom:-1px;left:-1px;width:12px;height:12px;border-bottom:2px solid {{ item.corner }};border-left:2px solid {{ item.corner }}"></span>
+          <span aria-hidden="true" style="position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;border-bottom:2px solid {{ item.corner }};border-right:2px solid {{ item.corner }}"></span>
+          <sc-if value="{{ item.isOpen }}" hint-placeholder-val="{{ false }}">
+            <span aria-hidden="true" style="position:absolute;left:0;top:18px;bottom:18px;width:2px;background:#00ff87;animation:artronPulse 1.6s ease-in-out infinite"></span>
+          </sc-if>
+          <h3 style="margin:0">
+            <button id="{{ item.btnId }}" aria-expanded="{{ item.isOpen }}" aria-controls="{{ item.panelId }}" onClick="{{ item.toggle }}" style="width:100%;min-height:64px;padding:18px 20px 18px 24px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;background:transparent;border:0;cursor:pointer;text-align:left;color:#e8ecef;font-family:inherit">
+              <span style="display:flex;flex-direction:column;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em">
+                <span style="color:{{ item.refColor }}">[ FAQ_REF: {{ item.ref }} ]</span>
+                <span style="color:#6b7580">{{ item.cat }}</span>
+              </span>
+              <span style="font-size:16px;font-weight:600;line-height:1.45;text-wrap:pretty">{{ item.q }}</span>
+              <span aria-hidden="true" style="position:relative;width:20px;height:20px;flex-shrink:0">
+                <span style="position:absolute;left:3px;right:3px;top:9px;height:2px;background:{{ item.corner }}"></span>
+                <span style="position:absolute;top:3px;bottom:3px;left:9px;width:2px;background:{{ item.corner }};transform:{{ item.plusRot }};transition:transform 300ms"></span>
+              </span>
+            </button>
+          </h3>
+          <div id="{{ item.panelId }}" role="region" aria-labelledby="{{ item.btnId }}" style="display:grid;grid-template-rows:{{ item.rows }};opacity:{{ item.op }};transition:grid-template-rows 300ms ease-in-out,opacity 300ms ease-in-out">
+            <div style="overflow:hidden;min-height:0">
+              <div style="margin:0 20px 0 24px;padding:16px 0 22px;border-top:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;gap:14px">
+                <p style="margin:0;font-size:15px;line-height:1.7;color:#c9d1d8;text-wrap:pretty">{{ item.a }}</p>
+                <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+                  <sc-for list="{{ item.points }}" as="p" hint-placeholder-count="3">
+                    <li style="display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px;font-size:14px;line-height:1.6;color:#9aa4ae">
+                      <span style="color:#00ff87;font-family:'JetBrains Mono',monospace">›</span><span>{{ p }}</span>
+                    </li>
+                  </sc-for>
+                </ul>
+                <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:12px">
+                  <span style="color:#6b7580">{{ t.basis }}:</span>
+                  <span style="color:#00ff87">{{ item.basis }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:28px 24px;border:1px dashed rgba(255,255,255,.12);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="color:#9aa4ae;font-size:15px">{{ t.empty }}</span>
+          <button onClick="{{ askFromSearch }}" style="min-height:44px;padding:0 16px;background:transparent;border:1px solid #00ff87;color:#00ff87;cursor:pointer;font-family:inherit;font-size:14px">{{ t.askBot }}</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ showBot }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:22px 24px;border:1px solid rgba(255,255,255,.08)">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span style="font-size:16px;font-weight:600">{{ t.ctaTitle }}</span>
+          <span style="font-size:14px;color:#9aa4ae">{{ t.ctaSub }}</span>
+        </div>
+        <button onClick="{{ openBot }}" style="min-height:44px;padding:0 18px;background:#00ff87;color:#05070a;border:0;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600">{{ t.ctaBtn }}</button>
+      </div>
+    </sc-if>
+  </section>
+
+  <sc-if value="{{ showBot }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;right:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:12px">
+      <sc-if value="{{ botOpen }}" hint-placeholder-val="{{ false }}">
+        <div role="dialog" aria-label="{{ t.botTitle }}" style="width:360px;max-width:calc(100vw - 40px);height:480px;max-height:calc(100vh - 120px);background:#0a0e13;border:1px solid rgba(0,255,135,.35);display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 12px 12px 16px;border-bottom:1px solid rgba(255,255,255,.06)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="width:8px;height:8px;background:#00ff87;animation:artronPulse 1.6s ease-in-out infinite"></span>
+              <span style="font-size:14px;font-weight:600">{{ t.botTitle }}</span>
+            </div>
+            <button onClick="{{ closeBot }}" aria-label="Close" style="width:44px;height:44px;background:transparent;border:0;color:#9aa4ae;cursor:pointer;font-size:20px">×</button>
+          </div>
+          <div ref="{{ msgRef }}" aria-live="polite" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
+              <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+                <div style="align-self:flex-end;max-width:85%;padding:10px 12px;background:rgba(0,255,135,.12);border:1px solid rgba(0,255,135,.25);font-size:14px;line-height:1.5">{{ m.text }}</div>
+              </sc-if>
+              <sc-if value="{{ m.isBot }}" hint-placeholder-val="{{ true }}">
+                <div style="align-self:flex-start;max-width:92%;padding:10px 12px;background:#10151b;border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px">
+                  <sc-if value="{{ m.hasFaq }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#00ff87">[ FAQ_REF: {{ m.ref }} ] {{ m.q }}</span>
+                  </sc-if>
+                  <span style="font-size:14px;line-height:1.55;color:#c9d1d8">{{ m.text }}</span>
+                  <sc-if value="{{ m.hasFaq }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ m.open }}" style="align-self:flex-start;min-height:36px;padding:0;background:transparent;border:0;color:#00ff87;cursor:pointer;font-family:inherit;font-size:13px">{{ t.botOpen }} →</button>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </sc-for>
+            <sc-if value="{{ showSuggestions }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="3">
+                  <button onClick="{{ s.onClick }}" style="min-height:44px;padding:8px 12px;text-align:left;background:transparent;border:1px solid rgba(255,255,255,.1);color:#e8ecef;cursor:pointer;font-family:inherit;font-size:13px;line-height:1.4">{{ s.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display:flex;gap:8px;padding:12px;border-top:1px solid rgba(255,255,255,.06)">
+            <input value="{{ botInput }}" onChange="{{ onBotInput }}" onKeyDown="{{ onBotKey }}" placeholder="{{ t.botPlaceholder }}" aria-label="{{ t.botPlaceholder }}" style="flex:1;min-width:0;min-height:44px;padding:0 12px;background:#05070a;border:1px solid rgba(255,255,255,.1);color:#e8ecef;font-family:inherit;font-size:14px;outline:none">
+            <button onClick="{{ sendBot }}" style="min-height:44px;padding:0 14px;background:#00ff87;color:#05070a;border:0;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">{{ t.botSend }}</button>
+          </div>
+        </div>
+      </sc-if>
+      <button onClick="{{ toggleBot }}" aria-expanded="{{ botOpen }}" aria-label="{{ t.botTitle }}" style="min-height:52px;padding:0 18px;display:flex;align-items:center;gap:10px;background:#05070a;border:1px solid #00ff87;color:#00ff87;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em">
+        <span style="width:8px;height:8px;background:#00ff87;animation:artronPulse 1.6s ease-in-out infinite"></span>AI_ASSIST
+      </button>
+    </div>
+  </sc-if>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ge&quot;,&quot;en&quot;,&quot;ru&quot;],&quot;default&quot;:&quot;ge&quot;,&quot;tsType&quot;:&quot;'ge'|'en'|'ru'&quot;},&quot;singleOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showBot&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const FAQ = [
+  { id: 1, cat: 'b2b', kw: ['ტურნიკეტ','მონტაჟ','ინსტალაც','დანერგ','turnstile','install','setup','турникет','монтаж','установк'] },
+  { id: 2, cat: 'b2b', kw: ['უსაფრთხო','ტენანტ','შიფრ','იზოლაც','security','secure','tenant','encrypt','privacy','безопасн','шифр','изоляц'] },
+  { id: 3, cat: 'b2b', kw: ['ტაბელ','01-15','შრომის','ინსპექც','timesheet','labor','labour','inspection','приказ','табел','инспекц'] },
+  { id: 4, cat: 'b2b', kw: ['შეწყვეტ','ექსპორტ','ხელშეკრულ','არქივ','cancel','terminat','export','contract','lock-in','archive','расторж','экспорт','договор','архив'] },
+  { id: 5, cat: 'b2c', kw: ['დაბრუნ','14 დღ','refund','money back','return','возврат','14 дн','14 day'] },
+  { id: 6, cat: 'b2c', kw: ['qr','საშვ','სკრინშოტ','გაზიარ','pass','screenshot','share','пропуск','скриншот'] },
+  { id: 7, cat: 'hybrid', kw: ['offline','ოფლაინ','ინტერნეტ','ავტონომ','internet','connection','офлайн','интернет','автоном','связ'] },
+];
+const POPULAR = [1, 5, 6];
+
+const DICT = {
+  ge: {
+    ui: {
+      eyebrow: 'ხშირად დასმული კითხვები',
+      title: 'პასუხები, სანამ კითხვას დასვამთ',
+      sub: 'დარბაზების მფლობელებისთვის და სპორტსმენებისთვის — დანერგვა, მონაცემთა უსაფრთხოება, კანონმდებლობა და საშვები.',
+      all: 'ყველა', b2b: 'დარბაზებისთვის', b2c: 'სპორტსმენებისთვის',
+      catB2B: 'B2B · დარბაზი', catB2C: 'B2C · სპორტსმენი', catHybrid: 'B2B + B2C',
+      search: 'მოძებნეთ: QR, დაბრუნება, ტაბელი…',
+      basis: 'საფუძველი',
+      empty: 'ამ მოთხოვნით პასუხი ვერ მოიძებნა.',
+      askBot: 'ჰკითხეთ ასისტენტს',
+      ctaTitle: 'ვერ იპოვეთ პასუხი?',
+      ctaSub: 'ასისტენტი პასუხობს ქართულად, ინგლისურად და რუსულად.',
+      ctaBtn: 'ასისტენტთან საუბარი',
+      botTitle: 'ARTRON ასისტენტი',
+      botHello: 'გამარჯობა! აირჩიეთ პოპულარული კითხვა ან დაწერეთ საკუთარი.',
+      botPlaceholder: 'დაწერეთ კითხვა…',
+      botSend: 'გაგზავნა',
+      botOpen: 'სრული პასუხი',
+      botFallback: 'ზუსტი პასუხი ვერ ვიპოვე. სცადეთ სხვა სიტყვა — მაგალითად „QR“, „დაბრუნება“ ან „ტაბელი“ — ან დაუკავშირდით ჩვენს გუნდს.',
+    },
+    q: {
+      1: { q: 'რამდენ ხანში მონტაჟდება IoT ტურნიკეტები?',
+        a: 'ფიზიკური ინსტალაცია სრულდება 1–3 სამუშაო დღეში — ვადა დამოკიდებულია შესასვლელების რაოდენობაზე. დარბაზს მუშაობის შეჩერება არ სჭირდება.',
+        p: ['დღე 1 — ტურნიკეტების მონტაჟი და კაბელირება', 'დღე 2 — კონტროლერის კონფიგურაცია და კლუბის ანგარიშთან სინქრონიზაცია', 'დღე 3 — ტესტირება და პერსონალის ინსტრუქტაჟი', 'სამუშაოები შეიძლება ჩატარდეს არასამუშაო საათებში'],
+        b: 'დანერგვის სტანდარტი: 1–3 სამუშაო დღე' },
+      2: { q: 'როგორ არის დაცული ჩვენი კლუბის მონაცემები სხვა კლუბებისგან?',
+        a: 'თითოეული კლუბის მონაცემები იზოლირებულია მონაცემთა ბაზის დონეზე. სხვა კლუბს, მათ შორის კონკურენტს, თქვენს ჩანაწერებზე წვდომა ტექნიკურად არ აქვს.',
+        p: ['Row-Level Security (RLS): ყოველი მოთხოვნა იფილტრება კლუბის იდენტიფიკატორით', 'პირადი ნომრები ინახება AES-256-GCM შიფრაციით', 'პერსონალის წვდომა განისაზღვრება როლით: მფლობელი, მენეჯერი, ადმინისტრატორი'],
+        b: 'Multi-Tenancy · RLS · AES-256-GCM' },
+      3: { q: 'შეესაბამება თუ არა სისტემა ბრძანება №01-15/ნ-ის მოთხოვნებს?',
+        a: 'დიახ. თანამშრომლის შესვლა-გასვლა ტურნიკეტზე ავტომატურად აისახება სამუშაო დროის აღრიცხვის ელექტრონულ ტაბელში, შრომის ინსპექციის მოთხოვნების შესაბამისად. ეს კლუბს იცავს ჯარიმებისგან.',
+        p: ['ტაბელი ივსება ავტომატურად, ხელით შეყვანის გარეშე', 'ტაბელის ექსპორტი ინსპექტირებისთვის მზა ფორმატში', 'ცვლები და ზეგანაკვეთური საათები ჩანს ცალ-ცალკე'],
+        b: 'ბრძანება №01-15/ნ · შრომის ინსპექცია' },
+      4: { q: 'რა ემართება ჩვენს მონაცემებს ხელშეკრულების შეწყვეტისას?',
+        a: 'შეწყვეტიდან 30 დღის განმავლობაში შეგიძლიათ სრულად გაიტანოთ საოპერაციო მონაცემები. სისტემაზე მიბმა არ ხდება (No Vendor Lock-in).',
+        p: ['30 დღე — წევრების, აბონემენტებისა და ვიზიტების სრული ექსპორტი (CSV / JSON)', 'საგადასახადო ჩანაწერები ინახება 3 წელი, საგადასახადო კოდექსის მოთხოვნით', 'ვადების გასვლის შემდეგ მონაცემები იშლება'],
+        b: '30-დღიანი ექსპორტი · 3-წლიანი საგადასახადო არქივი' },
+      5: { q: 'შემიძლია აბონემენტის თანხის დაბრუნება?',
+        a: 'აპლიკაციით შეძენილ აბონემენტზე მოქმედებს 14-დღიანი დაბრუნების უფლება, თუ მისით სარგებლობა ჯერ არ დაგიწყიათ.',
+        p: ['სარგებლობის დაწყება = პირველი შესვლა ტურნიკეტზე', 'მოთხოვნა: აპლიკაცია → აბონემენტები → თანხის დაბრუნება', 'თანხა ბრუნდება იმავე ბარათზე'],
+        b: 'მომხმარებელთა უფლებების დაცვის შესახებ კანონი · 14 დღე' },
+      6: { q: 'რამდენად უსაფრთხოა QR საშვი? შეიძლება მისი გაზიარება?',
+        a: 'არა. QR კოდი ავტომატურად ახლდება ყოველ 15 წამში, ამიტომ სკრინშოტი ან გადაგზავნილი სურათი რამდენიმე წამში უვარგისი ხდება.',
+        p: ['დინამიური კოდი — განახლება ყოველ 15 წამში', 'Anti-screenshot: სტატიკური სურათი ტურნიკეტს ვერ გააღებს', 'Anti-passback: ერთი საშვით ხელახლა შესვლა გასვლის გარეშე შეუძლებელია'],
+        b: 'დინამიური QR · Anti-passback' },
+      7: { q: 'იმუშავებს შესვლა, თუ ინტერნეტი გაითიშა?',
+        a: 'დიახ. ტურნიკეტის კონტროლერი ინახავს მოქმედი საშვების ადგილობრივ ქეშს, ამიტომ შესვლა-გასვლა ინტერნეტის გარეშეც გრძელდება.',
+        p: ['Edge ქეში — საშვი მოწმდება ადგილზე', 'ოფლაინ პერიოდის ყველა ვიზიტი ინახება მოწყობილობაზე', 'კავშირის აღდგენისას მონაცემები მყისიერად სინქრონიზდება'],
+        b: 'Edge Cache · ავტომატური სინქრონიზაცია' },
+    },
+  },
+  en: {
+    ui: {
+      eyebrow: 'Frequently asked questions',
+      title: 'Answers before you have to ask',
+      sub: 'For gym owners and athletes — rollout, data security, compliance and access passes.',
+      all: 'All', b2b: 'For gyms', b2c: 'For athletes',
+      catB2B: 'B2B · Gym', catB2C: 'B2C · Athlete', catHybrid: 'B2B + B2C',
+      search: 'Search: QR, refund, timesheet…',
+      basis: 'Basis',
+      empty: 'No answer matches this search.',
+      askBot: 'Ask the assistant',
+      ctaTitle: "Didn't find your answer?",
+      ctaSub: 'The assistant replies in Georgian, English and Russian.',
+      ctaBtn: 'Chat with assistant',
+      botTitle: 'ARTRON Assistant',
+      botHello: 'Hi! Pick a popular question or type your own.',
+      botPlaceholder: 'Type a question…',
+      botSend: 'Send',
+      botOpen: 'Full answer',
+      botFallback: "I couldn't find an exact answer. Try another word — e.g. “QR”, “refund” or “timesheet” — or contact our team.",
+    },
+    q: {
+      1: { q: 'How long does IoT turnstile installation take?',
+        a: 'Physical installation takes 1–3 business days, depending on the number of entry points. Your gym does not need to close.',
+        p: ['Day 1 — turnstile mounting and cabling', 'Day 2 — controller configuration and sync with your club account', 'Day 3 — testing and staff briefing', 'Work can be scheduled outside opening hours'],
+        b: 'Rollout standard: 1–3 business days' },
+      2: { q: "How is our club's data kept separate from other clubs?",
+        a: "Each club's data is isolated at the database level. No other club — competitors included — can technically access your records.",
+        p: ['Row-Level Security (RLS): every query is scoped to your club ID', 'Personal ID numbers are stored with AES-256-GCM encryption', 'Staff access is role-based: owner, manager, front desk'],
+        b: 'Multi-Tenancy · RLS · AES-256-GCM' },
+      3: { q: 'Does the system comply with Order №01-15/n?',
+        a: "Yes. Staff entries and exits at the turnstile are logged automatically into an electronic working-time timesheet that meets Labour Inspection requirements — protecting the club from fines.",
+        p: ['Timesheets fill themselves — no manual entry', 'Inspection-ready timesheet export', 'Shifts and overtime hours shown separately'],
+        b: 'Order №01-15/n · Labour Inspection' },
+      4: { q: 'What happens to our data if we end the contract?',
+        a: 'You have 30 days after termination to export all operational data. No vendor lock-in.',
+        p: ['30 days — full export of members, memberships and visits (CSV / JSON)', 'Tax records are retained for 3 years as required by the Tax Code', 'Data is deleted once these periods end'],
+        b: '30-day export · 3-year tax archive' },
+      5: { q: 'Can I get a refund on my membership?',
+        a: "Memberships bought in the app carry a 14-day refund right, as long as you haven't started using them.",
+        p: ['“Started using” = first entry through a turnstile', 'Request: App → Memberships → Refund', 'Money returns to the same card'],
+        b: 'Law on Consumer Rights Protection · 14 days' },
+      6: { q: 'How secure is the QR pass? Can I share it?',
+        a: 'No. The QR code refreshes every 15 seconds, so a screenshot or forwarded image stops working within seconds.',
+        p: ['Dynamic code — refreshes every 15 seconds', 'Anti-screenshot: a static image will not open the turnstile', 'Anti-passback: the same pass cannot enter twice without exiting'],
+        b: 'Dynamic QR · Anti-passback' },
+      7: { q: 'Does entry still work if the internet goes down?',
+        a: 'Yes. Turnstile controllers keep a local cache of valid passes, so entry and exit continue offline.',
+        p: ['Edge cache — passes are verified on site', 'All offline visits are stored on the device', 'Data syncs instantly once the connection returns'],
+        b: 'Edge Cache · Automatic sync' },
+    },
+  },
+  ru: {
+    ui: {
+      eyebrow: 'Частые вопросы',
+      title: 'Ответы до того, как вы спросите',
+      sub: 'Для владельцев залов и спортсменов — внедрение, безопасность данных, законодательство и пропуска.',
+      all: 'Все', b2b: 'Для залов', b2c: 'Для спортсменов',
+      catB2B: 'B2B · Зал', catB2C: 'B2C · Спортсмен', catHybrid: 'B2B + B2C',
+      search: 'Поиск: QR, возврат, табель…',
+      basis: 'Основание',
+      empty: 'По этому запросу ответ не найден.',
+      askBot: 'Спросить ассистента',
+      ctaTitle: 'Не нашли ответ?',
+      ctaSub: 'Ассистент отвечает на грузинском, английском и русском.',
+      ctaBtn: 'Написать ассистенту',
+      botTitle: 'Ассистент ARTRON',
+      botHello: 'Здравствуйте! Выберите популярный вопрос или напишите свой.',
+      botPlaceholder: 'Напишите вопрос…',
+      botSend: 'Отправить',
+      botOpen: 'Полный ответ',
+      botFallback: 'Точный ответ не найден. Попробуйте другое слово — например «QR», «возврат» или «табель» — или свяжитесь с нашей командой.',
+    },
+    q: {
+      1: { q: 'Сколько времени занимает монтаж IoT-турникетов?',
+        a: 'Физическая установка занимает 1–3 рабочих дня в зависимости от количества входов. Закрывать зал не нужно.',
+        p: ['День 1 — монтаж турникетов и прокладка кабеля', 'День 2 — настройка контроллера и синхронизация с аккаунтом клуба', 'День 3 — тестирование и инструктаж персонала', 'Работы можно провести в нерабочие часы'],
+        b: 'Стандарт внедрения: 1–3 рабочих дня' },
+      2: { q: 'Как данные нашего клуба защищены от других клубов?',
+        a: 'Данные каждого клуба изолированы на уровне базы данных. Другой клуб, включая конкурента, технически не имеет доступа к вашим записям.',
+        p: ['Row-Level Security (RLS): каждый запрос ограничен ID клуба', 'Личные номера хранятся с шифрованием AES-256-GCM', 'Доступ персонала — по ролям: владелец, менеджер, администратор'],
+        b: 'Multi-Tenancy · RLS · AES-256-GCM' },
+      3: { q: 'Соответствует ли система приказу №01-15/н?',
+        a: 'Да. Входы и выходы сотрудников через турникет автоматически попадают в электронный табель учёта рабочего времени в соответствии с требованиями Инспекции труда — это защищает клуб от штрафов.',
+        p: ['Табель заполняется автоматически, без ручного ввода', 'Экспорт табеля в формате, готовом к проверке', 'Смены и сверхурочные часы учитываются отдельно'],
+        b: 'Приказ №01-15/н · Инспекция труда' },
+      4: { q: 'Что происходит с данными при расторжении договора?',
+        a: 'В течение 30 дней после расторжения вы можете полностью выгрузить операционные данные. Привязки к системе нет (No Vendor Lock-in).',
+        p: ['30 дней — полный экспорт клиентов, абонементов и посещений (CSV / JSON)', 'Налоговые записи хранятся 3 года согласно Налоговому кодексу', 'По истечении сроков данные удаляются'],
+        b: 'Экспорт 30 дней · Налоговый архив 3 года' },
+      5: { q: 'Можно ли вернуть деньги за абонемент?',
+        a: 'На абонементы, купленные в приложении, действует право возврата в течение 14 дней, если вы ещё не начали ими пользоваться.',
+        p: ['«Начало использования» = первый проход через турникет', 'Запрос: Приложение → Абонементы → Возврат', 'Деньги возвращаются на ту же карту'],
+        b: 'Закон о защите прав потребителей · 14 дней' },
+      6: { q: 'Насколько безопасен QR-пропуск? Можно ли его передать?',
+        a: 'Нет. QR-код обновляется каждые 15 секунд, поэтому скриншот или пересланное изображение перестаёт работать через несколько секунд.',
+        p: ['Динамический код — обновление каждые 15 секунд', 'Anti-screenshot: статичное изображение не откроет турникет', 'Anti-passback: повторный вход по одному пропуску без выхода невозможен'],
+        b: 'Динамический QR · Anti-passback' },
+      7: { q: 'Будет ли работать вход, если пропадёт интернет?',
+        a: 'Да. Контроллеры турникетов хранят локальный кэш действующих пропусков, поэтому вход и выход продолжают работать офлайн.',
+        p: ['Edge-кэш — пропуск проверяется на месте', 'Все офлайн-посещения сохраняются на устройстве', 'При восстановлении связи данные мгновенно синхронизируются'],
+        b: 'Edge Cache · Автоматическая синхронизация' },
+    },
+  },
+};
+const LANGS = [['ge', 'ქარ'], ['en', 'ENG'], ['ru', 'РУС']];
+const LS_KEY = 'artron_faq_lang';
+
+class Component extends DCLogic {
+  state = {
+    lang: (typeof localStorage !== 'undefined' && localStorage.getItem(LS_KEY)) || this.props.defaultLang || 'ge',
+    tab: 'all', openIds: [], query: '',
+    botOpen: false, botInput: '', messages: [{ from: 'bot', kind: 'hello' }],
+  };
+  msgRef = React.createRef();
+
+  componentDidMount() {
+    const m = (location.hash || '').match(/faq-0?(\d+)/);
+    if (m) this.openFaq(Number(m[1]));
+  }
+  componentDidUpdate() {
+    const el = this.msgRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }
+
+  setLang(lang) { try { localStorage.setItem(LS_KEY, lang); } catch (e) {} this.setState({ lang }); }
+  setTab(tab) { this.setState({ tab, openIds: [] }); }
+  toggle(id) {
+    const single = this.props.singleOpen ?? true;
+    this.setState(s => {
+      const isOpen = s.openIds.includes(id);
+      if (single) return { openIds: isOpen ? [] : [id] };
+      return { openIds: isOpen ? s.openIds.filter(x => x !== id) : [...s.openIds, id] };
+    });
+  }
+  openFaq(id) {
+    this.setState({ tab: 'all', query: '', openIds: [id] }, () => {
+      setTimeout(() => {
+        const el = document.getElementById('faq-0' + id);
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' });
+      }, 50);
+    });
+  }
+  inTab(item, tab) { return tab === 'all' || item.cat === tab || item.cat === 'hybrid'; }
+  textOf(id, lang) { const d = DICT[lang].q[id]; return [d.q, d.a, d.b, ...d.p].join(' ').toLowerCase(); }
+  matches(item, query, lang) {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return this.textOf(item.id, lang).includes(q) || item.kw.some(k => q.includes(k) || k.includes(q));
+  }
+  // Keyword scoring across all three languages, so a Russian query still finds an answer while UI is Georgian.
+  classify(text) {
+    const q = text.toLowerCase();
+    let best = null, bestScore = 0;
+    FAQ.forEach(item => {
+      let score = item.kw.filter(k => q.includes(k)).length * 3;
+      Object.keys(DICT).forEach(l => {
+        const words = DICT[l].q[item.id].q.toLowerCase().split(/[^\p{L}\p{N}-]+/u).filter(w => w.length > 4);
+        score += words.filter(w => q.includes(w.slice(0, 5))).length;
+      });
+      if (score > bestScore) { bestScore = score; best = item.id; }
+    });
+    return bestScore >= 2 ? best : null;
+  }
+  ask(text, forcedId) {
+    const t = (text || '').trim();
+    if (!t) return;
+    const id = forcedId ?? this.classify(t);
+    this.setState(s => ({
+      botInput: '', botOpen: true,
+      messages: [...s.messages, { from: 'user', text: t }, id ? { from: 'bot', kind: 'faq', id } : { from: 'bot', kind: 'fallback' }],
+    }));
+  }
+
+  renderVals() {
+    const { lang, tab, openIds, query, botOpen, botInput, messages } = this.state;
+    const D = DICT[lang], t = D.ui;
+    const catLabel = { b2b: t.catB2B, b2c: t.catB2C, hybrid: t.catHybrid };
+    const visible = FAQ.filter(i => this.inTab(i, tab) && this.matches(i, query, lang));
+    const ref = id => '#0' + id;
+
+    return {
+      t,
+      langs: LANGS.map(([k, label]) => ({
+        label, active: k === lang, onClick: () => this.setLang(k),
+        bg: k === lang ? '#00ff87' : 'transparent', color: k === lang ? '#05070a' : '#9aa4ae',
+      })),
+      tabs: ['all', 'b2b', 'b2c'].map(k => {
+        const active = k === tab;
+        return {
+          label: t[k], active, onClick: () => this.setTab(k),
+          count: FAQ.filter(i => this.inTab(i, k)).length,
+          bg: active ? 'rgba(0,255,135,.08)' : 'transparent',
+          color: active ? '#00ff87' : '#c9d1d8',
+          border: active ? '#00ff87' : 'rgba(255,255,255,.08)',
+        };
+      }),
+      query,
+      onQuery: e => this.setState({ query: e.target.value, openIds: [] }),
+      items: visible.map(i => {
+        const d = D.q[i.id], isOpen = openIds.includes(i.id);
+        return {
+          ...d, a: d.a, points: d.p, basis: d.b, isOpen,
+          ref: ref(i.id), cat: catLabel[i.cat], anchor: 'faq-0' + i.id,
+          btnId: 'faq-btn-' + i.id, panelId: 'faq-panel-' + i.id,
+          toggle: () => this.toggle(i.id),
+          rows: isOpen ? '1fr' : '0fr', op: isOpen ? 1 : 0,
+          border: isOpen ? 'rgba(0,255,135,.25)' : 'rgba(255,255,255,.06)',
+          corner: isOpen ? '#00ff87' : 'rgba(255,255,255,.18)',
+          refColor: isOpen ? '#00ff87' : '#6b7580',
+          plusRot: isOpen ? 'rotate(90deg) scaleY(0)' : 'none',
+        };
+      }),
+      isEmpty: visible.length === 0,
+      askFromSearch: () => this.ask(query),
+      showBot: this.props.showBot ?? true,
+      botOpen,
+      openBot: () => this.setState({ botOpen: true }),
+      closeBot: () => this.setState({ botOpen: false }),
+      toggleBot: () => this.setState(s => ({ botOpen: !s.botOpen })),
+      msgRef: this.msgRef,
+      messages: messages.map(m => {
+        if (m.from === 'user') return { isUser: true, isBot: false, text: m.text };
+        if (m.kind === 'faq') {
+          const d = D.q[m.id];
+          return { isUser: false, isBot: true, hasFaq: true, ref: ref(m.id), q: d.q, text: d.a, open: () => this.openFaq(m.id) };
+        }
+        return { isUser: false, isBot: true, hasFaq: false, text: m.kind === 'hello' ? t.botHello : t.botFallback };
+      }),
+      showSuggestions: messages.length === 1,
+      suggestions: POPULAR.map(id => ({ label: D.q[id].q, onClick: () => this.ask(D.q[id].q, id) })),
+      botInput,
+      onBotInput: e => this.setState({ botInput: e.target.value }),
+      onBotKey: e => { if (e.key === 'Enter') this.ask(this.state.botInput); },
+      sendBot: () => this.ask(this.state.botInput),
+    };
+  }
+}
+</script>
+</body>
+</html>

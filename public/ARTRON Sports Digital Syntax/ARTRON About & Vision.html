@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ARTRON — სპორტის ციფრული სინტაქსი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Noto+Sans+Georgian:wght@200;300;400;500&family=Noto+Serif+Georgian:wght@200;300;400&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{
+  --obsidian:#090A0F; --abyss:#0B132B;
+  --snow:rgba(248,250,252,.95); --patina:#94A3B8; --titanium:#64748B;
+  --gold:#D4AF37; --bronze:#CD7F32; --emerald:#10B981; --diamond:#E2E8F0;
+  --sans:"Noto Sans Georgian",system-ui,sans-serif;
+  --serif:"Noto Serif Georgian",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --pad:clamp(20px,4.2vw,72px);--rail:0px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--obsidian)}
+body{color:var(--snow);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;
+  background:linear-gradient(180deg,#090A0F 0%,#090A0F 30%,#0B132B 100%);min-height:100vh;overflow-x:hidden}
+a{color:var(--snow);text-decoration:none}
+a:hover{color:var(--gold)}
+::selection{background:rgba(212,175,55,.3)}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.vignette{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 40%,transparent 40%,rgba(9,10,15,.75) 100%)}
+main{position:relative;z-index:1}
+
+.grid{max-width:1480px;margin:0 auto;padding:0 calc(var(--pad) + var(--rail)) 0 var(--pad);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(12px,2vw,32px)}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--patina);font-weight:400}
+.mono b{color:var(--gold);font-weight:400}
+.metal{background:linear-gradient(100deg,#64748B 0%,#F8FAFC 20%,#94A3B8 38%,#F8FAFC 55%,#7c8799 75%,#E2E8F0 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 14s ease-in-out infinite alternate}
+@keyframes sheen{from{background-position:0% 0}to{background-position:100% 0}}
+
+.rule{position:relative;height:1px;overflow:hidden;
+  background:linear-gradient(90deg,transparent,rgba(226,232,240,.07) 12%,rgba(226,232,240,.42) 50%,rgba(226,232,240,.07) 88%,transparent)}
+.rule::after{content:"";position:absolute;top:0;left:0;width:140px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:pulse 7s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes pulse{0%{transform:translateX(-160px)}60%,100%{transform:translateX(100vw)}}
+.divider{display:flex;align-items:center;gap:18px;grid-column:1/-1}
+.divider .rule{flex:1}
+.divider i{width:7px;height:7px;border:1px solid var(--bronze);transform:rotate(45deg);flex:none}
+
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity 1.2s cubic-bezier(.2,.7,.1,1),transform 1.2s cubic-bezier(.2,.7,.1,1)}
+.js .rv.in{opacity:1;transform:none}
+
+/* rail */
+.rail{position:fixed;right:clamp(14px,2vw,32px);top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:18px;align-items:flex-end}
+.rail a{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--titanium);display:flex;align-items:center;gap:10px;transition:color .4s}
+.rail a span{display:block;width:14px;height:1px;background:currentColor;transition:width .5s}
+.rail a.on{color:var(--gold)}
+.rail a.on span{width:34px}
+
+/* hero */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;padding-top:clamp(20px,3vw,36px);padding-bottom:clamp(28px,4vw,48px)}
+.hero .top{display:flex;justify-content:space-between;gap:16px;grid-column:1/-1}
+.hero h1{grid-column:1/-1;font-weight:200;font-size:clamp(68px,17.5vw,300px);line-height:.86;letter-spacing:.04em;margin-left:-.04em}
+.hero .sub{grid-column:1/8;font-family:var(--serif);font-weight:300;font-size:clamp(24px,3.1vw,46px);line-height:1.2;margin-top:clamp(12px,2vw,28px);text-wrap:balance}
+.hero .meta{grid-column:9/13;align-self:end;display:flex;flex-direction:column;gap:10px;text-align:right}
+.hero .foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:end;gap:16px;margin-top:40px}
+.scrollcue{display:flex;align-items:center;gap:12px}
+.scrollcue i{display:block;width:1px;height:48px;background:linear-gradient(var(--gold),transparent);animation:drip 2.4s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+.chapter{grid-column:1/-1;display:flex;align-items:baseline;gap:clamp(14px,2vw,28px);flex-wrap:wrap}
+.chapter .num{font-family:var(--mono);font-size:12px;color:var(--bronze);letter-spacing:.2em}
+.chapter h2{font-weight:300;font-size:clamp(28px,3.6vw,56px);line-height:1.1;letter-spacing:-.005em;text-wrap:balance}
+.chapter h2 em{font-style:normal;color:var(--patina)}
+
+/* quote */
+.quote{padding-top:clamp(120px,18vh,220px);padding-bottom:clamp(80px,12vh,160px);row-gap:44px}
+.quote .label{grid-column:2/12;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.quote blockquote{grid-column:2/12;font-family:var(--serif);font-weight:200;font-size:clamp(26px,3.7vw,60px);line-height:1.28;text-align:center;text-wrap:balance}
+.quote blockquote sup{font-family:var(--mono);font-size:.3em;color:var(--gold);vertical-align:top;margin-left:4px;-webkit-text-fill-color:var(--gold)}
+.quote .attr{grid-column:1/-1;text-align:center}
+.lede{grid-column:4/10;font-size:clamp(17px,1.35vw,21px);line-height:1.75;color:var(--snow);text-wrap:pretty}
+.lede p+p{margin-top:1.1em}
+.lede .dim{color:var(--patina)}
+.lede strong{font-weight:400;color:#fff}
+
+/* letters */
+.assemble{height:240vh;position:relative}
+.assemble .stick{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(26px,4vh,48px);overflow:hidden}
+.word{display:flex;font-family:var(--serif);font-weight:200;font-size:clamp(64px,14vw,240px);line-height:1;letter-spacing:.01em}
+.word span{display:inline-block;will-change:transform,opacity}
+.readout{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+.assemble .claim{font-size:clamp(22px,2.6vw,40px);font-weight:300;text-align:center;padding:0 var(--pad);transition:opacity .8s,transform .8s}
+
+/* fragmentation */
+.frag{padding-block:clamp(80px,12vh,140px);row-gap:clamp(40px,6vw,80px)}
+.frag .intro{grid-column:1/7;font-size:clamp(22px,2.2vw,34px);line-height:1.35;font-weight:300;text-wrap:balance}
+.actors{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:inherit;row-gap:clamp(36px,5vw,64px)}
+.actor{display:flex;flex-direction:column;gap:14px;padding-top:16px;border-top:1px solid rgba(148,163,184,.18)}
+.actor p{font-size:clamp(18px,1.6vw,24px);line-height:1.45;text-wrap:pretty}
+.actor:nth-child(1){grid-column:1/5}
+.actor:nth-child(2){grid-column:7/11;margin-top:120px}
+.actor:nth-child(3){grid-column:3/7}
+.actor:nth-child(4){grid-column:9/13;margin-top:80px}
+.frag .apart{grid-column:7/13;font-size:clamp(17px,1.35vw,21px);line-height:1.75;color:var(--patina);text-wrap:pretty}
+.frag .apart strong{color:var(--snow);font-weight:400}
+.cons{grid-column:1/-1;display:flex;flex-direction:column}
+.cons .row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:inherit;align-items:baseline;padding:26px 0}
+.cons .row .mono{grid-column:1/3}
+.cons .row p{grid-column:3/-1;font-size:clamp(22px,2.6vw,40px);font-weight:200;line-height:1.2}
+.cons .head{padding-bottom:18px}
+.fatigue{grid-column:2/12;text-align:center;font-family:var(--serif);font-weight:200;font-size:clamp(28px,4vw,64px);line-height:1.2;text-wrap:balance}
+
+.goal{padding-block:clamp(80px,12vh,160px);row-gap:48px}
+.goal h3{grid-column:1/7;font-weight:200;font-size:clamp(34px,4.6vw,76px);line-height:1.05;text-wrap:balance}
+.goal .lede{grid-column:7/13}
+.contrast{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(148,163,184,.14);margin-top:40px}
+.contrast div{background:rgba(9,10,15,.72);padding:clamp(28px,4vw,56px);display:flex;flex-direction:column;gap:20px;min-height:260px;justify-content:space-between}
+.contrast p{font-size:clamp(22px,2.3vw,36px);line-height:1.3;font-weight:300}
+.contrast .noise p{color:var(--titanium);letter-spacing:.06em;word-spacing:.35em}
+.contrast .syntax{background:rgba(11,19,43,.8)}
+
+/* architecture */
+.arch{padding-top:clamp(100px,16vh,200px);row-gap:40px}
+.arch .intro{grid-column:1/7;color:var(--patina);font-size:clamp(17px,1.35vw,21px);line-height:1.75}
+.nodes{grid-column:1/7;list-style:none;margin-top:10vh}
+.node{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:22px;padding:40px 0;opacity:.28;transition:opacity .8s}
+.node.on{opacity:1}
+.node .stamp{font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--patina);transition:color .6s}
+.node.on .stamp{color:var(--gold)}
+.node h4{font-weight:200;font-size:clamp(40px,5vw,84px);line-height:1;letter-spacing:-.01em}
+.node p{font-size:clamp(17px,1.3vw,20px);line-height:1.75;max-width:34em;text-wrap:pretty}
+.node .bar{height:1px;width:100%;background:rgba(148,163,184,.14);position:relative;overflow:hidden}
+.node .bar::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bronze),var(--gold) 40%,transparent);transform:scaleX(0);transform-origin:left;transition:transform 1.4s cubic-bezier(.2,.7,.1,1)}
+.node.on .bar::after{transform:scaleX(1)}
+.node.core h4{font-family:var(--mono);font-weight:300;letter-spacing:.04em;font-size:clamp(34px,4vw,64px)}
+.hud{grid-column:8/13;grid-row:span 1;position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(28px,5vh,56px) 0;pointer-events:none}
+.hud .frame{position:absolute;inset:18% 4% 30% 4%}
+.hud .frame i{position:absolute;width:22px;height:22px;border-color:rgba(205,127,50,.7);border-style:solid;border-width:0}
+.hud .frame i:nth-child(1){top:0;left:0;border-top-width:1px;border-left-width:1px}
+.hud .frame i:nth-child(2){top:0;right:0;border-top-width:1px;border-right-width:1px}
+.hud .frame i:nth-child(3){bottom:0;left:0;border-bottom-width:1px;border-left-width:1px}
+.hud .frame i:nth-child(4){bottom:0;right:0;border-bottom-width:1px;border-right-width:1px}
+.hud .row{display:flex;justify-content:space-between;gap:12px}
+.hud .bottom{display:flex;justify-content:space-between;align-items:end;gap:24px}
+.hud .big{font-family:var(--mono);font-size:clamp(14px,1.3vw,18px);letter-spacing:.14em;color:var(--snow)}
+.matrix{display:grid;grid-template-columns:repeat(3,30px);gap:4px}
+.matrix span{height:30px;border:1px solid rgba(148,163,184,.22);font-family:var(--mono);font-size:9px;color:var(--titanium);display:flex;align-items:center;justify-content:center;transition:all .5s}
+.matrix span.on{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,.08)}
+.matrix span.c{border-color:rgba(205,127,50,.55)}
+.arch .tail{grid-column:1/-1;height:12vh}
+
+/* reliability */
+.rel{padding-block:clamp(100px,16vh,200px);row-gap:40px}
+.rel .intro{grid-column:1/7;color:var(--patina);font-size:clamp(17px,1.35vw,21px);line-height:1.75}
+.rel .intro strong{color:var(--snow);font-weight:400}
+.vault{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:linear-gradient(135deg,rgba(226,232,240,.22),rgba(148,163,184,.06) 50%,rgba(205,127,50,.25));border:1px solid rgba(148,163,184,.12);margin-top:30px}
+.cell{position:relative;background:rgba(9,10,15,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:clamp(28px,3.6vw,56px);display:flex;flex-direction:column;gap:22px;min-height:420px}
+.cell .v{font-family:var(--mono);font-weight:300;font-size:clamp(40px,5.2vw,88px);line-height:1;letter-spacing:-.02em;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.cell .v small{font-size:12px;letter-spacing:.2em;color:var(--bronze)}
+.cell h5{font-weight:400;font-size:clamp(19px,1.6vw,24px);line-height:1.35;margin-top:auto}
+.cell p{font-size:16px;line-height:1.7;color:var(--patina);text-wrap:pretty}
+.cell .tick{position:absolute;top:14px;right:14px;width:7px;height:7px;border:1px solid var(--bronze);transform:rotate(45deg)}
+.cell .spark{position:absolute;left:0;top:0;height:1px;width:40%;background:linear-gradient(90deg,var(--emerald),transparent);opacity:.55}
+
+/* unity */
+.unity{padding-top:clamp(100px,16vh,200px);row-gap:40px}
+.unity .intro{grid-column:1/7;color:var(--patina);font-size:clamp(17px,1.35vw,21px);line-height:1.75}
+.unity .intro strong{color:var(--snow);font-weight:400}
+.ctas{grid-column:1/-1;display:flex;flex-direction:column;margin-top:30px;border-bottom:1px solid rgba(148,163,184,.16)}
+.cta{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(12px,2vw,32px);align-items:center;padding:clamp(28px,3.4vw,48px) 0;border-top:1px solid rgba(148,163,184,.16);min-height:44px;transition:background .6s}
+.cta::before{content:"";position:absolute;left:0;top:-1px;height:1px;width:100%;background:linear-gradient(90deg,var(--bronze),var(--gold) 50%,rgba(212,175,55,0));transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.1,1)}
+.cta:hover{background:linear-gradient(90deg,rgba(212,175,55,.045),transparent 70%);color:var(--snow)}
+.cta:hover::before,.cta:focus-visible::before{transform:scaleX(1)}
+.cta:focus-visible{outline:none}
+.cta .mono{grid-column:1/3}
+.cta h6{grid-column:3/8;font-weight:300;font-size:clamp(24px,2.5vw,40px);line-height:1.15;transition:transform .7s cubic-bezier(.2,.7,.1,1)}
+.cta:hover h6{transform:translateX(12px)}
+.cta p{grid-column:8/10;font-size:15px;line-height:1.65;color:var(--patina)}
+.cta .go{grid-column:10/13;white-space:nowrap;justify-self:end;display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--diamond)}
+.arrow{position:relative;width:38px;height:1px;background:currentColor;transition:width .6s cubic-bezier(.2,.7,.1,1)}
+.arrow::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
+.cta:hover .go{color:var(--gold)}
+.cta:hover .arrow{width:70px}
+.equal{grid-column:4/10;text-align:center;font-size:clamp(18px,1.5vw,23px);line-height:1.7;color:var(--patina);margin-top:60px;text-wrap:balance}
+.equal strong{color:var(--snow);font-weight:400}
+
+.finale{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:clamp(30px,5vh,60px);padding:18vh var(--pad)}
+.finale h2{font-family:var(--serif);font-weight:200;font-size:clamp(44px,8.4vw,150px);line-height:1.05;letter-spacing:-.01em}
+.finale h2 span{display:block}
+.finale .close{max-width:36em;font-size:clamp(18px,1.5vw,23px);line-height:1.7;color:var(--patina)}
+.finale .close strong{color:var(--snow);font-weight:400}
+footer{padding-top:40px;padding-bottom:48px;row-gap:24px}
+footer .notes{grid-column:1/9;display:flex;flex-direction:column;gap:10px;text-transform:none;letter-spacing:.04em;line-height:1.6}
+footer .sig{grid-column:9/13;text-align:right;align-self:end}
+
+@media (min-width:901px){:root{--rail:56px}}
+@media (max-width:900px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .grid>*{grid-column:1/-1!important}
+  .rail{display:none}
+  .hero .meta{text-align:left;margin-top:28px}
+  .actors,.cons .row,.cta{grid-template-columns:minmax(0,1fr)}
+  .actors>*,.cons .row>*,.cta>*{grid-column:1/-1!important;margin-top:0!important}
+  .cons .row{row-gap:10px}
+  .contrast,.vault{grid-template-columns:minmax(0,1fr)}
+  .cell{min-height:0}
+  .nodes{margin-top:0}
+  .node{min-height:0;opacity:1;padding:44px 20px;margin:0 -20px;background:linear-gradient(180deg,rgba(9,10,15,.78),rgba(9,10,15,.55));border-top:1px solid rgba(148,163,184,.12)}
+  .hud{display:none}
+  .cta{row-gap:14px}
+  .cta .go{justify-self:start;min-height:44px}
+  .cta:hover h6{transform:none}
+  footer .sig{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  .metal,.rule::after,.scrollcue i{animation:none}
+  .js .rv{transition:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="vignette"></div>
+
+<nav class="rail" aria-label="თავები">
+  <a href="#s1" data-r="0">I<span></span></a>
+  <a href="#s2" data-r="1">II<span></span></a>
+  <a href="#s3" data-r="2">III<span></span></a>
+  <a href="#s4" data-r="3">IV<span></span></a>
+</nav>
+
+<main>
+<!-- I. MANIFESTO -->
+<section id="s1" data-screen-label="01 Manifesto">
+  <header class="hero grid">
+    <div class="top">
+      <span class="mono">[ ARTRON // ABOUT &amp; VISION ]</span>
+      <span class="mono">41.7151° N — 44.8271° E</span>
+    </div>
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:inherit;column-gap:inherit">
+      <h1 class="metal rv">ARTRON</h1>
+      <p class="sub rv">სპორტის ციფრული სინტაქსი.</p>
+      <div class="meta rv">
+        <span class="mono">[ 01 // MANIFESTO ]</span>
+        <span class="mono">ანიდან ჰოემდე</span>
+      </div>
+    </div>
+    <div class="foot">
+      <span class="mono"><b>I.</b> მოძრაობა იბადება კავშირში</span>
+      <span class="scrollcue mono"><i></i>SCROLL</span>
+    </div>
+  </header>
+
+  <div class="quote grid">
+    <div class="label rv">
+      <span class="mono">[ ART. 01 // ართრონი ]</span>
+      <span class="mono">სულხან-საბა ორბელიანი</span>
+    </div>
+    <blockquote class="metal rv">«ესე ართრონი არიან ასოები, რომელნი წინა მოეზავებიან სიტყვათა ანუ უკანის და გვარიან ჰყოფენ და დაატკბობენ...»<sup>[1]</sup></blockquote>
+    <div class="divider rv"><div class="rule"></div><i></i><div class="rule"></div></div>
+    <div class="lede rv">
+      <p class="dim">დაფიქრდით, რას ნიშნავს ეს:</p>
+      <p>ასოები თავისთავად უბრალოდ ხმებია. ცალკეული სიტყვები უბრალოდ ნედლი მასალაა. მაგრამ შემოდის ართრონი — და ეს ნედლი მასალა ხდება სინტაქსი, ხდება აზრი, მშვენდება, ტკბება და იქცევა <strong>პოეზიად!</strong></p>
+      <p>ართრონი არის ის, რაც ქაოტურ ბგერებს ენად და აზროვნებად აქცევს, ანიდან ჰოემდე — დასაბამიდან უსასრულობამდე.</p>
+    </div>
+  </div>
+
+  <div class="assemble" id="assemble">
+    <div class="stick">
+      <span class="mono" id="noiseTag">[ NOISE // UNBOUND ]</span>
+      <div class="word metal" id="word" aria-label="ართრონი"><span>ა</span><span>რ</span><span>თ</span><span>რ</span><span>ო</span><span>ნ</span><span>ი</span></div>
+      <div class="readout">
+        <span class="mono">NOISE <b id="rNoise">100</b>%</span>
+        <span class="mono">SYNTAX <b id="rSyntax">000</b>%</span>
+      </div>
+      <p class="claim" id="claim" style="opacity:0;transform:translateY(16px)">ჩვენ ვართ სპორტის სინტაქსი.</p>
+    </div>
+  </div>
+
+  <div class="frag grid">
+    <p class="intro rv">შეხედეთ დღევანდელ სპორტულ სამყაროს — ის მიმოფანტულია:</p>
+    <div class="actors">
+      <div class="actor rv"><span class="mono">x 0.12 · y 0.84</span><p>დარბაზში პირველად შემოყვანილი ბავშვი და მღელვარე მშობელი;</p></div>
+      <div class="actor rv"><span class="mono">x 0.71 · y 0.33</span><p>დაუღალავი მწვრთნელი, რომელიც დარბაზში უკანასკნელ შუქს აქრობს;</p></div>
+      <div class="actor rv"><span class="mono">x 0.29 · y 0.97</span><p>მწვერვალზე მდგარი ჩემპიონი;</p></div>
+      <div class="actor rv"><span class="mono">x 0.88 · y 0.06</span><p>კულისებს მიღმა დარჩენილი მსაჯი, ექიმი და ფედერაცია...</p></div>
+    </div>
+    <p class="apart rv">ცალ-ცალკე ისინი დაქსაქსულები არიან. მათ აქვთ უდიდესი ენერგია, მაგრამ არ აქვთ <strong>სინტაქსი</strong> — საერთო ენა, რომელიც მათ ერთიან, შეკრულ ძალად აქცევს.</p>
+    <div class="cons">
+      <div class="head mono rv">როდესაც სექტორი დაქსაქსულია:</div>
+      <div class="rule"></div>
+      <div class="row rv"><span class="mono">— 01</span><p>ბიზნესი იხრჩობა გაურკვევლობაში,</p></div>
+      <div class="rule"></div>
+      <div class="row rv"><span class="mono">— 02</span><p>ტალანტი რჩება ჩრდილში,</p></div>
+      <div class="rule"></div>
+      <div class="row rv"><span class="mono">— 03</span><p>ხოლო ადამიანის ყოველდღიური შრომა კარგავს აზრს.</p></div>
+      <div class="rule"></div>
+    </div>
+    <p class="fatigue metal rv">მოძრაობა გონებისა და წესრიგის გარეშე — მხოლოდ დაღლაა.</p>
+  </div>
+
+  <div class="goal grid">
+    <h3 class="rv">ARTRON არის უმაღლესი მიზანი.</h3>
+    <div class="lede rv">
+      <p>ჩვენ ვართ ცენტრალური ციფრული ნერვული სისტემა, რომელიც ამ ქაოსს ასრულებს. ჩვენ ვქმნით ერთიან სივრცეს, სადაც ბავშვის პირველი ნაბიჯი პირდაპირ კავშირშია ოლიმპიურ ოქროსთან;</p>
+      <p class="dim">სადაც ფედერაციის ხედვა, მწვრთნელის შრომა და ათლეტის ოფლი ერთ საერთო სწრაფვად — <strong>სრულყოფილებისკენ სწრაფვად</strong> ერთიანდება.</p>
+    </div>
+    <div class="contrast rv">
+      <div class="noise"><span class="mono">[ − ართრონი ]</span><p>გამოაცალეთ სინტაქსი — და სპორტი რჩება მიმოფანტულ ხმაურად.</p></div>
+      <div class="syntax"><span class="mono"><b>[ + ართრონი ]</b></span><p>დააბრუნეთ ართრონი — და იბადება საერთო ენა, საერთო მიზანი და დიდი გამარჯვება.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- II. ARCHITECTURE -->
+<section id="s2" data-screen-label="02 Architecture">
+  <div class="arch grid">
+    <div class="divider"><div class="rule"></div><i></i><div class="rule"></div></div>
+    <div class="chapter rv"><span class="num">II.</span><h2>არქიტექტურა: <em>9 კვანძი, ერთი სრული წესრიგი</em></h2></div>
+    <p class="intro rv">სპორტის მართვა კომპლექსური პროცესია, სადაც შეცდომის ადგილი არ არის. ARTRON არის 9 ურთიერთდაკავშირებული კვანძის ეკოსისტემა, რომელსაც ერთი ცენტრალური ციფრული ბირთვი ამუშავებს.</p>
+    <ol class="nodes" id="nodes"></ol>
+    <aside class="hud" id="hud" style="grid-row:3/5;grid-column:8/13">
+      <div class="frame"><i></i><i></i><i></i><i></i></div>
+      <div class="row"><span class="mono">[ KINETIC CORE ]</span><span class="mono">LINKED <b id="linked">00</b> / 09</span></div>
+      <div class="bottom">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span class="mono">ACTIVE NODE</span>
+          <span class="big" id="activeStamp">[ 01 // SPACES ]</span>
+        </div>
+        <div class="matrix" id="matrix"></div>
+      </div>
+    </aside>
+    <div class="tail"></div>
+  </div>
+</section>
+
+<!-- III. RELIABILITY -->
+<section id="s3" data-screen-label="03 Reliability">
+  <div class="rel grid">
+    <div class="divider"><div class="rule"></div><i></i><div class="rule"></div></div>
+    <div class="chapter rv"><span class="num">III.</span><h2>სანდოობა და ლეგიტიმაცია: <em>ურყევი სტანდარტი</em></h2></div>
+    <p class="intro rv">სპორტული ორგანიზაციის მართვა მოითხოვს ორ ფუნდამენტურ გარანტიას: <strong>პროცესების უწყვეტობასა და მონაცემთა სრულ ხელშეუხებლობას.</strong> ჩვენი სტანდარტი გამყარებულია მკაფიო საინჟინრო და სამართლებრივი პარამეტრებით.</p>
+    <div class="vault rv">
+      <article class="cell"><i class="tick"></i><i class="spark"></i>
+        <span class="mono">[ R-01 // CONTINUITY ]</span>
+        <div class="v metal">99.99%<small>UPTIME</small></div>
+        <h5>სისტემის უწყვეტობა</h5>
+        <p>ARTRON არ ჩერდება. შიდა ავტონომიური ბუფერი უზრუნველყოფს ნებისმიერი სპორტული სივრცის, წვდომის წერტილებისა და საოპერაციო პროცესების უწყვეტ მუშაობას მაშინაც კი, როდესაც გარე ქსელი ან ინტერნეტ-კავშირი გათიშულია.</p>
+      </article>
+      <article class="cell"><i class="tick"></i>
+        <span class="mono">[ R-02 // ENCRYPTION ]</span>
+        <div class="v metal">AES-256<small>GCM</small></div>
+        <h5>მონაცემთა სრული უსაფრთხოება და ხელშეუხებლობა</h5>
+        <p>ათლეტების, განსაკუთრებით არასრულწლოვანთა და მშობელთა პერსონალური ინფორმაცია, ისევე როგორც ორგანიზაციის ფინანსური ნაკადები, დაცულია საერთაშორისო კრიპტოგრაფიული სტანდარტით. თითოეული მონაცემი საიმედოდ არის იზოლირებული და დაცული.</p>
+      </article>
+      <article class="cell"><i class="tick"></i>
+        <span class="mono">[ R-03 // LABOR LAW ]</span>
+        <div class="v metal">№01-15/ნ<small>ORDER [2]</small></div>
+        <h5>სამართლებრივი სიმშვიდე (შრომის უსაფრთხოება)</h5>
+        <p>სისტემა სრულად პასუხობს შრომის ინსპექციის მოთხოვნებს. თანამშრომელთა სამუშაო დროის, ზეგანაკვეთური საათებისა და დასვენების დღეების აღრიცხვა ხდება ავტომატურად, რაც ბიზნესს ათავისუფლებს რუტინისა და სამართლებრივი რისკებისგან.</p>
+      </article>
+      <article class="cell"><i class="tick"></i><i class="spark"></i>
+        <span class="mono">[ R-04 // ENGINEERING ]</span>
+        <div class="v metal">GLOBAL<small>STANDARD</small></div>
+        <h5>გლობალური საინჟინრო სტანდარტი</h5>
+        <p>სისტემის არქიტექტურა თავიდანვე საერთაშორისო სტანდარტებითა და საუკეთესო პრაქტიკით არის აგებული. დროში გამოცდილი, მოქნილი და მასშტაბირებადი ტექნოლოგია — მზად ადგილობრივი და გლობალური სპორტული ინდუსტრიისთვის.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- IV. UNITY -->
+<section id="s4" data-screen-label="04 Call to Unity">
+  <div class="unity grid">
+    <div class="divider"><div class="rule"></div><i></i><div class="rule"></div></div>
+    <div class="chapter rv"><span class="num">IV.</span><h2>ღიაობა და საერთო მიზანი: <em>ერთიანი სივრცე მომავლისთვის</em></h2></div>
+    <p class="intro rv">ARTRON არ არის ჩაკეტილი პროგრამა — ეს არის <strong>ღია ეკოსისტემა</strong>, რომელიც შექმნილია პარტნიორობისთვის, განვითარებისთვის და საერთო გამარჯვებისთვის. ჩვენ თანაბრად ღია ვართ ყველასთვის:</p>
+    <div class="ctas rv">
+      <a class="cta" href="#">
+        <span class="mono">[ A // CLUBS ]</span>
+        <h6>სპორტული ორგანიზაციები და კლუბები</h6>
+        <p>ვისაც სჭირდება ურყევი საოპერაციო საყრდენი და გამჭვირვალე მართვა.</p>
+        <span class="go">დემოს მოთხოვნა<i class="arrow"></i></span>
+      </a>
+      <a class="cta" href="#">
+        <span class="mono">[ B // ATHLETES ]</span>
+        <h6>ათლეტები, მშობლები და მოყვარულები</h6>
+        <p>ვისთვისაც სპორტი ყოველდღიური ცხოვრების განუყოფელი ნაწილი და ჯანსაღი გარემოა.</p>
+        <span class="go">პროფილის შექმნა<i class="arrow"></i></span>
+      </a>
+      <a class="cta" href="#">
+        <span class="mono">[ C // PARTNERS ]</span>
+        <h6>ტექნოლოგიური პარტნიორები და მომავალი გუნდი</h6>
+        <p>ვისაც სურს, საერთაშორისო დონის პროდუქტის შექმნაში საკუთარი სიტყვა თქვას.</p>
+        <span class="go">საუბრის დაწყება<i class="arrow"></i></span>
+      </a>
+    </div>
+    <p class="equal rv">ჩვენ არ ვქმნით ბარიერებს. ჩვენ ვქმნით თანაბარ ასპარეზს ყველასთვის — სადაც <strong>წესები ყველასთვის ერთია</strong>, ხოლო შესაძლებლობა — <strong>უსაზღვრო.</strong></p>
+  </div>
+
+  <div class="finale">
+    <span class="mono rv">[ Ა → Ჰ // ∞ ]</span>
+    <h2 class="metal rv"><span>ანიდან ჰოემდე.</span><span>დასაბამიდან უსასრულობამდე.</span></h2>
+    <p class="close rv">სპორტი მოძრაობაა. <strong>ARTRON</strong> არის წესრიგი, რომელიც ამ მოძრაობას სრულყოფილებად აქცევს — დასაბამიდან უსასრულობამდე.</p>
+  </div>
+
+  <footer class="grid">
+    <div class="divider"><div class="rule"></div><i></i><div class="rule"></div></div>
+    <div class="notes mono">
+      <span>[1] სულხან-საბა ორბელიანი, «სიტყვის კონა» — ართრონი.</span>
+      <span>[2] შრომის ინსპექციის სამსახურის ბრძანება №01-15/ნ.</span>
+    </div>
+    <span class="sig mono">ARTRON © 2026 // <b>DIGITAL SYNTAX OF SPORTS</b></span>
+  </footer>
+</section>
+</main>
+
+<script>
+(() => {
+  const NODES = [
+    ['01','SPACES','სივრცეები','ნებისმიერი მასშტაბისა და პროფილის სპორტული ინფრასტრუქტურა — ერთდარბაზიანი სტუდიიდან მრავალფუნქციურ ოლიმპიურ კომპლექსამდე. ტევადობის, სექციებისა და რესურსების ზუსტი მართვა ერთ სივრცეში.'],
+    ['02','MENTORS','მენტორები','მწვრთნელებისა და პერსონალის ავტომატური ტაბელირება. ობიექტურად აღრიცხული საათები და სამართლიანი ანაზღაურება — რათა პროფესიონალმა ფოკუსი მხოლოდ სპორტსმენის აღზრდაზე შეინარჩუნოს.'],
+    ['03','ATHLETES','ათლეტები','ერთიანი ციფრული პროფილი და უნივერსალური იდენტიფიკაცია. იქნება ეს მობილური მოწყობილობა თუ ნებისმიერი ფიზიკური მატარებელი — ათლეტი იღებს სრულ თავისუფლებას მოძრაობაში, დარბაზში შეუფერხებელი შესვლიდან საკუთარი პროგრესის კონტროლამდე.'],
+    ['04','FINANCE','ფინანსები','გამჭვირვალე ფულადი ნაკადები. გადახდების ავტომატიზაცია, აბონემენტების უშეცდომო კონტროლი და სუფთა ფინანსური სურათი როგორც კლუბისთვის, ისე მომხმარებლისთვის.'],
+    ['05','DATA & INSIGHTS','ანალიტიკა','ღრმა საოპერაციო და ბიზნეს-მონაცემები. მიუკერძოებელი ციფრები შემოსავლების, დარბაზების დატვირთვისა და სპორტსმენთა დინამიკის შესახებ — გადაწყვეტილებები, რომლებიც ეფუძნება რეალურ ფაქტებს და არა ინტუიციას.'],
+    ['06','HARDWARE & IOT','აპარატურა','სრული თავსებადობა ბაზარზე არსებულ ნებისმიერ ტურნიკეტთან, ჭკვიან საკეტსა თუ წამკითხველთან. მარტივი ინტეგრაცია რთული საინჟინრო გაყვანილობის გარეშე — სრული ფუნქციონირება ავტონომიური მობილური ქსელით (4G/LTE), ფიქსირებული ინტერნეტის გარეშეც.'],
+    ['07','TIMELINE','დრო','დარბაზების, ჯგუფური განრიგებისა და ტურნირების უშეცდომო სინქრონიზაცია. დროის აცდენებისა და გადაფარვების სრული გამორიცხვა.'],
+    ['08','PULSE','კომუნიკაცია','პირდაპირი, დაუყოვნებელი კავშირი მენეჯმენტს, მწვრთნელს, ათლეტსა და მშობელს შორის — შეტყობინებები, ცვლილებები და შედეგები ერთ გარემოში.'],
+    ['09','ARTRON CORE','ARTRON CORE','ცენტრალური ინტელექტი, რომელიც ამ რვა კვანძს ერთ ცოცხალ მექანიზმად კრავს. ალგორითმი, რომელიც გამორიცხავს ადამიანურ შეცდომას და ინარჩუნებს სისტემის უწყვეტ წესრიგს.']
+  ];
+  const ol = document.getElementById('nodes');
+  ol.innerHTML = NODES.map((n,i)=>`<li class="node${i===8?' core':''}" data-i="${i}">
+    <span class="stamp">[ ${n[0]} // ${n[1]} ]</span><h4${i===8?' class="metal"':''}>${n[2]}</h4><div class="bar"></div><p>${n[3]}</p></li>`).join('');
+  const ring=[0,1,2,7,8,3,6,5,4];
+  document.getElementById('matrix').innerHTML = ring.map(i=>`<span data-m="${i}" class="${i===8?'c':''}">${NODES[i][0]}</span>`).join('');
+
+  const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+  // shared scroll state for the WebGL module
+  const S = window.__artron = {state:0, active:-1, mobile:matchMedia('(max-width: 900px)').matches};
+  const secs=['s1','s2','s3','s4'].map(id=>document.getElementById(id));
+  const rail=[...document.querySelectorAll('.rail a')];
+  const nodeEls=[...document.querySelectorAll('.node')];
+  const mCells=[...document.querySelectorAll('.matrix span')];
+  const stamp=document.getElementById('activeStamp'), linked=document.getElementById('linked');
+  const word=[...document.querySelectorAll('#word span')], asm=document.getElementById('assemble');
+  const claim=document.getElementById('claim'), rN=document.getElementById('rNoise'), rS=document.getElementById('rSyntax'), tag=document.getElementById('noiseTag');
+  const seeds=word.map((_,i)=>({x:(Math.random()-.5)*(i%2?1:-1)*80,y:(Math.random()-.5)*70,r:(Math.random()-.5)*140,s:.5+Math.random()*.9}));
+  let lastActive=-2;
+  const ease=t=>1-Math.pow(1-t,3);
+
+  function tick(){
+    const vh=innerHeight;
+    // particle state: 0 chaos, 1 core, 2 lattice, 3 infinity
+    let s=0;
+    for(let i=1;i<4;i++){const t=secs[i].getBoundingClientRect().top;s+=Math.min(1,Math.max(0,(vh-t)/(vh*.75)))}
+    S.state=s;
+    let cur=0; secs.forEach((el,i)=>{if(el.getBoundingClientRect().top<vh*.5)cur=i});
+    rail.forEach((a,i)=>a.classList.toggle('on',i===cur));
+
+    // letters: noise -> syntax
+    const r=asm.getBoundingClientRect();
+    const p=Math.min(1,Math.max(0,-r.top/(r.height-vh)));
+    const e=ease(Math.min(1,p/.8));
+    word.forEach((sp,i)=>{const d=seeds[i],k=1-e;
+      sp.style.transform=`translate(${d.x*k}vw,${d.y*k}vh) rotate(${d.r*k}deg) scale(${1+(d.s-1)*k})`;
+      sp.style.opacity=.28+.72*e;});
+    rN.textContent=String(Math.round(100*(1-e))).padStart(3,'0');
+    rS.textContent=String(Math.round(100*e)).padStart(3,'0');
+    tag.textContent=e>.98?'[ SYNTAX // BOUND ]':'[ NOISE // UNBOUND ]';
+    const on=p>.78; claim.style.opacity=on?1:0; claim.style.transform=on?'none':'translateY(16px)';
+
+    // active node
+    let a=-1; const ar=secs[1].getBoundingClientRect();
+    if(ar.top<vh*.6&&ar.bottom>vh*.4){let best=1e9;nodeEls.forEach((n,i)=>{const b=n.getBoundingClientRect();const d=Math.abs(b.top+b.height/2-vh/2);if(d<best){best=d;a=i}})}
+    S.active=a;
+    if(a!==lastActive){lastActive=a;
+      nodeEls.forEach((n,i)=>n.classList.toggle('on',i===a));
+      mCells.forEach(c=>c.classList.toggle('on',+c.dataset.m===a));
+      const k=Math.max(a,0); stamp.textContent=`[ ${NODES[k][0]} // ${NODES[k][1]} ]`;
+      linked.textContent=String(a<0?0:a+1).padStart(2,'0');}
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+const S = window.__artron;
+const canvas = document.getElementById('gl');
+const mobile = S.mobile || matchMedia('(pointer: coarse)').matches;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COUNT = Math.round(15000 * (mobile ? 0.4 : 1)); // −60% on mobile
+
+const renderer = new THREE.WebGLRenderer({canvas, antialias:!mobile, alpha:true, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
+renderer.setClearColor(0x000000, 0);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+camera.position.set(0, 0, 12);
+
+// ---------- target shapes ----------
+const rand = (a,b)=>a+Math.random()*(b-a);
+const gauss = ()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+function edgeList(geo){const e=new THREE.EdgesGeometry(geo).attributes.position.array,out=[];for(let i=0;i<e.length;i+=6)out.push([e[i],e[i+1],e[i+2],e[i+3],e[i+4],e[i+5]]);return out}
+const outerEdges = edgeList(new THREE.IcosahedronGeometry(2.1,0));
+const innerEdges = edgeList(new THREE.DodecahedronGeometry(1.05,0));
+const icoVerts = (()=>{const g=new THREE.IcosahedronGeometry(2.1,0).toNonIndexed().attributes.position.array,m=new Map();for(let i=0;i<g.length;i+=3){const k=g.slice(i,i+3).map(v=>v.toFixed(3)).join();m.set(k,[g[i],g[i+1],g[i+2]])}return[...m.values()]})();
+const latLines=[];{const P=[-2,-2/3,2/3,2];for(const a of P)for(const b of P){latLines.push([-2,a,b,2,a,b],[a,-2,b,a,2,b],[a,b,-2,a,b,2])}}
+const onSeg=(L,j)=>{const t=Math.random();return[L[0]+(L[3]-L[0])*t+gauss()*j,L[1]+(L[4]-L[1])*t+gauss()*j,L[2]+(L[5]-L[2])*t+gauss()*j]};
+
+const chaos=new Float32Array(COUNT*3),core=new Float32Array(COUNT*3),lat=new Float32Array(COUNT*3),inf=new Float32Array(COUNT*3),col=new Float32Array(COUNT*3),rnd=new Float32Array(COUNT*2);
+const pal=[[0xE2E8F0,.70],[0x94A3B8,.15],[0x10B981,.09],[0xCD7F32,.04],[0xD4AF37,.02]].map(([h,w])=>[new THREE.Color(h),w]);
+for(let i=0;i<COUNT;i++){
+  const i3=i*3;
+  // chaos: loose PS5-style ribbons + free suspension
+  if(Math.random()<.6){const k=Math.floor(Math.random()*5),u=rand(-1.2,1.2);
+    chaos.set([u*10,Math.sin(u*2.1+k*1.3)*1.8+(k-2)*1.1+gauss()*.35,Math.cos(u*1.4+k)*2.4-1.5+gauss()*.4],i3);
+  } else chaos.set([rand(-11,11),rand(-6.5,6.5),rand(-8,3)],i3);
+  // core: forged polyhedral artifact
+  const q=Math.random(); let c;
+  if(q<.5)c=onSeg(outerEdges[Math.floor(Math.random()*outerEdges.length)],.012);
+  else if(q<.78)c=onSeg(innerEdges[Math.floor(Math.random()*innerEdges.length)],.01);
+  else if(q<.9){const v=icoVerts[Math.floor(Math.random()*icoVerts.length)];c=[v[0]+gauss()*.05,v[1]+gauss()*.05,v[2]+gauss()*.05]}
+  else{const d=new THREE.Vector3(gauss(),gauss(),gauss()).normalize().multiplyScalar(rand(2.6,3.4));c=[d.x,d.y,d.z]}
+  core.set(c,i3);
+  // lattice: 3×3×3 vault grid
+  lat.set(onSeg(latLines[Math.floor(Math.random()*latLines.length)],.01),i3);
+  // infinity ribbon params: t, tube radius, angle
+  inf.set([Math.random()*Math.PI*2,Math.abs(gauss())*.16,Math.random()*Math.PI*2],i3);
+  let r=Math.random(),acc=0,cc=pal[0][0];for(const [cl,w] of pal){acc+=w;if(r<=acc){cc=cl;break}}
+  col.set([cc.r,cc.g,cc.b],i3);
+  rnd.set([Math.random(),Math.floor(Math.random()*9)],i*2);
+}
+const geo=new THREE.BufferGeometry();
+geo.setAttribute('position',new THREE.BufferAttribute(chaos,3));
+geo.setAttribute('aCore',new THREE.BufferAttribute(core,3));
+geo.setAttribute('aLat',new THREE.BufferAttribute(lat,3));
+geo.setAttribute('aInf',new THREE.BufferAttribute(inf,3));
+geo.setAttribute('aColor',new THREE.BufferAttribute(col,3));
+geo.setAttribute('aRand',new THREE.BufferAttribute(rnd,2));
+
+const uniforms={uTime:{value:0},uState:{value:0},uPixel:{value:renderer.getPixelRatio()},uSize:{value:mobile?2.6:2.2},
+  uFit:{value:1},uActive:{value:-1},uMouse:{value:new THREE.Vector2(99,99)},uGold:{value:new THREE.Color(0xD4AF37)}};
+const mat=new THREE.ShaderMaterial({uniforms,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`
+attribute vec3 aCore,aLat,aInf,aColor;attribute vec2 aRand;
+uniform float uTime,uState,uPixel,uSize,uFit,uActive;uniform vec2 uMouse;uniform vec3 uGold;
+varying vec3 vColor;varying float vAlpha;
+vec3 rY(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(c*p.x+s*p.z,p.y,-s*p.x+c*p.z);}
+vec3 rX(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(p.x,c*p.y-s*p.z,s*p.y+c*p.z);}
+void main(){
+  float r=aRand.x;
+  vec3 c=position;
+  c.x+=sin(c.y*.5+uTime*.16+r*6.28)*.7;
+  c.y+=cos(c.x*.33+uTime*.13+r*3.1)*.45;
+  c.z+=sin(c.x*.22+uTime*.1)*.6;
+  vec3 core=rX(rY(aCore*(1.+.015*sin(uTime*.8)),uTime*.12),.35)*uFit;
+  vec3 lat=rX(rY(aLat,uTime*.07+.6),.42)*uFit;
+  float t=aInf.x+uTime*.05,s=sin(t),co=cos(t),d=1.+s*s;
+  vec3 inf=vec3(4.3*co/d,2.6*s*co/d,0.)+vec3(0.,cos(aInf.z),sin(aInf.z))*aInf.y;
+  inf=rX(inf,.3)*uFit;
+  float k=r*.35;
+  float t1=smoothstep(k,.62+k,uState),t2=smoothstep(1.+k,1.62+k,uState),t3=smoothstep(2.+k,2.62+k,uState);
+  vec3 p=mix(mix(mix(c,core,t1),lat,t2),inf,t3);
+  float fl=t1*(1.-t1)+t2*(1.-t2)+t3*(1.-t3);
+  p+=vec3(sin(r*41.+uTime*.7),cos(r*33.+uTime*.6),sin(r*21.+uTime*.5))*fl*1.4;
+  vec4 w=modelMatrix*vec4(p,1.);
+  vec2 dd=w.xy-uMouse;float dist=length(dd);
+  w.xy+=normalize(dd+1e-4)*smoothstep(1.9,0.,dist)*.75;
+  vec4 mv=viewMatrix*w;
+  gl_Position=projectionMatrix*mv;
+  float node=step(abs(aRand.y-uActive),.5)*step(fract(r*13.7),.4)*t1*(1.-t2);
+  vColor=mix(aColor,uGold,node);
+  gl_PointSize=uSize*(.55+r*.9)*(1.+node*.9)*uPixel*(11./-mv.z);
+  vAlpha=(.3+.7*fract(r*7.31))*(.72+.28*sin(uTime*1.3+r*50.))*mix(.75,1.,t1)+node*.3;
+}`,
+fragmentShader:`
+varying vec3 vColor;varying float vAlpha;
+void main(){float d=length(gl_PointCoord-.5);float a=1.-smoothstep(.28,.5,d);if(a<.01)discard;gl_FragColor=vec4(vColor,a*vAlpha);}`});
+const points=new THREE.Points(geo,mat);points.frustumCulled=false;points.name='particles';
+
+// solid artifact: forged iron heart + crystalline shell
+const artifact=new THREE.Group();artifact.name='kinetic_core';
+const iron=new THREE.MeshStandardMaterial({name:'forged_iron',color:0x23262e,metalness:.92,roughness:.36,flatShading:true,transparent:true,opacity:0});
+const glass=new THREE.MeshStandardMaterial({name:'crystal_glass',color:0xa9bccf,metalness:.2,roughness:.05,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
+const bronzeLine=new THREE.LineBasicMaterial({name:'bronze_edge',color:0xCD7F32,transparent:true,opacity:0});
+const heart=new THREE.Mesh(new THREE.DodecahedronGeometry(.5,0),iron);heart.name='iron_heart';
+const shell=new THREE.Mesh(new THREE.IcosahedronGeometry(2.08,0),glass);shell.name='glass_shell';
+const edges=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(2.1,0)),bronzeLine);edges.name='bronze_edges';
+artifact.add(heart,shell,edges);
+const world=new THREE.Group();world.add(points,artifact);scene.add(world);
+scene.add(new THREE.AmbientLight(0x6b7a99,.5));
+const key=new THREE.DirectionalLight(0xffe2b8,2.4);key.position.set(4,5,6);scene.add(key);
+const rim=new THREE.DirectionalLight(0x5f8cff,1.6);rim.position.set(-5,-2,-4);scene.add(rim);
+
+// ---------- input: cursor + gyroscope ----------
+const mouseN=new THREE.Vector2(9,9),par=new THREE.Vector2();let hasPointer=false;
+addEventListener('pointermove',e=>{hasPointer=true;mouseN.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);par.copy(mouseN)},{passive:true});
+addEventListener('pointerleave',()=>{hasPointer=false});
+addEventListener('deviceorientation',e=>{if(e.gamma==null)return;par.set(THREE.MathUtils.clamp(e.gamma/35,-1,1),THREE.MathUtils.clamp((e.beta-45)/35,-1,1))},{passive:true});
+const ray=new THREE.Vector3(),mouseW=new THREE.Vector2(99,99);
+
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+  uniforms.uFit.value=Math.min(1,camera.aspect/1.15);}
+addEventListener('resize',resize);resize();
+
+const clock=new THREE.Clock();let st=0,gx=0;
+function frame(){
+  const dt=Math.min(clock.getDelta(),.05);uniforms.uTime.value+=dt*(reduced?.25:1);
+  st+=(S.state-st)*Math.min(1,dt*2.2);uniforms.uState.value=st;
+  uniforms.uActive.value=S.active;
+  // shift the core into the right-hand HUD on desktop during chapter II
+  const halfW=Math.tan(THREE.MathUtils.degToRad(17.5))*camera.position.z*camera.aspect;
+  const wCore=Math.max(0,1-Math.abs(st-1));
+  const tx=(innerWidth>900?halfW*.42:0)*wCore;gx+=(tx-gx)*Math.min(1,dt*2.5);world.position.x=gx;
+  world.position.y=(innerWidth>900?0:-.2)*wCore;
+  const coreVis=Math.pow(wCore,3);
+  iron.opacity=coreVis;glass.opacity=coreVis*.07;bronzeLine.opacity=coreVis*.42;artifact.visible=coreVis>.01;
+  artifact.rotation.set(.35,uniforms.uTime.value*.12,0);heart.rotation.set(uniforms.uTime.value*.3,uniforms.uTime.value*.2,0);
+  // camera parallax
+  camera.position.x+=(par.x*.45-camera.position.x)*dt*1.5;camera.position.y+=(par.y*.3-camera.position.y)*dt*1.5;camera.lookAt(0,0,0);
+  // cursor in world plane z=0
+  if(hasPointer){ray.set(mouseN.x,mouseN.y,.5).unproject(camera).sub(camera.position).normalize();const d=-camera.position.z/ray.z;
+    mouseW.lerp(new THREE.Vector2(camera.position.x+ray.x*d,camera.position.y+ray.y*d),Math.min(1,dt*8));}
+  else mouseW.lerp(new THREE.Vector2(99,99),dt*.5);
+  uniforms.uMouse.value.copy(mouseW);
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

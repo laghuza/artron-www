@@ -113,37 +113,60 @@ export const Header: React.FC<HeaderProps> = ({
     }
     if (pathname !== '/') return;
 
-    // Zero-overhead passive scroll check for top boundary
-    const handleScroll = () => {
-      if (window.scrollY < 120) {
+    let ticking = false;
+
+    const updateActiveSection = () => {
+      const scrollY = window.scrollY;
+
+      // 1. Top boundary: clear active nav when in hero area
+      if (scrollY < 120) {
         setActiveNav((prev) => (prev !== '' ? '' : prev));
+        return;
+      }
+
+      // 2. Bottom boundary: highlight FAQ when scrolled to the very bottom
+      const scrollBottom = scrollY + window.innerHeight;
+      const scrollHeight = document.documentElement.scrollHeight;
+      if (scrollHeight > 0 && scrollBottom >= scrollHeight - 60) {
+        setActiveNav((prev) => (prev !== '/#faq' ? '/#faq' : prev));
+        return;
+      }
+
+      // 3. Focal reading line (42% down the viewport) for natural section tracking
+      const focalPoint = window.innerHeight * 0.42;
+      let currentNav = '';
+
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= focalPoint) {
+          currentNav = `/#${id}`;
+        }
+      }
+
+      if (currentNav) {
+        setActiveNav((prev) => (prev !== currentNav ? currentNav : prev));
       }
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // High-performance asynchronous IntersectionObserver (Zero layout thrashing / 0ms overhead)
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.target.id) {
-            setActiveNav(`/#${entry.target.id}`);
-          }
-        }
-      },
-      {
-        rootMargin: '-15% 0px -65% 0px',
-        threshold: 0,
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateActiveSection();
+          ticking = false;
+        });
+        ticking = true;
       }
-    );
+    };
 
-    SECTION_IDS.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    updateActiveSection();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
+      window.removeEventListener('resize', handleScroll);
     };
   }, [pathname]);
 
