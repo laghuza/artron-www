@@ -95,18 +95,36 @@ export const createRayTex = (): THREE.CanvasTexture => {
 };
 
 export const M = {
-  std: (c: number | THREE.ColorRepresentation, r = 0.5, m = 0.35, o = 1) =>
-    new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m, opacity: o, transparent: true }),
-  glow: (c: number | THREE.ColorRepresentation, o = 0.9) =>
-    new THREE.MeshBasicMaterial({ color: c, opacity: o, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }),
-  paint: (c: number | THREE.ColorRepresentation, o = 0.95) =>
-    new THREE.MeshBasicMaterial({ color: c, opacity: o, transparent: true }),
-  wire: (c: number | THREE.ColorRepresentation, o = 0.4) =>
-    new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: o }),
-  line: (c: number | THREE.ColorRepresentation, o = 0.7) =>
-    new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: o }),
-  dot: (c: number | THREE.ColorRepresentation, s: number, o = 0.9) =>
-    new THREE.PointsMaterial({ color: c, size: s, opacity: o, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }),
+  std: (c: number | THREE.ColorRepresentation, r = 0.5, m = 0.35, o = 1) => {
+    const mat = new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m, opacity: o, transparent: true });
+    mat.userData = { o0: o };
+    return mat;
+  },
+  glow: (c: number | THREE.ColorRepresentation, o = 0.9) => {
+    const mat = new THREE.MeshBasicMaterial({ color: c, opacity: o, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    mat.userData = { o0: o };
+    return mat;
+  },
+  paint: (c: number | THREE.ColorRepresentation, o = 0.95) => {
+    const mat = new THREE.MeshBasicMaterial({ color: c, opacity: o, transparent: true });
+    mat.userData = { o0: o };
+    return mat;
+  },
+  wire: (c: number | THREE.ColorRepresentation, o = 0.4) => {
+    const mat = new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: o });
+    mat.userData = { o0: o };
+    return mat;
+  },
+  line: (c: number | THREE.ColorRepresentation, o = 0.7) => {
+    const mat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: o });
+    mat.userData = { o0: o };
+    return mat;
+  },
+  dot: (c: number | THREE.ColorRepresentation, s: number, o = 0.9) => {
+    const mat = new THREE.PointsMaterial({ color: c, size: s, opacity: o, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    mat.userData = { o0: o };
+    return mat;
+  },
 };
 
 export const createBox = (

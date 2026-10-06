@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#060911"/><text x="50" y="64" font-family="monospace" font-size="40" font-weight="700" fill="#7fe8b8" text-anchor="middle">A</text></svg></template>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #060911; }
+  * { box-sizing: border-box; }
+  a { color: #7fe8b8; text-decoration: none; }
+  a:hover { color: #ffffff; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); border-radius: 6px; }
+  @keyframes kinA { from { opacity: 0; transform: translate3d(0, 0.62em, 0) rotateX(-58deg); filter: blur(7px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes kinB { from { opacity: 0; transform: translate3d(0, -0.5em, 0) scale(1.24); filter: blur(9px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes softIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes hudUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @keyframes breathe { 0%, 100% { opacity: 0.34; } 50% { opacity: 0.8; } }
+  @keyframes pulseHint { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.20); } 70% { box-shadow: 0 0 0 9px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+  button:focus-visible { outline: 1px solid rgba(255,255,255,0.55); outline-offset: 2px; }
+</style>
+</helmet>
+<div style="position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;background:#060911;color:#eaf2f8;font-family:'Noto Sans Georgian',system-ui,sans-serif;-webkit-font-smoothing:antialiased">
+
+  <x-import component-from-global-scope="artron-scene" from="./artron-scene.js" variant="{{ scene }}" accent="{{ accent }}" focus="{{ focus }}" shift="{{ shift }}" hint-size="100%,100%" style="position:absolute;inset:0;width:100%;height:100%"></x-import>
+
+  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(115% 85% at 62% 18%, rgba(6,9,17,0) 38%, rgba(4,6,12,0.62) 82%, rgba(3,5,10,0.9) 100%)"></div>
+  <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top, rgba(4,6,12,0.86) 0%, rgba(4,6,12,0.28) 30%, rgba(4,6,12,0) 58%)"></div>
+
+  <div style="position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:{{ pad }};gap:18px">
+
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;pointer-events:auto">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;padding:8px;border-radius:999px;border:1px solid transparent;background:linear-gradient(150deg,rgba(255,255,255,0.075),rgba(255,255,255,0.022)) padding-box,linear-gradient(160deg,rgba(255,255,255,0.24),rgba(255,255,255,0.05) 45%,rgba(255,255,255,0.14)) border-box;backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);box-shadow:0 26px 70px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)">
+          <sc-for list="{{ dims }}" as="dm" hint-placeholder-count="3">
+            <button type="button" onClick="{{ dm.pick }}" style-hover="background:rgba(255,255,255,0.14);transform:translateY(-1px)" style-active="transform:translateY(0) scale(0.982)" style="display:flex;align-items:center;gap:12px;padding:8px 16px;border:none;border-radius:999px;cursor:pointer;background:{{ dm.bg }};transition:background .32s cubic-bezier(.16,.84,.44,1),transform .16s cubic-bezier(.16,.84,.44,1);font-family:inherit;text-align:left;will-change:transform">
+              <span style="display:flex;align-items:center;gap:8px">
+                <span style="width:2px;height:16px;border-radius:2px;background:{{ dm.rule }};transition:background .32s ease"></span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10.8px;letter-spacing:0.14em;font-variant-numeric:tabular-nums;color:{{ dm.sub }};min-width:16px">{{ dm.num }}</span>
+              </span>
+              <span style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:13px;font-weight:600;letter-spacing:0.01em;color:{{ dm.fg }};white-space:nowrap">{{ dm.name }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.16em;color:{{ dm.sub }};white-space:nowrap">{{ dm.tag }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;padding-left:8px">
+          <div style="display:flex;gap:4px">
+            <sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="5">
+              <button type="button" onClick="{{ tk.pick }}" aria-label="{{ tk.label }}" style-hover="height:8px;opacity:1" style="width:{{ tk.w }};height:4px;padding:0;border:none;border-radius:4px;cursor:pointer;background:{{ tk.bg }};opacity:{{ tk.op }};transition:width .34s cubic-bezier(.16,.84,.44,1),height .18s ease,opacity .3s ease"></button>
+            </sc-for>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;font-variant-numeric:tabular-nums;color:rgba(234,242,248,0.62)">{{ modIndex }}/{{ modCount }} · ← →</span>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;max-width:min(760px,86vw)">
+          <sc-for list="{{ mods }}" as="md" hint-placeholder-count="5">
+            <button type="button" onClick="{{ md.pick }}" style-hover="transform:translateY(-1px);border-color:rgba(255,255,255,0.32)" style-active="transform:translateY(0) scale(0.97)" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:10.8px;font-weight:600;letter-spacing:0.01em;background:{{ md.bg }};color:{{ md.fg }};border:1px solid {{ md.bd }};backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:background .32s ease,color .32s ease,border-color .32s ease,transform .16s cubic-bezier(.16,.84,.44,1);white-space:nowrap;animation:{{ md.pulse }}">
+              <span style="width:5px;height:5px;border-radius:50%;background:{{ md.dot }};transition:background .3s ease"></span>{{ md.n }}
+            </button>
+          </sc-for>
+          <button type="button" onClick="{{ next }}" style-hover="background:rgba(255,255,255,0.12);letter-spacing:0.26em;padding-right:22px" style-active="transform:scale(0.96)" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;background:transparent;color:{{ accent }};border:1px dashed rgba(255,255,255,0.22);transition:background .28s ease,letter-spacing .28s ease,padding .28s ease,transform .16s ease;white-space:nowrap">NEXT →</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;min-height:0">
+      <div style="pointer-events:auto;width:{{ hudW }};max-height:{{ hudMax }};overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent;padding:{{ hudPad }};border-radius:26px;border:1px solid transparent;background:radial-gradient(130% 80% at 0% 0%, {{ tint }}, rgba(255,255,255,0) 62%) padding-box,linear-gradient(150deg,rgba(255,255,255,0.08),rgba(255,255,255,0.022)) padding-box,linear-gradient(160deg,rgba(255,255,255,0.26),rgba(255,255,255,0.05) 42%,rgba(255,255,255,0.16)) border-box;backdrop-filter:blur(28px) saturate(150%);-webkit-backdrop-filter:blur(28px) saturate(150%);box-shadow:0 26px 70px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);animation:hudUp 0.7s cubic-bezier(.16,.84,.44,1) both">
+
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+          <span style="width:6px;height:6px;border-radius:50%;background:{{ accent }};box-shadow:0 0 12px {{ accent }};animation:breathe 3.2s ease-in-out infinite"></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.22em;color:rgba(234,242,248,0.62)">{{ kicker }}</span>
+          <span style="flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,0.14),transparent)"></span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;font-variant-numeric:tabular-nums;color:rgba(234,242,248,0.34)">{{ modIndex }} / {{ modCount }}</span>
+        </div>
+
+        <h1 style="margin:0 0 16px;font-size:{{ headSize }};font-weight:700;line-height:1.04;letter-spacing:-0.015em;display:flex;flex-wrap:wrap;gap:0 0.28em;perspective:620px;text-wrap:balance">
+          <sc-for list="{{ words }}" as="w" hint-placeholder-count="4">
+            <span style="display:inline-flex">
+              <sc-for list="{{ w.chars }}" as="ch" hint-placeholder-count="5">
+                <span style="display:inline-block;color:{{ w.c }};animation:{{ ch.a }} 0.66s cubic-bezier(.16,.84,.44,1) both;animation-delay:{{ ch.d }}">{{ ch.t }}</span>
+              </sc-for>
+            </span>
+          </sc-for>
+        </h1>
+
+        <p style="margin:0 0 16px;font-size:13px;line-height:1.7;color:rgba(230,239,246,0.78);max-width:62ch;text-wrap:pretty;animation:softIn 1s ease 0.24s both">{{ copy }}</p>
+
+        <div style="display:grid;grid-template-columns:{{ tileCols }};gap:8px">
+          <sc-for list="{{ tiles }}" as="tl" hint-placeholder-count="4">
+            <div style="grid-column:{{ tl.span }};border-radius:16px;border:1px solid {{ tl.bd }};background:{{ tl.bg }};box-shadow:{{ tl.sh }};transition:border-color .38s cubic-bezier(.16,.84,.44,1),background .38s ease,box-shadow .38s ease;overflow:hidden" style-hover="border-color:rgba(255,255,255,0.24)">
+              <button type="button" onClick="{{ tl.pick }}" style-active="transform:scale(0.988)" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:none;background:transparent;cursor:pointer;font-family:inherit;text-align:left;transition:transform .16s ease">
+                <span style="display:flex;align-items:center;gap:10px;min-width:0">
+                  <span style="width:2px;height:24px;border-radius:2px;background:{{ tl.rule }};transition:background .34s ease;flex:0 0 auto"></span>
+                  <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                    <span style="font-size:13px;font-weight:600;color:{{ tl.fg }};transition:color 0.3s ease">{{ tl.t }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.18em;color:rgba(234,242,248,0.58)">{{ tl.s }}</span>
+                  </span>
+                </span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:15.6px;line-height:1;color:{{ tl.fg }};flex:0 0 auto">{{ tl.sign }}</span>
+              </button>
+              <sc-if value="{{ tl.open }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;animation:softIn 0.42s ease both">
+                  <div style="height:1px;background:linear-gradient(to right,{{ tl.bd }},transparent)"></div>
+                  <sc-for list="{{ tl.rows }}" as="rw" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:baseline;gap:8px">
+                      <span style="font-size:10.8px;color:rgba(230,239,246,0.62);flex:0 1 auto">{{ rw.l }}</span>
+                      <span style="flex:1 1 16px;min-width:16px;height:1px;background:repeating-linear-gradient(to right,rgba(255,255,255,0.18) 0 1px,transparent 1px 4px);transform:translateY(-3px)"></span>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.8px;letter-spacing:0.04em;font-variant-numeric:tabular-nums;color:rgba(240,247,252,0.94);text-align:right;flex:0 0 auto">{{ rw.v }}</span>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ tl.note }}" hint-placeholder-val="{{ false }}">
+                    <p style="margin:2px 0 0;font-size:11.5px;line-height:1.62;color:rgba(230,239,246,0.7);text-wrap:pretty">{{ tl.note }}</p>
+                  </sc-if>
+                  <div style="display:inline-flex;align-self:flex-start;align-items:center;gap:8px;margin-top:4px;padding:5px 10px;border-radius:999px;border:1px solid {{ tl.bd }};background:rgba(255,255,255,0.03)">
+                    <span style="width:4px;height:4px;border-radius:50%;background:{{ tl.fg }}"></span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:{{ tl.fg }}">CAMERA → {{ tl.cam }}</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;padding-bottom:8px;flex:{{ markFlex }}">
+        <span style="font-size:{{ markSize }};font-weight:300;letter-spacing:0.01em;color:rgba(238,246,252,0.68);text-align:right;white-space:nowrap">არვის მეგობარი — ყველას მოკავშირე.</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.3em;color:rgba(238,246,252,0.4)">ARTRON</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;kinetic&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;autoTour&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;tourInterval&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:9,&quot;min&quot;:4,&quot;max&quot;:24,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;showWatermark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+const TILES = [
+  { t: 'მასშტაბი', s: 'SCALE & CAPACITY' },
+  { t: 'დისციპლინები', s: 'DISCIPLINES' },
+  { t: 'საკვანძო ტექნოლოგია', s: 'TELEMETRY / RFID / BIO' },
+  { t: 'უმაღლესი სტანდარტი', s: 'COMPLIANCE' }
+];
+
+const D1 = [
+  { n: 'ათლეტური ჰაბები', k: 'VEN-01 / MEMBERSHIP HUB', s: 'gym',
+    head: 'ერთი ჰაბი. სრული კონტროლი.',
+    copy: 'პიკის საათებში დარბაზი იტვირთება, ადმინისტრატორი ხელით ავსებს ჟურნალს და გაუქმებული აბონემენტები ჩუმად ჭამს შემოსავალს. Artron აერთიანებს წევრობას, შესვლის კონტროლს და აღჭურვილობის რეალურ დატვირთვას ერთ ცოცხალ სურათში — გადაწყვეტილება მიიღება მონაცემზე, არა ვარაუდზე.',
+    t: [[['საერთო ფართობი', '1 200–8 000 m²'], ['ერთდროული ტევადობა', '450 მომხმარებელი'], ['პიკის ფანჯარა', '18:00 – 21:30']],
+        [['ძალოვანი ზონა', 'Free weights · Rack'], ['ფუნქციური', 'HIIT · Cross · Mobility'], ['კარდიო ბლოკი', '64 ერთეული']],
+        [['წევრის იდენტიფიკაცია', 'RFID / NFC ბრასლეტი'], ['აღჭურვილობის ტელემეტრია', 'IoT 900+ სენსორი'], ['დატვირთვის რუკა', 'Heatmap 1 წთ ინტერვალი']],
+        [['პერსონალურ მონაცემთა დაცვა', 'GDPR · ISO 27001'], ['უსაფრთხოების აუდიტი', 'კვარტალური'], ['ხანძარსაწინააღმდეგო', 'EN 13501 კლასი B']]] },
+  { n: 'ოლიმპიური აუზები', k: 'VEN-02 / AQUATIC COMPLEX', s: 'pool',
+    head: 'წყალი, რომელიც თავად ანგარიშობს.',
+    copy: 'ქლორის ხელით გაზომვა, ბუნდოვანი ბილიკების განრიგი და მოცურავეთა რიგი კომპლექსს ყოველდღე ნერვიულობაში აგდებს. Artron წყლის ქიმიას, ბილიკების დატვირთვას და მაშველთა როტაციას ერთ პროტოკოლში კრავს და გადახრაზე რეაგირებს წუთებში, არა შემოწმების დღეს.',
+    t: [[['აუზის ზომა', '50 m · 8 ბილიკი'], ['წყლის მოცულობა', '2 500 m³'], ['დღიური ნაკადი', '1 100 მოცურავე']],
+        [['ცურვა', 'თავისუფალი · ბრასი · დელფინი'], ['წყლის პოლო', 'სრული მოედანი'], ['სინქრონული / დაივინგი', '3 m · 5 m პლატფორმა']],
+        [['წყლის ქიმია', 'pH · Cl · ORP realtime'], ['ბილიკის აღრიცხვა', 'ოპტიკური მრიცხველი'], ['ტემპერატურა', '±0.2 °C კონტროლი']],
+        [['FINA / World Aquatics', 'FR 2 სტანდარტი'], ['სანიტარული ნორმა', 'SanPiN ეკვივალენტი'], ['მაშველთა კოეფიციენტი', '1 : 75 მოცურავე']]] },
+  { n: 'ჩოგბურთი და პადელი', k: 'VEN-03 / COURT SYSTEMS', s: 'court',
+    head: 'კორტი, რომელიც არასდროს ცარიელია.',
+    copy: 'ჯავშნის გაუქმება ბოლო წუთს, გამორთული განათების ხარჯი და ტელეფონით დაჯავშნის ქაოსი კორტის მარჟას წლიურად ნახევრად ჭრის. Artron ავტომატურად ავსებს გამოთავისუფლებულ სლოტს ლოდინის სიიდან და განათებას მხოლოდ ნამდვილ თამაშზე რთავს.',
+    t: [[['კორტების რაოდენობა', '4 ჩოგბურთი · 6 პადელი'], ['სლოტის შევსება', '87% საშუალო'], ['დაჯავშნის ფანჯარა', '30 დღე წინ']],
+        [['ჩოგბურთი', 'Hard · Clay · Indoor'], ['პადელი', 'Panoramic glass'], ['სკვოში / ბადმინტონი', 'ოპციური ბლოკი']],
+        [['ჭკვიანი განათება', 'Presence-based LED'], ['მატჩის ანალიტიკა', 'Court cam · dwell'], ['წვდომა', 'QR · PIN კოდი']],
+        [['ITF / FIP', 'კორტის განზომილება'], ['განათების დონე', '500–750 lux'], ['დაზღვევა', 'პასუხისმგებლობის პოლისი']]] },
+  { n: 'დოჯოები და რინგი', k: 'VEN-04 / COMBAT ARTS', s: 'octagon',
+    head: 'ყოველი დარტყმა აღრიცხულია.',
+    copy: 'სპარინგის დატვირთვა ქაღალდზე იკარგება, წონითი კატეგორიები დღის ბოლოს იზომება და ტრავმა მაშინ ჩანს, როცა გვიანია. Artron სპარინგის მოცულობას, აღდგენას და წონის დინამიკას ერთ პროფილში აგროვებს — მწვრთნელი ხედავს რისკს მოვლენამდე.',
+    t: [[['საწვრთნელი ზონა', '2 თათამი · 1 რინგი'], ['ჯგუფის ზომა', '24 ათლეტი'], ['სესიები დღეში', '9 ბლოკი']],
+        [['ჭიდაობა / ძიუდო', 'IJF წესი'], ['კრივი / MMA', 'რინგი 6.1 m · გალია'], ['კარატე / ტაეკვონდო', 'WKF · WT კატა']],
+        [['სპარინგის ტელემეტრია', 'Impact G-sensor'], ['წონის კონტროლი', 'ბიოიმპედანსი'], ['ვიდეო განხილვა', '4 კამერა · slow-mo']],
+        [['ტრავმის პროტოკოლი', 'Concussion checklist'], ['სამედიცინო დაშვება', 'სავალდებულო ცნობა'], ['არასრულწლოვანთა ზედამხედველობა', 'ორმაგი თანხმობა']]] },
+  { n: 'არენები და სტადიონები', k: 'VEN-05 / MULTIPURPOSE ARENA', s: 'arena',
+    head: 'არენა ერთი ეკრანიდან.',
+    copy: 'ღონისძიებათა შორის გარდამავალი პერიოდი, ბილეთების არაცხადი ნაკადი და შესასვლელების რიგი არენას თითოეულ საღამოს გამოტოვებულ შემოსავლად უჯდება. Artron ერთ კონსოლში აერთიანებს კონფიგურაციის ცვლას, ნაკადის მართვას და კომერციულ ანალიტიკას.',
+    t: [[['დამსწრეთა ტევადობა', '12 000 ადგილი'], ['კონფიგურაციის ცვლა', '< 4 საათი'], ['ღონისძიება წელიწადში', '140+']],
+        [['საგუნდო სპორტი', 'კალათბურთი · ხელბურთი'], ['ფეხბურთი / რაგბი', 'სრული ბალახის მოედანი'], ['კონცერტი / კონგრესი', 'Stage 360° · end-stage']],
+        [['ნაკადის მართვა', 'Turnstile + LiDAR count'], ['ბილეთი და წვდომა', 'Dynamic QR · reseller API'], ['მოედნის მდგომარეობა', 'Turf moisture · temp']],
+        [['UEFA / FIBA ინფრასტრუქტურა', 'კატეგორია 3+'], ['ევაკუაცია', '8 წუთი სრული დარბაზი'], ['ხმაურის ნორმა', 'ღამის რეჟიმის ლიმიტი']]] }
+];
+
+const D2 = [
+  { n: 'სამწვრთნელო შტაბი', k: 'HC-01 / COACHING STAFF', s: 'coach',
+    cams: ['STAFF FLOOR', 'GAME MODEL', 'GPS LOAD', 'LICENCE WALL'],
+    head: 'მწვრთნელი მიდის — მეთოდიკა რჩება.',
+    copy: 'დღეს სავარჯიშო გეგმა მწვრთნელის რვეულშია, ათლეტის პროგრესი — მის მეხსიერებაში. კადრი იცვლება და სამი სეზონის გამოცდილება მასთან ერთად მიდის. Artron მეთოდიკას, დატვირთვის ისტორიას და შეფასებებს კლუბის საერთო ბაზაში ინახავს — ახალი მწვრთნელი პირველივე დღეს ხედავს, სად გაჩერდა წინამორბედი.',
+    notes: ['მაგიდა ტაქტიკური დაფაა — წითელი და ლურჯი მაგნიტები ორი გუნდია. გარშემო ათი მიმართულების ხელმძღვანელი, წინ — მთავარი მწვრთნელი ბლოკნოტით.',
+      'ჰოლოგრამა მოედანია: კარები, საჯარიმოები, კონუსები და ბურთი. წერტილები მოთამაშეებია, ხაზები — პასები.',
+      'ათლეტს GPS ჟილეტი აცვია — ზურგის სენსორი სატელიტთან არის დაკავშირებული. წამზომი, რკალები და ხუთი დღის სვეტები დატვირთვას ზომავს.',
+      'ბეიჯი — მწვრთნელის ლიცენზია. ხუთიდან ერთი ქარვისფრად ციმციმებს — ვადა 30 დღეში იწურება, შეხსენება ავტომატურად მიდის.'],
+    t: [[['შტაბი', '34 სპეციალისტი · 10 მიმართულება'], ['მწვრთნელი / ათლეტი', '1 : 18'], ['დაგეგმვის ჰორიზონტი', 'მაკროციკლი · 12 თვე'], ['ახალი მწვრთნელის ადაპტაცია', 'კვირებიდან → 1 დღე']],
+        [['გამძლეობა', 'Endurance · tempo'], ['ძალა და სიმძლავრე', 'Strength · power'], ['ტექნიკა და ტაქტიკა', 'Skill · game model'], ['აღდგენა', 'Recovery · sleep']],
+        [['დატვირთვის მართვა', 'GPS · RPE · ACWR'], ['უსაფრთხო დიაპაზონი', 'ACWR 0.8 – 1.3'], ['სესიის ჟურნალი', 'ავტომატური ლოგი'], ['ვიდეო ანალიზი', 'Tag & share']],
+        [['მწვრთნელის ლიცენზია', 'ფედერაციის კატეგორია'], ['ვადის შეხსენება', '30 დღით ადრე'], ['ბავშვებთან მუშაობა', 'Safeguarding სერტიფიკატი'], ['შრომის ნორმა', 'კვირის საათების ლიმიტი']]] },
+  { n: 'ექიმები და რეაბილიტაცია', k: 'HC-02 / SPORTS MEDICINE', s: 'med',
+    cams: ['TREATMENT BAY', 'JOINT SCAN', 'BIOMETRICS', 'RTP GATES'],
+    head: 'ათლეტი ბრუნდება, როცა სხეული მზადაა.',
+    copy: 'სამედიცინო ჩანაწერი ფურცელზეა, მწვრთნელი ექიმს ტელეფონით ეკითხება და მოედანზე დაბრუნება ხშირად თარიღით წყდება, არა მზადყოფნით. Artron ერთ ბარათში აერთიანებს სკრინინგს, აღდგენის მაჩვენებლებს და დაბრუნების ოთხ ეტაპს — ექიმი და მწვრთნელი ერთსა და იმავე სურათს ხედავენ.',
+    notes: ['წითელი ჯვარი — სამედიცინო ბლოკი. ცენტრალურ საწოლზე ათლეტი წევს, გვერდით წვეთოვანი; ეკრანები — პაციენტის ცოცხალი ბარათი.',
+      'სკანერის რგოლი ათლეტის სხეულს გადის. მუხლებზე ქარვისფერი რგოლი — იქ დატვირთვა ნორმას აჭარბებს.',
+      'გული — პულსი და HRV, მთვარე — ძილი. დილის ეს მონაცემები წყვეტს, რამდენი დატვირთვა ეკუთვნის დღეს.',
+      'ყავარჯნებიდან ბურთამდე ოთხი თაღია — დაბრუნების ოთხი ეტაპი. ათლეტი სამს გადის, მეოთხე ექიმის ხელმოწერას ელის.'],
+    t: [[['სამედიცინო შტაბი', '9 ექიმი · 12 რეაბილიტოლოგი'], ['ათლეტის ბარათი', '1 400 აქტიური'], ['სკრინინგი', 'კვარტალში ერთხელ'], ['ექიმი ↔ მწვრთნელი', 'ერთი საერთო ბარათი']],
+        [['ორთოპედია', 'სახსარი · მყესი'], ['ფიზიოთერაპია', 'Manual · instrumental'], ['ფუნქციური დიაგნოსტიკა', 'VO₂max · ლაქტატი'], ['კვება და წონა', 'სპორტული დიეტოლოგი']],
+        [['დილის შემოწმება', 'HRV · ძილი · SpO₂'], ['რისკის ქულა', 'ყოველდღიური · 0–100'], ['სახსრის ასიმეტრია', '> 10% → სიგნალი'], ['დაბრუნების ეტაპები', 'RTP gate-checks']],
+        [['სამედიცინო მონაცემები', 'GDPR Art. 9 რეჟიმი'], ['წვდომა', 'მხოლოდ ექიმი + ათლეტი'], ['ანტიდოპინგი', 'WADA · TUE აღრიცხვა'], ['პირველადი დახმარება', 'AED · BLS გუნდი']]] },
+  { n: 'ფიტნეს-ინსტრუქტორები', k: 'HC-03 / GROUP LEADERS', s: 'group',
+    cams: ['STUDIO FLOOR', 'CLASS ZONES', 'HR BOARD', 'SPACING / CERT'],
+    head: 'სავსე დარბაზი, არა სავსე განრიგი.',
+    copy: 'ცარიელი გაკვეთილი ისევე ძვირია, როგორც გადატვირთული: ინსტრუქტორის საათი გადახდილია, დარბაზი დაკავებულია, შემოსავალი კი არ არის. Artron განრიგს რეალურ მოთხოვნაზე აგებს, გათავისუფლებულ ადგილს ლოდინის სიიდან ავსებს და ინსტრუქტორის შედეგს დასწრებით ზომავს.',
+    notes: ['ინსტრუქტორი სარკის წინ, 20 მონაწილე ხალიჩებზე. ოთხი ცარიელი ქარვისფერი ადგილი ლოდინის სიიდან ივსება.',
+      'სამი კუთხე — სამი ფორმატი: ველოსტუდია მხედრებით, იოგას წრე და TRX გირებით.',
+      'გულის ქვეშ თითო სვეტი ერთი მონაწილის პულსია, ფერი — ზონა. ბარათი NFC წამკითხველს ეხება — დასწრება დაფიქსირდა.',
+      'მონიშნული კვადრატი — ერთი მონაწილის ნორმატიული ფართობი. ლენტიანი ოქროს ბეჭედი — ინსტრუქტორის სერტიფიკატი.'],
+    t: [[['ჯგუფური გაკვეთილი', '180 კვირაში'], ['საშუალო დასწრება', '82%'], ['ინსტრუქტორები', '46 პირი'], ['ადგილის ხელახლა შევსება', '< 15 წუთი']],
+        [['ცეკვა და კარდიო', 'Zumba · step · cycle'], ['გონება და სხეული', 'Yoga · pilates · stretch'], ['ფუნქციური', 'TRX · kettlebell · circuit'], ['ახალი ფორმატი', '4-კვირიანი პილოტი']],
+        [['დაჯავშნა', 'აპლიკაცია + ლოდინის სია'], ['დასწრება', 'NFC check-in'], ['გულისცემის ზონები', 'Live HR ეკრანი'], ['გაკვეთილის შეფასება', '1 შეხებით, გასვლისას']],
+        [['ინსტრუქტორის სერტიფიკატი', 'EREPS დონე 3+'], ['დარბაზის ნორმა', '≥ 4 m² მონაწილეზე'], ['ჯანმრთელობის კითხვარი', 'PAR-Q · პირველ ვიზიტზე'], ['პირველადი დახმარება', 'CPR ყოველ ცვლაში']]] },
+  { n: 'ადმინისტრაცია და ოპერაციები', k: 'HC-04 / OPS & COMPLIANCE', s: 'ops',
+    cams: ['ROTA RING', 'DEPARTMENT PODS', 'SERVER / CLOCK-IN', 'AUDIT LEDGER'],
+    head: 'აუდიტი — ჩვეულებრივი სამშაბათი.',
+    copy: 'ცვლების გრაფიკი ექსელშია, შვებულება მესენჯერში, ხელფასი ხელით ითვლება — შემოწმების წინ კი დოკუმენტების აღდგენას ერთი კვირა სჭირდება. Artron ცვლებს, ხელშეკრულებებს და ბრძანება №01-15/ნ-ის მოთხოვნებს ერთ რეესტრში კრავს, რომლის შეცვლაც კვალის დატოვების გარეშე შეუძლებელია.',
+    notes: ['რგოლი 24-საათიანი საათია: მზე — დღის ცვლა, მზის ჩასვლა — საღამოს, მთვარე — ღამის. წერტილები თანამშრომლებია.',
+      'ოთხი სამსახური: რეცეფცია ზარით, ტექნიკური — ხელსაწყოების ყუთი, დასუფთავება — ვედრო და ჯოხი, დაცვა — კამერა.',
+      'თანამშრომელი თითის ანაბეჭდით აღირიცხება — ყოველი შესვლა მონეტად ემატება ხელფასის სვეტს.',
+      'ბეჭდიანი დოკუმენტი რეესტრში ჩადის და ბლოკად იქცევა. ძველი ბლოკი ვერ შეიცვლება — ოქროს ზედა ბლოკი დღის ბოლოა.'],
+    t: [[['პერსონალი', '210 თანამშრომელი'], ['ცვლები', '24/7 · 3 ცვლა'], ['დოკუმენტის მოძიება', '< 30 წამი'], ['აუდიტისთვის მზადება', 'კვირიდან → 1 საათამდე']],
+        [['რეცეფცია და გაყიდვები', 'Front desk · CRM'], ['ტექნიკური სამსახური', 'Maintenance · HVAC'], ['დასუფთავება', 'Housekeeping'], ['უსაფრთხოება', 'Security · CCTV']],
+        [['ცვლების დაგეგმვა', 'Auto-rota + ღირებულება'], ['დროის აღრიცხვა', 'Biometric clock-in'], ['ხელფასი', 'საათებიდან ავტომატურად'], ['ინციდენტების ჟურნალი', 'ციფრული · დროის ნიშნით']],
+        [['ბრძანება №01-15/ნ', 'სრული შესაბამისობა'], ['შრომის უსაფრთხოება', 'ISO 45001'], ['შრომის კოდექსი', 'ზეგანაკვეთის ლიმიტი'], ['აუდიტის კვალი', 'უცვლელი ჟურნალი']]] },
+  { n: 'მაშველთა კორპუსი', k: 'HC-05 / WATER SAFETY', s: 'guard',
+    cams: ['BASIN OVERVIEW', 'SCAN CONES', 'RESPONSE MESH', 'DRILL BEACON'],
+    head: 'ყოველი წამი დათვლილია.',
+    copy: 'მაშველის ყურადღება 20 წუთის შემდეგ ეცემა, პოზიციების როტაცია ზეპირად ხდება და სავარჯიშო ტრევოგა თვეებით ჩამორჩება გრაფიკს. Artron მართავს როტაციას, ფიქსირებს რეაგირების დროს და ავტომატურად აგებს უსაფრთხოების ანგარიშს.',
+    t: [[['მაშველთა კორპუსი', '28 პირი'], ['დაფარვის ზონა', '4 აუზი · 1 აკვაპარკი'], ['როტაციის ინტერვალი', '20 წუთი']],
+        [['ზედაპირის მეთვალყურეობა', 'Scan-10/20 პროტოკოლი'], ['წყალქვეშა სამაშველო', 'Deep-water rescue'], ['პირველადი დახმარება', 'CPR · AED · spinal']],
+        [['რეაგირების ტაიმერი', 'Alarm-to-contact log'], ['ხედვის კონტროლი', 'Underwater detection'], ['ტრევოგის ღილაკი', 'Poolside panic mesh']],
+        [['ILS სტანდარტი', 'საერთაშორისო რეკომენდაცია'], ['სერტიფიცირება', 'ყოველწლიური რე-ატესტაცია'], ['სავარჯიშო ტრევოგა', 'თვეში ერთხელ']]] }
+];
+const D3 = [
+  { n: 'საერთაშორისო ოსტატები', k: 'MST-01 / MSIC ELITE', s: 'trophy',
+    cams: ['ELITE RING', 'DISCIPLINE BANNERS', 'MOCAP VOLUME', 'PROTOCOL CHAIN'],
+    head: 'ელიტა მოითხოვს დამტკიცებულ ისტორიას.',
+    copy: 'საერთაშორისო კლასის ოსტატი ქვეყანაში ათეულებით ითვლება — და თითოეულის სტატუსი დოკუმენტების ჯაჭვზე დგას: ოქმი, ლიცენზია, საზღვარგარეთული სტარტი, ანტიდოპინგური ისტორია. დღეს ეს ჯაჭვი საქაღალდეებშია გაფანტული და ერთი წარდგინების აწყობას კვირები სჭირდება. Artron თითოეულ ათლეტს ერთ ვერიფიცირებულ დოსიედ კრებს: რა შესრულდა, რა დარჩა და რომელ სტარტზე იხურება ნორმატივი.',
+    notes: ['ელიტა ერთეულებით ითვლება — ამიტომ 3D-ში თითოეული ათლეტი ცალკე წერტილია ციკლის რგოლზე, არა საერთო სია.',
+      'ყოველ დისციპლინას თავისი ნორმატივი და ოქმის ფორმა აქვს — სისტემა მათ ერთ შედარებად ენაზე თარგმნის.',
+      'მოძრაობის ჩანაწერი და მსოფლიო რეიტინგი ერთ პროფილშია — ტექნიკის დაცემა ჩანს შედეგის დაცემამდე.',
+      'სტატუსი მაშინ იბადება, როცა ჯაჭვის ყველა რგოლი ხელმოწერილია — სცენაზე ჩანს, რომელი რგოლი აკლია.'],
+    t: [[['MSIC ათლეტი', '37 აქტიური'], ['საერთაშორისო სტარტი', '9 წელიწადში'], ['ოლიმპიური ციკლი', '4 წელი · 3 მეოთხედი გავლილი'], ['დოსიეს აწყობა', 'კვირებიდან → 2 საათამდე']],
+        [['ინდივიდუალური', 'მძლეოსნობა · ცურვა · ძალოსნობა'], ['საბრძოლო', 'ჭიდაობა · ძიუდო · კრივი'], ['გუნდური', 'რაგბი · კალათბურთი'], ['ნორმატივის წყარო', 'თითო ფედერაციის ცხრილი']],
+        [['შედეგის ვერიფიკაცია', 'ოქმის ციფრული ხელმოწერა'], ['ბიომექანიკა', 'Motion capture 240 fps'], ['შედარებითი ანალიტიკა', 'World-rank benchmark'], ['გადახრის სიგნალი', 'ტექნიკის რეგრესი 7 დღეში']],
+        [['ნორმატივი', 'ეროვნული კლასიფიკაცია'], ['ანტიდოპინგი', 'WADA · ADAMS whereabouts'], ['წარდგინება', 'სამინისტროს რეგლამენტი'], ['დოკუმენტის ჯაჭვი', '4 ოქმიდან 3 დადასტურებული']]] },
+  { n: 'ოსტატები და ჩემპიონები', k: 'MST-02 / MASTERS & CHAMPIONS', s: 'podium',
+    cams: ['PODIUM & SEASON RING', 'CATEGORY LADDER', 'RESULT → RANK CHAIN', 'CLASSIFICATION CODEX'],
+    head: 'ჩემპიონი არ იბადება — აღირიცხება.',
+    copy: 'ოსტატის წოდება სამი რგოლის ნამრავლია: სტარტი, შედეგი და ხელმოწერილი ოქმი. დღეს სამივე სხვადასხვა ფედერაციის ცხრილშია და ჯაჭვის აღდგენა ყოველ ჯერზე ხელით იწყება — ამიტომ იკარგება წოდებები, რომლებიც ფაქტობრივად უკვე მოპოვებულია. Artron სტარტს, მედალს და ოქმს ერთ რეესტრში კრავს და აჩვენებს, რამდენი რჩება წოდებამდე.',
+    notes: ['სეზონის რგოლზე თითოეული სტარტია აღნიშნული — ოქროთი ის, რომელიც მედალში გადაიზარდა.',
+      'კატეგორია და ლიგა განსაზღვრავს, რომელი შედეგი ითვლება წოდებაში — კიბე აჩვენებს მოქმედ საფეხურს.',
+      'შედეგი ოქმად, ოქმი წოდებად — ჯაჭვი ავტომატურია და თითოეული რგოლი გადამოწმებადია.',
+      'სადავო შედეგი რეიტინგში არ ჩაითვლება, სანამ აპელაციის ფანჯარა ღიაა — წოდება მხოლოდ სუფთა ჯაჭვზე დგება.'],
+    t: [[['ოსტატის წოდება', '124 მფლობელი'], ['სეზონური სტარტი', '46 ტურნირი'], ['მედლის კონვერსია', '31%'], ['წოდებამდე მანძილი', 'საშუალოდ 2 სტარტი']],
+        [['ეროვნული ჩემპიონატი', 'ყველა წონითი კატეგორია'], ['თასების სისტემა', 'Cup · league'], ['ვეტერანთა კლასი', 'Masters 35+'], ['კატეგორიის ცვლა', 'წონის ისტორიით დადასტურებული']],
+        [['შედეგის ჯაჭვი', 'Result → protocol → rank'], ['რეიტინგის ძრავა', 'Elo-ტიპის მოდელი'], ['მედალიონის RFID', 'ნამდვილობის შემოწმება'], ['ოქმის მიღება', 'ფედერაციის API · ავტომატური']],
+        [['კლასიფიკაცია', 'ფედერაციის წესდება'], ['მოსამართლის დაშვება', 'ლიცენზიის რეესტრი'], ['აპელაცია', '72 საათიანი ფანჯარა'], ['სადავო შედეგი', 'გაყინული გადაწყვეტამდე']]] },
+  { n: 'ოსტატობის კანდიდატები', k: 'MST-03 / CMS PIPELINE', s: 'passport',
+    head: 'კანდიდატი ერთ ნორმატივს აკლია.',
+    copy: 'კანდიდატები ყველაზე ხშირად სისტემის უყურადღებობის გამო იკარგებიან: ნორმატივი ვადაზე გამოტოვდა, სტარტი არ დაიფიქსირდა, დოკუმენტი დაგვიანდა. Artron თითოეულ კანდიდატს აძლევს ცხად რუკას — რა დარჩა, რომელ ტურნირზე და რა ვადამდე.',
+    t: [[['CMS კანდიდატი', '268 ათლეტი'], ['საშუალო ასაკი', '17.4 წელი'], ['გადასვლის მაჩვენებელი', '22% წელიწადში']],
+        [['სასტარტო კალენდარი', 'რეგიონული → ეროვნული'], ['ტესტირების ბატარეა', 'Speed · power · VO₂'], ['საკვალიფიკაციო ჯგუფები', '6 დისციპლინა']],
+        [['ნორმატივის ტრეკერი', 'Gap-to-standard %'], ['პროგრესის მრუდი', '12-თვიანი ტრენდი'], ['დატვირთვის ბალანსი', 'ACWR 0.8–1.3']],
+        [['ასაკობრივი ლიმიტი', 'ფედერაციის ჩარჩო'], ['სამედიცინო დაშვება', 'წლიური სკრინინგი'], ['მშობლის თანხმობა', 'არასრულწლოვანებზე']]] },
+  { n: 'I, II, III თანრიგი', k: 'MST-04 / RANKED ATHLETES', s: 'medals',
+    head: 'თანრიგი — მასის ნამდვილი რუკა.',
+    copy: 'ათასობით თანრიგიანი ათლეტი ქაღალდის ცნობებში იმალება და კლუბს არ აქვს პასუხი მარტივ კითხვაზე: ვინ სად დგას დღეს. Artron თანრიგებს ციფრულ რეესტრად აქცევს — ვადები, გადამოწმება და მასობრივი ატესტაცია ერთ ნაკადში.',
+    t: [[['რეესტრის მოცულობა', '3 120 ათლეტი'], ['თანრიგის განაწილება', 'I 14% · II 33% · III 53%'], ['ატესტაცია', 'წელიწადში ორჯერ']],
+        [['საოლიმპიური სპორტი', '18 დისციპლინა'], ['არაოლიმპიური', '11 დისციპლინა'], ['სასკოლო ლიგა', 'რეგიონული ეტაპები']],
+        [['ციფრული ცნობა', 'QR-ვერიფიკაცია'], ['მასობრივი ტესტი', 'Bulk import · scoring'], ['ვადის კონტროლი', 'ავტო-შეტყობინება']],
+        [['ეროვნული კლასიფიკაცია', 'დამტკიცებული ცხრილი'], ['მონაცემთა მინიმიზაცია', 'GDPR პრინციპი'], ['რეესტრის აუდიტი', 'წლიური შემოწმება']]] },
+  { n: 'იუნიორთა აკადემიები', k: 'MST-05 / YOUTH ACADEMY', s: 'academy',
+    cams: ['AGE-STEP COHORTS', 'SPECIALISATION PODS', 'GROWTH & SKILL PANEL', 'CONSENT GATE'],
+    head: 'ნიჭი ადრე ჩანს. მონაცემი გვიან.',
+    copy: 'აკადემიის ღირებულება ერთ კითხვაზე დგას: რომელი ბავშვი ვითარდება და რომელი გვტოვებს. დღეს დასწრება რვეულშია, ზრდის მრუდი — არსად, მშობელი კი მესენჯერში იღებს ინფორმაციას. Artron U8–U18 ტრაექტორიას ერთ ხაზად აწყობს: ასაკობრივი საფეხური, ზრდის პიკი, უნარების ბარათი და გასვლის სიგნალი ერთად ჩანს, მშობლის წვდომა კი დალუქულ რეჟიმშია.',
+    notes: ['კიბის თითოეული საფეხური ცალკე კოჰორტაა — ჩანს, სად ვიწროვდება ნაკადი და სად ჩერდება ზრდა.',
+      'ადრეული ვიწრო სპეციალიზაცია ნიჭს კლავს — სისტემა ბაზისის წილს ასაკის მიხედვით აკონტროლებს.',
+      'ზრდის პიკი ტრავმის ყველაზე მაღალი რისკია — მრუდი, უნარების ბარათი და დატვირთვა ერთ ეკრანზე იკითხება.',
+      'ბავშვის მონაცემზე წვდომა დალუქულია და აღირიცხება — თანხმობის გარეშე კარი არ იღება.'],
+    t: [[['აღსაზრდელი', '1 850 ბავშვი'], ['ასაკობრივი საფეხური', 'U8 – U18 · 6 საფეხური'], ['შენარჩუნება', '74% სეზონზე'], ['გასვლის სიგნალი', '3 გაცდენა ზედიზედ']],
+        [['საბაზისო მომზადება', 'ABC · coordination'], ['სპეციალიზაცია', '9 მიმართულება'], ['სასწავლო მატჩები', 'ლიგა + ფესტივალი'], ['ადრეული სპეციალიზაცია', 'შეზღუდული U12-მდე']],
+        [['ზრდის მონიტორინგი', 'PHV · სიმაღლის მრუდი'], ['უნარების ბარათი', 'Skill matrix 18 პარამეტრი'], ['მშობლის პორტალი', 'Read-only წვდომა'], ['დატვირთვა ზრდის პიკზე', 'ავტომატური შემცირება']],
+        [['COPPA', 'მშობლის ვერიფიცირებული თანხმობა'], ['GDPR-K', 'მონაცემთა მინიმიზაცია'], ['Safeguarding', 'პერსონალის შემოწმება'], ['წვდომის ჟურნალი', 'ვინ ნახა ბავშვის მონაცემი']]] }
+];
+
+const DIMS = [
+  { num: 'I', name: 'სპორტული სივრცეები', sub: 'VENUES & INFRASTRUCTURE', accent: '#00FF88', mods: D1 },
+  { num: 'II', name: 'ადამიანური კაპიტალი', sub: 'WORKFORCE & PROFESSIONALS', accent: '#00F0FF', mods: D2 },
+  { num: 'III', name: 'ოსტატობა და ტიტულები', sub: 'MASTERY & SPORTS RANKS', accent: '#FFD700', mods: D3 }
+];
+
+class Component extends DCLogic {
+  state = { d: 0, m: 0, tile: null, rev: 0, w: window.innerWidth };
+
+  componentDidMount() {
+    this._onR = () => { if (Math.abs(window.innerWidth - this.state.w) > 40) this.setState({ w: window.innerWidth }); };
+    window.addEventListener('resize', this._onR);
+    this._onK = e => {
+      if (e.key === 'ArrowRight') this.step(1);
+      else if (e.key === 'ArrowLeft') this.step(-1);
+      else if (e.key === 'Escape') this.setState({ tile: null });
+    };
+    window.addEventListener('keydown', this._onK);
+    this._tour();
+  }
+
+  componentDidUpdate(prev) {
+    if (prev.autoTour !== this.props.autoTour || prev.tourInterval !== this.props.tourInterval) this._tour();
+  }
+
+  _tour() {
+    clearInterval(this._tv);
+    if (!this.props.autoTour) return;
+    const ms = (this.props.tourInterval ?? 9) * 1000;
+    this._tv = setInterval(() => this.setState(s => {
+      const mods = DIMS[s.d].mods;
+      const next = s.m + 1;
+      return next < mods.length
+        ? { m: next, tile: null, rev: s.rev + 1 }
+        : { d: (s.d + 1) % DIMS.length, m: 0, tile: null, rev: s.rev + 1 };
+    }), ms);
+  }
+
+  componentWillUnmount() { window.removeEventListener('resize', this._onR); window.removeEventListener('keydown', this._onK); clearInterval(this._tv); }
+
+  step(dir) {
+    this.setState(s => {
+      const n = DIMS[s.d].mods.length;
+      let m = s.m + dir, d = s.d;
+      if (m >= n) { d = (s.d + 1) % DIMS.length; m = 0; }
+      else if (m < 0) { d = (s.d + DIMS.length - 1) % DIMS.length; m = DIMS[d].mods.length - 1; }
+      return { d, m, tile: null, rev: s.rev + 1 };
+    });
+  }
+
+  pickDim(i) { this.setState(s => ({ d: i, m: 0, tile: null, rev: s.rev + 1 })); }
+  pickMod(i) { this.setState(s => ({ m: i, tile: null, rev: s.rev + 1 })); }
+  pickTile(i) { this.setState(s => ({ tile: s.tile === i ? null : i })); }
+
+  renderVals() {
+    const { d, m, tile, rev, w } = this.state;
+    const narrow = w < 830;
+    const tiny = w < 620;
+    const dim = DIMS[d];
+    const mods = dim.mods;
+    const mi = Math.min(m, mods.length - 1);
+    const mod = mods[mi];
+    const accent = dim.accent;
+    const kin = this.props.kinetic ?? true;
+    const anim = kin ? (rev % 2 ? 'kinB' : 'kinA') : 'softIn';
+    const raw = mod.head.split(' ');
+    const closed = TILES.map((_, i) => i).filter(i => i !== tile);
+    const lastClosed = closed.length % 2 ? closed[closed.length - 1] : -1;
+    let ci = 0;
+    const words = raw.map((word, wi) => ({
+      c: wi === raw.length - 1 ? accent : '#f4f9fd',
+      chars: word.split('').map(t => {
+        const delay = kin ? (wi * 0.05 + ci * 0.022) : wi * 0.03;
+        ci++;
+        return { t, a: anim, d: delay.toFixed(3) + 's' };
+      })
+    }));
+    return {
+      accent,
+      tint: accent + '1f',
+      scene: mod.s,
+      kicker: mod.k,
+      copy: mod.copy,
+      words,
+      focus: tile === null ? '' : String(tile),
+      shift: narrow ? 0 : 0.42,
+      next: () => this.step(1),
+      ticks: mods.map((x, i) => ({
+        label: x.n, pick: () => this.pickMod(i),
+        w: i === mi ? '34px' : '14px',
+        bg: i === mi ? accent : '#eaf2f8',
+        op: i === mi ? 1 : (i === (mi + 1) % mods.length ? 0.5 : 0.22)
+      })),
+      modIndex: String(mi + 1).padStart(2, '0'),
+      modCount: String(mods.length).padStart(2, '0'),
+      pad: tiny ? '16px 16px 24px' : (narrow ? '24px 24px 24px' : '32px 40px 40px'),
+      hudW: narrow ? '100%' : 'clamp(400px, 40vw, 600px)',
+      hudMax: tiny ? '48vh' : (narrow ? '52vh' : '72vh'),
+      hudPad: tiny ? '16px' : '24px',
+      headSize: tiny ? '27px' : (narrow ? '32.4px' : 'clamp(32.4px, 3.2vw, 46.7px)'),
+      tileCols: tiny ? '1fr' : 'repeat(2, minmax(0, 1fr))',
+      markFlex: narrow ? '1 1 100%' : '0 0 auto',
+      markSize: tiny ? '10.8px' : '13px',
+      dims: DIMS.map((x, i) => ({
+        num: x.num, name: x.name, tag: x.sub, pick: () => this.pickDim(i),
+        bg: i === d ? 'rgba(255,255,255,0.1)' : 'transparent',
+        fg: i === d ? '#f7fbfe' : 'rgba(234,242,248,0.56)',
+        rule: i === d ? x.accent : 'rgba(255,255,255,0.14)',
+        sub: i === d ? x.accent : 'rgba(234,242,248,0.34)'
+      })),
+      mods: mods.map((x, i) => ({
+        n: x.n, pick: () => this.pickMod(i),
+        bg: i === mi ? accent : 'rgba(255,255,255,0.05)',
+        fg: i === mi ? '#050811' : 'rgba(234,242,248,0.74)',
+        bd: i === mi ? accent : 'rgba(255,255,255,0.1)',
+        dot: i === mi ? 'rgba(5,8,17,0.45)' : (i === (mi + 1) % mods.length ? accent : 'rgba(255,255,255,0.22)'),
+        pulse: i === (mi + 1) % mods.length ? 'pulseHint 2.6s ease-in-out infinite' : 'none'
+      })),
+      tiles: TILES.map((tl, i) => ({
+        t: tl.t, s: tl.s, open: tile === i, sign: tile === i ? '–' : '+',
+        pick: () => this.pickTile(i),
+        span: !tiny && (tile === i || i === lastClosed) ? 'span 2' : 'auto',
+        cam: (mod.cams || ['WIDE ESTABLISH', 'DISCIPLINE PASS', 'TECH CLOSE-UP', 'STANDARD SWEEP'])[i],
+        note: (mod.notes || [])[i] || '',
+        bg: tile === i ? 'rgba(255,255,255,0.065)' : 'rgba(255,255,255,0.028)',
+        bd: tile === i ? accent + '66' : 'rgba(255,255,255,0.08)',
+        rule: tile === i ? accent : 'rgba(255,255,255,0.12)',
+        sh: tile === i ? 'inset 0 0 0 1px rgba(255,255,255,0.04), 0 14px 34px rgba(0,0,0,0.34)' : 'none',
+        fg: tile === i ? accent : '#eaf2f8',
+        rows: (mod.t[i] || []).map(r => ({ l: r[0], v: r[1] }))
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

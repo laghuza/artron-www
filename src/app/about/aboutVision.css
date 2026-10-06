@@ -16,7 +16,7 @@
   color: var(--snow);
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 @media (min-width: 901px) {

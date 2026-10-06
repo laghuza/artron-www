@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/landing/Footer';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
@@ -13,8 +14,20 @@ import { AboutCallToUnity } from './components/AboutCallToUnity';
 import './aboutVision.css';
 
 export default function AboutClient() {
+  const { locale } = useLanguage();
   const scrollStateRef = useRef<{ state: number; active: number }>({ state: 0, active: -1 });
   const [activeChapter, setActiveChapter] = useState(0);
+
+  // Update browser tab title dynamically on locale change
+  useEffect(() => {
+    if (locale === 'en') {
+      document.title = 'ARTRON — Digital Syntax of Sports | About Us & Vision';
+    } else if (locale === 'ru') {
+      document.title = 'ARTRON — Цифровой синтаксис спорта | О нас и нашем видении';
+    } else {
+      document.title = 'ARTRON — სპორტის ციფრული სინტაქსი | ჩვენ შესახებ & Vision';
+    }
+  }, [locale]);
 
   const handleActiveNodeChange = useCallback((nodeIndex: number) => {
     scrollStateRef.current.active = nodeIndex;

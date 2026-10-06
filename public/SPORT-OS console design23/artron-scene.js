@@ -1032,6 +1032,73 @@
           c.tick.material.opacity = (c.tick.material.userData.o0 ?? 0.9) * (c.i === 3 ? 0.35 + 0.65 * Math.abs(Math.sin(t * 3)) : 0.9);
         }));
       }
+      {                                                   // + 0 · tactics board on the table + head coach with clipboard
+        const L = M.line(THREE, 0xffffff, 0.6), y = -0.684;
+        P[0].add(loop4(THREE, 1.9, 1.2, y, L));
+        P[0].add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, y, -0.6), new THREE.Vector3(0, y, 0.6)]), L));
+        const cc = new THREE.Mesh(new THREE.RingGeometry(0.2, 0.216, 40), M.glow(THREE, 0xffffff, 0.55));
+        cc.rotation.x = -Math.PI / 2; cc.position.y = y; P[0].add(cc);
+        [-1, 1].forEach(sx => { const b = loop4(THREE, 0.3, 0.6, y, L); b.position.x = sx * 0.8; P[0].add(b); });
+        const mags = [];
+        [[-0.62, -0.3], [-0.62, 0.3], [-0.32, 0], [-0.2, -0.42], [-0.2, 0.42]].forEach(([x, z], i) => [1, -1].forEach(sd => {
+          const m = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.03, 16), M.paint(THREE, sd > 0 ? 0xff5a5a : 0x4aa8ff, 0.95));
+          m.position.set(x * sd, y + 0.016, z * sd); P[0].add(m); mags.push({ m, x: x * sd, i });
+        }));
+        const hc = figure(THREE, M.std(THREE, a, 0.55, 0.2), M.glow(THREE, 0xffffff, 0.95), 1.08);
+        hc.position.set(0, -1.3, 2.0); P[0].add(hc);
+        hc.add(box(THREE, 0.2, 0.26, 0.02, M.paint(THREE, 0xf2f6fa, 0.95), 0.1, 0.38, -0.16));
+        hc.add(box(THREE, 0.08, 0.03, 0.03, M.paint(THREE, 0x8a98a6, 0.95), 0.1, 0.51, -0.16));
+        acts.push(t => mags.forEach(g => { g.m.position.x = g.x + Math.sin(t * 0.7 + g.i) * 0.05; }));
+      }
+      {                                                   // + 1 · real pitch markings on the hologram: boxes, goals, cones, ball
+        const hb = new THREE.Group(); hb.position.set(0, 0.92, 0); hb.rotation.x = -0.18; P[1].add(hb);
+        const L = M.line(THREE, 0xffffff, 0.5);
+        hb.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0.005, -1), new THREE.Vector3(0, 0.005, 1)]), L));
+        [-1, 1].forEach(sx => {
+          const b = loop4(THREE, 0.5, 1.1, 0.005, L); b.position.x = sx * 1.35; hb.add(b);
+          const gl = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.2, 0.5), M.wire(THREE, 0xffffff, 0.55));
+          gl.position.set(sx * 1.68, 0.1, 0); hb.add(gl);
+        });
+        for (let i = 0; i < 5; i++) {
+          const c = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.09, 12), M.paint(THREE, 0xffb347, 0.95));
+          c.position.set(-0.9 + i * 0.3, 0.045, 0.82); hb.add(c);
+        }
+        const ball = new THREE.Mesh(new THREE.SphereGeometry(0.05, 14, 10), M.paint(THREE, 0xffffff, 0.98)); hb.add(ball);
+        acts.push(t => { ball.position.set(Math.sin(t * 0.55) * 1.3, 0.05 + Math.abs(Math.sin(t * 2.2)) * 0.08, Math.sin(t * 1.1) * 0.55); });
+      }
+      {                                                   // + 2 · stopwatch + athlete in a GPS vest linked to the satellite
+        const G = new THREE.Group(); G.position.set(2.85, 0.25, 0); G.rotation.y = -0.5; P[2].add(G);
+        const sw = new THREE.Group(); sw.position.set(1.02, 0.42, 0.08); G.add(sw);
+        sw.add(new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.024, 10, 40), M.paint(THREE, 0xeaf4ff, 0.95)));
+        sw.add(box(THREE, 0.07, 0.07, 0.04, M.paint(THREE, 0xeaf4ff, 0.95), 0, 0.21, 0));
+        const hand = new THREE.Group(); sw.add(hand);
+        hand.add(box(THREE, 0.014, 0.13, 0.01, M.glow(THREE, a, 0.95), 0, 0.065, 0.01));
+        const ath = figure(THREE, M.std(THREE, 0x1e2a35, 0.6, 0.25), M.glow(THREE, 0xffffff, 0.9), 1.0);
+        ath.position.set(0.15, -1.55, 0.6); G.add(ath);
+        ath.add(box(THREE, 0.25, 0.2, 0.25, M.paint(THREE, 0xffb347, 0.9), 0, 0.42, 0));
+        const pod = box(THREE, 0.07, 0.05, 0.04, M.glow(THREE, 0xffffff, 0.95), 0, 0.5, -0.14); ath.add(pod);
+        const lg = new THREE.BufferGeometry(), lp = new Float32Array(6); lg.setAttribute('position', new THREE.BufferAttribute(lp, 3));
+        G.add(new THREE.Line(lg, M.line(THREE, a, 0.45)));
+        acts.push(t => {
+          hand.rotation.z = -t * 2.4;
+          lp[0] = 0.15; lp[1] = -1.05; lp[2] = 0.46;
+          lp[3] = Math.cos(t * 0.9) * 0.66; lp[4] = 0.16 + Math.sin(t * 0.9) * 0.22; lp[5] = Math.sin(t * 0.9) * 0.42;
+          lg.attributes.position.needsUpdate = true;
+          ath.position.y = -1.55 + Math.abs(Math.sin(t * 3)) * 0.03;
+        });
+      }
+      {                                                   // + 3 · coach ID badge on a lanyard
+        const G = new THREE.Group(); G.position.set(-2.9, 0.4, 0); G.rotation.y = 0.5; P[3].add(G);
+        const bd = new THREE.Group(); bd.position.set(1.15, -0.05, 0.14); G.add(bd);
+        bd.add(box(THREE, 0.42, 0.58, 0.02, M.paint(THREE, 0xeaf4ff, 0.95)));
+        bd.add(box(THREE, 0.42, 0.08, 0.025, M.paint(THREE, a, 0.95), 0, 0.25, 0));
+        bd.add(box(THREE, 0.2, 0.2, 0.01, M.paint(THREE, 0x2a3a48, 0.95), 0, 0.07, 0.016));
+        const ph = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 8), M.paint(THREE, 0x9fb4c4, 0.95)); ph.position.set(0, 0.1, 0.03); bd.add(ph);
+        bd.add(box(THREE, 0.12, 0.05, 0.01, M.paint(THREE, 0x9fb4c4, 0.95), 0, 0.005, 0.022));
+        [-0.1, -0.17].forEach((yy, i) => bd.add(box(THREE, 0.3 - i * 0.1, 0.03, 0.01, M.paint(THREE, 0x2a3a48, 0.95), 0, yy, 0.016)));
+        bd.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-0.12, 0.29, 0), new THREE.Vector3(0, 0.72, 0), new THREE.Vector3(0.12, 0.29, 0)]), M.line(THREE, a, 0.8)));
+        acts.push(t => { bd.rotation.z = Math.sin(t * 0.8) * 0.06; });
+      }
       return { group: g, parts: P, update(t, dt) { acts.forEach(f => f(t, dt)); } };
     },
 
@@ -1126,6 +1193,53 @@
           lock.rotation.z = Math.sin(t * 0.9) * 0.2;
         });
       }
+      {                                                   // + 0 · medical cross, patient on the centre bed, IV stand
+        const cr = new THREE.Group(); cr.position.set(0, 0.16, -0.44); P[0].add(cr);
+        cr.add(box(THREE, 0.34, 0.11, 0.03, M.glow(THREE, 0xff5a5a, 0.95)));
+        cr.add(box(THREE, 0.11, 0.34, 0.03, M.glow(THREE, 0xff5a5a, 0.95)));
+        const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.62, 6, 12), M.std(THREE, 0x2a3a48, 0.6, 0.2));
+        body.rotation.z = Math.PI / 2; body.position.set(0.08, -0.62, 0.02); P[0].add(body);
+        const hd = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 10), M.glow(THREE, 0xffffff, 0.9)); hd.position.set(-0.5, -0.6, 0.02); P[0].add(hd);
+        P[0].add(box(THREE, 0.7, 0.03, 0.5, M.paint(THREE, 0x1c5566, 0.9), 0.22, -0.56, 0.02));
+        const st = M.std(THREE, 0x8a98a6, 0.4, 0.7);
+        P[0].add(box(THREE, 0.03, 1.4, 0.03, st, -0.95, -0.6, -0.3));
+        P[0].add(box(THREE, 0.22, 0.02, 0.02, st, -0.95, 0.1, -0.3));
+        const bag = box(THREE, 0.12, 0.18, 0.05, M.glow(THREE, CYAN, 0.7), -0.9, -0.02, -0.3); P[0].add(bag);
+        acts.push(t => {
+          cr.scale.setScalar(1 + 0.05 * Math.sin(t * 2));
+          body.scale.set(1, 1 + 0.05 * Math.sin(t * 1.3), 1);
+          bag.material.opacity = (bag.material.userData.o0 ?? 0.7) * (0.6 + 0.4 * Math.sin(t * 2.6));
+        });
+      }
+      {                                                   // + 1 · head on the scanned body — clearly a person
+        const hd = new THREE.Mesh(new THREE.SphereGeometry(0.13, 14, 10), M.wire(THREE, CYAN, 0.55));
+        hd.position.set(0, 0.92, 0); P[1].add(hd);
+        acts.push(t => { hd.rotation.y = t * 0.5; });
+      }
+      {                                                   // + 2 · heart icon on HRV ring, crescent moon over sleep bars
+        const G = new THREE.Group(); G.position.set(2.7, 0.45, 0); G.rotation.y = -0.45; P[2].add(G);
+        const ht = new THREE.Group(); ht.position.set(-0.52, -0.3, 0.05); G.add(ht);
+        const hm = M.paint(THREE, 0xff5a5a, 0.95);
+        [-0.038, 0.038].forEach(x => { const s = new THREE.Mesh(new THREE.SphereGeometry(0.05, 14, 10), hm); s.position.set(x, 0.02, 0); ht.add(s); });
+        const cn = new THREE.Mesh(new THREE.ConeGeometry(0.083, 0.11, 16), hm); cn.rotation.z = Math.PI; cn.position.y = -0.045; ht.add(cn);
+        const moon = new THREE.Mesh(new THREE.RingGeometry(0.06, 0.1, 28, 1, 0.9, 3.6), M.paint(THREE, 0xeaf4ff, 0.9));
+        moon.position.set(0.3, 0.02, 0.05); G.add(moon);
+        acts.push(t => { const u = ((t * 0.8) % 1); ht.scale.setScalar(1 + 0.22 * Math.exp(-Math.pow((u - 0.1) * 12, 2))); });
+      }
+      {                                                   // + 3 · running lane, crutches at the start, athlete walking through the gates, ball at the end
+        const G = new THREE.Group(); G.position.set(-2.8, 0, 0); P[3].add(G);
+        const L = M.line(THREE, 0xffffff, 0.35);
+        [-0.34, 0.34].forEach(x => G.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x, -1.29, -1.9), new THREE.Vector3(x, -1.29, 1.9)]), L)));
+        const cm = M.std(THREE, 0x8a98a6, 0.4, 0.7);
+        [-0.16, 0.16].forEach((x, i) => { const c = box(THREE, 0.03, 0.62, 0.03, cm, x, -1.0, -1.8); c.rotation.x = 0.25; c.rotation.z = i ? -0.08 : 0.08; G.add(c); });
+        const ball = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), M.paint(THREE, 0xffffff, 0.95)); ball.position.set(0.1, -1.21, 1.72); G.add(ball);
+        const w = figure(THREE, M.std(THREE, 0x1e2a35, 0.6, 0.25), M.glow(THREE, 0xffffff, 0.95), 0.58); G.add(w);
+        acts.push(t => {
+          const u = (t * 0.22) % 1;
+          w.position.set(0, -1.3 + Math.abs(Math.sin(t * 5)) * 0.02, -1.6 + Math.min(u * 1.25, 1) * 2.3);
+          ball.rotation.x = t;
+        });
+      }
       return { group: g, parts: P, update(t, dt) { acts.forEach(f => f(t, dt)); } };
     },
 
@@ -1203,6 +1317,7 @@
         G.add(new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.1, 6, 4), M.wire(THREE, CYAN, 0.16)));
         const seal = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.022, 10, 32), new THREE.MeshStandardMaterial({ color: GOLD, roughness: 0.2, metalness: 1, transparent: true }));
         seal.position.set(-0.45, -0.22, 0.04); G.add(seal);
+        [-1, 1].forEach(sd => { const r = box(THREE, 0.06, 0.2, 0.01, M.paint(THREE, GOLD, 0.95), -0.45 + sd * 0.05, -0.44, 0.03); r.rotation.z = sd * 0.25; G.add(r); });
         [0, 1, 2].forEach(i => G.add(box(THREE, 0.8 - i * 0.16, 0.045, 0.02, M.glow(THREE, a, 0.55), 0.1, 0.3 - i * 0.18, 0.04)));
         const sp = new THREE.Mesh(new THREE.PlaneGeometry(6.2, 4.2, 12, 8), M.wire(THREE, a, 0.2));
         sp.rotation.x = -Math.PI / 2; sp.position.y = -1.2; P[3].add(sp);
@@ -1210,6 +1325,43 @@
           seal.rotation.z = t * 0.6;
           sp.material.opacity = (sp.material.userData.o0 ?? 0.2) * (0.5 + 0.5 * Math.sin(t * 0.9));
         });
+      }
+      {                                                   // + 0 · participants on the mats, mirror wall and speakers
+        const body = M.std(THREE, 0x2a3a48, 0.6, 0.2), head = M.glow(THREE, 0xffffff, 0.8), ppl = [];
+        for (let r = 0; r < 4; r++) for (let c = 0; c < 6; c++) {
+          const k = r * 6 + c; if (k % 7 === 0) continue;
+          const f = figure(THREE, body, head, 0.55); f.position.set(-2.5 + c, -1.22, -1.05 + r * 0.9); P[0].add(f); ppl.push({ f, k });
+        }
+        P[0].add(box(THREE, 6.0, 1.15, 0.03, M.std(THREE, 0x9fb4c4, 0.08, 1, 0.3), 0, -0.7, -2.12));
+        [-2.9, 2.9].forEach(x => {
+          P[0].add(box(THREE, 0.3, 0.5, 0.25, M.std(THREE, 0x131c25, 0.5, 0.4), x, -1.05, -1.95));
+          const cone = new THREE.Mesh(new THREE.RingGeometry(0.04, 0.1, 20), M.glow(THREE, a, 0.6)); cone.position.set(x, -1.0, -1.82); P[0].add(cone);
+        });
+        acts.push(t => ppl.forEach(p => { p.f.position.y = -1.22 + Math.abs(Math.sin(t * 2.2 - 0.3)) * 0.045; p.f.rotation.y = Math.sin(t * 1.1 + p.k) * 0.12; }));
+      }
+      {                                                   // + 1 · riders on the bikes, kettlebells by the TRX rig
+        const body = M.std(THREE, 0x2a3a48, 0.6, 0.2), head = M.glow(THREE, 0xffffff, 0.8), rd = [];
+        [0, 2, 4].forEach(i => { const f = figure(THREE, body, head, 0.6); f.position.set(-1.6 + i * 0.8, -0.95, 2.52); f.rotation.x = 0.3; P[1].add(f); rd.push(f); });
+        [-0.45, 0.45].forEach(z => {
+          const kb = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 10), M.std(THREE, 0x1a232d, 0.5, 0.6)); kb.position.set(2.9, -1.2, z); P[1].add(kb);
+          const hd = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.016, 8, 20, Math.PI), M.glow(THREE, a, 0.8)); hd.position.set(2.9, -1.12, z); P[1].add(hd);
+        });
+        acts.push(t => rd.forEach((f, i) => { f.position.y = -0.95 + Math.sin(t * 6 + i) * 0.015; }));
+      }
+      {                                                   // + 2 · heart over the HR board, card tapping the NFC reader
+        const ht = new THREE.Group(); ht.position.set(0, 1.92, -2.17); P[2].add(ht);
+        const hm = M.paint(THREE, 0xff5a5a, 0.95);
+        [-0.06, 0.06].forEach(x => { const s = new THREE.Mesh(new THREE.SphereGeometry(0.08, 14, 10), hm); s.position.set(x, 0.03, 0); ht.add(s); });
+        const cn = new THREE.Mesh(new THREE.ConeGeometry(0.135, 0.17, 16), hm); cn.rotation.z = Math.PI; cn.position.y = -0.07; ht.add(cn);
+        const card = box(THREE, 0.2, 0.015, 0.13, M.paint(THREE, 0xeaf4ff, 0.95), 2.5, -0.8, 2.2); P[2].add(card);
+        acts.push(t => {
+          const u = (t * 1.2) % 1; ht.scale.setScalar(1 + 0.2 * Math.exp(-Math.pow((u - 0.1) * 10, 2)));
+          card.position.y = -0.94 + 0.2 * (0.5 + 0.5 * Math.cos(t * 1.4));
+        });
+      }
+      {                                                   // + 3 · one participant's personal-space square
+        const sq = loop4(THREE, 0.96, 0.86, -1.19, M.line(THREE, a, 0.9)); sq.position.set(-0.5, 0, -0.15); P[3].add(sq);
+        acts.push(t => { sq.material.opacity = (sq.material.userData.o0 ?? 0.9) * (0.4 + 0.6 * Math.abs(Math.sin(t * 1.4))); });
       }
       return { group: g, parts: P, update(t, dt) { acts.forEach(f => f(t, dt)); } };
     },
@@ -1290,6 +1442,70 @@
             bl.e.material.opacity = (bl.e.material.userData.o0 ?? 0.45) * (0.35 + 0.65 * k);
           });
           seal.rotation.z = t * 0.7; seal.rotation.x = Math.PI / 2 + Math.sin(t * 0.8) * 0.2;
+        });
+      }
+      {                                                   // + 0 · sun / dusk / moon marking the three shifts
+        const G = new THREE.Group(); G.position.set(0, -0.5, 0); P[0].add(G);
+        const at = th => [Math.cos(th) * 2.2, 0.42, -Math.sin(th) * 2.2];
+        const sun = new THREE.Group(); sun.position.set(...at(1.045)); G.add(sun);
+        sun.add(new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), M.glow(THREE, GOLD, 0.95)));
+        const rays = new THREE.Mesh(new THREE.TorusGeometry(0.21, 0.012, 6, 40), M.glow(THREE, GOLD, 0.6)); sun.add(rays);
+        const dusk = new THREE.Group(); dusk.position.set(...at(3.14)); G.add(dusk);
+        dusk.add(new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), M.glow(THREE, 0xffb347, 0.95)));
+        dusk.add(box(THREE, 0.4, 0.015, 0.015, M.glow(THREE, 0xffb347, 0.8)));
+        const moon = new THREE.Mesh(new THREE.RingGeometry(0.08, 0.14, 28, 1, 0.9, 3.6), M.paint(THREE, 0xeaf4ff, 0.95));
+        moon.position.set(...at(5.23)); G.add(moon);
+        acts.push(t => { rays.scale.setScalar(1 + 0.12 * Math.sin(t * 2)); sun.position.y = 0.42 + Math.sin(t) * 0.03; moon.position.y = 0.42 + Math.sin(t + 2) * 0.03; });
+      }
+      {                                                   // + 1 · each pod gets its job: receptionist + bell, toolbox, bucket + mop, CCTV
+        const hs = [0.5, 0.62, 0.42, 0.56], cams = [];
+        hs.forEach((h, i) => {
+          const th = i / 4 * Math.PI * 2 + Math.PI / 4;
+          const Gp = new THREE.Group(); Gp.position.set(Math.cos(th) * 1.15, -1.3, Math.sin(th) * 1.15); Gp.rotation.y = -th; P[1].add(Gp);
+          if (i === 0) {
+            const f = figure(THREE, M.std(THREE, a, 0.55, 0.2), M.glow(THREE, 0xffffff, 0.95), 0.75); f.position.set(0, 0, -0.42); Gp.add(f);
+            const bell = new THREE.Mesh(new THREE.SphereGeometry(0.06, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), M.std(THREE, GOLD, 0.2, 1)); bell.position.set(0.18, h + 0.03, 0.12); Gp.add(bell);
+          } else if (i === 1) {
+            Gp.add(box(THREE, 0.32, 0.13, 0.15, M.paint(THREE, 0xff5a5a, 0.95), 0, h + 0.1, 0.1));
+            const hd = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.012, 8, 20, Math.PI), M.std(THREE, 0x8a98a6, 0.4, 0.8)); hd.position.set(0, h + 0.165, 0.1); Gp.add(hd);
+          } else if (i === 2) {
+            const bk = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.08, 0.15, 18), M.paint(THREE, 0xffd23f, 0.95)); bk.position.set(0.08, h + 0.1, 0.08); Gp.add(bk);
+            const mop = box(THREE, 0.025, 0.75, 0.025, M.std(THREE, 0x8a98a6, 0.4, 0.7), -0.02, h + 0.4, 0.08); mop.rotation.z = 0.3; Gp.add(mop);
+          } else {
+            Gp.add(box(THREE, 0.03, 0.34, 0.03, M.std(THREE, 0x8a98a6, 0.4, 0.7), 0.2, h + 0.17, 0.12));
+            const cam = new THREE.Group(); cam.position.set(0.2, h + 0.36, 0.12); Gp.add(cam);
+            cam.add(box(THREE, 0.2, 0.09, 0.09, M.paint(THREE, 0xeaf4ff, 0.95), 0.06, 0, 0));
+            const led = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), M.glow(THREE, 0xff5a5a, 0.95)); led.position.set(0.17, 0.03, 0); cam.add(led);
+            cams.push({ cam, led });
+          }
+        });
+        acts.push(t => cams.forEach(c => { c.cam.rotation.y = Math.sin(t * 0.7) * 0.8; c.led.material.opacity = (c.led.material.userData.o0 ?? 0.95) * (Math.sin(t * 4) > 0 ? 1 : 0.2); }));
+      }
+      {                                                   // + 2 · fingerprint on the clock-in, employee at the terminal, payroll coins
+        const G = new THREE.Group(); G.position.set(3.0, 0, 0); G.rotation.y = -0.5; P[2].add(G);
+        const fp = new THREE.Group(); fp.position.set(-0.05, -1.0, 1.26); G.add(fp);
+        [0.035, 0.065, 0.095, 0.125].forEach((r, i) => fp.add(new THREE.Mesh(new THREE.RingGeometry(r, r + 0.012, 28, 1, 0.3 + i * 0.2, 4.6 - i * 0.3), M.glow(THREE, a, 0.85))));
+        const emp = figure(THREE, M.std(THREE, 0x2a3a48, 0.6, 0.2), M.glow(THREE, 0xffffff, 0.95), 0.9); emp.position.set(-0.05, -1.3, 1.72); G.add(emp);
+        const coins = [0, 1, 2, 3, 4].map(i => {
+          const c = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.04, 22), M.std(THREE, GOLD, 0.25, 1)); c.position.set(0.62, -1.28 + i * 0.05, 0.9); G.add(c); return c;
+        });
+        acts.push(t => {
+          const u = (t * 0.25) % 1;
+          coins.forEach((c, i) => { c.visible = i < 1 + Math.floor(u * 5); });
+          fp.scale.setScalar(1 + 0.08 * Math.sin(t * 3));
+        });
+      }
+      {                                                   // + 3 · a document sliding into the top of the ledger
+        const G = new THREE.Group(); G.position.set(-2.9, 0, 0); P[3].add(G);
+        const doc = new THREE.Group(); G.add(doc);
+        const sheet = box(THREE, 0.3, 0.4, 0.01, M.paint(THREE, 0xeaf4ff, 0.95)); doc.add(sheet);
+        [0.12, 0.05, -0.02, -0.09].forEach((y, i) => doc.add(box(THREE, 0.2 - (i % 2) * 0.06, 0.02, 0.012, M.paint(THREE, 0x2a3a48, 0.95), -0.02, y, 0.006)));
+        doc.add(box(THREE, 0.07, 0.07, 0.014, M.paint(THREE, 0xff5a5a, 0.9), 0.07, -0.15, 0.007));
+        acts.push(t => {
+          const u = (t * 0.3) % 1, e = 1 - Math.pow(1 - Math.min(u * 1.4, 1), 3);
+          doc.position.set(0.95 - e * 0.95, 1.35 - e * 0.55, 0.3 - e * 0.3);
+          doc.rotation.set(0, 0.3 * (1 - e), 0.25 * (1 - e));
+          doc.scale.setScalar(u > 0.85 ? Math.max(0.01, (1 - u) / 0.15) : 1);
         });
       }
       return { group: g, parts: P, update(t, dt) { acts.forEach(f => f(t, dt)); } };

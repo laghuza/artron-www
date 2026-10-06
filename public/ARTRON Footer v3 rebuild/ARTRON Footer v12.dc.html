@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#06080F;color:#FFFFFF;font-family:'Noto Sans Georgian',system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+a{color:#CBD5E1;text-decoration:none}a:hover{color:#FFFFFF}
+@keyframes arcSweep{0%{background-position:130% 0,0 0}22%{background-position:-30% 0,0 0}100%{background-position:-30% 0,0 0}}
+@keyframes arcLine{0%{transform:translateX(-60vw);opacity:0}3%{opacity:1}20%{opacity:1}23%,100%{transform:translateX(110vw);opacity:0}}
+@keyframes arcIntro{0%{background-position:130% 0,0 0}100%{background-position:-30% 0,0 0}}
+@keyframes pulseRing{0%{transform:scale(1);opacity:.75}100%{transform:scale(3);opacity:0}}
+@keyframes toastLife{0%{opacity:0;transform:translate(-50%,12px)}7%,88%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,6px)}}
+@keyframes copyTip{0%{opacity:0;transform:translate(-50%,4px)}12%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-2px)}}
+@keyframes auroraBreathe{0%,100%{transform:translateX(-50%) scale(1);opacity:.72}50%{transform:translateX(-50%) scale(1.07,1.12);opacity:1}}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+</helmet>
+<div style="width:100%;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;background:#06080F">
+  
+  <footer ref="{{ footerRef }}" style="position:relative;width:100%;overflow:hidden;contain:paint layout;height:auto;isolation:isolate;border-top-left-radius:50% 24px;border-top-right-radius:50% 24px;margin-top:24px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:radial-gradient(140% 60% at 50% 0%,#0F1628 0%,#0B101D 38%,#080B15 70%,#05070B 100%)">
+    <div aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(90% 38% at 50% 0%,rgba(255,255,255,0.08) 0%,rgba(147,197,253,0.05) 30%,rgba(147,197,253,0) 70%),radial-gradient(60% 40% at 12% 58%,rgba(168,123,65,0.04),transparent 70%),radial-gradient(55% 40% at 90% 62%,rgba(16,185,129,0.035),transparent 70%)"></div>
+    {{ aurora }}
+    <canvas id="cosmic-canvas" ref="{{ canvasRef }}" aria-hidden="true" style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;transform:translate3d(0,0,0);backface-visibility:hidden"></canvas>
+    {{ forge }}
+    <div aria-hidden="true" style="position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0.022;mix-blend-mode:overlay;transform:translate3d(0,0,0);background-repeat:repeat;background-size:220px 220px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E&quot;)"></div>
+    <div data-reveal="glow" aria-hidden="true" style="position:absolute;left:50%;top:0;width:min(720px,70%);height:90px;transform:translateX(-50%);z-index:0;pointer-events:none;background:radial-gradient(50% 100% at 50% 0%,rgba(255,255,255,0.1) 0%,rgba(212,175,55,0.05) 35%,rgba(16,185,129,0.03) 60%,transparent 100%)"></div>
+    <div data-reveal="beam" aria-hidden="true" style="position:absolute;inset:0;z-index:2;pointer-events:none;transform-origin:50% 0;box-sizing:border-box;padding-top:1.5px;border-top-left-radius:50% 24px;border-top-right-radius:50% 24px;background:linear-gradient(90deg,rgba(100,116,139,0.15) 0%,rgba(148,163,184,0.55) 18%,rgba(226,232,240,0.7) 34%,#93C5FD 44%,#FFFFFF 50%,#93C5FD 56%,rgba(226,232,240,0.7) 66%,rgba(148,163,184,0.55) 82%,rgba(100,116,139,0.15) 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)"></div>
+    <div aria-hidden="true" style="position:absolute;left:50%;top:-10px;width:min(420px,50%);height:22px;transform:translateX(-50%);z-index:2;pointer-events:none;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(255,255,255,0.9) 0%,rgba(147,197,253,0.55) 30%,rgba(147,197,253,0) 72%);filter:blur(6px)"></div>
+    <div data-reveal="flare" aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:2px;z-index:2;pointer-events:none;opacity:0;transform-origin:50% 50%;background:linear-gradient(90deg,transparent 20%,rgba(147,197,253,0.9) 40%,#FFFFFF 50%,rgba(147,197,253,0.9) 60%,transparent 80%);box-shadow:0 0 18px 2px rgba(147,197,253,0.45),0 0 44px 6px rgba(212,175,55,0.22)"></div>
+
+    <div style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:clamp(30px,min(3.4vw,4.4vh),46px) clamp(20px,5vw,72px) 0;display:flex;flex-direction:column">
+
+      <section data-reveal="rise" data-order="0" style="position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 32px;padding:0 0 clamp(12px,min(2.4vw,3vh),28px)">
+        <div style="display:flex;align-items:center;gap:14px;min-width:0">
+          {{ pulse }}
+          <h2 style="margin:0;font-size:clamp(16px,1.5vw,19px);line-height:1.35;font-weight:700;letter-spacing:-.005em;color:#FFFFFF;text-wrap:balance">სპორტსმენებისა და წევრების მობილური აპლიკაცია</h2>
+          <span style="flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#10B981;text-transform:uppercase">iOS · Android</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <button onClick="{{ notify }}" onPointerDown="{{ rim }}" data-rim="rect" aria-label="App Store — მალე" style="height:48px;display:flex;align-items:center;gap:11px;padding:0 12px 0 14px;border-radius:12px;cursor:pointer;font-family:inherit;text-align:left;color:#FFFFFF;border:1px solid transparent;background:linear-gradient(135deg,transparent 42%,rgba(255,255,255,0.05) 46%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.05) 54%,transparent 58%) 130% 0 / 300% 100% no-repeat padding-box,linear-gradient(180deg,#141B2B 0%,#0B101D 55%,#080B14 100%) padding-box,linear-gradient(180deg,rgba(255,255,255,0.55) 0%,#94A3B8 30%,rgba(148,163,184,0.25) 60%,#A87B41 90%,#D4AF37 100%) border-box;box-shadow:inset 0 1px 1px rgba(255,255,255,0.12),inset 0 -2px 3px rgba(0,0,0,0.6),0 12px 30px -14px rgba(0,0,0,0.9);overflow:hidden;transition:box-shadow .25s,transform .25s,background-position .8s cubic-bezier(.3,.6,.2,1)" style-hover="background-position:-30% 0,0 0,0 0;transform:translateY(-1px);box-shadow:inset 0 1px 1px rgba(255,255,255,0.18),inset 0 -2px 3px rgba(0,0,0,0.6),0 0 0 1px rgba(212,175,55,0.2),0 0 28px -8px rgba(147,197,253,0.35)" style-active="transform:scale(0.97) translateY(1px);transition:transform .08s ease">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg>
+            <span style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:10px;color:#CBD5E1;line-height:1.2">ჩამოტვირთეთ</span>
+              <span style="font-size:15px;font-weight:600;line-height:1.15;color:#FFFFFF">App Store</span>
+            </span>
+            <span style="margin-left:4px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.14em;padding:4px 7px;border-radius:999px;color:#6EE7B7;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.45)">SOON</span>
+          </button>
+          <button onClick="{{ notify }}" onPointerDown="{{ rim }}" data-rim="rect" aria-label="Google Play — მალე" style="height:48px;display:flex;align-items:center;gap:11px;padding:0 12px 0 14px;border-radius:12px;cursor:pointer;font-family:inherit;text-align:left;color:#FFFFFF;border:1px solid transparent;background:linear-gradient(135deg,transparent 42%,rgba(255,255,255,0.05) 46%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.05) 54%,transparent 58%) 130% 0 / 300% 100% no-repeat padding-box,linear-gradient(180deg,#141B2B 0%,#0B101D 55%,#080B14 100%) padding-box,linear-gradient(180deg,rgba(255,255,255,0.55) 0%,#94A3B8 30%,rgba(148,163,184,0.25) 60%,#A87B41 90%,#D4AF37 100%) border-box;box-shadow:inset 0 1px 1px rgba(255,255,255,0.12),inset 0 -2px 3px rgba(0,0,0,0.6),0 12px 30px -14px rgba(0,0,0,0.9);overflow:hidden;transition:box-shadow .25s,transform .25s,background-position .8s cubic-bezier(.3,.6,.2,1)" style-hover="background-position:-30% 0,0 0,0 0;transform:translateY(-1px);box-shadow:inset 0 1px 1px rgba(255,255,255,0.18),inset 0 -2px 3px rgba(0,0,0,0.6),0 0 0 1px rgba(212,175,55,0.2),0 0 28px -8px rgba(147,197,253,0.35)" style-active="transform:scale(0.97) translateY(1px);transition:transform .08s ease">
+            <svg width="18" height="20" viewBox="2.6 1.4 19.2 21.2" aria-hidden="true"><path fill="#4285F4" d="M3.6 1.8L13.3 12 3.6 22.2c-.3-.2-.5-.6-.5-1.1V2.9c0-.5.2-.9.5-1.1z"></path><path fill="#34A853" d="M3.6 1.8c.3-.2.8-.2 1.3.1l11.7 6.7L13.3 12z"></path><path fill="#FBBC04" d="M16.6 8.6l3.8 2.2c.9.5.9 1.9 0 2.4l-3.8 2.2L13.3 12z"></path><path fill="#EA4335" d="M3.6 22.2L13.3 12l3.3 3.4-11.7 6.7c-.5.3-1 .3-1.3.1z"></path></svg>
+            <span style="display:flex;flex-direction:column;gap:1px">
+              <span style="font-size:10px;color:#CBD5E1;line-height:1.2">ხელმისაწვდომია</span>
+              <span style="font-size:15px;font-weight:600;line-height:1.15;color:#FFFFFF">Google Play</span>
+            </span>
+            <span style="margin-left:4px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.14em;padding:4px 7px;border-radius:999px;color:#6EE7B7;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.45)">SOON</span>
+          </button>
+        </div>
+        <div data-rim="h" aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:1px;pointer-events:none;background:linear-gradient(90deg,rgba(168,123,65,0) 0%,rgba(168,123,65,0.55) 18%,rgba(212,175,55,0.7) 50%,rgba(168,123,65,0.55) 82%,rgba(168,123,65,0) 100%)"></div>
+      </section>
+
+      <section style="position:relative;display:grid;grid-template-columns:{{ gridCols }}">
+        <div data-reveal="rise" data-order="1" style="position:relative;padding:clamp(12px,min(2.8vw,3.4vh),34px) clamp(0px,3vw,40px) clamp(12px,min(2.8vw,3.4vh),34px) 0;display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px)">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A87B41;letter-spacing:.1em">01</span><span style="width:16px;height:1px;background:#A87B41"></span><span style="font-size:14px;font-weight:700;color:#FFFFFF">ეკოსისტემა</span></div>
+          <nav style="display:flex;flex-direction:column">
+            <sc-for list="{{ eco }}" as="l" hint-placeholder-count="3">
+              <a href="{{ l.href }}" style="min-height:clamp(28px,4.6vh,36px);display:flex;align-items:center;padding-left:0;font-size:14px;line-height:1.4;color:#CBD5E1;background:linear-gradient(90deg,#10B981,#059669) no-repeat left center / 0px 2px;transition:color .25s,padding-left .3s cubic-bezier(.2,.7,.2,1),background-size .3s cubic-bezier(.2,.7,.2,1)" style-hover="color:#FFFFFF;padding-left:22px;background-size:13px 2px">{{ l.label }}</a>
+            </sc-for>
+          </nav>
+          <div style="display:flex;gap:10px;padding-top:4px">
+            <a href="https://www.linkedin.com/company/artron" target="_blank" rel="noopener" aria-label="LinkedIn" data-rim="rect" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;color:#CBD5E1;border:1px solid transparent;background:linear-gradient(160deg,#1A2030 0%,#0D111B 60%,#07090F 100%) padding-box,linear-gradient(180deg,rgba(203,213,225,0.55),rgba(148,163,184,0.1) 60%,rgba(168,123,65,0.4)) border-box;box-shadow:inset 0 1px 1px rgba(255,255,255,0.1),inset 0 -2px 4px rgba(0,0,0,0.7);transition:color .25s,box-shadow .25s,transform .25s" style-hover="color:#F3D98A;transform:translateY(-1px);background:linear-gradient(160deg,#211C14 0%,#110E0A 60%,#07090F 100%) padding-box,linear-gradient(135deg,#F3D98A 0%,#D4AF37 35%,#A87B41 70%,#F3D98A 100%) border-box;box-shadow:inset 0 1px 1px rgba(255,230,160,0.25),0 0 22px -4px rgba(212,175,55,0.45)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.745 1.637-1.558 3.37-1.558 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg>
+            </a>
+            <a href="https://www.facebook.com/artron" target="_blank" rel="noopener" aria-label="Facebook" data-rim="rect" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;color:#CBD5E1;border:1px solid transparent;background:linear-gradient(160deg,#1A2030 0%,#0D111B 60%,#07090F 100%) padding-box,linear-gradient(180deg,rgba(203,213,225,0.55),rgba(148,163,184,0.1) 60%,rgba(168,123,65,0.4)) border-box;box-shadow:inset 0 1px 1px rgba(255,255,255,0.1),inset 0 -2px 4px rgba(0,0,0,0.7);transition:color .25s,box-shadow .25s,transform .25s" style-hover="color:#F3D98A;transform:translateY(-1px);background:linear-gradient(160deg,#211C14 0%,#110E0A 60%,#07090F 100%) padding-box,linear-gradient(135deg,#F3D98A 0%,#D4AF37 35%,#A87B41 70%,#F3D98A 100%) border-box;box-shadow:inset 0 1px 1px rgba(255,230,160,0.25),0 0 22px -4px rgba(212,175,55,0.45)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div data-reveal="rise" data-order="2" style="position:relative;padding:clamp(12px,min(2.8vw,3.4vh),34px) clamp(0px,3vw,40px);display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px)">
+          <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}"><span data-rim="v" aria-hidden="true" style="position:absolute;left:0;top:24px;bottom:24px;width:1px;background:linear-gradient(180deg,rgba(168,123,65,0) 0%,rgba(168,123,65,0.55) 25%,rgba(168,123,65,0.55) 75%,rgba(168,123,65,0) 100%)"></span></sc-if>
+          <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}"><span data-rim="h" aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,rgba(168,123,65,0.55),rgba(168,123,65,0.2) 70%,transparent)"></span></sc-if>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A87B41;letter-spacing:.1em">02</span><span style="width:16px;height:1px;background:#A87B41"></span><span style="font-size:14px;font-weight:700;color:#FFFFFF">სამართლებრივი</span></div>
+          <nav style="display:flex;flex-direction:column">
+            <sc-for list="{{ legal }}" as="l" hint-placeholder-count="5">
+              <a href="{{ l.href }}" style="min-height:clamp(28px,4.4vh,34px);display:flex;align-items:center;column-gap:10px;padding-left:0;font-size:14px;line-height:1.4;color:#CBD5E1;background:linear-gradient(90deg,#10B981,#059669) no-repeat left center / 0px 2px;transition:color .25s,padding-left .3s cubic-bezier(.2,.7,.2,1),background-size .3s cubic-bezier(.2,.7,.2,1)" style-hover="color:#FFFFFF;padding-left:22px;background-size:13px 2px">
+                <span>{{ l.label }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;color:#94A3B8">{{ l.tag }}</span>
+              </a>
+            </sc-for>
+          </nav>
+          <div data-rim="top" style="display:flex;flex-wrap:wrap;gap:0 20px;border-top:1px solid rgba(168,123,65,0.22)">
+            <a href="/delete-account" style="min-height:clamp(30px,5vh,40px);display:flex;align-items:center;gap:9px;font-size:13px;color:#94A3B8;transition:color .3s ease,filter .3s ease" style-hover="color:#EC9C13;filter:drop-shadow(0 0 6px rgba(236,156,19,0.38))">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.6 5.2A9 9 0 1 0 20.3 15.4" stroke-dasharray="3.2 1.6"></path><circle cx="11" cy="9.6" r="2.7"></circle><path d="M6.4 17.4c1-2.3 2.7-3.5 4.6-3.5 1.4 0 2.6.6 3.5 1.7"></path><circle cx="17.4" cy="12.2" r=".55" fill="currentColor" stroke="none"></circle><circle cx="19.6" cy="9.4" r=".45" fill="currentColor" stroke="none" opacity=".7"></circle><circle cx="21.2" cy="12.8" r=".4" fill="currentColor" stroke="none" opacity=".5"></circle><circle cx="20.2" cy="6.4" r=".35" fill="currentColor" stroke="none" opacity=".35"></circle></svg>
+              <span>ანგარიშის წაშლა</span>
+            </a>
+            <button onClick="{{ openCookies }}" style="min-height:clamp(30px,5vh,40px);display:flex;align-items:center;gap:9px;padding:0;background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:13px;color:#94A3B8;transition:color .3s ease,filter .3s ease" style-hover="color:#BAE6FD;filter:drop-shadow(0 0 6px rgba(125,211,252,0.42))">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8l7.6 2.9v5.6c0 4.8-3.2 8.6-7.6 10.1-4.4-1.5-7.6-5.3-7.6-10.1V5.7z"></path><path d="M9.2 10.4a2.9 2.9 0 0 1 5.6 0v1.4c0 1.9-.6 3.4-1.6 4.6"></path><path d="M12 10.9v1.2c0 1.6-.5 2.9-1.4 3.9"></path><path d="M7.6 12.6v-2a4.4 4.4 0 0 1 7.4-3.2" opacity=".55"></path></svg>
+              <span>ქუქიების მართვა</span>
+            </button>
+          </div>
+        </div>
+
+        <div data-reveal="rise" data-order="3" style="position:relative;padding:clamp(12px,min(2.8vw,3.4vh),34px) 0 clamp(12px,min(2.8vw,3.4vh),34px) clamp(0px,3vw,40px);display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px)">
+          <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}"><span data-rim="v" aria-hidden="true" style="position:absolute;left:0;top:24px;bottom:24px;width:1px;background:linear-gradient(180deg,rgba(168,123,65,0) 0%,rgba(168,123,65,0.55) 25%,rgba(168,123,65,0.55) 75%,rgba(168,123,65,0) 100%)"></span></sc-if>
+          <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}"><span data-rim="h" aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,rgba(168,123,65,0.55),rgba(168,123,65,0.2) 70%,transparent)"></span></sc-if>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A87B41;letter-spacing:.1em">03</span><span style="width:16px;height:1px;background:#A87B41"></span><span style="font-size:14px;font-weight:700;color:#FFFFFF">კონტაქტი &amp; იურიდიული პირი</span></div>
+          <div data-rim="rect" style="align-self:flex-start;max-width:100%;display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;padding:7px 13px;border-radius:9px;border:1px solid transparent;background:linear-gradient(180deg,#17140F,#0D0C0B) padding-box,linear-gradient(120deg,#A87B41 0%,#D4AF37 40%,#F3D98A 50%,#D4AF37 60%,#A87B41 100%) border-box;box-shadow:inset 0 1px 1px rgba(243,217,138,0.18);font-size:12.5px">
+            <span style="font-weight:600;color:#F3D98A">შპს „არტრონი“</span>
+            <span style="width:1px;height:12px;background:#A87B41"></span>
+            <button onClick="{{ copyTax }}" onPointerDown="{{ rimPill }}" aria-label="საიდენტიფიკაციო კოდის კოპირება" title="კოპირება" style="position:relative;padding:0;border:none;background:transparent;cursor:copy;font-family:'JetBrains Mono',monospace;font-size:12px;color:#E6C868;transition:color .2s,text-shadow .2s,transform .25s" style-hover="color:#F3D98A;text-shadow:0 0 10px rgba(212,175,55,0.45)" style-active="transform:scale(0.97) translateY(1px);transition:transform .08s ease">ს/კ: 412799431{{ taxTip }}</button>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div style="display:flex;gap:12px;align-items:baseline;font-size:14px;line-height:1.6;color:#CBD5E1;padding:4px 0">
+              <span style="flex-shrink:0;width:40px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#94A3B8">LOC</span>
+              <span>საქართველო, ქუთაისი, ნიკეას ქ., N 46ა, ბ. 17</span>
+            </div>
+            <a href="tel:+995599528155" style="min-height:clamp(28px,4.6vh,36px);display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:14px;color:#FFFFFF;transition:color .2s" style-hover="color:#93C5FD">
+              <span style="width:40px;font-size:10px;letter-spacing:.14em;color:#94A3B8">TEL</span>+995 599 52 81 55
+            </a>
+            <div style="min-height:clamp(28px,4.6vh,36px);display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:14px">
+              <span style="width:40px;font-size:10px;letter-spacing:.14em;color:#94A3B8">MAIL</span>
+              <button onClick="{{ copyMail }}" aria-label="ელფოსტის კოპირება" title="კოპირება" style="position:relative;padding:0;border:none;background:transparent;cursor:copy;font-family:inherit;font-size:14px;color:#FFFFFF;transition:color .2s" style-hover="color:#93C5FD">info@artron.ge{{ mailTip }}</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section style="position:relative;z-index:1">
+      <div data-rim="h" aria-hidden="true" style="position:relative;height:1px;overflow:hidden;background:linear-gradient(90deg,rgba(168,123,65,0) 0%,rgba(168,123,65,0.45) 20%,rgba(212,175,55,0.5) 50%,rgba(168,123,65,0.45) 80%,rgba(168,123,65,0) 100%)">{{ arcLine }}</div>
+      <div style="position:relative;max-width:1280px;margin:0 auto;padding:clamp(18px,min(3.4vw,4vh),44px) clamp(16px,4vw,56px) clamp(10px,2vh,18px);display:flex;flex-direction:column;align-items:center;gap:clamp(12px,min(2.6vw,2.6vh),32px)">
+        <div data-reveal="slogan" style="position:relative;text-align:center;width:100%">
+          <div aria-hidden="true" style="position:absolute;left:50%;top:50%;width:min(900px,95%);height:60%;transform:translate(-50%,-50%);pointer-events:none;border-radius:999px;background:linear-gradient(90deg,rgba(147,197,253,0.07),rgba(6,78,59,0.16),rgba(147,197,253,0.07));filter:blur(50px)"></div>
+          <div style="position:relative">{{ slogan }}</div>
+        </div>
+        <div data-reveal="rise" data-order="4" data-rim="top" style="position:relative;width:100%;display:flex;justify-content:center;padding-top:clamp(8px,1.6vh,14px);border-top:1px solid rgba(148,163,184,0.1)">
+          <div style="font-size:12.5px;letter-spacing:.02em;color:#64748B;text-align:center">© 2026 ARTRON. ყველა უფლება დაცულია.</div>
+        </div>
+      </div>
+    </section>
+    <canvas ref="{{ fxRef }}" aria-hidden="true" style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:3;pointer-events:none;transform:translate3d(0,0,0);backface-visibility:hidden"></canvas>
+  </footer>
+
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" aria-live="polite" style="position:fixed;left:50%;bottom:24px;z-index:60;width:min(540px,calc(100vw - 32px));display:flex;gap:14px;align-items:flex-start;padding:14px 18px;border-radius:14px;border:1px solid transparent;background:linear-gradient(180deg,#141B2B,#080B14) padding-box,linear-gradient(180deg,rgba(255,255,255,0.4),rgba(148,163,184,0.15) 50%,rgba(168,123,65,0.45)) border-box;box-shadow:0 24px 60px -20px rgba(0,0,0,0.9);animation:toastLife 4s cubic-bezier(.2,.7,.2,1) forwards">
+      <span style="flex-shrink:0;margin-top:6px;width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 10px #10B981"></span>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#6EE7B7">[ RELEASE IN PROGRESS ]</div>
+        <div style="font-size:14px;line-height:1.6;color:#FFFFFF;text-wrap:pretty">iOS &amp; Android აპლიკაცია რელიზის პროცესშია და უახლოეს დღეებში გახდება ხელმისაწვდომი.</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showCookies }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeCookies }}" style="position:fixed;inset:0;z-index:55;background:rgba(4,6,10,0.78);display:flex;align-items:flex-end;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:460px;padding:22px;border-radius:16px;border:1px solid transparent;background:linear-gradient(180deg,#121826,#0A0E18) padding-box,linear-gradient(180deg,rgba(255,255,255,0.35),rgba(148,163,184,0.12) 50%,rgba(168,123,65,0.4)) border-box;box-shadow:0 30px 80px -20px rgba(0,0,0,0.9);display:flex;flex-direction:column;gap:4px;animation:panelIn .25s ease-out">
+        <div style="font-size:16px;font-weight:700;color:#FFFFFF;padding-bottom:8px">ქუქიების მართვა</div>
+        <sc-for list="{{ cookieRows }}" as="c" hint-placeholder-count="3">
+          <button onClick="{{ c.toggle }}" style="min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0;background:transparent;border:none;border-top:1px solid rgba(148,163,184,0.12);cursor:pointer;font-family:inherit;text-align:left">
+            <span style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:14px;color:#FFFFFF">{{ c.label }}</span>
+              <span style="font-size:12px;color:#CBD5E1">{{ c.note }}</span>
+            </span>
+            <span style="{{ c.track }}"><span style="{{ c.knob }}"></span></span>
+          </button>
+        </sc-for>
+        <div style="display:flex;justify-content:flex-end;padding-top:12px">
+          <button onClick="{{ closeCookies }}" style="min-height:44px;padding:0 22px;border-radius:10px;border:none;background:linear-gradient(180deg,#FFFFFF,#CBD5E1);color:#06080F;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">შენახვა</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;particleCount&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:80,&quot;min&quot;:70,&quot;max&quot;:90,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Particles&quot;},&quot;shimmerSeconds&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:7,&quot;min&quot;:4,&quot;max&quot;:12,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Slogan&quot;},&quot;sloganSweep&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Electric&quot;,&quot;options&quot;:[&quot;Electric&quot;,&quot;Gold&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Slogan&quot;},&quot;auroraIntensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.3,&quot;max&quot;:1,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Atmosphere&quot;}}">
+const BP = 900;
+const ECO = [['B2B SaaS პლატფორმა', '/b2b'], ['B2C მობილური აპლიკაცია', '/app']];
+const LEGAL = [
+  ['ჩვენ შესახებ', '/about', ''],
+  ['კონფიდენციალურობის პოლიტიკა', '/privacy', ''],
+  ['წესები და პირობები', '/terms', ''],
+  ['B2B სალიცენზიო შეთანხმება', '/b2b-agreement', 'SLA'],
+  ['ქუქი-ფაილების პოლიტიკა', '/cookie-policy', '']
+];
+const COOKIES = [
+  ['essential', 'აუცილებელი', 'სერვისის ფუნქციონირებისთვის', true],
+  ['analytics', 'ანალიტიკა', 'ანონიმური გამოყენების სტატისტიკა'],
+  ['marketing', 'მარკეტინგი', 'პერსონალიზებული შეთავაზებები']
+];
+const FORGE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .012' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"), repeating-linear-gradient(0deg,rgba(255,255,255,0.35) 0 1px,rgba(255,255,255,0) 1px 3px)";
+const COLORS = [[255, 255, 255], [212, 175, 55], [16, 185, 129], [147, 197, 253]];
+class Component extends DCLogic {
+  state = { mobile: typeof window !== 'undefined' && window.innerWidth < BP, toast: false, cookies: false, prefs: { essential: true, analytics: false, marketing: false } };
+  canvasRef = React.createRef();
+  footerRef = React.createRef();
+  sloganRef = React.createRef();
+  fxRef = React.createRef();
+  pulseRim(el, c1, c2) {
+    if (!el || !el.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const b = getComputedStyle(el).boxShadow, base = b && b !== 'none' ? b + ',' : '';
+    el.animate([
+      { boxShadow: base + '0 0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(0,0,0,0)' },
+      { boxShadow: base + '0 0 0 1px ' + c1 + ',0 0 16px 2px ' + c2, offset: .3 },
+      { boxShadow: base + '0 0 0 0 rgba(0,0,0,0),0 0 0 0 rgba(0,0,0,0)' }
+    ], { duration: 300, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  }
+  rim = e => this.pulseRim(e.currentTarget, 'rgba(232,242,255,0.85)', 'rgba(147,197,253,0.5)');
+  rimPill = e => this.pulseRim(e.currentTarget.parentElement, 'rgba(255,240,190,0.85)', 'rgba(212,175,55,0.5)');
+  shock = () => { this.fireShock && this.fireShock(); };
+  componentDidMount() {
+    this.alive = true;
+    this.startEngine();
+    this.setupReveal();
+  }
+  setupReveal() {
+    const host = this.footerRef.current;
+    if (!host) return;
+    const els = [...host.querySelectorAll('[data-reveal]')];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window) || !Element.prototype.animate) return;
+    const H = { slogan: 'translate3d(0,6px,0) scale(.95)', beam: 'scaleX(0)', glow: 'translate3d(-50%,0,0) scaleX(0)', rise: 'translate3d(0,20px,0)' };
+    const S = { slogan: 'translate3d(0,0,0) scale(1)', beam: 'scaleX(1)', glow: 'translate3d(-50%,0,0) scaleX(1)', rise: 'translate3d(0,0,0)' };
+    els.forEach(el => { const t = el.dataset.reveal; if (!H[t]) return; el._orig = { o: el.style.opacity, t: el.style.transform }; el.style.opacity = '0'; el.style.transform = H[t]; el.style.willChange = 'transform,opacity'; });
+    this.revIO = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+      this.revIO.disconnect();
+      els.forEach(el => {
+        const t = el.dataset.reveal;
+        let kf, o;
+        if (t === 'flare') { kf = [{ opacity: 0, transform: 'scaleX(0)' }, { opacity: 1, transform: 'scaleX(.55)', offset: .45 }, { opacity: 0, transform: 'scaleX(1)' }]; o = { delay: 400, duration: 700, easing: 'cubic-bezier(.6,0,.2,1)' }; }
+        else {
+          kf = [{ opacity: 0, transform: H[t] }, { opacity: 1, transform: S[t] }];
+          o = t === 'slogan' ? { delay: 0, duration: 400, easing: 'cubic-bezier(.2,.8,.2,1)' }
+            : t === 'beam' ? { delay: 400, duration: 300, easing: 'cubic-bezier(.7,0,.2,1)' }
+            : t === 'glow' ? { delay: 420, duration: 520, easing: 'cubic-bezier(.4,0,.2,1)' }
+            : { delay: 700 + (+el.dataset.order || 0) * 60, duration: 360, easing: 'cubic-bezier(.2,.8,.2,1)' };
+        }
+        const a = el.animate(kf, { ...o, fill: 'both' });
+        a.onfinish = () => { if (el._orig) { el.style.opacity = el._orig.o; el.style.transform = el._orig.t; el.style.willChange = ''; } a.cancel(); if (t === 'slogan' && this.remeasure) this.remeasure(); };
+      });
+    }, { threshold: .15 });
+    this.revIO.observe(host);
+  }
+  componentWillUnmount() {
+    this.alive = false;
+    clearTimeout(this.tt); clearTimeout(this.tr); clearTimeout(this.ct);
+    this.stopEngine && this.stopEngine();
+    this.revIO && this.revIO.disconnect();
+  }
+  notify = () => {
+    clearTimeout(this.tt); clearTimeout(this.tr);
+    this.setState({ toast: false });
+    this.tr = setTimeout(() => this.setState({ toast: true }), 30);
+    this.tt = setTimeout(() => this.setState({ toast: false }), 4030);
+  };
+  copy = (key, text) => {
+    const done = () => { clearTimeout(this.ct); this.setState(st => ({ copied: key, copyN: (st.copyN || 0) + 1 })); this.ct = setTimeout(() => this.setState({ copied: null }), 1500); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => { this.fallbackCopy(text); done(); });
+    else { this.fallbackCopy(text); done(); }
+  };
+  fallbackCopy(text) {
+    const t = document.createElement('textarea'); t.value = text; t.style.cssText = 'position:fixed;opacity:0;left:-9999px';
+    document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) {} t.remove();
+  }
+  tip(key) {
+    if (this.state.copied !== key) return null;
+    return React.createElement('span', { key: this.state.copyN, role: 'status', style: { position: 'absolute', left: '50%', bottom: 'calc(100% + 8px)', zIndex: 5, whiteSpace: 'nowrap', pointerEvents: 'none', padding: '4px 9px', borderRadius: 999, fontFamily: "'Noto Sans Georgian',system-ui,sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 0, color: '#6EE7B7', background: 'rgba(6,20,16,0.92)', border: '1px solid rgba(16,185,129,0.5)', boxShadow: '0 0 16px -2px rgba(16,185,129,0.45)', textShadow: '0 0 8px rgba(16,185,129,0.6)', animation: 'copyTip 1.5s cubic-bezier(.2,.7,.2,1) forwards' } }, 'კოპირებულია ✓');
+  }
+  startEngine() {
+    const cv = this.canvasRef.current, host = this.footerRef.current;
+    if (!cv || !host) return;
+    const ctx = cv.getContext('2d');
+    const fx = this.fxRef.current, fctx = fx && fx.getContext('2d');
+    let rims = [], rimA = 0, glyphs = [], sb = null, arc = null, arcT = 0, tA = 0, fxDirty = false, waves = [], flareT = -1e9;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const R = 140, R2 = R * R;
+    let w = 0, h = 0, ox = 0, oy = 0, raf = 0, rt = 0, visible = true, last = performance.now();
+    const mouse = { x: -9999, y: -9999, on: false, dirty: false };
+    let parts = [], sr = { l: 0, w: 1 }, spec = -.5;
+    const want = () => Math.max(70, Math.min(90, Math.round(this.props.particleCount ?? 80)));
+    const spawn = () => {
+      const n = want();
+      parts = Array.from({ length: n }, (_, i) => {
+        const z = .35 + Math.random() * .65, c = COLORS[i % 4], a = .25 + Math.random() * .2;
+        return { x: Math.random() * w, y: Math.random() * h, vx: 0, vy: 0, z, r: .6 + z * 1.4, ph: Math.random() * 6.283, sp: .0002 + Math.random() * .0003,
+          core: `rgba(${c[0]},${c[1]},${c[2]},${a})`, halo: `rgba(${c[0]},${c[1]},${c[2]},${a * .22})` };
+      });
+      this.pCount = n;
+    };
+    // Layout reads + canvas sizing: only here (mount, fonts ready, debounced window resize). Never in rAF.
+    const measure = () => {
+      if (!this.alive) return;
+      const r = host.getBoundingClientRect();
+      ox = r.left + window.scrollX; oy = r.top + window.scrollY;
+      const dpr = Math.min(2, window.devicePixelRatio || 1), nw = r.width, nh = r.height;
+      if (parts.length && w && h && (nw !== w || nh !== h)) parts.forEach(p => { p.x *= nw / w; p.y *= nh / h; });
+      w = nw; h = nh;
+      const bw = Math.round(w * dpr), bh = Math.round(h * dpr);
+      if (bw !== cv.width || bh !== cv.height) { cv.width = bw; cv.height = bh; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (fx) { if (bw !== fx.width || bh !== fx.height) { fx.width = bw; fx.height = bh; } fctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      const sl = this.sloganRef.current; if (sl) { const q = sl.getBoundingClientRect(); sr = { l: q.left - r.left, w: q.width || 1 };
+        sb = { l: q.left - r.left, t: q.top - r.top, r: q.right - r.left, b: q.bottom - r.top, cx: q.left - r.left + q.width / 2, cy: q.top - r.top + q.height / 2 };
+        glyphs = []; const tn = sl.firstChild;
+        if (tn && tn.nodeType === 3) { const rg = document.createRange(), tx = tn.textContent;
+          for (let i = 0; i < tx.length; i++) { if (/\s/.test(tx[i])) continue; rg.setStart(tn, i); rg.setEnd(tn, i + 1); const g = rg.getClientRects()[0]; if (!g || !g.width) continue;
+            glyphs.push({ l: g.left - r.left, t: g.top - r.top + g.height * .18, r: g.right - r.left, b: g.bottom - r.top - g.height * .14, cx: g.left - r.left + g.width / 2, cy: g.top - r.top + g.height * .52 }); } } }
+      rims = [...host.querySelectorAll('[data-rim]')].map(el => { const q = el.getBoundingClientRect(), k = el.dataset.rim;
+        return { k, l: q.left - r.left, t: q.top - r.top, r: q.right - r.left, b: q.bottom - r.top, rad: k === 'rect' ? parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0 : 0 }; }).filter(o => o.r > o.l || o.b > o.t);
+      if (!parts.length) spawn();
+      draw(0, performance.now());
+    };
+    const applyPointer = () => { mouse.dirty = false; };
+    const draw = (dt, now) => {
+      if (want() !== this.pCount) spawn();
+      if (mouse.dirty) applyPointer();
+      ctx.clearRect(0, 0, w, h);
+      const k = dt / 16.67;
+      for (const p of parts) {
+        if (dt) {
+          p.vx += Math.cos(now * p.sp + p.ph) * .018 * p.z * k;
+          p.vy += (Math.sin(now * p.sp * 1.3 + p.ph) * .014 * p.z - .004 * p.z) * k;
+          if (mouse.on) {
+            const dx = mouse.x - p.x, dy = mouse.y - p.y, d2 = dx * dx + dy * dy;
+            if (d2 < R2 && d2 > 1) { const f = (1 - Math.sqrt(d2) / R) * .0028 * (.5 + p.z); p.vx += dx * f * k; p.vy += dy * f * k; }
+          }
+          for (const wv of waves) {
+            const dx = p.x - wv.x, dy = p.y - wv.y, d = Math.sqrt(dx * dx + dy * dy) || 1, band = 90, off = Math.abs(d - wv.r);
+            if (off < band) { const f = (1 - off / band) * wv.s * (.6 + p.z * .6) * k; p.vx += dx / d * f; p.vy += dy / d * f;
+              if (p.hk === undefined || p.hk <= 0) { p.hx = p.x; p.hy = p.y; } p.hk = 1; }
+          }
+          if (p.hk > 0) { const s = .0032 * p.hk * k; p.vx += (p.hx - p.x) * s; p.vy += (p.hy - p.y) * s; p.hk -= dt / 4200; }
+          const damp = Math.pow(.94, k);
+          p.vx *= damp; p.vy *= damp;
+          p.x += p.vx * k; p.y += p.vy * k;
+          if (p.hk > 0) { /* spring-held: no wrap */ } else if (p.x < -10) p.x = w + 10; else if (p.x > w + 10) p.x = -10;
+          if (p.y < -10) p.y = h + 10; else if (p.y > h + 10) p.y = -10;
+        }
+        ctx.fillStyle = p.halo; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.2, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = p.core; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+      }
+      if (dt && waves.length) { for (const wv of waves) { wv.r += dt * .95; wv.s *= Math.pow(.985, k); } waves = waves.filter(wv => wv.r < wv.max); }
+      if (fctx && dt) drawFx(dt, now);
+      const sl = this.sloganRef.current;
+      const fl = (now - flareT) / 900;
+      if (sl && dt && fl >= 0 && fl < 1) { const e = 1 - Math.pow(1 - fl, 3); spec = -.4 + 1.8 * e; sl.style.backgroundPosition = ((1.25 - spec) / 1.5 * 100).toFixed(2) + '% 0,0 0'; }
+      else if (sl && dt) {
+        const tgt = mouse.on ? Math.max(-.4, Math.min(1.4, (mouse.x - sr.l) / sr.w)) : .5 + .9 * Math.sin(now / 5200);
+        spec += (tgt - spec) * (1 - Math.pow(.92, k));
+        sl.style.backgroundPosition = ((1.25 - spec) / 1.5 * 100).toFixed(2) + '% 0,0 0';
+      }
+    };
+    const jag = (x1, y1, x2, y2, disp, depth, out) => {
+      if (depth <= 0 || disp < .6) { out.push(x2, y2); return; }
+      const mx = (x1 + x2) / 2 + (Math.random() - .5) * disp, my = (y1 + y2) / 2 + (Math.random() - .5) * disp;
+      jag(x1, y1, mx, my, disp / 2, depth - 1, out); jag(mx, my, x2, y2, disp / 2, depth - 1, out);
+    };
+    const bolt = (x1, y1, x2, y2) => {
+      const L = Math.hypot(x2 - x1, y2 - y1), main = [x1, y1]; jag(x1, y1, x2, y2, L * .22, 6, main);
+      const br = [], n = L > 50 ? 2 : 1;
+      for (let b = 0; b < n; b++) { const i = 2 * (4 + Math.floor(Math.random() * (main.length / 2 - 8))); if (i < 2 || i >= main.length - 2) continue;
+        const bx = main[i], by = main[i + 1], a = Math.atan2(y2 - y1, x2 - x1) + (Math.random() < .5 ? -1 : 1) * (.45 + Math.random() * .5), bl = L * (.16 + Math.random() * .16);
+        const seg = [bx, by]; jag(bx, by, bx + Math.cos(a) * bl, by + Math.sin(a) * bl, bl * .3, 4, seg); br.push(seg); }
+      return { main, br };
+    };
+    const path = (c, pts) => { c.beginPath(); c.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) c.lineTo(pts[i], pts[i + 1]); };
+    const cl = (v, a, b) => v < a ? a : v > b ? b : v, RIM = 240;
+    const glint = (px, py, d, len) => { const I = 1 - d / RIM, a = I * I * rimA; if (a < .01) return null;
+      const g = fctx.createRadialGradient(px, py, 0, px, py, len);
+      g.addColorStop(0, 'rgba(240,236,226,' + (.55 * a).toFixed(3) + ')'); g.addColorStop(.3, 'rgba(212,175,55,' + (.4 * a).toFixed(3) + ')'); g.addColorStop(1, 'rgba(212,175,55,0)'); return g; };
+    const drawRim = () => {
+      const mx = mouse.x, my = mouse.y;
+      fctx.save(); fctx.globalCompositeOperation = 'lighter';
+      { const a = w / 2, x = cl(mx, 0, w), u = (x - a) / a, y = 24 - 24 * Math.sqrt(Math.max(0, 1 - u * u)), d = Math.hypot(mx - x, my - y);
+        const g = d < RIM && glint(x, y, d, 110); if (g) { fctx.strokeStyle = g; fctx.lineWidth = 1.5; fctx.beginPath(); fctx.ellipse(a, 24, a - .75, 23.25, 0, Math.PI, 2 * Math.PI); fctx.stroke(); } }
+      fctx.lineWidth = 1;
+      for (const o of rims) {
+        let px, py, rr = 0;
+        if (o.k === 'v') { px = o.l + .5; py = cl(my, o.t, o.b); }
+        else if (o.k !== 'rect') { py = o.t + .5; px = cl(mx, o.l, o.r); }
+        else {
+          rr = Math.min(o.rad, (o.r - o.l) / 2, (o.b - o.t) / 2);
+          if (mx >= o.l && mx <= o.r && my >= o.t && my <= o.b) {
+            const e = [mx - o.l, o.r - mx, my - o.t, o.b - my], m = Math.min(...e), k = e.indexOf(m);
+            px = k === 0 ? o.l : k === 1 ? o.r : mx; py = k === 2 ? o.t : k === 3 ? o.b : my;
+          } else {
+            const cx = cl(mx, o.l + rr, o.r - rr), cy = cl(my, o.t + rr, o.b - rr), dx = mx - cx, dy = my - cy, L = Math.hypot(dx, dy) || 1;
+            px = cx + dx / L * rr; py = cy + dy / L * rr;
+            if (rr === 0) { px = cl(mx, o.l, o.r); py = cl(my, o.t, o.b); }
+          }
+        }
+        const d = Math.hypot(mx - px, my - py); if (d >= RIM) continue;
+        const g = glint(px, py, d, o.k === 'rect' ? 40 : 85); if (!g) continue;
+        fctx.strokeStyle = g; fctx.beginPath();
+        if (o.k === 'v') { fctx.moveTo(o.l + .5, o.t); fctx.lineTo(o.l + .5, o.b); }
+        else if (o.k !== 'rect') { fctx.moveTo(o.l, o.t + .5); fctx.lineTo(o.r, o.t + .5); }
+        else if (fctx.roundRect) fctx.roundRect(o.l + .5, o.t + .5, o.r - o.l - 1, o.b - o.t - 1, Math.max(0, rr - .5));
+        else fctx.rect(o.l + .5, o.t + .5, o.r - o.l - 1, o.b - o.t - 1);
+        fctx.stroke();
+      }
+      fctx.restore();
+    };
+    const drawFx = (dt, now) => {
+      let tgt = null, zone = false;
+      if (mouse.on && sb && glyphs.length && mouse.x > sb.l - 120 && mouse.x < sb.r + 120 && mouse.y > sb.t - 120 && mouse.y < sb.b + 120) {
+        let best = 1e9, g0 = null, px = 0, py = 0;
+        for (const g of glyphs) { const cx = Math.max(g.l, Math.min(g.r, mouse.x)), cy = Math.max(g.t, Math.min(g.b, mouse.y)), d = (cx - mouse.x) ** 2 + (cy - mouse.y) ** 2; if (d < best) { best = d; g0 = g; px = cx; py = cy; } }
+        const d = Math.sqrt(best);
+        zone = d < 120;
+        if (d < 120 && d > 4) tgt = { x: px + (g0.cx - px) * .4, y: py + (g0.cy - py) * .4, d };
+      }
+      rimA += ((mouse.on ? 1 : 0) - rimA) * (1 - Math.pow(.86, dt / 16.67));
+      tA += ((tgt ? 1 : 0) - tA) * (1 - Math.pow(tgt ? .8 : .86, dt / 16.67));
+      if (tgt) this._tgt = tgt;
+      const T = tgt || this._tgt;
+      const arcOn = tA >= .01 && !!T, rimOn = rimA > .01 && rims.length;
+      if (!arcOn && !rimOn) { if (fxDirty) { fctx.clearRect(0, 0, w, h); fxDirty = false; } return; }
+      fctx.clearRect(0, 0, w, h); fxDirty = true;
+      if (rimOn) drawRim();
+      if (!arcOn) return;
+      if (now - arcT > 55 || !arc) { arc = bolt(mouse.x, mouse.y, T.x, T.y); arcT = now; }
+      const near = 1 - Math.min(1, T.d / 120), A = tA * (.55 + near * .45);
+      fctx.save(); fctx.lineCap = 'round'; fctx.lineJoin = 'round'; fctx.globalCompositeOperation = 'lighter';
+      fctx.strokeStyle = 'rgba(162,201,242,' + (.12 * A).toFixed(3) + ')'; fctx.lineWidth = 3.2; path(fctx, arc.main); fctx.stroke();
+      fctx.strokeStyle = 'rgba(162,201,242,' + (.6 * A).toFixed(3) + ')'; fctx.lineWidth = .8; path(fctx, arc.main); fctx.stroke();
+      fctx.strokeStyle = 'rgba(232,242,255,' + (.35 * A).toFixed(3) + ')'; fctx.lineWidth = .35; path(fctx, arc.main); fctx.stroke();
+      fctx.strokeStyle = 'rgba(162,201,242,' + (.32 * A).toFixed(3) + ')'; fctx.lineWidth = .5; for (const b of arc.br) { path(fctx, b); fctx.stroke(); }
+      const fl = .75 + Math.random() * .5, gr = fctx.createRadialGradient(T.x, T.y, 0, T.x, T.y, 11 * fl);
+      gr.addColorStop(0, 'rgba(255,248,220,' + (.9 * A).toFixed(3) + ')'); gr.addColorStop(.25, 'rgba(243,217,138,' + (.55 * A).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(212,175,55,0)');
+      fctx.fillStyle = gr; fctx.beginPath(); fctx.arc(T.x, T.y, 11 * fl, 0, 6.2832); fctx.fill();
+      fctx.fillStyle = 'rgba(243,217,138,' + (.8 * A).toFixed(3) + ')';
+      for (let i = 0; i < 3; i++) { const a = Math.random() * 6.2832, rr = 3 + Math.random() * 7; fctx.fillRect(T.x + Math.cos(a) * rr, T.y + Math.sin(a) * rr, .9, .9); }
+      fctx.fillStyle = 'rgba(232,242,255,' + (.7 * A).toFixed(3) + ')'; fctx.beginPath(); fctx.arc(mouse.x, mouse.y, 1.1, 0, 6.2832); fctx.fill();
+      fctx.restore();
+    };
+    this.fireShock = () => {
+      if (reduce || !sb) return;
+      const md = Math.max(Math.hypot(sb.cx, sb.cy), Math.hypot(w - sb.cx, sb.cy), Math.hypot(sb.cx, h - sb.cy), Math.hypot(w - sb.cx, h - sb.cy));
+      waves.push({ x: sb.cx, y: sb.cy, r: 0, s: .55, max: md + 100 });
+      if (waves.length > 3) waves.shift();
+      flareT = performance.now();
+      const sl = this.sloganRef.current;
+      if (sl && sl.animate) {
+        const base = 'drop-shadow(0 1px 0 rgba(255,255,255,0.08)) drop-shadow(0 22px 34px rgba(0,0,0,0.65))';
+        sl.animate([
+          { filter: base + ' drop-shadow(0 0 0 rgba(243,217,138,0)) brightness(1)' },
+          { filter: base + ' drop-shadow(0 0 10px rgba(243,217,138,0.55)) brightness(1.45)', offset: .18 },
+          { filter: base + ' drop-shadow(0 0 3px rgba(162,201,242,0.35)) brightness(1.12)', offset: .5 },
+          { filter: base + ' drop-shadow(0 0 0 rgba(243,217,138,0)) brightness(1)' }
+        ], { duration: 1100, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      }
+      kick();
+    };
+    this.remeasure = measure;
+    setTimeout(measure, 1400);
+    const loop = now => { const dt = Math.min(50, now - last); last = now; draw(dt, now); raf = visible && !document.hidden ? requestAnimationFrame(loop) : 0; };
+    const kick = () => { if (!raf && !reduce && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(loop); } };
+    const flush = () => { if (reduce) applyPointer(); else kick(); };
+    const onResize = () => {
+      clearTimeout(rt);
+      rt = setTimeout(() => {
+        const m = window.innerWidth < BP;
+        if (m !== this.state.mobile) this.setState({ mobile: m }, () => requestAnimationFrame(measure)); else measure();
+      }, 150);
+    };
+    const onMove = e => {
+      const x = e.pageX - ox, y = e.pageY - oy, on = x >= 0 && y >= 0 && x <= w && y <= h;
+      if (!on && !mouse.on) return;
+      mouse.x = x; mouse.y = y; mouse.on = on; mouse.dirty = true; flush();
+    };
+    const onOut = e => { if (!e.relatedTarget && mouse.on) { mouse.on = false; mouse.dirty = true; flush(); } };
+    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('mouseout', onOut, { passive: true });
+    document.addEventListener('visibilitychange', kick);
+    const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }); io.observe(host);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    measure(); kick();
+    this.stopEngine = () => {
+      cancelAnimationFrame(raf); clearTimeout(rt); io.disconnect();
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseout', onOut);
+      document.removeEventListener('visibilitychange', kick);
+    };
+  }
+  renderVals() {
+    const { mobile, prefs } = this.state;
+    const sec = Math.min(12, Math.max(4, this.props.shimmerSeconds ?? 7));
+    const sweep = this.props.sloganSweep ?? 'Electric';
+    const band = sweep === 'Gold'
+      ? 'linear-gradient(105deg,rgba(243,217,138,0) 43%,rgba(243,217,138,0.55) 48%,#FFFBEB 50%,rgba(243,217,138,0.55) 52%,rgba(243,217,138,0) 57%)'
+      : 'linear-gradient(105deg,rgba(147,197,253,0) 43%,rgba(191,219,254,0.6) 48%,#FFFFFF 50%,rgba(191,219,254,0.6) 52%,rgba(147,197,253,0) 57%)';
+    const chrome = 'linear-gradient(180deg,#F8FAFC 0%,#E2E8F0 22%,#CBD5E1 44%,#94A3B8 70%,#64748B 100%)';
+    const aur = Math.max(.3, Math.min(1, this.props.auroraIntensity ?? 1));
+    const ease = 'cubic-bezier(.55,0,.25,1)';
+    return {
+      canvasRef: this.canvasRef, footerRef: this.footerRef, fxRef: this.fxRef,
+      isDesktop: !mobile, isMobile: mobile,
+      gridCols: mobile ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr)',
+      eco: ECO.map(([label, href]) => ({ label, href })),
+      legal: LEGAL.map(([label, href, tag]) => ({ label, href, tag })),
+      notify: this.notify, rim: this.rim, rimPill: this.rimPill,
+      copyTax: () => this.copy('tax', '412799431'),
+      copyMail: () => this.copy('mail', 'info@artron.ge'),
+      taxTip: this.tip('tax'), mailTip: this.tip('mail'),
+      showToast: this.state.toast,
+      showCookies: this.state.cookies,
+      openCookies: () => this.setState({ cookies: true }),
+      closeCookies: () => this.setState({ cookies: false }),
+      stop: e => e.stopPropagation(),
+      cookieRows: COOKIES.map(([k, label, note, locked]) => {
+        const on = prefs[k];
+        return {
+          label, note,
+          toggle: () => !locked && this.setState(s => ({ prefs: { ...s.prefs, [k]: !s.prefs[k] } })),
+          track: { flexShrink: 0, width: 38, height: 22, borderRadius: 11, position: 'relative', transition: 'background .2s', background: on ? (locked ? 'rgba(16,185,129,0.35)' : '#10B981') : 'rgba(148,163,184,0.22)', opacity: locked ? .7 : 1 },
+          knob: { position: 'absolute', top: 3, left: on ? 19 : 3, width: 16, height: 16, borderRadius: '50%', background: '#FFFFFF', transition: 'left .2s' }
+        };
+      }),
+      pulse: React.createElement('span', { style: { position: 'relative', width: 8, height: 8, flexShrink: 0 } },
+        React.createElement('span', { style: { position: 'absolute', inset: 0, borderRadius: '50%', background: '#10B981', animation: 'pulseRing 2.4s cubic-bezier(0,0,.2,1) infinite', willChange: 'transform,opacity' } }),
+        React.createElement('span', { style: { position: 'absolute', inset: 0, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' } })),
+      arcLine: React.createElement('span', { 'aria-hidden': true, style: { position: 'absolute', top: 0, left: 0, width: 'min(36vw,460px)', height: 1, background: 'linear-gradient(90deg,transparent,rgba(147,197,253,0.6) 60%,#FFFFFF 95%,transparent)', animation: `arcLine ${sec}s ${ease} infinite`, willChange: 'transform' } }),
+      aurora: React.createElement('div', { 'aria-hidden': true, style: { position: 'absolute', left: 0, right: 0, top: 0, height: 'clamp(240px,46vh,420px)', zIndex: 0, pointerEvents: 'none', opacity: aur, willChange: 'transform', transform: 'translateZ(0)' } },
+        React.createElement('div', { style: { position: 'absolute', left: '50%', top: -60, width: '130%', height: '100%', transformOrigin: '50% 0', filter: 'blur(14px)', animation: 'auroraBreathe 10s ease-in-out infinite', willChange: 'transform,opacity', background: 'radial-gradient(18% 30% at 50% 12%,rgba(255,255,255,0.34) 0%,rgba(255,255,255,0) 100%),radial-gradient(36% 52% at 44% 8%,rgba(147,197,253,0.22) 0%,rgba(147,197,253,0) 100%),radial-gradient(40% 60% at 60% 10%,rgba(6,78,59,0.42) 0%,rgba(6,78,59,0) 100%),radial-gradient(60% 80% at 50% 0%,rgba(147,197,253,0.08) 0%,rgba(6,78,59,0.14) 45%,rgba(5,7,11,0) 80%)' } })),
+      forge: React.createElement(React.Fragment, null,
+        React.createElement('div', { 'aria-hidden': true, style: { position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: .05, mixBlendMode: 'overlay', backgroundImage: FORGE } })),
+      slogan: React.createElement('h3', { ref: this.sloganRef, onClick: this.shock, style: { margin: 0, display: 'inline-block', padding: '0 .04em .1em', fontSize: 'clamp(40px,min(7.2vw,13vh),112px)', lineHeight: 1.02, fontWeight: 800, letterSpacing: '-0.03em', WebkitTextStroke: '1px rgba(226,232,240,0.22)', filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.08)) drop-shadow(0 22px 34px rgba(0,0,0,0.65))', textWrap: 'balance', WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility', backgroundImage: `${band},${chrome}`, backgroundRepeat: 'no-repeat', backgroundPosition: '130% 0,0 0', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', backgroundSize: '250% 100%,100% 100%', willChange: 'transform', transform: 'translateZ(0)' } }, '„მოძრაობა იბადება კავშირში.“')
+    };
+  }
+}
+</script>
+</body>
+</html>

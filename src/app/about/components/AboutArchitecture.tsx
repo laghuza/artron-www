@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { VISION_NODES, MATRIX_RING_ORDER } from '../data/aboutVisionData';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+import { getAboutVisionData, MATRIX_RING_ORDER } from '../data/aboutVisionData';
 
 interface AboutArchitectureProps {
   onActiveNodeChange?: (index: number) => void;
 }
 
 export const AboutArchitecture: React.FC<AboutArchitectureProps> = ({ onActiveNodeChange }) => {
+  const { locale } = useLanguage();
+  const { architecture, nodes } = useMemo(() => getAboutVisionData(locale), [locale]);
+
   const sectionRef = useRef<HTMLElement>(null);
   const [activeNode, setActiveNode] = useState(0);
   const nodeRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -46,7 +50,14 @@ export const AboutArchitecture: React.FC<AboutArchitectureProps> = ({ onActiveNo
     return () => window.removeEventListener('scroll', handleScroll);
   }, [onActiveNodeChange]);
 
-  const activeData = activeNode >= 0 ? VISION_NODES[activeNode] : VISION_NODES[0];
+  const scrollToNode = (idx: number) => {
+    const el = nodeRefs.current[idx];
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const activeData = activeNode >= 0 ? nodes[activeNode] : nodes[0];
 
   return (
     <section id="s2" ref={sectionRef} data-screen-label="02 Architecture" className="relative z-10 pt-24 sm:pt-36">
@@ -59,20 +70,20 @@ export const AboutArchitecture: React.FC<AboutArchitectureProps> = ({ onActiveNo
 
         {/* Chapter Header */}
         <div className="col-span-full flex items-baseline gap-4 sm:gap-6 flex-wrap vision-rv in">
-          <span className="vision-mono text-amber-500 font-semibold text-sm">II.</span>
+          <span className="vision-mono text-amber-500 font-semibold text-sm">{architecture.chapterNum}</span>
           <h2 className="text-[clamp(26px,3.6vw,52px)] font-light text-white tracking-tight leading-tight">
-            არქიტექტურა: <em className="not-italic text-slate-400">9 კვანძი, ერთი სრული წესრიგი</em>
+            {architecture.title}<em className="not-italic text-slate-400">{architecture.titleEm}</em>
           </h2>
         </div>
 
         <p className="col-span-12 lg:col-span-7 text-[clamp(16px,1.35vw,20px)] leading-relaxed text-slate-300 vision-rv in">
-          სპორტის მართვა კომპლექსური პროცესია, სადაც შეცდომის ადგილი არ არის. ARTRON არის 9 ურთიერთდაკავშირებული კვანძის ეკოსისტემა, რომელსაც ერთი ცენტრალური ციფრული ბირთვი ამუშავებს.
+          {architecture.description}
         </p>
 
-        {/* Nodes List on Left & HUD on Right */}
-        <div className="col-span-12 grid grid-cols-12 gap-x-6 sm:gap-x-10 relative">
+        {/* Nodes List on Left & Sticky HUD on Right */}
+        <div className="col-span-12 grid grid-cols-12 gap-x-6 sm:gap-x-10 relative pb-32 sm:pb-48">
           <ol className="col-span-12 lg:col-span-7 space-y-16 sm:space-y-28 my-10">
-            {VISION_NODES.map((node, i) => {
+            {nodes.map((node, i) => {
               const isSelected = activeNode === i;
               const isCore = i === 8;
 
@@ -81,35 +92,35 @@ export const AboutArchitecture: React.FC<AboutArchitectureProps> = ({ onActiveNo
                   key={node.id}
                   ref={(el) => { nodeRefs.current[i] = el; }}
                   data-i={i}
-                  className={`min-h-[50vh] sm:min-h-[65vh] flex flex-col justify-center gap-5 py-8 transition-opacity duration-700 ${
-                    isSelected ? 'opacity-100' : 'opacity-35 hover:opacity-75'
+                  className={`min-h-[78vh] flex flex-col justify-center gap-[22px] py-10 transition-opacity duration-700 ${
+                    isSelected ? 'opacity-100' : 'opacity-28 hover:opacity-60'
                   }`}
                 >
                   <span
-                    className={`vision-mono font-medium transition-colors duration-500 ${
-                      isSelected ? 'text-amber-400' : 'text-slate-400'
+                    className={`vision-mono text-[13px] tracking-[0.18em] font-medium transition-colors duration-500 ${
+                      isSelected ? 'text-[#D4AF37]' : 'text-[#94A3B8]'
                     }`}
                   >
                     [ {node.id} // {node.code} ]
                   </span>
 
                   <h4
-                    className={`text-[clamp(32px,4.5vw,72px)] font-extralight tracking-tight leading-none ${
-                      isCore ? 'vision-metal font-mono text-[clamp(28px,3.8vw,56px)]' : 'text-white'
+                    className={`text-[clamp(40px,5vw,84px)] font-[200] tracking-[-0.01em] leading-none ${
+                      isCore ? 'vision-metal font-mono font-[300] tracking-[0.04em] text-[clamp(34px,4vw,64px)]' : 'text-white'
                     }`}
                   >
                     {node.title}
                   </h4>
 
                   {/* Kinetic Progress Bar */}
-                  <div className="h-px w-full bg-slate-700/40 relative overflow-hidden">
+                  <div className="h-px w-full bg-slate-400/[0.14] relative overflow-hidden">
                     <div
-                      className="absolute inset-0 bg-gradient-to-r from-amber-500 via-amber-300 to-transparent transition-transform duration-1000 origin-left"
+                      className="absolute inset-0 bg-gradient-to-r from-[#CD7F32] via-[#D4AF37] to-transparent transition-transform duration-[1400ms] ease-[cubic-bezier(0.2,0.7,0.1,1)] origin-left"
                       style={{ transform: isSelected ? 'scaleX(1)' : 'scaleX(0)' }}
                     />
                   </div>
 
-                  <p className="text-[clamp(16px,1.3vw,19px)] leading-relaxed text-slate-300 max-w-2xl font-light">
+                  <p className="text-[clamp(17px,1.3vw,20px)] leading-[1.75] text-[#94A3B8] max-w-[34em] font-[300]">
                     {node.description}
                   </p>
                 </li>
@@ -117,49 +128,55 @@ export const AboutArchitecture: React.FC<AboutArchitectureProps> = ({ onActiveNo
             })}
           </ol>
 
-          {/* Sticky Tactical HUD (Desktop) */}
-          <aside className="hidden lg:flex col-span-5 sticky top-20 h-[80vh] flex-col justify-between py-12 px-8 pointer-events-none rounded-3xl border border-white/[0.08] bg-[#090A0F]/60 backdrop-blur-xl shadow-2xl relative my-auto">
-            {/* Corner Markers */}
-            <i className="absolute top-3 left-3 w-5 h-5 border-t border-l border-amber-500/70" />
-            <i className="absolute top-3 right-3 w-5 h-5 border-t border-r border-amber-500/70" />
-            <i className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-amber-500/70" />
-            <i className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-amber-500/70" />
+          {/* Pure HUD Overlay (Desktop) - Sticky alongside all 9 nodes */}
+          <aside className="hidden lg:flex col-span-5 self-start sticky top-0 h-screen flex-col justify-between pt-24 pb-14 pointer-events-none relative z-10">
+            {/* Reticle Target Frame around Kinetic Core */}
+            <div className="absolute inset-[18%_4%_30%_4%] pointer-events-none">
+              <i className="absolute top-0 left-0 w-[22px] h-[22px] border-t border-l border-[#CD7F32]/70" />
+              <i className="absolute top-0 right-0 w-[22px] h-[22px] border-t border-r border-[#CD7F32]/70" />
+              <i className="absolute bottom-0 left-0 w-[22px] h-[22px] border-b border-l border-[#CD7F32]/70" />
+              <i className="absolute bottom-0 right-0 w-[22px] h-[22px] border-b border-r border-[#CD7F32]/70" />
+            </div>
 
-            <div className="flex justify-between items-center text-xs vision-mono">
-              <span className="text-cyan-400 font-semibold">[ KINETIC CORE ]</span>
-              <span className="text-slate-400">
-                LINKED <b className="text-amber-400">{String(activeNode < 0 ? 0 : activeNode + 1).padStart(2, '0')}</b> / 09
+            {/* Top Row: Core Tag & Linked Node Counter */}
+            <div className="flex justify-between items-center text-[11px] vision-mono tracking-[0.14em]">
+              <span className="text-[#94A3B8] font-normal">{architecture.kineticCore}</span>
+              <span className="text-[#94A3B8]">
+                {architecture.linked} <b className="text-[#D4AF37] font-normal">{String(activeNode < 0 ? 0 : activeNode + 1).padStart(2, '0')}</b> / 09
               </span>
             </div>
 
-            <div className="flex justify-between items-end gap-6 pt-12 border-t border-white/[0.08]">
-              <div className="flex flex-col gap-2">
-                <span className="vision-mono text-slate-400 text-[10px]">ACTIVE NODE</span>
-                <span className="vision-mono text-white text-base tracking-wider font-semibold">
+            {/* Bottom Row: Active Node Stamp & 3x3 Ring Matrix */}
+            <div className="flex justify-between items-end gap-6">
+              <div className="flex flex-col gap-2.5">
+                <span className="vision-mono text-[#94A3B8] text-[11px] tracking-[0.14em]">{architecture.activeNode}</span>
+                <span className="vision-mono text-[clamp(14px,1.3vw,18px)] tracking-[0.14em] text-[#F8FAFC]">
                   [ {activeData.id} // {activeData.code} ]
                 </span>
-                <span className="text-sm text-cyan-300 font-light">{activeData.title}</span>
               </div>
 
-              {/* 3x3 Matrix Grid */}
-              <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-black/40 border border-white/10">
+              {/* 3x3 Matrix Grid (Clickable Node Selectors) */}
+              <div className="grid grid-cols-3 gap-1 pointer-events-auto">
                 {MATRIX_RING_ORDER.map((idx) => {
                   const isNodeActive = activeNode === idx;
                   const isCore = idx === 8;
 
                   return (
-                    <span
+                    <button
                       key={idx}
-                      className={`w-8 h-8 rounded-md flex items-center justify-center vision-mono text-[10px] transition-all duration-500 border ${
+                      type="button"
+                      onClick={() => scrollToNode(idx)}
+                      title={`${architecture.jumpTo}: ${nodes[idx].id} - ${nodes[idx].title}`}
+                      className={`w-[30px] h-[30px] flex items-center justify-center font-mono text-[9px] transition-all duration-300 border cursor-pointer ${
                         isNodeActive
-                          ? 'border-amber-400 text-amber-300 bg-amber-400/15 shadow-[0_0_12px_rgba(212,175,55,0.4)]'
+                          ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/[0.12] shadow-[0_0_10px_rgba(212,175,55,0.2)]'
                           : isCore
-                          ? 'border-amber-700/60 text-amber-500/80 bg-amber-950/20'
-                          : 'border-slate-800 text-slate-400 bg-slate-900/40'
+                          ? 'border-[#CD7F32]/55 text-[#94A3B8] hover:border-[#CD7F32] hover:text-[#D4AF37]'
+                          : 'border-slate-400/20 text-[#64748B] hover:border-slate-400/50 hover:text-slate-200'
                       }`}
                     >
-                      {VISION_NODES[idx].id}
-                    </span>
+                      {nodes[idx].id}
+                    </button>
                   );
                 })}
               </div>

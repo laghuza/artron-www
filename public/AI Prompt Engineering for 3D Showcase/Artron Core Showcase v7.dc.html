@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Georgian:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;min-height:100%;}
+body{background-color:#05070B;background-image:radial-gradient(ellipse 62% 58% at 8% -6%,rgba(56,189,248,0.15) 0%,rgba(224,242,254,0.08) 28%,rgba(224,242,254,0) 68%),radial-gradient(ellipse 75% 38% at 50% 100%,rgba(217,119,6,0.08) 0%,rgba(217,119,6,0) 72%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse 90% 70% at 50% 35%,#0B1017 0%,#05070B 75%);background-attachment:fixed;}
+*{box-sizing:border-box;}a{color:#94A3B8;}a:hover{color:#E0F2FE;}button{font:inherit;}
+@keyframes shock{0%{transform:translate(-50%,-50%) scale(0.05);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@keyframes sweep{0%{transform:translateX(-120%)}100%{transform:translateX(260%)}}
+@keyframes laser{0%{top:-40px}100%{top:100%}}
+@keyframes pkt{0%{left:calc(100% - 8px)}100%{left:-60px}}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(0.84);filter:brightness(0.9)}50%{transform:translate(-50%,-50%) scale(1);filter:brightness(1.15)}}
+@keyframes halo{0%,100%{transform:translate(-50%,-50%) scale(0.7);opacity:0.35}50%{transform:translate(-50%,-50%) scale(1.15);opacity:0.75}}
+@keyframes orbit{from{transform:rotateX(-16deg) rotateY(0deg)}to{transform:rotateX(-16deg) rotateY(360deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fiber{0%{left:-22%}100%{left:112%}}
+@keyframes rowin{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:none}}
+@keyframes haptic{0%{transform:translate(-50%,-50%) scale(0.18);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@keyframes ignite{0%{transform:translateX(-160%) skewX(-24deg)}34%{transform:translateX(360%) skewX(-24deg)}100%{transform:translateX(360%) skewX(-24deg)}}
+@keyframes fiberR{0%{left:112%}100%{left:-22%}}
+</style>
+</helmet>
+<div style="min-height:100vh;color:#E0F2FE;font-family:'JetBrains Mono','Noto Sans Georgian',ui-monospace,monospace;padding:40px 32px 56px;display:flex;flex-direction:column;gap:48px;overflow-x:hidden;">
+
+
+
+  <div onMouseMove="{{ onMove }}" onMouseLeave="{{ onLeave }}" style="perspective:1700px;perspective-origin:50% 40%;padding:64px 0 120px;position:relative;">
+    <div style="position:absolute;left:-10%;right:-10%;bottom:40px;height:360px;background:radial-gradient(ellipse 50% 46% at 50% 78%,rgba(217,119,6,0.08) 0%,rgba(217,119,6,0.03) 45%,rgba(217,119,6,0) 75%);filter:blur(20px);pointer-events:none;"></div>
+    <div style="position:absolute;left:1%;right:1%;bottom:50px;height:380px;transform-origin:50% 100%;transform:rotateX(74deg);border-radius:12px 12px 0 0;background:radial-gradient(ellipse 55% 65% at 50% 70%,rgba(217,119,6,0.08) 0%,rgba(217,119,6,0) 72%),radial-gradient(ellipse 45% 60% at 10% 0%,rgba(224,242,254,0.05) 0%,rgba(224,242,254,0) 70%),linear-gradient(180deg,#090D12 0%,#0C1118 55%,#0F141B 100%);box-shadow:inset 0 1px 0 rgba(224,242,254,0.12),inset 1px 0 0 rgba(224,242,254,0.05),inset -1px 0 0 rgba(224,242,254,0.04);overflow:hidden;pointer-events:none;font-family:'JetBrains Mono',monospace;color:rgba(224,242,254,0.2);">
+      <div style="position:absolute;left:26%;right:26%;top:0;height:78%;background:radial-gradient(ellipse 50% 60% at 50% 28%,rgba(234,179,8,0.22) 0%,rgba(217,119,6,0.07) 45%,rgba(217,119,6,0) 75%);opacity:{{ dawnOpacity }};transition:opacity 0.8s;"></div><div style="position:absolute;left:16%;right:16%;top:6%;height:84%;background:radial-gradient(ellipse 50% 55% at 50% 40%,rgba(56,189,248,0.2) 0%,rgba(56,189,248,0.06) 45%,rgba(56,189,248,0) 75%);opacity:{{ glacierOp }};transition:opacity 0.9s;"></div><span style="position:absolute;left:3%;top:6%;font-size:22px;">+</span><span style="position:absolute;right:3%;top:6%;font-size:22px;">+</span><span style="position:absolute;left:3%;bottom:4%;font-size:22px;">+</span><span style="position:absolute;right:3%;bottom:4%;font-size:22px;">+</span>
+      <span style="position:absolute;left:12%;top:30%;font-size:20px;letter-spacing:0.4em;">· · ·</span><span style="position:absolute;right:12%;top:30%;font-size:20px;letter-spacing:0.4em;">· · ·</span>
+      <span style="position:absolute;left:0;right:0;bottom:12%;text-align:center;font-size:20px;letter-spacing:0.5em;">[01 // 02 // 03]</span>
+      <div style="position:absolute;left:6%;right:6%;bottom:3%;height:14px;background:repeating-linear-gradient(90deg,rgba(224,242,254,0.14) 0 1px,transparent 1px 28px);"></div>
+      <div style="position:absolute;left:5%;right:5%;top:58%;height:10px;border-radius:5px;background:linear-gradient(180deg,#010203 0%,#080B10 100%);box-shadow:inset 0 3px 4px rgba(0,0,0,1),0 1px 0 rgba(224,242,254,0.12),0 -1px 0 rgba(0,0,0,0.8);overflow:hidden;"><div style="position:absolute;left:0;right:0;top:4px;height:2px;background:{{ fiberColor }};transition:background 0.4s;"></div><div style="position:absolute;left:0;right:0;top:7px;height:1px;background:rgba(56,189,248,0.22);"></div>{{ fiberPulse }}{{ fiberRev }}</div>
+    </div>
+    <div style="position:absolute;left:1%;right:1%;bottom:26px;height:24px;border-radius:0 0 10px 10px;background:linear-gradient(180deg,#141A22 0%,#090C11 45%,#040507 100%);box-shadow:inset 0 1px 0 rgba(224,242,254,0.12),inset 0 -8px 14px -8px rgba(217,119,6,0.16),0 40px 70px -10px rgba(0,0,0,0.95);pointer-events:none;"></div>
+    <div style="position:relative;transform-style:preserve-3d;transform:{{ rowTransform }};transition:transform 0.35s ease-out;z-index:1;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:44px;">
+                  <div style="position:absolute;left:2%;right:2%;bottom:-110px;height:200px;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.6) 35%,rgba(0,0,0,0) 70%);transform:translateZ(-140px) rotateX(72deg);pointer-events:none;"></div>
+
+      <div data-screen-label="B2B Console" style="flex:1 1 460px;max-width:560px;position:relative;transform-style:preserve-3d;transform:rotateY(7deg) translateZ(-24px);">
+<div style="position:absolute;left:6px;top:-46px;display:flex;align-items:center;gap:11px;font-size:10.5px;letter-spacing:0.18em;color:#94A3B8;white-space:nowrap;"><span style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:0;background:#05080C;border:1px solid {{ consoleTag }};color:{{ consoleTag }};box-shadow:0 0 14px -2px {{ consoleTag }},inset 0 2px 4px rgba(0,0,0,0.9);transition:border-color 0.4s,color 0.4s,box-shadow 0.4s;">03</span><span style="font-family:'Noto Sans Georgian','JetBrains Mono',sans-serif;">B2B · ბიზნესის პანელი</span></div>
+<div style="position:absolute;left:6%;right:6%;bottom:-54px;height:46px;border-radius:50%;background:rgba(0,0,0,0.92);filter:blur(24px);transform:translateZ(-60px);pointer-events:none;"></div>
+
+        <div style="position:absolute;inset:0;border-radius:20px;background:#030406;transform:translateZ(-24px);box-shadow:0 60px 120px -20px rgba(0,0,0,1);"></div>
+        <div style="position:absolute;inset:0;border-radius:20px;background:#080B11;border:1px solid rgba(224,242,254,0.1);transform:translateZ(-16px);"></div>
+        <div style="position:absolute;inset:0;border-radius:20px;background:#0A0E15;border:1px solid rgba(224,242,254,0.14);transform:translateZ(-8px);"></div>
+        <div style="position:relative;border-radius:20px;background:#0B1017;border:1px solid rgba(224,242,254,0.12);box-shadow:{{ consoleShadow }};transition:box-shadow 0.6s;padding:8px;">
+        <div style="position:absolute;right:-11px;top:50%;transform:translateY(-50%);width:12px;height:72px;border-radius:6px;background:linear-gradient(90deg,#05080C 0%,#1B2330 55%,#3A4658 100%);box-shadow:inset 0 2px 4px rgba(0,0,0,0.95),inset 0 -1px 0 rgba(224,242,254,0.1),0 0 0 1px rgba(224,242,254,0.16),0 6px 12px rgba(0,0,0,0.8);display:flex;flex-direction:column;align-items:center;padding:9px 0;z-index:3;" title="Egress Dispatch Node">
+          <span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ cnInBg }};box-shadow:{{ cnInGlow }};transition:box-shadow 0.3s;"></span>
+          <span style="flex:1;width:1px;margin:5px 0;background:linear-gradient(180deg,rgba(245,158,11,0.3),rgba(56,189,248,0.3));"></span>
+          <span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ cnOutBg }};box-shadow:{{ cnOutGlow }};transition:box-shadow 0.3s;"></span>
+        </div>
+          <div style="position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(224,242,254,0.12) 0%,rgba(224,242,254,0.02) 22%,transparent 40%),linear-gradient(0deg,rgba(217,119,6,0.1) 0%,transparent 18%);pointer-events:none;"></div>
+          <div style="border-radius:14px;background:#0B1018;box-shadow:inset 0 2px 6px rgba(0,0,0,0.8),inset 0 0 0 1px rgba(0,0,0,0.6);padding:16px 18px 18px;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:center;gap:12px;font-size:10.5px;color:#94A3B8;">
+              <div style="display:flex;gap:7px;">
+                <span style="width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3A4454 0%,#202732 60%,#0F141C 100%);border:1px solid rgba(255,255,255,0.08);box-shadow:inset 0 1px 1px rgba(255,255,255,0.22),inset 0 -1.5px 2px rgba(0,0,0,0.85),0 2px 4px rgba(0,0,0,0.6);"></span>
+                <span style="width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3A4454 0%,#202732 60%,#0F141C 100%);border:1px solid rgba(255,255,255,0.08);box-shadow:inset 0 1px 1px rgba(255,255,255,0.22),inset 0 -1.5px 2px rgba(0,0,0,0.85),0 2px 4px rgba(0,0,0,0.6);"></span>
+                <span style="width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3A4454 0%,#202732 60%,#0F141C 100%);border:1px solid rgba(255,255,255,0.08);box-shadow:inset 0 1px 1px rgba(255,255,255,0.22),inset 0 -1.5px 2px rgba(0,0,0,0.85),0 2px 4px rgba(0,0,0,0.6);"></span>
+              </div>
+              <div style="flex:1;min-width:0;padding:6px 11px;border-radius:7px;background:#05080C;box-shadow:inset 0 2px 6px rgba(0,0,0,0.8);border-bottom:1px solid rgba(224,242,254,0.1);letter-spacing:0.04em;">admin.artron.ge/ops</div>
+              <span style="display:flex;align-items:center;gap:7px;white-space:nowrap;color:{{ linkColor }};"><span style="width:6px;height:6px;border-radius:50%;background:{{ linkColor }};box-shadow:0 0 8px {{ linkColor }};"></span>{{ linkText }}</span>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;">
+              <div style="font-family:'Noto Sans Georgian',sans-serif;font-size:18px;font-weight:700;color:#E0F2FE;">ოპერაციული მართვა</div>
+              <div style="font-size:10px;color:#94A3B8;letter-spacing:0.16em;">NODE B2B · {{ queueText }}</div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+              <div style="position:relative;overflow:hidden;border-radius:12px;padding:14px 14px 13px;background:#05080C;box-shadow:inset 0 2px 10px rgba(0,0,0,0.7);display:flex;flex-direction:column;gap:12px;">
+                {{ shock }}
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;letter-spacing:0.12em;"><span>სალარო · დღეს</span><span style="color:#10B981;opacity:{{ deltaOpacity }};transition:opacity 0.4s;text-shadow:0 0 12px rgba(16,185,129,0.6);">+50 ₾</span></div>
+                <div style="font-size:40px;font-weight:400;line-height:1;letter-spacing:0.03em;color:{{ revColor }};text-shadow:{{ revGlow }};transition:color 0.5s,text-shadow 0.5s;font-variant-numeric:tabular-nums;">{{ revText }} ₾</div>
+                <div style="display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;">
+                  <sc-for list="{{ revSegs }}" as="sg" hint-placeholder-count="24">
+                    <span style="height:7px;border-radius:1px;background:{{ sg.bg }};box-shadow:{{ sg.glow }};transition:background 0.4s,box-shadow 0.4s;"></span>
+                  </sc-for>
+                </div>
+                <div style="font-size:9.5px;color:#94A3B8;letter-spacing:0.1em;">TARGET 3,000 ₾</div>
+              </div>
+              <div style="position:relative;overflow:hidden;border-radius:12px;padding:14px 14px 13px;background:#05080C;box-shadow:inset 0 2px 10px rgba(0,0,0,0.7);display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;letter-spacing:0.12em;"><span>ვიზიტორები</span><span>LIVE</span></div>
+                <div style="font-size:40px;font-weight:400;line-height:1;letter-spacing:0.03em;color:#E0F2FE;font-variant-numeric:tabular-nums;text-shadow:0 -1px 0 rgba(0,0,0,0.95),0 1px 0 rgba(224,242,254,0.14);">{{ inGym }}<span style="color:#94A3B8;font-size:20px;letter-spacing:0.06em;"> / 60</span></div>
+                <div style="display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;">
+                  <sc-for list="{{ visSegs }}" as="sg" hint-placeholder-count="24">
+                    <span style="height:7px;border-radius:1px;background:{{ sg.bg }};box-shadow:{{ sg.glow }};transition:background 0.4s,box-shadow 0.4s;"></span>
+                  </sc-for>
+                </div>
+                <div style="font-size:9.5px;color:#94A3B8;letter-spacing:0.1em;">CAPACITY {{ occPct }}</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:11px;border-radius:10px;padding:10px 12px;background:rgba(16,22,31,0.6);font-family:'Noto Sans Georgian','JetBrains Mono',sans-serif;font-size:11.5px;line-height:1.45;color:#94A3B8;">
+              <span style="flex:none;width:9px;height:9px;border-radius:50%;background:#10B981;box-shadow:0 0 12px rgba(16,185,129,0.7),inset 0 -1px 2px rgba(5,150,105,0.9);"></span>
+              <span>შრომის ინსპექცია (№01-15/ნ) · ავტომატური ტაბელი დაცულია · AES-256</span>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94A3B8;letter-spacing:0.16em;"><span>ACTIVITY LEDGER</span><span>{{ logCount }} ROWS</span></div>
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;font-size:9.5px;letter-spacing:0.08em;color:{{ dspColor }};transition:color 0.4s;"><span style="flex:none;width:5px;height:5px;border-radius:50%;background:{{ dspColor }};box-shadow:0 0 8px {{ dspColor }};"></span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ dspText }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:6px;min-height:232px;">
+                <sc-for list="{{ logs }}" as="log" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;padding:9px 12px;border-radius:9px;font-size:11.5px;line-height:1.55;background:{{ log.bg }};border:1px solid {{ log.border }};box-shadow:{{ log.shadow }};animation:{{ log.anim }};transition:border-color 0.6s,background 0.6s,box-shadow 0.6s;">
+                    <span style="color:#94A3B8;font-variant-numeric:tabular-nums;">{{ log.t }}</span>
+                    <span style="color:#E0F2FE;">{{ log.name }} · {{ log.court }}</span>
+                    <span></span>
+                    <span style="color:#94A3B8;">გადახდილია: <span style="color:{{ log.accent }};">+50.00 ₾</span> · დაშვება: <span style="color:{{ log.accent }};">წარმატებული</span></span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-screen-label="Syntax Bridge" style="flex:0 1 300px;max-width:320px;min-width:260px;position:relative;transform-style:preserve-3d;transform:translateZ(16px);">
+<div style="position:absolute;left:6px;top:-46px;display:flex;align-items:center;gap:11px;font-size:10.5px;letter-spacing:0.18em;color:#94A3B8;white-space:nowrap;"><span style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:0;background:#05080C;border:1px solid {{ bridgeTag }};color:{{ bridgeTag }};box-shadow:0 0 14px -2px {{ bridgeTag }},inset 0 2px 4px rgba(0,0,0,0.9);transition:border-color 0.4s,color 0.4s,box-shadow 0.4s;">02</span><span style="font-family:'Noto Sans Georgian','JetBrains Mono',sans-serif;">ხიდი · პროგრამული სინაფსი</span></div>
+        <div style="position:relative;transform-style:preserve-3d;display:flex;flex-direction:column;align-items:center;">
+          <div style="position:relative;transform:translateZ(44px);padding:9px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;letter-spacing:0.1em;line-height:1.4;text-align:center;white-space:nowrap;">
+            <span style="position:absolute;left:0;top:0;bottom:0;width:7px;border:1px solid rgba(224,242,254,0.24);border-right:none;"></span>
+            <span style="position:absolute;right:0;top:0;bottom:0;width:7px;border:1px solid rgba(224,242,254,0.24);border-left:none;"></span>
+            <span style="color:#E0F2FE;">PROTOCOL // ARTRON-SYNTAX-v4</span>
+            <span style="color:#94A3B8;">[ZERO-HARDWARE / IOT DUAL-ENGINE]</span>
+          </div>
+          <div style="position:relative;width:100%;height:440px;transform-style:preserve-3d;">
+            <canvas ref="{{ cvRef }}" style="position:absolute;top:0;left:-72px;width:calc(100% + 144px);height:100%;pointer-events:none;"></canvas>
+            <div style="position:absolute;left:50%;top:0;height:110px;width:1px;background:linear-gradient(180deg,rgba(224,242,254,0.26),rgba(224,242,254,0));"></div>
+            <div style="position:absolute;left:50%;bottom:0;height:110px;width:1px;background:linear-gradient(0deg,rgba(234,179,8,0.3),rgba(234,179,8,0));"></div>
+            {{ ennea }}
+          </div>
+          <div style="position:relative;transform:translateZ(44px);padding:9px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;letter-spacing:0.1em;line-height:1.4;text-align:center;white-space:nowrap;color:#94A3B8;">
+            <span style="position:absolute;left:0;top:0;bottom:0;width:7px;border:1px solid rgba(224,242,254,0.24);border-right:none;"></span>
+            <span style="position:absolute;right:0;top:0;bottom:0;width:7px;border:1px solid rgba(224,242,254,0.24);border-left:none;"></span>
+            <span>PIPELINE: <span style="color:{{ pipeColor }};transition:color 0.3s;">{{ pipeText }}</span> · LATENCY: <span style="color:#E0F2FE;">{{ latText }}</span></span>
+            <span>ENCRYPTION: TLS 1.3 / ZERO-TRUST</span>
+          </div>
+          <div style="margin-top:16px;width:100%;display:flex;flex-direction:column;gap:5px;font-size:9.5px;letter-spacing:0.12em;"><span style="display:flex;justify-content:space-between;color:rgba(245,158,11,0.85);"><span>◂ PASS</span><span>UPPER ARTERY</span></span><span style="display:flex;justify-content:space-between;color:rgba(56,189,248,0.9);"><span>LOWER ARTERY</span><span>DISPATCH ▸</span></span></div>
+          <div style="margin-top:12px;width:100%;display:flex;justify-content:space-between;font-size:9.5px;letter-spacing:0.14em;color:#94A3B8;"><span>LEDGER · B2B</span><span style="display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:#FACC15;box-shadow:0 0 5px 1px rgba(234,179,8,0.95),0 0 14px rgba(234,179,8,0.4);"></span>ENNEA</span><span>PASS · B2C</span></div>
+        </div>
+      </div>
+
+      <div data-screen-label="B2C Pass" style="flex:0 0 auto;perspective:1200px;position:relative;">
+<div style="position:absolute;left:6px;top:-46px;display:flex;align-items:center;gap:11px;font-size:10.5px;letter-spacing:0.18em;color:#94A3B8;white-space:nowrap;"><span style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:0;background:#05080C;border:1px solid {{ phoneTag }};color:{{ phoneTag }};box-shadow:0 0 14px -2px {{ phoneTag }},inset 0 2px 4px rgba(0,0,0,0.9);transition:border-color 0.4s,color 0.4s,box-shadow 0.4s;">01</span><span style="font-family:'Noto Sans Georgian','JetBrains Mono',sans-serif;">B2C · მომხმარებლის საშვი</span></div>
+<div style="position:absolute;left:12%;right:12%;bottom:-54px;height:46px;border-radius:50%;background:rgba(0,0,0,0.92);filter:blur(24px);transform:translateZ(-60px);pointer-events:none;"></div>
+
+        <div style="position:relative;transform-style:preserve-3d;transform:rotateY(-8deg) rotateX(4deg);">
+          <div style="position:absolute;inset:0;border-radius:56px;background:#05070B;transform:translateZ(-14px);box-shadow:0 70px 120px -20px rgba(0,0,0,1);"></div>
+          <div style="position:absolute;inset:0;border-radius:56px;background:linear-gradient(145deg,#1B2330,#0A0D13);transform:translateZ(-7px);"></div>
+          <div style="position:relative;width:334px;padding:10px;border-radius:56px;background:linear-gradient(172deg,#303C4B 0%,#1B2330 30%,#111620 72%,#1E1710 92%,#3A2510 100%);box-shadow:{{ phoneShadow }};transition:box-shadow 0.5s;">
+            <div style="position:absolute;inset:0;border-radius:56px;background:linear-gradient(135deg,rgba(224,242,254,0.24) 0%,rgba(56,189,248,0.06) 30%,transparent 48%);pointer-events:none;"></div>
+            <div style="position:absolute;inset:0;border-radius:56px;background:linear-gradient(0deg,rgba(245,158,11,0.2) 0%,rgba(180,83,9,0.06) 14%,transparent 28%);pointer-events:none;"></div>
+            <div style="position:absolute;right:-4px;top:168px;width:5px;height:76px;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#111620,#3A4658);box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);"></div>
+            <div style="position:absolute;left:-4px;top:128px;width:5px;height:30px;border-radius:3px 0 0 3px;background:linear-gradient(270deg,#111620,#3A4658);"></div>
+            <div style="position:absolute;left:-4px;top:176px;width:5px;height:52px;border-radius:3px 0 0 3px;background:linear-gradient(270deg,#111620,#3A4658);"></div>
+            <div style="position:absolute;left:-4px;top:240px;width:5px;height:52px;border-radius:3px 0 0 3px;background:linear-gradient(270deg,#111620,#3A4658);"></div>
+            <div style="position:absolute;left:-11px;top:296px;transform:none;width:12px;height:72px;border-radius:6px;background:linear-gradient(270deg,#05080C 0%,#1B2330 55%,#3A4658 100%);box-shadow:inset 0 2px 4px rgba(0,0,0,0.95),inset 0 -1px 0 rgba(224,242,254,0.1),0 0 0 1px rgba(224,242,254,0.16),0 6px 12px rgba(0,0,0,0.8);display:flex;flex-direction:column;align-items:center;padding:9px 0;z-index:3;" title="Ingress Synapse Node">
+          <span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ phInBg }};box-shadow:{{ phInGlow }};transition:box-shadow 0.3s;"></span>
+          <span style="flex:1;width:1px;margin:5px 0;background:linear-gradient(180deg,rgba(245,158,11,0.3),rgba(56,189,248,0.3));"></span>
+          <span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ phOutBg }};box-shadow:{{ phOutGlow }};transition:box-shadow 0.3s;"></span>
+        </div>
+            <div style="padding:3px;border-radius:47px;background:#05070B;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.9);">
+              <div style="position:relative;width:308px;height:648px;border-radius:44px;background:#070A0E;overflow:hidden;display:flex;flex-direction:column;">
+                <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,rgba(224,242,254,0.02) 40%,transparent 60%);pointer-events:none;z-index:5;"></div>
+                <div style="position:absolute;left:50%;top:11px;height:{{ islandH }};width:{{ islandW }};transform:translateX(-50%);background:{{ islandBg }};border-radius:{{ islandR }};box-shadow:{{ islandShadow }};overflow:hidden;display:flex;flex-direction:column;transition:width 0.5s cubic-bezier(.3,1.25,.5,1),height 0.5s cubic-bezier(.3,1.25,.5,1),border-radius 0.5s,box-shadow 0.5s;z-index:4;">
+                  <div style="flex:none;height:33px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px 0 14px;">
+                    <span style="display:flex;align-items:center;gap:7px;min-width:0;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;">
+                      <span style="flex:none;width:6px;height:6px;border-radius:50%;background:{{ islandLed }};opacity:{{ islandDot }};box-shadow:0 0 10px {{ islandLed }};transition:opacity 0.2s,background 0.2s;"></span>
+                      <span style="color:#10B981;text-shadow:0 0 8px rgba(16,185,129,0.6);opacity:{{ islandTxtOp }};transition:opacity 0.3s 0.25s;">[LIVE]</span>
+                      <span style="color:#94A3B8;opacity:{{ islandTxtOp }};transition:opacity 0.3s 0.3s;">DISPATCH // {{ ackText }}</span>
+                    </span>
+                    <span style="flex:none;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 36% 34%,#3A5272 0%,#101A2A 38%,#020305 70%);box-shadow:0 0 0 2px #0A0D13,inset 0 0 2px rgba(0,0,0,1);"></span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:3px;padding:2px 14px 0 27px;font-family:'JetBrains Mono','Noto Sans Georgian',monospace;font-size:10px;line-height:1.45;white-space:nowrap;opacity:{{ islandTxtOp }};transition:opacity 0.3s 0.32s;">
+                    <span style="color:#E0F2FE;">Tbilisi Arena // კორტი #1 მზადაა</span>
+                    <span style="color:#94A3B8;">19:00 – 20:00 · <span style="color:#38BDF8;">მწვრთნელი: ადგილზეა</span></span>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 30px 0;font-size:12px;font-weight:700;height:48px;">
+                  <span>19:00</span><span style="color:{{ netChipColor }};font-size:10px;letter-spacing:0.1em;">{{ netChip }}</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:13px;padding:18px 16px 12px;">
+                  <div style="display:flex;flex-direction:column;gap:5px;padding:9px 11px;border-radius:10px;background:#05080C;box-shadow:inset 0 2px 6px rgba(0,0,0,0.8);font-size:10.5px;letter-spacing:0.06em;line-height:1.5;">
+                    <span style="color:#94A3B8;">ATHLETE // ID: 4471</span>
+                    <span style="color:#E0F2FE;">გიორგი მ. <span style="color:#10B981;text-shadow:0 0 10px rgba(16,185,129,0.6);">[PASS ACTIVE]</span></span>
+                  </div>
+
+                  <div style="position:relative;border-radius:20px;padding:14px;background:rgba(13,18,27,0.75);border:1px solid rgba(224,242,254,0.16);box-shadow:inset 0 1px 1px 0 rgba(255,255,255,0.12),0 18px 40px -12px rgba(0,0,0,0.9);display:flex;flex-direction:column;gap:11px;">
+                    {{ haptic }}<div style="display:flex;justify-content:space-between;align-items:baseline;font-size:10px;letter-spacing:0.12em;">
+                      <span style="color:#94A3B8;">DYNAMIC PASS</span>
+                      <span style="color:{{ ttlColor }};font-weight:700;font-variant-numeric:tabular-nums;">TTL {{ ttlText }}s</span>
+                    </div>
+                    <div style="height:3px;border-radius:2px;background:#05080C;box-shadow:inset 0 1px 2px rgba(0,0,0,0.9);overflow:hidden;"><div style="height:100%;width:{{ ttlPct }};background:{{ ttlColor }};transition:width 0.1s linear;"></div></div>
+                    <div style="position:relative;align-self:center;padding:10px;border-radius:14px;background:#E0F2FE;box-shadow:0 14px 30px -8px rgba(0,0,0,0.9),inset 0 -2px 0 rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.9);overflow:hidden;">
+                      <canvas ref="{{ qrRef }}" style="display:block;width:170px;height:170px;opacity:{{ qrOpacity }};transition:opacity 0.2s;"></canvas>
+                      {{ laser }}
+                      <sc-if value="{{ qrOverlay }}" hint-placeholder-val="{{ false }}">
+                        <div style="position:absolute;inset:0;border-radius:14px;background:{{ qrOverlayBg }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:{{ qrOverlayFg }};">
+                          <span style="font-size:16px;font-weight:700;letter-spacing:0.1em;">{{ qrOverlayT1 }}</span>
+                          <span style="font-size:10.5px;letter-spacing:0.08em;">{{ qrOverlayT2 }}</span>
+                        </div>
+                      </sc-if>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:#94A3B8;"><span>კორტი #1 · 60 წთ</span><span style="color:#E0F2FE;font-weight:700;">50.00 ₾</span></div>
+                  </div>
+
+                  <sc-if value="{{ showLocalMsg }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:9px;align-items:flex-start;padding:9px 11px;border-radius:10px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.4);box-shadow:inset 0 0 8px rgba(16,185,129,0.15);font-family:'Noto Sans Georgian',sans-serif;font-size:10.5px;line-height:1.5;color:#E0F2FE;">
+                      <span style="flex:none;margin-top:5px;width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 8px rgba(16,185,129,0.8);"></span>
+                      <span>ლოკალური ოფლაინ დაშვება · კრიპტო-ტოკენი დამოწმებულია · ქლაუდ-სინქრონიზაცია მოლოდინში</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ showArmedMsg }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:8px 11px;border-radius:10px;background:#05080C;box-shadow:inset 0 2px 6px rgba(0,0,0,0.8);font-size:9.5px;letter-spacing:0.1em;line-height:1.5;color:#94A3B8;">{{ armedText }}</div>
+                  </sc-if>
+
+                  <div style="flex:1;"></div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:0.14em;color:#94A3B8;"><span>STATE</span><span style="color:{{ col }};">{{ phaseCode }}</span></div>
+                  <div style="padding:4px;border-radius:20px;background:linear-gradient(180deg,#05080C 0%,#0B1017 100%);box-shadow:inset 0 2px 4px rgba(0,0,0,0.8),0 1px 0 rgba(255,255,255,0.05);">
+                  <button onClick="{{ run }}" onPointerEnter="{{ btnEnter }}" onPointerLeave="{{ btnLeave }}" onPointerDown="{{ btnDown }}" onPointerUp="{{ btnUp }}" style="position:relative;overflow:hidden;display:block;min-height:58px;width:100%;border-radius:16px;padding:10px 14px;font-family:'Noto Sans Georgian','JetBrains Mono',sans-serif;font-size:12.5px;font-weight:700;line-height:1.35;text-wrap:balance;background:{{ btnBg }};color:{{ btnFg }};border:1px solid {{ btnBorder }};border-top-color:{{ btnBorderTop }};border-bottom-color:{{ btnBorderBottom }};box-shadow:{{ btnShadow }};text-shadow:{{ btnTextShadow }};transform:{{ btnTransform }};filter:{{ btnFilter }};cursor:{{ btnCursor }};transition:background 0.25s,color 0.25s,box-shadow 0.18s,border-color 0.25s,transform 0.12s cubic-bezier(.3,.7,.4,1),filter 0.2s;">
+                    <sc-if value="{{ btnGem }}" hint-placeholder-val="{{ true }}">
+                      <span style="position:absolute;left:3%;right:3%;top:1px;height:45%;border-radius:14px 14px 50% 50% / 14px 14px 100% 100%;background:linear-gradient(180deg,rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.05) 80%,rgba(255,255,255,0) 100%);pointer-events:none;"></span>
+                      <span style="position:absolute;top:-20%;bottom:-20%;left:0;width:34%;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(241,245,249,0.42) 50%,rgba(255,255,255,0) 100%);animation:ignite 3.5s cubic-bezier(.45,0,.25,1) infinite;pointer-events:none;mix-blend-mode:screen;"></span>
+                    </sc-if>
+                    <span style="position:relative;">{{ btnLabel }}</span>
+                  </button>
+                  </div>
+                  <div style="align-self:center;width:116px;height:4px;border-radius:2px;background:#283241;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;autoDemo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;ttlSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;min&quot;:4,&quot;max&quot;:20,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;parallax&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;3D&quot;}}">
+const E='#10B981',A='#F59E0B',A2='#D97706',SIL='#94A3B8',PL='#E0F2FE';
+const L_TAGS=['LEDGER_COMMIT','LABOR_AUDIT_OK','AES_256','TABEL_SYNC'],R_TAGS=['AUTH_TOKEN','DYNAMIC_UUID','RELAY_ACK','PASS_4471'],CODE=['gRPC // SYNTAX-PIPE','TLS_1.3','TOKEN: VERIFIED','LATENCY: 8ms','HANDSHAKE · OK','0x4471::SIG','ZERO-TRUST'];
+const SEED=[{id:'s2',t:'18:58:31',name:'ნინო კ.',court:'კორტი #2'},{id:'s1',t:'18:53:14',name:'ლუკა ბ.',court:'დარბაზი A'},{id:'s0',t:'18:47:09',name:'ანა ჯ.',court:'კორტი #3'}];
+const rng=seed=>{let a=seed>>>0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};};
+const hex=()=>'0x'+Math.floor(Math.random()*65535).toString(16).toUpperCase().padStart(4,'0');
+const RAISED='0 3px 0 #05080C,0 8px 16px rgba(0,0,0,0.6),inset 0 1px 1px rgba(255,255,255,0.25),inset 0 -1px 0 rgba(245,158,11,0.12)';
+const DEEP='0 1px 1px rgba(0,0,0,0.6),0 6px 12px rgba(0,0,0,0.55),0 35px 80px -20px rgba(0,0,0,0.95),0 120px 180px -60px rgba(0,0,0,1),0 0 1px 1px rgba(224,242,254,0.05),0 30px 60px -32px rgba(245,158,11,0.24),inset 0 1px 1px 0 rgba(255,255,255,0.25),inset 1px 0 1px 0 rgba(224,242,254,0.1),inset 0 -1px 1px 0 rgba(245,158,11,0.22),inset 0 -28px 44px -30px rgba(245,158,11,0.16)';
+const PHONE='0 2px 2px rgba(0,0,0,0.6),0 10px 20px rgba(0,0,0,0.6),0 35px 80px -20px rgba(0,0,0,0.95),0 80px 140px -30px rgba(0,0,0,1),0 0 0 1px rgba(224,242,254,0.16),0 26px 50px -28px rgba(245,158,11,0.3),inset 0 1px 1px rgba(224,242,254,0.4),inset 2px 0 2px rgba(224,242,254,0.1),inset 0 -2px 2px rgba(245,158,11,0.32),inset 0 -6px 8px -4px rgba(0,0,0,0.7)';
+const TI_UP='linear-gradient(180deg,#2E3641 0%,#1B212A 46%,#141920 54%,#1E242D 100%)',TI_DN='linear-gradient(180deg,#0C1015 0%,#141920 100%)',FLOAT=',0 22px 34px -14px rgba(0,0,0,0.95)';
+const RGB={[A]:'245,158,11',[E]:'16,185,129',[A2]:'217,119,6'};
+const ring=(base,c,k=1)=>c?`0 0 0 1px rgba(${RGB[c]},${0.6*k}),0 0 22px -6px rgba(${RGB[c]},${0.45*k}),`+base:base;
+const PRESSED='inset 0 2px 6px rgba(0,0,0,0.8),0 0 0 1px rgba(245,158,11,0.15)';
+
+class Component extends DCLogic {
+  timers=[];parts=[];acc=0;demoAcc=0;pktT0=0;
+  state=this.initialState();
+  ttlMs(){return (this.props.ttlSeconds??8)*1000;}
+  initialState(keep){
+    return {phase:'idle',network:keep?.network??'online',mode:keep?.mode??'zero',revenue:2450,shownRev:2450,inGym:42,logs:SEED,fresh:false,pending:false,
+      ttl:this.ttlMs(),seed:Math.floor(Math.random()*1e6),gateOpen:false,tilt:keep?.tilt??{x:0,y:0},pkt:'—',latency:null,waveId:0,pktKey:0,pktOn:false,revOn:false,dispatch:false,hapticId:0,ack:null};
+  }
+  componentDidMount(){
+    this.iv=setInterval(()=>{
+      const ph=this.state.phase;
+      if(this.props.autoDemo&&(ph==='idle'||ph==='synced')){this.demoAcc+=100;if(this.demoAcc>=4500){this.demoAcc=0;this.run();}}
+      if(ph!=='idle')return;
+      this.setState(s=>s.ttl<=100?{ttl:this.ttlMs(),seed:s.seed+1}:{ttl:s.ttl-100});
+    },100);
+    this.last=performance.now();
+    const loop=t=>{this.draw(Math.min(0.05,(t-this.last)/1000));this.last=t;this.raf=requestAnimationFrame(loop);};
+    this.raf=requestAnimationFrame(loop);
+  }
+  componentWillUnmount(){clearInterval(this.iv);cancelAnimationFrame(this.raf);cancelAnimationFrame(this.tw);this.clear();}
+  componentDidUpdate(){if(this._seed!==this.state.seed){this._seed=this.state.seed;this.drawQR();}}
+  later(fn,ms){this.timers.push(setTimeout(fn,ms));}
+  clear(){this.timers.forEach(clearTimeout);this.timers=[];}
+  busy(){const p=this.state.phase;return p==='processing'||p==='transit';}
+
+  run(){
+    if(this.busy())return;
+    if(this.state.phase==='synced'){this.reset();return;}
+    const s=this.state,off=s.network==='offline',iot=s.mode==='iot';
+    this.clear();this.demoAcc=0;
+    this.setState({phase:'processing',gateOpen:false,pkt:hex(),latency:null});
+    this.later(()=>{
+      if(off&&iot){this.setState({phase:'error'});return;}
+      this.setState({phase:'transit',gateOpen:true});
+      if(!off)this.firePacket();
+    },350);
+    this.later(()=>{
+      if(off&&iot)return;
+      if(off)this.setState({phase:'synced',pending:true});
+      else{this.commit();this.setState({phase:'synced'});}
+    },750);
+    this.later(()=>this.setState({gateOpen:false}),2150);
+  }
+  firePacket(){this.crossed=false;this.pktT0=performance.now();this.setState(s=>({pktOn:true,pktKey:s.pktKey+1}));this.later(()=>this.setState({pktOn:false}),420);}
+  commit(){
+    const s=this.state,lat=7+Math.floor(Math.random()*5);
+    this.tween(s.shownRev,s.revenue+50);
+    this.setState(p=>({revenue:p.revenue+50,inGym:Math.min(60,p.inGym+1),latency:lat,fresh:true,pending:false,waveId:p.waveId+1,
+      logs:[{id:'n'+p.waveId,t:'19:00:02',name:'გიორგი მ.',court:'კორტი #1'},...p.logs].slice(0,4)}));
+    this.later(()=>this.fireReverse(),260);
+  }
+  fireReverse(){
+    this.crossedB=false;this.revT0=performance.now();
+    this.setState({revOn:true,ack:20+Math.floor(Math.random()*9)});
+    this.later(()=>this.setState(s=>({revOn:false,dispatch:true,hapticId:s.hapticId+1})),560);
+  }
+  setNet(id){
+    if(this.busy())return;
+    const s=this.state;
+    this.setState({network:id,phase:s.phase==='error'?'idle':s.phase});
+    if(id==='online'&&s.pending){this.firePacket();this.later(()=>this.commit(),380);}
+  }
+  tween(from,to){
+    cancelAnimationFrame(this.tw);const t0=performance.now(),D=800;
+    const step=t=>{const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);this.setState({shownRev:Math.round(from+(to-from)*e)});if(k<1)this.tw=requestAnimationFrame(step);};
+    this.tw=requestAnimationFrame(step);
+  }
+  reset(){this.clear();cancelAnimationFrame(this.tw);this.pktT0=0;this.revT0=0;this.setState(this.initialState(this.state));}
+
+  cvRef=el=>{this.cv=el;};
+  qrRef=el=>{this.qr=el;if(el)this.drawQR();};
+  drawQR(){
+    const cv=this.qr;if(!cv)return;
+    const N=25,s=7,dpr=window.devicePixelRatio||1,ink='#070A0E',paper='#E0F2FE';
+    cv.width=N*s*dpr;cv.height=N*s*dpr;
+    const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,N*s,N*s);ctx.fillStyle=ink;
+    const r=rng(this.state.seed),inF=(x,y)=>(x<8&&y<8)||(x>=N-8&&y<8)||(x<8&&y>=N-8);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(inF(x,y))continue;if((y===6||x===6)?((x+y)%2===0):r()>0.5)ctx.fillRect(x*s,y*s,s,s);}
+    [[0,0],[N-7,0],[0,N-7]].forEach(([fx,fy])=>{ctx.fillStyle=ink;ctx.fillRect(fx*s,fy*s,7*s,7*s);ctx.fillStyle=paper;ctx.fillRect((fx+1)*s,(fy+1)*s,5*s,5*s);ctx.fillStyle=ink;ctx.fillRect((fx+2)*s,(fy+2)*s,3*s,3*s);});
+  }
+
+  spark(n=1,big){this.sp=this.sp||[];for(let k=0;k<n;k++)this.sp.push({life:0,max:0.16+Math.random()*0.26,bulge:(Math.random()<0.5?-1:1)*(12+Math.random()*(big?58:30)),big});}
+  draw(dt){
+    const cv=this.cv;if(!cv)return;
+    const W=cv.clientWidth,H=cv.clientHeight,dpr=window.devicePixelRatio||1;if(!W)return;
+    if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);}
+    const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    const T=(this.T=(this.T||0)+dt),cx=W/2,cy=H/2,G=16,SP=Math.min(150,H*0.34),N=7,TAU=Math.PI*2;
+    this.bL=Math.max(0,(this.bL||0)-dt*1.3);this.bR=Math.max(0,(this.bR||0)-dt*1.3);this.flash=Math.max(0,(this.flash||0)-dt*1.4);
+    const pt=(side,i,u)=>{const s=(i/(N-1)-0.5)*2,y0=cy+s*SP,m=1-u,x0=side<0?0:W,x1=cx+side*G,c=x0+(x1-x0)*0.62,cyc=cy+s*SP*0.12;
+      const y=m*m*y0+2*m*u*cyc+u*u*cy;return [m*m*x0+2*m*u*c+u*u*x1,side<0?y:y+Math.sin(u*10-T*2.4+i*1.3)*7*(1-u)];};
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(T*0.04);
+    const R=Math.min(118,W*0.27);
+    ctx.strokeStyle='rgba(224,242,254,0.07)';ctx.lineWidth=1;ctx.beginPath();
+    for(let k=0;k<=9;k++){const a=(k*4%9)/9*TAU-Math.PI/2,x=Math.cos(a)*R,y=Math.sin(a)*R;k?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+    ctx.setLineDash([1,5]);ctx.beginPath();ctx.arc(0,0,R,0,TAU);ctx.stroke();ctx.setLineDash([]);
+    for(let k=0;k<9;k++){const a=k/9*TAU-Math.PI/2;ctx.fillStyle=k===0?'rgba(234,179,8,0.85)':'rgba(224,242,254,0.35)';ctx.beginPath();ctx.arc(Math.cos(a)*R,Math.sin(a)*R,k===0?2:1.3,0,TAU);ctx.fill();}
+    ctx.restore();
+    const amb=0.1+0.04*Math.sin(T*1.6)+this.flash*0.45;
+    let rg=ctx.createRadialGradient(cx,cy,0,cx,cy,90+this.flash*70);rg.addColorStop(0,'rgba(234,179,8,'+amb+')');rg.addColorStop(1,'rgba(234,179,8,0)');ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+    this.cd=this.cd||[];if(this.cd.length<6&&Math.random()<dt*1.3){const top=Math.random()<0.5;this.cd.push({txt:CODE[Math.floor(Math.random()*CODE.length)],x:W*(0.18+Math.random()*0.64),y:top?H*(0.07+Math.random()*0.14):H*(0.82+Math.random()*0.12),life:0,max:4+Math.random()*3});}
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='8.5px "JetBrains Mono",monospace';
+    this.cd=this.cd.filter(c=>{c.life+=dt;if(c.life>c.max)return false;const k=c.life/c.max;ctx.fillStyle='rgba(148,163,184,'+(Math.sin(k*Math.PI)*0.32)+')';ctx.fillText(c.txt,c.x,c.y-k*10);return true;});
+    for(const side of [-1,1]){const b=side<0?this.bL:this.bR;
+      for(let i=0;i<N;i++){const s=Math.abs(i/(N-1)-0.5)*2,core=i===(N-1)/2;
+        const rgb=side<0?(i%2?'148,163,184':'224,242,254'):(i===1||i===5?'16,185,129':'245,158,11');
+        const a=(core?0.5:0.24-s*0.08)*(1+b*2.4),x0=pt(side,i,0)[0],x1=pt(side,i,1)[0];
+        const g=ctx.createLinearGradient(x0,0,x1,0);g.addColorStop(0,'rgba('+rgb+',0)');g.addColorStop(0.35,'rgba('+rgb+','+(a*0.6)+')');g.addColorStop(1,'rgba('+rgb+','+Math.min(1,a*1.6)+')');
+        ctx.strokeStyle=g;ctx.lineWidth=core?1.1:0.7;if(side<0&&i%2)ctx.setLineDash([2,5]);
+        ctx.beginPath();for(let k=0;k<=48;k++){const [x,y]=pt(side,i,k/48);k?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();ctx.setLineDash([]);
+      }}
+    this.pk=this.pk||[];this.pAcc=(this.pAcc||0)+dt*2.6;
+    while(this.pAcc>1){this.pAcc--;const side=Math.random()<0.5?-1:1,tags=side<0?L_TAGS:R_TAGS;this.pk.push({side,i:Math.floor(Math.random()*N),u:0,sp:0.16+Math.random()*0.14,tag:Math.random()<0.4?tags[Math.floor(Math.random()*tags.length)]:null});}
+    ctx.font='500 8px "JetBrains Mono",monospace';ctx.textBaseline='bottom';
+    this.pk=this.pk.filter(p=>{p.u+=p.sp*dt*(1+p.u*0.9);if(p.u>=1){if(Math.random()<0.35)this.spark();return false;}
+      const [x,y]=pt(p.side,p.i,p.u),fade=Math.min(1,p.u*6)*(p.u>0.78?(1-p.u)/0.22:1);
+      ctx.fillStyle='rgba('+(p.side<0?'224,242,254':'245,158,11')+','+(0.9*fade)+')';ctx.beginPath();ctx.arc(x,y,1.4,0,TAU);ctx.fill();
+      if(p.tag){ctx.fillStyle='rgba('+(p.side<0?'168,182,200':'245,180,90')+','+(0.8*fade)+')';ctx.textAlign=p.side<0?'left':'right';ctx.fillText(p.tag,x+(p.side<0?4:-4),y-3);}
+      return true;});
+    this.sAcc=(this.sAcc||0)+dt*1.3;while(this.sAcc>1){this.sAcc--;this.spark();}
+    ctx.shadowColor='rgba(234,179,8,0.95)';ctx.shadowBlur=8;
+    this.sp=(this.sp||[]).filter(s=>{s.life+=dt;if(s.life>s.max)return false;const a=1-s.life/s.max;
+      ctx.strokeStyle='rgba(250,204,21,'+a+')';ctx.lineWidth=s.big?1.4:0.9;ctx.beginPath();
+      const ax=cx-G,bx=cx+G,c1x=cx-G-12,c2x=cx+G+12,cyb=cy+s.bulge*1.3;
+      for(let k=0;k<=12;k++){const u=k/12,m=1-u,x=m*m*m*ax+3*m*m*u*c1x+3*m*u*u*c2x+u*u*u*bx,y=m*m*m*cy+3*m*m*u*cyb+3*m*u*u*cyb+u*u*u*cy,j=(k&&k<12)?(Math.random()-0.5)*3:0;k?ctx.lineTo(x+j,y+j):ctx.moveTo(x,y);}
+      ctx.stroke();return true;});
+    ctx.shadowBlur=0;
+    const RO=22,ry=(x,d)=>{const k=Math.min(1,Math.abs(x-cx)/(W/2));return cy+d*RO*k*(2-k);};
+    const rail=(x0,x1,d)=>{ctx.beginPath();for(let k=0;k<=28;k++){const x=x0+(x1-x0)*k/28;k?ctx.lineTo(x,ry(x,d)):ctx.moveTo(x,ry(x,d));}ctx.stroke();};
+    const st=this.state;
+    ctx.lineWidth=1;ctx.strokeStyle='rgba(245,158,11,'+(0.16+(st.pktOn?0.25:0))+')';rail(0,W,-1);
+    ctx.strokeStyle='rgba(56,189,248,'+(0.16+(st.revOn?0.3:st.dispatch?0.14:0))+')';rail(0,W,1);
+    this.rf=(this.rf||0)+dt;
+    for(let j=0;j<8;j++){let u=(this.rf*0.09+j/8)%1,x=W-u*W;ctx.fillStyle='rgba(245,158,11,'+(0.5*Math.sin(Math.PI*u))+')';ctx.beginPath();ctx.arc(x,ry(x,-1),1.2,0,TAU);ctx.fill();
+      u=(this.rf*0.08+j/8+0.06)%1;x=u*W;ctx.fillStyle='rgba(56,189,248,'+(0.55*Math.sin(Math.PI*u))+')';ctx.beginPath();ctx.arc(x,ry(x,1),1.2,0,TAU);ctx.fill();}
+    const el=performance.now()-this.pktT0,D=420;
+    if(this.pktT0&&el<D){const k=el/D,e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,x=W-W*e,y=ry(x,-1);
+      if(x>cx)this.bR=1;else this.bL=1;
+      if(!this.crossed&&x<=cx){this.crossed=true;this.flash=1;this.spark(8,true);}
+      const tw=Math.min(170,W-x),tr=ctx.createLinearGradient(x,0,x+tw,0);tr.addColorStop(0,'rgba(254,243,199,1)');tr.addColorStop(0.15,'rgba(245,158,11,0.85)');tr.addColorStop(1,'rgba(245,158,11,0)');
+      ctx.strokeStyle=tr;ctx.lineWidth=3;rail(x,x+tw,-1);
+      if(x<cx){const eg=ctx.createLinearGradient(x,0,cx,0);eg.addColorStop(0,'rgba(16,185,129,0.85)');eg.addColorStop(1,'rgba(16,185,129,0.1)');ctx.strokeStyle=eg;ctx.lineWidth=2;rail(x,cx,-1);}
+      rg=ctx.createRadialGradient(x,y,0,x,y,32);rg.addColorStop(0,'rgba(245,158,11,0.75)');rg.addColorStop(0.35,'rgba(245,158,11,0.22)');rg.addColorStop(1,'rgba(245,158,11,0)');ctx.fillStyle=rg;ctx.fillRect(x-32,y-32,64,64);
+      ctx.shadowColor='rgba(245,158,11,1)';ctx.shadowBlur=22;ctx.fillStyle='#FEF3C7';ctx.beginPath();ctx.arc(x,y,3.5,0,TAU);ctx.fill();ctx.shadowBlur=0;}
+    const el2=performance.now()-(this.revT0||0),D2=560;
+    if(this.revT0&&el2<D2){const k=el2/D2,e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,x=W*e,y=ry(x,1);
+      if(!this.crossedB&&x>=cx){this.crossedB=true;this.flashB=1;}
+      const tw=Math.min(170,x),tr=ctx.createLinearGradient(x,0,x-tw,0);tr.addColorStop(0,'rgba(224,242,254,1)');tr.addColorStop(0.15,'rgba(56,189,248,0.9)');tr.addColorStop(0.6,'rgba(16,185,129,0.35)');tr.addColorStop(1,'rgba(16,185,129,0)');
+      ctx.strokeStyle=tr;ctx.lineWidth=3;rail(x-tw,x,1);
+      rg=ctx.createRadialGradient(x,y,0,x,y,32);rg.addColorStop(0,'rgba(56,189,248,0.7)');rg.addColorStop(0.35,'rgba(56,189,248,0.2)');rg.addColorStop(1,'rgba(56,189,248,0)');ctx.fillStyle=rg;ctx.fillRect(x-32,y-32,64,64);
+      ctx.shadowColor='rgba(56,189,248,1)';ctx.shadowBlur=22;ctx.fillStyle='#E0F2FE';ctx.beginPath();ctx.arc(x,y,3.5,0,TAU);ctx.fill();ctx.shadowBlur=0;}
+    this.flashB=Math.max(0,(this.flashB||0)-dt*1.4);
+    if(this.flashB>0){ctx.lineWidth=1.2;ctx.strokeStyle='rgba(56,189,248,'+(this.flashB*0.7)+')';ctx.beginPath();ctx.arc(cx,cy,(1-this.flashB)*120,0,TAU);ctx.stroke();}
+    if(this.flash>0){const r=(1-this.flash)*120;ctx.lineWidth=1.2;ctx.strokeStyle='rgba(234,179,8,'+(this.flash*0.7)+')';ctx.beginPath();ctx.arc(cx,cy,r,0,TAU);ctx.stroke();
+      ctx.strokeStyle='rgba(16,185,129,'+(this.flash*0.45)+')';ctx.beginPath();ctx.arc(cx,cy,r*0.62,0,TAU);ctx.stroke();}
+    [[cx-G,'224,242,254'],[cx+G,'245,158,11']].forEach(([x,c])=>{ctx.shadowColor='rgba('+c+',1)';ctx.shadowBlur=10;ctx.fillStyle='rgba('+c+',0.95)';ctx.beginPath();ctx.arc(x,cy,1.6,0,TAU);ctx.fill();});ctx.shadowBlur=0;
+  }
+
+  segs(v,max,freshFrom){
+    const n=24,lit=Math.round(v/max*n),prev=freshFrom==null?lit:Math.round(freshFrom/max*n);
+    return Array.from({length:n},(_,i)=>{
+      if(i>=lit)return {bg:'#111721',glow:'inset 0 1px 1px rgba(0,0,0,0.8)'};
+      if(i>=prev)return {bg:E,glow:'0 0 8px rgba(16,185,129,0.8)'};
+      return {bg:SIL,glow:'0 0 5px rgba(154,168,184,0.35)'};
+    });
+  }
+
+  renderVals(){
+    const rv=this.state.revOn,dp=this.state.dispatch,BL='56,189,248',AMB='245,158,11';
+    const s=this.state,ph=s.phase,off=s.network==='offline',zero=s.mode==='zero',busy=ph==='processing'||ph==='transit',local=off&&zero;
+    const col={idle:SIL,processing:A,transit:A,synced:E,error:A2}[ph];
+    const labels={idle:'დაჯავშნე, გადაიხადე & გამოსცადე საშვი',processing:'მუშავდება გადახდა & სკანირება...',transit:'კარი ღიაა · წვდომა დაშვებულია',synced:'ჯავშანი & დაშვება წარმატებულია (თავიდან)',error:'IoT რელე მიუწვდომელია · გადართე MODE 01'};
+    const codes={idle:'STANDBY',processing:'PROCESSING',transit:'TRANSIT',synced:local&&s.pending?'LOCAL · SIGNED':dp?'LOOP · CLOSED':'SYNCED',error:'RELAY · OFFLINE'};
+    const si={idle:0,processing:1,transit:2,synced:3,error:1}[ph];
+    const SD=[
+      ['STANDBY','ეკრანი 03 · ტელეფონი','საშვი მზადაა','კლიენტს ტელეფონში აქვს პირადი QR საშვი. კოდი ყოველ რამდენიმე წამში იცვლება, ამიტომ სქრინშოტით ან სხვისთვის გაგზავნით ვერ ისარგებლებ.','ეკრანზე: მთვლელი TTL და განახლებადი QR'],
+      ['PAY·SCAN','ეკრანი 03 · ტელეფონი','გადახდა და შემოწმება','კლიენტი ერთი ღილაკით იხდის 50 ₾-ს. სისტემა ამოწმებს, რომ საშვი ნამდვილია და ვადაგასული არ არის.','ეკრანზე: ქარვისფერი სკანირების ხაზი'],
+      ['TRANSIT','ეკრანი 02 · ხიდი','ინფორმაცია იგზავნება','გადახდის და შესვლის მონაცემი დაცული (დაშიფრული) სახით მიდის ტელეფონიდან დარბაზის სისტემაში.','ეკრანზე: ქარვისფერი წერტილი მოძრაობს ხიდზე'],
+      ['SYNC','ეკრანი 01 · პანელი','კარი იღება — ყველაფერი ჩაიწერა','კლიენტი შედის. მფლობელის პანელში ავტომატურად ემატება თანხა, ვიზიტი და დარბაზში მყოფთა რაოდენობა — ხელით არაფერი კეთდება.','ეკრანზე: მწვანე სიგნალი და ახალი ჩანაწერი']];
+    const steps=SD.map(([label,where,title,desc,hint],i)=>{
+      const c=i===0?SIL:i===3?E:(ph==='error'?A2:A),on=i<=si,cur=i===si;
+      const status=cur?(ph==='error'&&i===1?'შეჩერდა':'ახლა'):on?'შესრულდა ✓':'მოლოდინში';
+      return {label,where,title,desc,hint,status,statusColor:cur?(ph==='error'&&i===1?A2:c):on?E:'#6B7888',statusBg:cur?`rgba(${RGB[c]||'154,168,184'},0.12)`:'rgba(224,242,254,0.06)',num:'0'+(i+1),color:on?c:'#4A5666',titleColor:on?PL:'#6B7888',fill:on?c:'#111721',glow:on&&cur&&i>0?`0 0 12px ${c}`:'inset 0 1px 1px rgba(0,0,0,0.8)',
+        border:cur&&i>0?`rgba(${RGB[c]},0.45)`:'rgba(224,242,254,0.12)',shadow:cur&&i>0?`0 0 40px -10px rgba(${RGB[c]},0.55),0 24px 48px -16px rgba(0,0,0,0.9),inset 0 1px 1px rgba(255,255,255,0.08)`:'0 24px 48px -16px rgba(0,0,0,0.9),inset 0 1px 1px rgba(255,255,255,0.06)'};
+    });
+    const pC=ph==='processing'?A:ph==='error'?A2:ph==='synced'||ph==='transit'?E:null;
+    const bC=s.pktOn||ph==='transit'?A:off&&s.pending?A2:null;
+    const cC=ph==='synced'&&!s.pending?E:s.pending?A2:null;
+    const logs=s.logs.map((l,i)=>{const f=s.fresh&&i===0;return {...l,
+      bg:f?'rgba(16,185,129,0.07)':'#05080C',border:f?'rgba(16,185,129,0.55)':'transparent',
+      shadow:f?'0 0 25px rgba(16,185,129,0.28),inset 0 0 8px rgba(16,185,129,0.2)':'inset 0 2px 6px rgba(0,0,0,0.8)',
+      anim:f?'rowin 0.5s ease-out':'none',accent:f?E:PL};});
+    const pr=s.fresh?2450:null,pv=s.fresh?42:null;
+    const tx=this.props.parallax===false?0:s.tilt.x,ty=this.props.parallax===false?0:s.tilt.y;
+    const btn={
+      idle:{bg:'linear-gradient(180deg,#10B981 0%,#059669 60%,#047857 100%)',fg:'#041A12',bd:'rgba(4,120,87,0.9)',bt:'rgba(224,242,254,0.55)',bb:'rgba(0,0,0,0.6)',ts:'0 1px 0 rgba(255,255,255,0.25)',gem:true,
+        sh:s.btnPress?'inset 0 3px 8px rgba(0,0,0,0.45),inset 0 -1px 0 rgba(255,255,255,0.08),0 2px 10px -4px rgba(16,185,129,0.5)':`0 8px 25px -4px rgba(16,185,129,${s.btnHover?0.6:0.4}),inset 0 1px 0 rgba(255,255,255,0.3)`},
+      processing:{bg:'#05080C',fg:A,bd:'rgba(245,158,11,0.6)',sh:'0 0 30px rgba(245,158,11,0.45),inset 0 2px 6px rgba(0,0,0,0.8),inset 0 0 14px rgba(245,158,11,0.25)'},
+      transit:{bg:'linear-gradient(180deg,#10B981 0%,#059669 100%)',fg:'#03140D',bd:'rgba(16,185,129,1)',sh:'0 0 40px rgba(16,185,129,0.55),inset 0 0 8px rgba(16,185,129,0.2),inset 0 1px 0 rgba(255,255,255,0.35)'},
+      synced:{bg:'#0B1017',fg:E,bd:'rgba(16,185,129,0.5)',sh:'0 0 25px rgba(16,185,129,0.28),inset 0 0 8px rgba(16,185,129,0.2),inset 0 1px 1px rgba(255,255,255,0.12)'},
+      error:{bg:'#0B1017',fg:A2,bd:'rgba(217,119,6,0.5)',sh:'inset 0 1px 1px rgba(255,255,255,0.1),0 10px 24px -8px rgba(0,0,0,0.9)'}
+    }[ph];
+    const shock=s.waveId>0?React.createElement('div',{key:'w'+s.waveId,style:{position:'absolute',inset:0,pointerEvents:'none',borderRadius:'12px'}},
+      React.createElement('div',{style:{position:'absolute',left:'32%',top:'55%',width:'520px',height:'520px',borderRadius:'50%',border:'2px solid rgba(16,185,129,0.75)',boxShadow:'0 0 25px rgba(16,185,129,0.5),inset 0 0 30px rgba(16,185,129,0.35)',animation:'shock 1100ms cubic-bezier(.2,.7,.3,1) forwards'}}),
+      React.createElement('div',{style:{position:'absolute',top:0,bottom:0,left:0,width:'55%',background:'linear-gradient(90deg,rgba(16,185,129,0),rgba(16,185,129,0.22),rgba(16,185,129,0))',animation:'sweep 900ms ease-out forwards'}})):null;
+    const laser=busy?React.createElement('div',{key:'laser',style:{position:'absolute',left:'4px',right:'4px',height:'40px',background:'linear-gradient(180deg,rgba(16,185,129,0),rgba(16,185,129,0.3))',borderBottom:'2px solid #10B981',boxShadow:'0 8px 16px -4px rgba(16,185,129,0.85)',animation:'laser 520ms ease-in-out infinite',pointerEvents:'none'}}):null;
+    const ce=React.createElement,lit=!!bC||ph==='synced';
+        const ap=c=>c?{bg:'radial-gradient(circle at 35% 30%,#FFFFFF 0%,rgba('+c+',1) 45%,rgba('+c+',0.45) 100%)',glow:'0 0 8px rgba('+c+',0.95),0 0 18px rgba('+c+',0.55)'}:{bg:'radial-gradient(circle at 35% 30%,#F1F5F9 0%,#94A3B8 50%,#1E293B 100%)',glow:'inset 0 1px 2px rgba(0,0,0,0.7),0 0 0 1px rgba(0,0,0,0.6)'};
+    const phIn=ap(busy?AMB:null),phOut=ap(rv?BL:dp?'16,185,129':null),cnIn=ap(s.pktOn||ph==='transit'?AMB:null),cnOut=ap(rv||dp?BL:null);
+    const haptic=s.hapticId?ce('div',{key:'h'+s.hapticId,style:{position:'absolute',inset:0,pointerEvents:'none'}},
+      ce('div',{style:{position:'absolute',left:'50%',top:'50%',width:'320px',height:'320px',borderRadius:'50%',border:'1.5px solid rgba(16,185,129,0.85)',boxShadow:'0 0 22px rgba(16,185,129,0.5),inset 0 0 18px rgba(16,185,129,0.3)',animation:'haptic 1100ms cubic-bezier(.2,.7,.3,1) forwards'}}),
+      ce('div',{style:{position:'absolute',left:'50%',top:'50%',width:'320px',height:'320px',borderRadius:'50%',border:'1px solid rgba(56,189,248,0.6)',opacity:0,animation:'haptic 1100ms cubic-bezier(.2,.7,.3,1) 180ms forwards'}})):null;
+    const IRON='rgba(74,82,92,0.95)',PLAT='rgba(214,224,234,0.5)';
+    const rings=Array.from({length:9},(_,i)=>ce('div',{key:'m'+i,style:{position:'absolute',left:'-76px',top:'-76px',width:'152px',height:'152px',borderRadius:'50%',border:(i%3===0?'1.5px solid ':'1px solid ')+(i%2?IRON:PLAT),boxShadow:i%2?'none':'0 0 4px rgba(224,242,254,0.12)',transform:'rotateY('+(i*20)+'deg)'}}));
+    const ennea=ce('div',{key:'ennea',style:{position:'absolute',left:'50%',top:'50%',width:0,height:0,transformStyle:'preserve-3d'}},
+      ce('div',{key:'halo',style:{position:'absolute',left:0,top:0,width:'140px',height:'140px',borderRadius:'50%',background:'radial-gradient(circle,rgba(234,179,8,'+(lit?0.5:0.24)+') 0%,rgba(234,179,8,0.07) 42%,rgba(234,179,8,0) 70%)',animation:'halo 4s ease-in-out infinite',transition:'background 0.5s'}}),
+      ce('div',{key:'sph',style:{position:'absolute',left:0,top:0,transformStyle:'preserve-3d',animation:'orbit 48s linear infinite'}},...rings,
+        ce('div',{key:'eq',style:{position:'absolute',left:'-76px',top:'-76px',width:'152px',height:'152px',borderRadius:'50%',border:'1px solid rgba(234,179,8,0.4)',transform:'rotateX(90deg)'}})),
+      ce('div',{key:'core',style:{position:'absolute',left:0,top:0,width:'26px',height:'26px',borderRadius:'50%',background:'radial-gradient(circle at 36% 30%,#FEF3C7 0%,#FACC15 24%,#EAB308 50%,#854D0E 100%)',boxShadow:lit?'0 0 24px rgba(234,179,8,0.95),0 0 70px rgba(234,179,8,0.5),inset 0 -2px 4px rgba(120,53,15,0.6)':'0 0 18px rgba(234,179,8,0.75),0 0 46px rgba(234,179,8,0.3),inset 0 -2px 4px rgba(120,53,15,0.6)',animation:'breathe 4s ease-in-out infinite',transition:'box-shadow 0.4s'}}));
+    const fiberPulse=off?null:ce('div',{key:'fp',style:{position:'absolute',top:'3px',height:'4px',width:'22%',borderRadius:'2px',background:'linear-gradient(90deg,rgba(245,158,11,0),rgba(245,158,11,0.75),rgba(245,158,11,0))',boxShadow:'0 0 12px rgba(245,158,11,0.5)',animation:'fiber 4s linear infinite'}});
+    return {
+      phInBg:phIn.bg,phInGlow:phIn.glow,phOutBg:phOut.bg,phOutGlow:phOut.glow,cnInBg:cnIn.bg,cnInGlow:cnIn.glow,cnOutBg:cnOut.bg,cnOutGlow:cnOut.glow,haptic,
+      islandH:dp?'78px':'33px',islandR:dp?'26px':'20px',islandBg:dp?'linear-gradient(180deg,#151B24 0%,#06080C 38%,#000 100%)':'#000',
+      islandShadow:dp?'inset 0 1px 0 rgba(224,242,254,0.22),inset 0 -1px 0 rgba(56,189,248,0.25),0 0 0 1px rgba(148,163,184,0.35),0 10px 24px -8px rgba(56,189,248,0.45),0 4px 10px rgba(0,0,0,0.8)':'inset 0 2px 4px rgba(0,0,0,1),0 0 0 1px rgba(224,242,254,0.07)',
+      islandTxtOp:dp?1:0,ackText:'ACK '+(s.ack||24)+'ms',
+      dspText:rv?'AUTO-DISPATCH: TRANSMITTING -> ATHLETE_ID: 4471':dp?'AUTO-DISPATCH: SENT -> ATHLETE_ID: 4471 (DYNAMIC ISLAND ACK: '+s.ack+'ms)':'AUTO-DISPATCH: STANDBY',
+      dspColor:rv?'#38BDF8':dp?'rgba(56,189,248,0.75)':'rgba(148,163,184,0.55)',
+      glacierOp:rv?1:dp?0.6:0,
+      fiberRev:off?null:ce('div',{key:'fr',style:{position:'absolute',top:'6px',height:'3px',width:'18%',borderRadius:'2px',background:'linear-gradient(90deg,rgba(56,189,248,0),rgba(56,189,248,0.75),rgba(56,189,248,0))',boxShadow:'0 0 10px rgba(56,189,248,0.5)',animation:'fiberR 5s linear infinite',opacity:rv||dp?1:0.35,transition:'opacity 0.5s'}}),
+      ennea,fiberPulse,pipeText:ph==='synced'?(rv?'DISPATCH':dp?'LOOP CLOSED':'COMMITTED'):({processing:'HANDSHAKE',transit:'DISCHARGE',error:'HALTED'}[ph]||'ACTIVE'),pipeColor:rv||dp?'#38BDF8':busy?A:ph==='synced'?E:PL,latText:s.latency?s.latency+'ms':'<12ms',dawnOpacity:s.gateOpen?1:ph==='processing'?0.75:0.5,
+phoneShadow:ring(PHONE,pC),bridgeShadow:ring(DEEP,bC),consoleShadow:ring(DEEP,cC,0.8),phoneTag:pC||SIL,bridgeTag:rv?'#38BDF8':bC||SIL,consoleTag:cC||SIL,
+      col,phaseCode:codes[ph],netLabel:off?'OFFLINE':'ONLINE',netColor:off?A2:PL,modeShort:zero?'MODE 01':'MODE 02',
+      rowTransform:`rotateX(${(-ty*4).toFixed(2)}deg) rotateY(${(tx*6).toFixed(2)}deg)`,
+      onMove:e=>{const r=e.currentTarget.getBoundingClientRect();this.setState({tilt:{x:(e.clientX-r.left)/r.width-0.5,y:(e.clientY-r.top)/r.height-0.5}});},
+      onLeave:()=>this.setState({tilt:{x:0,y:0}}),
+      cvRef:this.cvRef,qrRef:this.qrRef,
+      linkText:off?'WS · LINK LOST':'WS · 24ms',linkColor:off?A2:SIL,queueText:s.pending?'QUEUE 1 · AWAITING SYNC':'QUEUE 0',
+      revText:s.shownRev.toLocaleString('en-US'),revColor:s.fresh?E:PL,revGlow:s.fresh?'0 -1px 0 rgba(0,0,0,0.95),0 0 22px rgba(16,185,129,0.45)':'0 -1px 0 rgba(0,0,0,0.95),0 1px 0 rgba(224,242,254,0.14)',deltaOpacity:s.fresh?1:0,
+      revSegs:this.segs(s.revenue,3000,pr),visSegs:this.segs(s.inGym,60,pv),
+      inGym:s.inGym,occPct:Math.round(s.inGym/60*100)+'%',shock,
+      logs,logCount:s.logs.length,
+      steps,pkt:s.pkt,
+      fiberColor:off?'rgba(217,119,6,0.12)':'rgba(245,158,11,0.22)',
+      busText:s.pktOn?'PHOTON · IN TRANSIT':off?(s.pending?'QUEUED · LOCAL':'LINK DOWN'):'IDLE',busColor:s.pktOn?A:off?A2:SIL,
+      doorText:s.gateOpen?'OPEN':ph==='error'?'LOCKED':'CLOSED',doorColor:s.gateOpen?E:SIL,doorLed:s.gateOpen?E:'#1F2733',doorGlow:s.gateOpen?'0 0 10px rgba(16,185,129,0.9)':'inset 0 1px 1px rgba(0,0,0,0.9)',
+      latencyText:ph==='synced'?(s.latency?`ACK · ${s.latency}ms · LEDGER COMMITTED`:'ACK · LOCAL SIGNATURE · CLOUD PENDING'):ph==='error'?'NO UPLINK · RELAY REQUIRES NETWORK':busy?'AWAITING ACK…':'READY',
+      islandW:dp?'288px':busy?'150px':ph==='synced'||ph==='error'?'172px':'112px',islandDot:ph==='idle'?0:1,islandLed:col,
+      netChip:off?'NO NET':'5G ▪▪▪',netChipColor:off?A2:PL,
+      ttlText:(s.ttl/1000).toFixed(1).padStart(4,'0'),ttlPct:(s.ttl/this.ttlMs()*100).toFixed(1)+'%',ttlColor:s.ttl<2500?A:E,
+      qrOpacity:busy?0.55:1,laser,qrOverlay:ph==='synced'||ph==='error',
+      qrOverlayBg:ph==='synced'?'rgba(16,185,129,0.94)':'rgba(13,18,27,0.94)',qrOverlayFg:ph==='synced'?'#03140D':A2,
+      qrOverlayT1:ph==='synced'?(local&&s.pending?'LOCAL · SIGNED':'ACCESS · OK'):'RELAY · DOWN',
+      qrOverlayT2:ph==='synced'?(local&&s.pending?'CRYPTO TOKEN · VERIFIED':`${s.inGym} / 60 · +50 ₾`):'0 ₾ · NOT CHARGED',
+      showLocalMsg:local&&ph==='synced',showArmedMsg:off&&ph!=='synced',
+      armedText:zero?'OFFLINE · LOCAL SIGNATURE ARMED · MODE 01':'OFFLINE · MODE 02 REQUIRES UPLINK',
+      btnLabel:labels[ph],btnBg:btn.bg,btnFg:btn.fg,btnBorder:btn.bd,btnBorderTop:btn.bt||btn.bd,btnBorderBottom:btn.bb||btn.bd,btnTextShadow:btn.ts||'none',btnGem:!!btn.gem,
+      btnTransform:btn.gem?(s.btnPress?'translateY(2px) scale(0.98)':s.btnHover?'scale(1.015)':'none'):'none',btnFilter:btn.gem&&s.btnHover&&!s.btnPress?'brightness(1.08)':'none',
+      btnEnter:()=>this.setState({btnHover:true}),btnLeave:()=>this.setState({btnHover:false,btnPress:false}),btnDown:()=>this.setState({btnPress:true}),btnUp:()=>this.setState({btnPress:false}),btnShadow:btn.sh,btnCursor:busy?'progress':'pointer',
+      run:()=>this.run()
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,9 +1,13 @@
 'use client';
 
-import React from 'react';
-import { RELIABILITY_VAULT_CARDS } from '../data/aboutVisionData';
+import React, { useMemo } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+import { getAboutVisionData } from '../data/aboutVisionData';
 
 export const AboutReliability: React.FC = () => {
+  const { locale } = useLanguage();
+  const { reliability, vaultCards } = useMemo(() => getAboutVisionData(locale), [locale]);
+
   return (
     <section id="s3" data-screen-label="03 Reliability" className="relative z-10 pt-24 sm:pt-36">
       <div className="vision-grid gap-y-12">
@@ -15,21 +19,21 @@ export const AboutReliability: React.FC = () => {
 
         {/* Chapter Header */}
         <div className="col-span-full flex items-baseline gap-4 sm:gap-6 flex-wrap vision-rv in">
-          <span className="vision-mono text-amber-500 font-semibold text-sm">III.</span>
+          <span className="vision-mono text-amber-500 font-semibold text-sm">{reliability.chapterNum}</span>
           <h2 className="text-[clamp(26px,3.6vw,52px)] font-light text-white tracking-tight leading-tight">
-            სანდოობა და ლეგიტიმაცია: <em className="not-italic text-slate-400">ურყევი სტანდარტი</em>
+            {reliability.title}<em className="not-italic text-slate-400">{reliability.titleEm}</em>
           </h2>
         </div>
 
         <p className="col-span-12 lg:col-span-7 text-[clamp(16px,1.35vw,20px)] leading-relaxed text-slate-300 vision-rv in">
-          სპორტული ორგანიზაციის მართვა მოითხოვს ორ ფუნდამენტურ გარანტიას:{' '}
-          <strong className="text-white font-medium">პროცესების უწყვეტობასა და მონაცემთა სრულ ხელშეუხებლობას.</strong>{' '}
-          ჩვენი სტანდარტი გამყარებულია მკაფიო საინჟინრო და სამართლებრივი პარამეტრებით.
+          {reliability.descP1}
+          <strong className="text-white font-medium">{reliability.descBold}</strong>
+          {reliability.descP2}
         </p>
 
         {/* 4 Vault Cards Grid */}
         <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-px bg-gradient-to-br from-slate-200/20 via-slate-500/10 to-amber-500/25 border border-white/10 rounded-3xl overflow-hidden mt-6 shadow-2xl vision-rv in">
-          {RELIABILITY_VAULT_CARDS.map((card, i) => (
+          {vaultCards.map((card, i) => (
             <article
               key={i}
               className="relative bg-[#090A0F]/85 backdrop-blur-md p-8 sm:p-12 flex flex-col justify-between gap-6 min-h-[360px] sm:min-h-[400px] group transition-colors duration-500 hover:bg-[#0B132B]/90"

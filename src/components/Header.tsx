@@ -8,7 +8,6 @@ import {
   ChevronDown, 
   Menu, 
   X, 
-  Globe, 
   ArrowLeft, 
   Home, 
   Cpu, 

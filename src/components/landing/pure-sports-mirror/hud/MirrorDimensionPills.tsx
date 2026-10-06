@@ -15,7 +15,7 @@ export const MirrorDimensionPills: React.FC<MirrorDimensionPillsProps> = ({
   onSelectDimension,
 }) => {
   return (
-    <div className="self-start flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-full border border-white/[0.12] bg-white/[0.04] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)] max-w-full overflow-x-auto scrollbar-none">
+    <div className="mx-auto flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-full border border-white/[0.10] bg-white/[0.02] backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] max-w-full overflow-x-auto scrollbar-none">
       {dimensions.map((dim, i) => {
         const isActive = i === activeDimensionIndex;
         return (

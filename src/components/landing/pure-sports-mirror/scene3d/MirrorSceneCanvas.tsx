@@ -190,14 +190,46 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       state.camCurrent.lerp(state.camGoal, k);
       state.tgtCurrent.lerp(state.tgtGoal, 1 - Math.exp(-lam * 1.35 * dt));
 
-      state.camera.position.x = state.camCurrent.x + state.pointer.x * (isFocused ? 0.1 : 0.2);
-      state.camera.position.y = state.camCurrent.y - state.pointer.y * (isFocused ? 0.08 : 0.15);
-      state.camera.position.z = state.camCurrent.z;
+      const camAxis = state.camCurrent.clone().sub(state.tgtCurrent);
+      const camLen = camAxis.length() || 1;
+      camAxis.multiplyScalar(1 / camLen);
+      const par = isFocused ? 0.22 : 0.45;
+      const camRight = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), camAxis).normalize();
+      const camUp = new THREE.Vector3().crossVectors(camAxis, camRight).normalize();
+      const camPos = state.camCurrent
+        .clone()
+        .addScaledVector(camRight, state.pointer.x * par)
+        .addScaledVector(camUp, -state.pointer.y * par * 0.7);
+
+      state.camera.position.copy(camPos);
       state.camera.lookAt(state.tgtCurrent);
 
       // Model updates & idle yaw swing
       if (state.activeModel) {
         state.activeModel.group.rotation.y = Math.sin(t * 0.11) * 0.16;
+        if (state.activeModel.parts) {
+          const fi = focusTileIndex ?? -1;
+          const kp = 1 - Math.exp(-5 * dt);
+          state.activeModel.parts.forEach((p, j) => {
+            const goal = fi < 0 || j === fi ? 1 : 0.13;
+            const cur = (p.userData.w as number | undefined) ?? 1;
+            const w = cur + (goal - cur) * kp;
+            p.userData.w = w;
+            p.traverse((o) => {
+              const mesh = o as THREE.Mesh;
+              if (mesh.material) {
+                const mat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.Material & {
+                  opacity: number;
+                  userData: { o0?: number };
+                };
+                if (mat.userData.o0 === undefined) {
+                  mat.userData.o0 = mat.opacity;
+                }
+                mat.opacity = mat.userData.o0 * w;
+              }
+            });
+          });
+        }
         state.activeModel.update(t, dt);
       }
       state.ambient?.update(t);

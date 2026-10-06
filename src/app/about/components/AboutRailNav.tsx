@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface AboutRailNavProps {
   activeChapter: number;
@@ -14,6 +15,9 @@ const CHAPTERS = [
 ];
 
 export const AboutRailNav: React.FC<AboutRailNavProps> = ({ activeChapter }) => {
+  const { locale } = useLanguage();
+  const ariaLabel = locale === 'en' ? 'Chapters' : locale === 'ru' ? 'Главы' : 'თავები';
+
   const scrollTo = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     const el = document.getElementById(id);
@@ -25,7 +29,7 @@ export const AboutRailNav: React.FC<AboutRailNavProps> = ({ activeChapter }) => 
   return (
     <nav
       className="hidden md:flex fixed right-4 lg:right-8 top-1/2 -translate-y-1/2 z-30 flex-col gap-4 items-end"
-      aria-label="თავები"
+      aria-label={ariaLabel}
     >
       {CHAPTERS.map((ch, idx) => {
         const isActive = activeChapter === idx;

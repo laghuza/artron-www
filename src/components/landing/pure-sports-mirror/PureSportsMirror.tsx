@@ -3,16 +3,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ALL_DIMENSIONS } from './data';
 import { MirrorSceneCanvas } from './scene3d/MirrorSceneCanvas';
-import { MirrorDimensionPills } from './hud/MirrorDimensionPills';
-import { MirrorSubNav } from './hud/MirrorSubNav';
-import { MirrorKineticHeader } from './hud/MirrorKineticHeader';
-import { MirrorSpecAccordion } from './hud/MirrorSpecAccordion';
+import { MirrorUnifiedCockpitDeck } from './hud/MirrorUnifiedCockpitDeck';
 import { useLanguage, Locale } from '@/context/LanguageContext';
 
 const SLOGANS: Record<Locale, string> = {
-  ka: 'მოძრაობა იბადება კავშირში',
-  en: 'Motion is born in connection',
-  ru: 'Движение рождается в связи',
+  ka: 'არვის მეგობარი — ყველას მოკავშირე.',
+  en: 'Friend to none — ally to all.',
+  ru: 'Никому не друг — союзник всем.',
 };
 
 export const PureSportsMirror: React.FC = () => {
@@ -76,17 +73,17 @@ export const PureSportsMirror: React.FC = () => {
     <section
       id="pure-sports-mirror"
       aria-label="SPORT-OS Systemic Mirror"
-      className="relative w-full h-[calc(100vh-88px)] min-h-[640px] xl:min-h-[700px] max-h-[1080px] bg-[#060911] text-[#EAF2F8] overflow-hidden select-none scroll-mt-[88px] flex flex-col justify-between p-3 sm:p-5 lg:p-6"
+      className="relative w-full min-h-[560px] lg:min-h-[640px] xl:min-h-[720px] h-auto lg:h-[calc(100vh-88px)] max-h-[1080px] bg-[#060911] text-[#EAF2F8] overflow-hidden select-none scroll-mt-[88px] flex flex-col justify-between p-3 sm:p-4 lg:p-5"
     >
-      {/* Layer 1: Procedural WebGL 3D Canvas (80% Visual Dominance with off-axis frustum) */}
+      {/* Layer 1: Procedural WebGL 3D Canvas (Preserved 3D visual dominance) */}
       <MirrorSceneCanvas
         variant={currentMod.sceneVariant}
         accent={currentDim.accentColor}
         focusTileIndex={tileIndex}
-        shift={0.42}
+        shift={0.44}
       />
 
-      {/* Layer 2: Vignette Depth Gradient (Matching Claude Design) */}
+      {/* Layer 2: Vignette Depth Gradient */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -95,63 +92,29 @@ export const PureSportsMirror: React.FC = () => {
         }}
       />
 
-      {/* Layer 3: Top Navigation Bar (Dimension Pills & SubNav) */}
-      <div className="relative z-10 flex flex-col gap-2.5 pointer-events-auto max-w-full">
-        <MirrorDimensionPills
-          dimensions={ALL_DIMENSIONS}
-          activeDimensionIndex={dimIndex}
-          onSelectDimension={handleSelectDim}
-        />
+      {/* Layer 3: Unified Cyber Cockpit Deck (Centered Navigation + Left Data Flank + Visual Bridge) */}
+      <MirrorUnifiedCockpitDeck
+        dimensions={ALL_DIMENSIONS}
+        activeDimensionIndex={dimIndex}
+        currentDimension={currentDim}
+        currentModule={currentMod}
+        activeModuleIndex={modIndex}
+        activeTileIndex={tileIndex}
+        accentColor={currentDim.accentColor}
+        onSelectDimension={handleSelectDim}
+        onSelectModule={handleSelectMod}
+        onNextModule={() => step(1)}
+        onToggleTile={handleToggleTile}
+      />
 
-        <MirrorSubNav
-          modules={currentDim.modules}
-          activeModuleIndex={modIndex}
-          accentColor={currentDim.accentColor}
-          onSelectModule={handleSelectMod}
-          onNextModule={() => step(1)}
-        />
-      </div>
-
-      {/* Layer 4: Floating Glassmorphic HUD (20% Text) & Footer Watermark */}
-      <div className="relative z-10 flex flex-col lg:flex-row items-stretch lg:items-end justify-between gap-4 pointer-events-none min-h-0 mt-auto">
-        {/* Left Floating Cockpit HUD (Matching Claude Design hudW & hudMax) */}
-        <div
-          className="pointer-events-auto w-full lg:max-w-[480px] max-h-[min(640px,calc(100vh-200px))] overflow-y-auto rounded-[26px] p-4 sm:p-5 lg:p-6 border border-white/[0.12] backdrop-blur-[28px] shadow-[0_26px_70px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.07)] scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
-          style={{
-            background: `radial-gradient(130% 80% at 0% 0%, ${currentDim.accentColor}1f, rgba(255,255,255,0) 62%), linear-gradient(150deg, rgba(255,255,255,0.08), rgba(255,255,255,0.022))`,
-          }}
-        >
-          <MirrorKineticHeader
-            headline={currentMod.headline}
-            kicker={currentMod.kicker}
-            accentColor={currentDim.accentColor}
-            currentIndex={modIndex}
-            totalCount={currentDim.modules.length}
-          />
-
-          <p className="text-xs sm:text-[13px] leading-[1.68] text-[#E6EFF6]/80 mb-3.5 font-normal max-w-[62ch]">
-            {currentMod.description}
-          </p>
-
-          <MirrorSpecAccordion
-            specRows={currentMod.specRows}
-            cameraTags={currentMod.cameraTags}
-            notes={currentMod.notes}
-            accentColor={currentDim.accentColor}
-            activeTileIndex={tileIndex}
-            onToggleTile={handleToggleTile}
-          />
-        </div>
-
-        {/* Right Watermark - ARTRON Brand & Localized Slogan */}
-        <div className="flex flex-col items-end gap-1 pb-1 text-right pointer-events-none select-none md:mr-16 lg:mr-20">
-          <span className="font-mono text-base sm:text-lg lg:text-xl font-bold tracking-[0.25em] uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
-            <span className="text-white">AR</span><span className="text-[#00FF88]">T</span><span className="text-white">RON</span>
-          </span>
-          <span className="text-xs sm:text-[13px] font-normal tracking-wide text-slate-300/85 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
-            {currentSlogan}
-          </span>
-        </div>
+      {/* Layer 4: Right Watermark - ARTRON Brand & Localized Slogan */}
+      <div className="absolute right-4 bottom-4 lg:right-6 lg:bottom-5 z-10 flex flex-col items-end gap-1.5 text-right pointer-events-none select-none">
+        <span className="text-[11px] sm:text-xs font-light tracking-[0.01em] text-[#EEF6FC]/70 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+          {currentSlogan}
+        </span>
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-[#EEF6FC]/40">
+          ARTRON
+        </span>
       </div>
     </section>
   );

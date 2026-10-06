@@ -24,7 +24,7 @@ export const MirrorKineticHeader: React.FC<MirrorKineticHeaderProps> = ({
   let wordCounter = 0;
 
   return (
-    <div className="flex flex-col gap-2.5 mb-3.5">
+    <div className="flex flex-col gap-1.5 mb-2 sm:mb-2.5">
       {/* Top kicker bar */}
       <div className="flex items-center gap-2">
         <span
@@ -46,7 +46,7 @@ export const MirrorKineticHeader: React.FC<MirrorKineticHeaderProps> = ({
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.16, 0.84, 0.44, 1] }}
-        className="text-2xl sm:text-[28px] lg:text-[32px] font-bold tracking-tight leading-[1.06] text-white flex flex-col gap-1"
+        className="text-2xl sm:text-3xl lg:text-[30px] xl:text-[34px] font-bold tracking-tight leading-[1.08] text-white flex flex-col gap-0.5"
       >
         {lines.map((line, li) => {
           const lineWords = line.split(' ').filter(Boolean);

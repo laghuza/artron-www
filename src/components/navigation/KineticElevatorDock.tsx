@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { audioManager } from '@/lib/audioManager';
@@ -23,6 +24,7 @@ const LeftGlassTooltip: React.FC<{ isVisible: boolean; children: React.ReactNode
 );
 
 export const KineticElevatorDock: React.FC = () => {
+  const pathname = usePathname();
   const { locale } = useLanguage();
   const [activeNodeIndex, setActiveNodeIndex] = useState<number>(0);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
@@ -136,6 +138,8 @@ export const KineticElevatorDock: React.FC = () => {
       })
     );
   };
+
+  if (pathname === '/about') return null;
 
   return (
     <>

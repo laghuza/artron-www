@@ -4,6 +4,7 @@ import { CYAN, EMER, WHITE } from '../sceneConfig';
 
 export interface SceneModelHandle {
   group: THREE.Group;
+  parts?: THREE.Group[];
   update: (t: number, dt: number) => void;
 }
 
@@ -111,99 +112,8 @@ export const buildGym = (a: number): SceneModelHandle => {
   };
 };
 
-export const buildPool = (a: number): SceneModelHandle => {
-  const g = new THREE.Group();
-  const S = 0.2, L = 50 * S, W = 25 * S, LW = 2.5 * S, SPAN = 8 * LW;
-  g.add(createBox(L + 2.6, 0.2, W + 2.4, M.std(0x101922, 0.8, 0.1), 0, -1.32, 0));
-  [
-    [L + 0.4, 0.9, 0.22, 0, -0.9, W / 2 + 0.1],
-    [L + 0.4, 0.9, 0.22, 0, -0.9, -W / 2 - 0.1],
-    [0.22, 0.9, W + 0.4, L / 2 + 0.1, -0.9, 0],
-    [0.22, 0.9, W + 0.4, -L / 2 - 0.1, -0.9, 0],
-  ].forEach((v) => g.add(createBox(v[0], v[1], v[2], M.std(0x16222d, 0.7, 0.2), v[3], v[4], v[5])));
-  g.add(createBox(L, 0.06, W, M.paint(0x062634, 1), 0, -1.28, 0));
+export { buildPool } from './poolBuilder';
 
-  for (let i = 0; i < 8; i++) {
-    const z = -SPAN / 2 + (i + 0.5) * LW;
-    g.add(createBox(L - 4 * S * 2, 0.02, 0.05, M.paint(0x03323f, 0.92), 0, -1.24, z));
-  }
-
-  const geo = new THREE.PlaneGeometry(L, W, 70, 36);
-  const water = new THREE.Mesh(
-    geo,
-    new THREE.MeshPhysicalMaterial({
-      color: 0x0a6f9e,
-      roughness: 0.06,
-      metalness: 0.25,
-      transparent: true,
-      opacity: 0.8,
-      clearcoat: 1,
-      clearcoatRoughness: 0.08,
-      side: THREE.DoubleSide,
-    })
-  );
-  water.rotation.x = -Math.PI / 2;
-  water.position.y = -0.84;
-  g.add(water);
-
-  const base = geo.attributes.position.array.slice();
-  const GW = [
-    [1, 0.16, 1.3, 0.032, 0.62],
-    [0.42, -1, 0.78, 0.019, 0.74],
-  ].map(([dx, dz, lam, amp, q]) => {
-    const l = Math.hypot(dx, dz);
-    const kk = (2 * Math.PI) / lam;
-    return { dx: dx / l, dz: dz / l, k: kk, w: Math.sqrt(9.81 * S * kk), a: amp, q: q / kk };
-  });
-
-  const floats: { im: THREE.InstancedMesh; z: number }[] = [];
-  for (let i = 1; i < 8; i++) {
-    const z = -SPAN / 2 + i * LW;
-    const im = new THREE.InstancedMesh(new THREE.SphereGeometry(0.05, 10, 6), M.std(i % 2 ? 0xe8f6ff : a, 0.35, 0.2), 36);
-    const d = new THREE.Object3D();
-    for (let k = 0; k < 36; k++) {
-      d.position.set(-L / 2 + (k / 35) * L, -0.8, z);
-      d.updateMatrix();
-      im.setMatrixAt(k, d.matrix);
-    }
-    g.add(im);
-    floats.push({ im, z });
-  }
-
-  for (let i = 0; i < 8; i++) {
-    const z = -SPAN / 2 + (i + 0.5) * LW;
-    const x = -L / 2 - 0.45;
-    g.add(createBox(0.42, 0.34, 0.42, M.std(0x1d2732, 0.55, 0.4), x, -1.05, z));
-    const top = createBox(0.44, 0.04, 0.44, M.glow(i % 2 ? CYAN : a, 0.7), x, -0.87, z);
-    top.rotation.x = -0.12;
-    g.add(top);
-  }
-
-  return {
-    group: g,
-    update(t: number) {
-      const p = geo.attributes.position.array as Float32Array;
-      for (let i = 0; i < p.length; i += 3) {
-        const x0 = base[i], y0 = base[i + 1];
-        let dx = 0, dy = 0, h = 0;
-        for (let j = 0; j < GW.length; j++) {
-          const q = GW[j];
-          const ph = q.k * (q.dx * x0 + q.dz * y0) - q.w * t;
-          dx += q.q * q.a * q.dx * Math.cos(ph);
-          dy += q.q * q.a * q.dz * Math.cos(ph);
-          h += q.a * Math.sin(ph);
-        }
-        p[i] = x0 + dx;
-        p[i + 1] = y0 + dy;
-        p[i + 2] = h;
-      }
-      geo.attributes.position.needsUpdate = true;
-      floats.forEach((f, i) => {
-        f.im.position.y = Math.sin(t * 1.8 + i * 0.6) * 0.022;
-      });
-    },
-  };
-};
 
 export const buildCourt = (a: number): SceneModelHandle => {
   const g = new THREE.Group();

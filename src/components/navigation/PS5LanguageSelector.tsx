@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Globe, Check, ChevronDown, Sparkles } from 'lucide-react';
+import { Check, ChevronDown, Sparkles } from 'lucide-react';
 import { useLanguage, Locale } from '@/context/LanguageContext';
+import { MiniEcosystemGlobe } from './MiniEcosystemGlobe';
 
 export interface PS5LanguageOption {
   code: Locale;
@@ -96,7 +97,7 @@ export const PS5LanguageSelector: React.FC<PS5LanguageSelectorProps> = ({
       <div className={`flex flex-col gap-1.5 w-full ${className}`}>
         <div className="flex items-center justify-between px-1 mb-1">
           <span className="text-[10px] font-mono text-[#00A3FF] uppercase tracking-widest flex items-center gap-1.5 font-bold">
-            <Globe className="w-3 h-3 text-[#00A3FF]" />
+            <MiniEcosystemGlobe size={14} />
             {t('lang_selector') || 'SYSTEM LANGUAGE'}
           </span>
           <span className="text-[9px] font-mono text-slate-400">PS5 HUD</span>
@@ -173,13 +174,7 @@ export const PS5LanguageSelector: React.FC<PS5LanguageSelectorProps> = ({
         )}
 
         <div className="flex items-center gap-1.5 relative z-10">
-          <Globe
-            className={`w-3.5 h-3.5 transition-transform duration-500 ${
-              isOpen
-                ? 'text-[#00E5FF] rotate-90 scale-110'
-                : 'text-[#00A3FF] group-hover:rotate-45'
-            }`}
-          />
+          <MiniEcosystemGlobe size={18} isActive={isOpen} />
           <span className="text-xs">{currentLang.flag}</span>
           <span className="text-[11px] font-black uppercase tracking-wider text-white font-mono">
             {currentLang.code.toUpperCase()}
