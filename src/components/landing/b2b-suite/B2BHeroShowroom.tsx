@@ -33,21 +33,22 @@ export const B2BHeroShowroom: React.FC<B2BHeroShowroomProps> = ({
 
         {/* Headline */}
         <h1 className="m-0 flex flex-col gap-2.5 text-left">
-          <span className="font-serif text-3xl sm:text-5xl md:text-6xl font-semibold tracking-wider text-[#F0F9FF] leading-none">
+          <span className="font-serif text-2xl sm:text-5xl md:text-6xl font-semibold tracking-wider text-[#F0F9FF] leading-none">
             ARTRON <span className="text-[#F59E0B] tracking-normal">—</span>
           </span>
-          <span className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold text-[#F0F9FF] leading-tight text-balance">
+          <span className="font-serif text-xl sm:text-3xl md:text-4xl font-semibold text-[#F0F9FF] leading-tight text-balance">
             ჭკვიანი დაშვების <span className="italic font-normal text-[#F59E0B] font-serif">&amp;</span> IoT მართვის ცენტრი
           </span>
         </h1>
 
         {/* Narrative Description */}
-        <p className="m-0 max-w-[50ch] text-sm sm:text-base leading-relaxed text-[#A9B9CA] text-pretty">
-          ტურნიკეტები, სენსორები და ჯავშნები — ერთ ცენტრში. ARTRON ამოწმებს თითოეულ გავლას წამის მეასედებში და განაგრძობს მუშაობას ინტერნეტის გათიშვისასაც.
+        <p className="m-0 max-w-[50ch] text-xs sm:text-base leading-relaxed text-[#A9B9CA] text-pretty">
+          <span className="hidden sm:inline">ტურნიკეტები, სენსორები და ჯავშნები — ერთ ცენტრში. ARTRON ამოწმებს თითოეულ გავლას წამის მეასედებში და განაგრძობს მუშაობას ინტერნეტის გათიშვისასაც.</span>
+          <span className="sm:hidden">ტურნიკეტები, სენსორები & ჯავშნები — 0.04წმ რეაგირება და სრული მუშაობა ინტერნეტის გარეშეც.</span>
         </p>
 
         {/* Latency Budget Badge */}
-        <div className="flex flex-wrap items-baseline gap-2 sm:gap-3.5 px-4 py-2.5 rounded-xl border border-[#BAE6FD]/15 bg-[#06090e]/60 backdrop-blur-md font-mono text-xs text-[#A9B9CA] w-fit shadow-lg">
+        <div className="flex flex-wrap items-baseline gap-1.5 sm:gap-3.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-[#BAE6FD]/15 bg-[#06090e]/60 backdrop-blur-md font-mono text-[11px] sm:text-xs text-[#A9B9CA] w-fit shadow-lg">
           <span className="text-[#F59E0B] font-bold">t</span>
           <span>= t<sub>სკან</sub> + t<sub>ვერიფ</sub> + t<sub>ძრავა</sub></span>
           <span>= 12 + 18 + 10</span>
@@ -91,7 +92,8 @@ export const B2BHeroShowroom: React.FC<B2BHeroShowroomProps> = ({
             onClick={onNextLogic}
             className="inline-flex items-center gap-2.5 min-h-[44px] bg-transparent border-none p-0 cursor-pointer font-sans text-sm font-semibold text-[#F0F9FF] hover:text-[#10B981] transition-colors"
           >
-            <span>შემდეგი ლოგიკა · ჯავშნები</span>
+            <span className="hidden sm:inline">შემდეგი ლოგიკა · ჯავშნები</span>
+            <span className="sm:hidden">შემდეგი ლოგიკა</span>
             <span className="font-mono text-base">→</span>
           </button>
         </div>

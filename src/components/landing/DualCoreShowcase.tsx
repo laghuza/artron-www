@@ -48,19 +48,30 @@ export const DualCoreShowcase: React.FC = () => {
                 : 'DUAL-CORE SYNC · REAL-TIME CORE'}
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 leading-tight">
             {locale === 'ka'
               ? 'კლუბის მართვის პანელი და წევრის ციფრული საშვი'
               : locale === 'ru'
               ? 'Панель управления клубом и цифровой пропуск резидента'
               : 'Club Management Console & Athlete Digital Pass'}
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
-            {locale === 'ka'
-              ? 'მყისიერი კავშირი ადმინისტრაციასა და სპორტსმენს შორის: მობილურით შეძენილი აბონემენტი, ტურნიკეტის ავტომატური გახსნა და შემოსავლების ლაივ აღრიცხვა.'
-              : locale === 'ru'
-              ? 'Мгновенная связь между администрацией и атлетом: покупка абонемента через приложение, автоматическое открытие турникета и учет доходов в реальном времени.'
-              : 'Instant synchronization between administration and member: mobile pass purchase, automated turnstile entry, and real-time revenue ledger.'}
+          <p className="text-xs sm:text-base text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
+            {locale === 'ka' ? (
+              <>
+                <span className="hidden sm:inline">მყისიერი კავშირი ადმინისტრაციასა და სპორტსმენს შორის: მობილურით შეძენილი აბონემენტი, ტურნიკეტის ავტომატური გახსნა და შემოსავლების ლაივ აღრიცხვა.</span>
+                <span className="sm:hidden">მობილურით შეძენილი საშვი, ტურნიკეტის ავტომატური გახსნა და ლაივ აღრიცხვა.</span>
+              </>
+            ) : locale === 'ru' ? (
+              <>
+                <span className="hidden sm:inline">Мгновенная связь между администрацией и атлетом: покупка абонемента через приложение, автоматическое открытие турникета и учет доходов в реальном времени.</span>
+                <span className="sm:hidden">Покупка абонемента через приложение, авто-открытие турникета и учет доходов.</span>
+              </>
+            ) : (
+              <>
+                <span className="hidden sm:inline">Instant synchronization between administration and member: mobile pass purchase, automated turnstile entry, and real-time revenue ledger.</span>
+                <span className="sm:hidden">Mobile pass purchase, automated turnstile entry, and real-time ledger.</span>
+              </>
+            )}
           </p>
         </div>
 

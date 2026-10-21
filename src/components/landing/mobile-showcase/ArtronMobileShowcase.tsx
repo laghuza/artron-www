@@ -90,12 +90,13 @@ export const ArtronMobileShowcase: React.FC = () => {
             </span>
           </div>
 
-          <h2 className="m-0 font-semibold text-[clamp(34px,4.6vw,62px)] leading-[1.1] tracking-[-0.025em] text-[#F8FAFC]">
+          <h2 className="m-0 font-semibold text-[clamp(26px,4.6vw,62px)] leading-[1.1] tracking-[-0.025em] text-[#F8FAFC]">
             სრული ციფრული თავისუფლება სპორტსმენისთვის
           </h2>
 
-          <p className="m-0 text-[19px] font-normal leading-[1.62] text-[#9BA8B9] max-w-[620px]">
-            ნულოვანი ბიუროკრატია, მყისიერი წვდომა და პერსონალური პროგრესი ერთიან ეკოსისტემაში.
+          <p className="m-0 text-sm sm:text-[19px] font-normal leading-[1.5] sm:leading-[1.62] text-[#9BA8B9] max-w-[620px]">
+            <span className="hidden sm:inline">ნულოვანი ბიუროკრატია, მყისიერი წვდომა და პერსონალური პროგრესი ერთიან ეკოსისტემაში.</span>
+            <span className="sm:hidden">ნულოვანი ბიუროკრატია, მყისიერი წვდომა & პერსონალური პროგრესი.</span>
           </p>
         </header>
 

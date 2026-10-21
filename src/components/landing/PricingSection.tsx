@@ -51,10 +51,10 @@ export const PricingSection: React.FC = () => {
             <Shield className="w-3.5 h-3.5" />
             <span>[ ARTRON_PRICING_ENGINE_V2 ]</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
             {t('pricing_title')}
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-gray-400 font-normal">
+          <p className="mt-2.5 sm:mt-3 text-xs sm:text-base text-gray-400 font-normal">
             {t('pricing_subtitle')}
           </p>
         </div>

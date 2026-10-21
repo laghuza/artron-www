@@ -98,7 +98,7 @@ export const ArtronAiSection: React.FC = () => {
             <span>[SYS: AI_ASSISTANT // OPERATIONS_AUTOMATION]</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             {locale === 'ka' 
               ? 'AI ასისტენტი & ავტომატიზაცია — მენეჯერის საიმედო საყრდენი 24/7-ზე'
               : locale === 'ru'
@@ -106,12 +106,23 @@ export const ArtronAiSection: React.FC = () => {
                 : 'AI Assistant & Automation — 24/7 Superpower for Facility Managers'}
           </h2>
 
-          <p className="mt-4 text-sm sm:text-base md:text-lg text-[#94A3B8] font-medium leading-relaxed">
-            {locale === 'ka'
-              ? 'გაათავისუფლეთ პერსონალი რუტინისგან: 5-წამიანი რეგისტრაცია ქართული ხმითა და OCR სკანერით, წევრების გადინების პრევენცია და 24/7 ვირტუალური კონსიერჟი.'
-              : locale === 'ru'
-                ? 'Освободите персонал от рутины: 5-секундная регистрация голосом и OCR сканером, предиктивный контроль оттока и виртуальный консьерж 24/7.'
-                : 'Free your team from routine: 5-second voice & OCR onboarding, predictive churn radar, and 24/7 virtual concierge.'}
+          <p className="mt-3 sm:mt-4 text-xs sm:text-base md:text-lg text-[#94A3B8] font-normal sm:font-medium leading-relaxed">
+            {locale === 'ka' ? (
+              <>
+                <span className="hidden sm:inline">გაათავისუფლეთ პერსონალი რუტინისგან: 5-წამიანი რეგისტრაცია ქართული ხმითა და OCR სკანერით, წევრების გადინების პრევენცია და 24/7 ვირტუალური კონსიერჟი.</span>
+                <span className="sm:hidden">5-წამიანი რეგისტრაცია ხმით & OCR-ით, გადინების პრევენცია და 24/7 ვირტუალური კონსიერჟი.</span>
+              </>
+            ) : locale === 'ru' ? (
+              <>
+                <span className="hidden sm:inline">Освободите персонал от рутины: 5-секундная регистрация голосом и OCR сканером, предиктивный контроль оттока и виртуальный консьерж 24/7.</span>
+                <span className="sm:hidden">5-секундная регистрация голосом & OCR, контроль оттока и виртуальный консьерж.</span>
+              </>
+            ) : (
+              <>
+                <span className="hidden sm:inline">Free your team from routine: 5-second voice & OCR onboarding, predictive churn radar, and 24/7 virtual concierge.</span>
+                <span className="sm:hidden">5-second voice & OCR onboarding, predictive churn radar, and 24/7 concierge.</span>
+              </>
+            )}
           </p>
 
           {/* Quick Metrics Bar */}

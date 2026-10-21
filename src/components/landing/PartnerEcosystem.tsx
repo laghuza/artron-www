@@ -21,10 +21,10 @@ export const PartnerEcosystem: React.FC = () => {
             <Sparkles className="w-3.5 h-3.5 animate-pulse" />
             <span>{t('partner_badge')}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             {t('partner_title')}
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-[#94A3B8] font-medium leading-relaxed">
+          <p className="mt-3 sm:mt-4 text-xs sm:text-base text-[#94A3B8] font-normal sm:font-medium leading-relaxed">
             {t('partner_subtitle')}
           </p>
         </div>
