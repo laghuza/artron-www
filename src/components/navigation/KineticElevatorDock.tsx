@@ -310,52 +310,7 @@ export const KineticElevatorDock: React.FC = () => {
         </div>
       </aside>
 
-      {/* ── MOBILE KINETIC BOTTOM DOCK (< 768px) ── */}
-      <div
-        className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex md:hidden items-center gap-2 px-3 py-2 rounded-2xl bg-[#080C14]/90 border border-white/15 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(0,229,255,0.15)] transition-all duration-300 ${
-          isVisible ? 'opacity-100 translate-y-0 pointer-events-auto visible' : 'opacity-0 translate-y-6 pointer-events-none invisible'
-        }`}
-      >
-        <button
-          onClick={scrollToTop}
-          className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 active:text-[#00E5FF]"
-          aria-label="Top"
-        >
-          <ChevronUp className="w-4 h-4" />
-        </button>
 
-        <span className="font-mono text-xs font-bold text-[#00E5FF] px-2 py-1 rounded-lg bg-[#00E5FF]/15 border border-[#00E5FF]/30">
-          {SECTION_NODES[activeNodeIndex]?.index || '01'}/{String(SECTION_NODES.length).padStart(2, '0')}
-        </span>
-
-        <button
-          onClick={() => {
-            playTactileFeedback();
-            setIsDrawerOpen(!isDrawerOpen);
-          }}
-          className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold flex items-center gap-1 transition-all ${
-            isDrawerOpen ? 'bg-[#00E5FF] text-black' : 'bg-white/5 text-slate-200 border border-white/10'
-          }`}
-          aria-label="OS Modules"
-        >
-          <Layers className="w-3.5 h-3.5" /> OS
-        </button>
-
-        <button
-          onClick={handleAiTrigger}
-          className="px-2.5 py-1 rounded-xl bg-[#00E5FF]/15 border border-[#00E5FF]/30 text-[#00E5FF] text-xs font-mono font-bold flex items-center gap-1"
-          aria-label="AI Assistant"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse" /> AI
-        </button>
-
-        <button
-          onClick={scrollToBottom}
-          className="px-2.5 py-1 rounded-xl bg-[#00A3FF]/20 border border-[#00E5FF]/40 text-[#00E5FF] text-xs font-semibold"
-        >
-          {lang === 'ka' ? 'დემო' : lang === 'ru' ? 'Демо' : 'Demo'}
-        </button>
-      </div>
 
       {/* Flyout Drawer for Sport OS Submodules (slides in from the right) */}
       <ElevatorFlyoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />

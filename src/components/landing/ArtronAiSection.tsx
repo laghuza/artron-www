@@ -3,7 +3,6 @@
 import React, { useState, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { 
-  Sparkles, 
   Mic, 
   ScanLine, 
   Bot, 
@@ -93,10 +92,7 @@ export const ArtronAiSection: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#00E5FF]/10 border border-[#00E5FF]/30 text-xs font-mono font-bold text-[#00E5FF] mb-4 tracking-wider uppercase shadow-[0_0_20px_rgba(0,229,255,0.2)]">
-            <Sparkles className="w-3.5 h-3.5 animate-spin text-[#00E5FF]" style={{ animationDuration: '4s' }} />
-            <span>[SYS: AI_ASSISTANT // OPERATIONS_AUTOMATION]</span>
-          </div>
+
 
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             {locale === 'ka' 

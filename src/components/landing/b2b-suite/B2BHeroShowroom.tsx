@@ -2,24 +2,19 @@
 
 import React from 'react';
 import { AccessLogRow, SystemStatusRow } from './types';
-import { EM, AM, INK, MU, DIM, ICE } from './constants';
-
 interface B2BHeroShowroomProps {
-  passes: number;
+  passes?: number;
   fresh: boolean;
   log: AccessLogRow[];
   status: SystemStatusRow[];
-  onBookDemo: () => void;
-  onNextLogic: () => void;
+  onBookDemo?: () => void;
+  onNextLogic?: () => void;
 }
 
 export const B2BHeroShowroom: React.FC<B2BHeroShowroomProps> = ({
-  passes,
   fresh,
   log,
   status,
-  onBookDemo,
-  onNextLogic,
 }) => {
   return (
     <div className="relative z-10 flex flex-col justify-between flex-1 w-full pointer-events-none">
@@ -46,57 +41,6 @@ export const B2BHeroShowroom: React.FC<B2BHeroShowroomProps> = ({
           <span className="hidden sm:inline">ტურნიკეტები, სენსორები და ჯავშნები — ერთ ცენტრში. ARTRON ამოწმებს თითოეულ გავლას წამის მეასედებში და განაგრძობს მუშაობას ინტერნეტის გათიშვისასაც.</span>
           <span className="sm:hidden">ტურნიკეტები, სენსორები & ჯავშნები — 0.04წმ რეაგირება და სრული მუშაობა ინტერნეტის გარეშეც.</span>
         </p>
-
-        {/* Latency Budget Badge */}
-        <div className="flex flex-wrap items-baseline gap-1.5 sm:gap-3.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-[#BAE6FD]/15 bg-[#06090e]/60 backdrop-blur-md font-mono text-[11px] sm:text-xs text-[#A9B9CA] w-fit shadow-lg">
-          <span className="text-[#F59E0B] font-bold">t</span>
-          <span>= t<sub>სკან</sub> + t<sub>ვერიფ</sub> + t<sub>ძრავა</sub></span>
-          <span>= 12 + 18 + 10</span>
-          <span className="text-[#10B981] font-bold">= 40 მწმ</span>
-        </div>
-
-        {/* 3 Numerical KPI Stats */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-6 pt-2">
-          <div className="flex flex-col gap-1 sm:gap-1.5 pt-2.5 sm:pt-3 border-t border-[#BAE6FD]/20">
-            <span className="font-serif text-lg sm:text-2xl md:text-3xl font-semibold text-[#F0F9FF] tabular-nums">99.98%</span>
-            <span className="text-[10.5px] sm:text-xs text-[#A9B9CA] leading-tight">Uptime · 30 დღე</span>
-          </div>
-          <div className="flex flex-col gap-1 sm:gap-1.5 pt-2.5 sm:pt-3 border-t border-[#BAE6FD]/20">
-            <span className="font-serif text-lg sm:text-2xl md:text-3xl font-semibold text-[#F0F9FF] tabular-nums">
-              0.04<span className="text-[10px] sm:text-xs font-sans text-[#A9B9CA] ml-0.5 sm:ml-1">წმ</span>
-            </span>
-            <span className="text-[10.5px] sm:text-xs text-[#A9B9CA] leading-tight">რეაგირების დრო</span>
-          </div>
-          <div className={`flex flex-col gap-1 sm:gap-1.5 pt-2.5 sm:pt-3 border-t transition-colors duration-700 ${fresh ? 'border-[#10B981]' : 'border-[#BAE6FD]/20'}`}>
-            <span className={`font-serif text-lg sm:text-2xl md:text-3xl font-semibold tabular-nums transition-colors duration-700 ${fresh ? 'text-[#10B981]' : 'text-[#F0F9FF]'}`}>
-              {passes}
-            </span>
-            <span className="flex items-center gap-1 sm:gap-1.5 text-[10.5px] sm:text-xs text-[#A9B9CA] leading-tight">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse shrink-0" />
-              დაშვება დღეს
-            </span>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2">
-          <button
-            type="button"
-            onClick={onBookDemo}
-            className="inline-flex items-center justify-center min-h-[46px] px-7 rounded-full bg-gradient-to-b from-[#10B981] to-[#059669] border border-[#a7f3d0]/45 text-[#022c22] text-sm font-bold shadow-[0_0_0_4px_rgba(16,185,129,0.1),0_12px_34px_-10px_rgba(16,185,129,0.7)] hover:shadow-[0_0_0_6px_rgba(16,185,129,0.18),0_16px_40px_-10px_rgba(16,185,129,0.9)] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
-          >
-            დემოს დაჯავშნა
-          </button>
-          <button
-            type="button"
-            onClick={onNextLogic}
-            className="inline-flex items-center gap-2.5 min-h-[44px] bg-transparent border-none p-0 cursor-pointer font-sans text-sm font-semibold text-[#F0F9FF] hover:text-[#10B981] transition-colors"
-          >
-            <span className="hidden sm:inline">შემდეგი ლოგიკა · ჯავშნები</span>
-            <span className="sm:hidden">შემდეგი ლოგიკა</span>
-            <span className="font-mono text-base">→</span>
-          </button>
-        </div>
       </div>
 
       {/* Floating Live Telemetry Cards */}

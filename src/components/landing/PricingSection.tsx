@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Shield } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { VerticalType, PricingMode, BillingCycle, PricingTier, CustomModule } from '@/types/pricing';
 import { PricingVerticalSelector } from './pricing/PricingVerticalSelector';
@@ -47,10 +46,7 @@ export const PricingSection: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00A3FF]/10 border border-[#00A3FF]/30 text-[#00A3FF] text-xs font-mono tracking-wider uppercase mb-4">
-            <Shield className="w-3.5 h-3.5" />
-            <span>[ ARTRON_PRICING_ENGINE_V2 ]</span>
-          </div>
+
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
             {t('pricing_title')}
           </h2>

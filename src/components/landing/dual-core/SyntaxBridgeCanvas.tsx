@@ -349,8 +349,6 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
   }, [state.pktOn, state.revOn, state.dispatch]);
 
   const lit = state.phase === 'synced' || state.pktOn;
-  const pipeColor = state.revOn || state.dispatch ? '#38BDF8' : state.phase === 'synced' ? '#10B981' : state.phase === 'transit' ? '#F59E0B' : '#E0F2FE';
-  const pipeText = state.phase === 'synced' ? (state.revOn ? 'გაგზავნა' : state.dispatch ? 'შეკრული წრე' : 'დადასტურებულია') : state.phase === 'transit' ? 'იმპულსი' : state.phase === 'processing' ? 'დაკავშირება' : 'აქტიური';
 
   return (
     <div
@@ -486,18 +484,6 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
           </div>
         </div>
 
-        {/* Lower Status Chip */}
-        <div
-          className="relative px-4 py-2 flex flex-col items-center gap-1 text-[10px] tracking-wider leading-snug text-center whitespace-nowrap text-slate-400 font-mono"
-          style={{ transform: 'translateZ(44px)' }}
-        >
-          <span className="absolute left-0 inset-y-0 w-1.5 border border-sky-100/25 border-r-0" />
-          <span className="absolute right-0 inset-y-0 w-1.5 border border-sky-100/25 border-l-0" />
-          <span>
-            ნაკადი: <span style={{ color: pipeColor }}>{pipeText}</span> · დაყოვნება: <span className="text-sky-100">{state.latency ? `${state.latency}მწმ` : '<12მწმ'}</span>
-          </span>
-          <span className="text-[9px] text-slate-500">შიფრაცია: TLS 1.3 / ZERO-TRUST</span>
-        </div>
 
         {/* Artery Directions */}
         <div className="mt-3.5 w-full flex flex-col gap-1 text-[9.5px] font-mono tracking-widest">

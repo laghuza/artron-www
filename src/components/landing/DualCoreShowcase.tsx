@@ -38,16 +38,7 @@ export const DualCoreShowcase: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-500/20 bg-cyan-950/30 text-cyan-400 font-mono text-[11px] mb-4 backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span>
-              {locale === 'ka'
-                ? 'ორმხრივი სინქრონიზაცია · REAL-TIME CORE'
-                : locale === 'ru'
-                ? 'ДВУСТОРОННЯЯ СИНХРОНИЗАЦИЯ · REAL-TIME CORE'
-                : 'DUAL-CORE SYNC · REAL-TIME CORE'}
-            </span>
-          </div>
+
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 leading-tight">
             {locale === 'ka'
               ? 'კლუბის მართვის პანელი და წევრის ციფრული საშვი'
