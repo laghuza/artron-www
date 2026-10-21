@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useI18n } from "@/context/I18nContext";
 import { soundEngine } from "@/core";
 
@@ -107,13 +108,13 @@ export const SandboxHeader: React.FC<SandboxHeaderProps> = ({
         </button>
 
         {/* Return to Home Landing Page */}
-        <a
+        <Link
           href="/"
           className="px-3 py-1.5 rounded bg-white/[0.04] hover:bg-white/[0.08] text-[#9CA3AF] hover:text-white border border-white/10 text-[10px] sm:text-[11px] font-medium tracking-wider uppercase transition-all cursor-pointer shadow-sm flex items-center gap-1"
           title="მთავარ გვერდზე დაბრუნება"
         >
           <span>მთავარი</span>
-        </a>
+        </Link>
       </div>
     </header>
   );

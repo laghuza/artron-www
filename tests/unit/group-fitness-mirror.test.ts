@@ -10,8 +10,8 @@ describe('Group Fitness Leaders (HC-03) System Mirror Implementation', () => {
 
     expect(groupMod.name).toBe('ფიტნეს-ინსტრუქტორები');
     expect(groupMod.kicker).toBe('HC-03 / GROUP LEADERS');
-    expect(groupMod.headline).toBe('ჯგუფი ივსება\nგანრიგამდე.');
-    expect(groupMod.description).toContain('მართული ჯგუფური გაკვეთილი ისეთივე ოპერაა');
+    expect(groupMod.headline).toBe('ჯგუფური ვარჯიშების 100%-იანი\nდასწრება და ლოიალობა.');
+    expect(groupMod.description).toContain('გადატვირთული პოპულარული საათები');
     expect(groupMod.cameraTags).toEqual(['STEREO FLOOR', 'CLASS ZONES', 'HR BOARD', 'SPACES / CERT']);
     expect(groupMod.notes).toHaveLength(4);
     expect(groupMod.specRows).toHaveLength(4);
@@ -23,24 +23,24 @@ describe('Group Fitness Leaders (HC-03) System Mirror Implementation', () => {
     expect(groupMod.specRows[3]).toHaveLength(4);
 
     // Verify specific key metrics matching Claude handoff and screenshot
-    expect(groupMod.specRows[0][0]).toEqual({ label: 'ჯგუფური გაკვეთილი', value: '180 კვირაში' });
-    expect(groupMod.specRows[0][1]).toEqual({ label: 'საშუალო დასწრება', value: '82%' });
-    expect(groupMod.specRows[0][2]).toEqual({ label: 'ინსტრუქტორები', value: '46 პირი' });
-    expect(groupMod.specRows[0][3]).toEqual({ label: 'ადგილის ხელახლა შევსება', value: '< 15 წუთი' });
+    expect(groupMod.specRows[0][0]).toEqual({ label: 'ჯგუფური სესიები', value: '180 კვირაში' });
+    expect(groupMod.specRows[0][1]).toEqual({ label: 'საშუალო დასწრება', value: '82% დატვირთვა' });
+    expect(groupMod.specRows[0][2]).toEqual({ label: 'ინსტრუქტორთა ბაზა', value: '46 სერტიფიცირებული პირი' });
+    expect(groupMod.specRows[0][3]).toEqual({ label: 'სლოტის ავტო-შევსება', value: '< 15 წუთი ლოდინის სიიდან' });
 
-    expect(groupMod.specRows[1][0]).toEqual({ label: 'ცეკვა და კარდიო', value: 'Zumba · step · cycle' });
-    expect(groupMod.specRows[1][1]).toEqual({ label: 'გონება და სხეული', value: 'Yoga · pilates · stretch' });
-    expect(groupMod.specRows[1][2]).toEqual({ label: 'ფუნქციური', value: 'TRX · kettlebell · circuit' });
-    expect(groupMod.specRows[1][3]).toEqual({ label: 'ახალი ფორმატი', value: '4-კვირიანი პილოტი' });
+    expect(groupMod.specRows[1][0]).toEqual({ label: 'ცეკვა და კარდიო', value: 'Zumba · Step · Cycle' });
+    expect(groupMod.specRows[1][1]).toEqual({ label: 'გონება და სხეული', value: 'Yoga · Pilates · Stretch' });
+    expect(groupMod.specRows[1][2]).toEqual({ label: 'ფუნქციური ტრენინგი', value: 'TRX · Kettlebell · Circuit' });
+    expect(groupMod.specRows[1][3]).toEqual({ label: 'ახალი ფორმატი', value: '4-კვირიანი სატესტო პილოტი' });
 
-    expect(groupMod.specRows[2][0]).toEqual({ label: 'დაჯავშნა', value: 'აპლიკაცია + ლოდინის სია' });
-    expect(groupMod.specRows[2][1]).toEqual({ label: 'დასწრება', value: 'NFC check-in' });
-    expect(groupMod.specRows[2][2]).toEqual({ label: 'გულისცემის ზონები', value: 'Live HR ეკრანი' });
-    expect(groupMod.specRows[2][3]).toEqual({ label: 'გაკვეთილის შეფასება', value: '1 შეხებით, გასვლისას' });
+    expect(groupMod.specRows[2][0]).toEqual({ label: 'ჯავშნის მოდული', value: 'B2C აპლიკაცია + Waitlist' });
+    expect(groupMod.specRows[2][1]).toEqual({ label: 'დასწრების დაფიქსირება', value: 'NFC Check-in' });
+    expect(groupMod.specRows[2][2]).toEqual({ label: 'გულისცემის ზონები', value: 'Live HR ეკრანი დარბაზში' });
+    expect(groupMod.specRows[2][3]).toEqual({ label: 'სესიის შეფასება', value: '1 შეხებით გასვლისას' });
 
     expect(groupMod.specRows[3][0]).toEqual({ label: 'ინსტრუქტორის სერტიფიკატი', value: 'EREPS დონე 3+' });
-    expect(groupMod.specRows[3][1]).toEqual({ label: 'დარბაზის ნორმა', value: '≥ 4 m² მონაწილეზე' });
-    expect(groupMod.specRows[3][2]).toEqual({ label: 'ჯანმრთელობის კითხვარი', value: 'PAR-Q · პირველ ვიზიტზე' });
+    expect(groupMod.specRows[3][1]).toEqual({ label: 'დარბაზის ნორმა', value: '≥ 4 m² ერთ მონაწილეზე' });
+    expect(groupMod.specRows[3][2]).toEqual({ label: 'ჯანმრთელობის კითხვარი', value: 'PAR-Q პირველ ვიზიტზე' });
     expect(groupMod.specRows[3][3]).toEqual({ label: 'პირველადი დახმარება', value: 'CPR ყოველ ცვლაში' });
 
     // Verify notes match offline handoff specifications
@@ -52,10 +52,10 @@ describe('Group Fitness Leaders (HC-03) System Mirror Implementation', () => {
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for group matching handoff poses', () => {

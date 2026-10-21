@@ -10,7 +10,7 @@ describe('International Masters (MST-01 / MSIC ELITE) System Mirror Implementati
 
     expect(trophyMod.name).toBe('საერთაშორისო ოსტატები');
     expect(trophyMod.kicker).toBe('MST-01 / MSIC ELITE');
-    expect(trophyMod.headline).toBe('ელიტა მოითხოვს დამტკიცებულ ისტორიას.');
+    expect(trophyMod.headline).toBe('ელიტური ათლეტების ვერიფიცირებული\nციფრული დოსიე.');
     expect(trophyMod.sceneVariant).toBe('trophy');
     expect(trophyMod.cameraTags).toEqual(['ELITE RING', 'DISCIPLINE BANNERS', 'MOCAP VOLUME', 'PROTOCOL CHAIN']);
     expect(trophyMod.notes).toHaveLength(4);
@@ -23,28 +23,28 @@ describe('International Masters (MST-01 / MSIC ELITE) System Mirror Implementati
     expect(trophyMod.specRows[3]).toHaveLength(4);
 
     // Tile 0 metrics
-    expect(trophyMod.specRows[0][0]).toEqual({ label: 'MSIC ათლეტი', value: '37 აქტიური' });
-    expect(trophyMod.specRows[0][1]).toEqual({ label: 'საერთაშორისო სტარტი', value: '9 წელიწადში' });
+    expect(trophyMod.specRows[0][0]).toEqual({ label: 'MSIC ელიტური ათლეტები', value: '37 აქტიური წევრი' });
+    expect(trophyMod.specRows[0][1]).toEqual({ label: 'საერთაშორისო სტარტი', value: '9 ოფიციალური / წელიწადში' });
     expect(trophyMod.specRows[0][2]).toEqual({ label: 'ოლიმპიური ციკლი', value: '4 წელი · 3 მეოთხედი გავლილი' });
-    expect(trophyMod.specRows[0][3]).toEqual({ label: 'დოსიეს აწყობა', value: 'კვირებიდან → 2 საათამდე' });
+    expect(trophyMod.specRows[0][3]).toEqual({ label: 'დოსიეს ციფრული აწყობა', value: 'კვირებიდან ➔ 2 საათამდე' });
 
     // Tile 1 metrics
-    expect(trophyMod.specRows[1][0]).toEqual({ label: 'ინდივიდუალური', value: 'მძლეოსნობა · ცურვა · ძალოსნობა' });
-    expect(trophyMod.specRows[1][1]).toEqual({ label: 'საბრძოლო', value: 'ჭიდაობა · ძიუდო · კრივი' });
-    expect(trophyMod.specRows[1][2]).toEqual({ label: 'გუნდური', value: 'რაგბი · კალათბურთი' });
-    expect(trophyMod.specRows[1][3]).toEqual({ label: 'ნორმატივის წყარო', value: 'თითო ფედერაციის ცხრილი' });
+    expect(trophyMod.specRows[1][0]).toEqual({ label: 'ინდივიდუალური სპორტი', value: 'მძლეოსნობა · ცურვა · ძალოსნობა' });
+    expect(trophyMod.specRows[1][1]).toEqual({ label: 'საბრძოლო სახეობები', value: 'ჭიდაობა · ძიუდო · კრივი' });
+    expect(trophyMod.specRows[1][2]).toEqual({ label: 'გუნდური სპორტი', value: 'რაგბი · კალათბურთი · წყალბურთი' });
+    expect(trophyMod.specRows[1][3]).toEqual({ label: 'ნორმატივის წყარო', value: 'საერთაშორისო ფედერაციის ცხრილი' });
 
     // Tile 2 metrics
-    expect(trophyMod.specRows[2][0]).toEqual({ label: 'შედეგის ვერიფიკაცია', value: 'ოქმის ციფრული ხელმოწერა' });
-    expect(trophyMod.specRows[2][1]).toEqual({ label: 'ბიომექანიკა', value: 'Motion capture 240 fps' });
-    expect(trophyMod.specRows[2][2]).toEqual({ label: 'შედარებითი ანალიტიკა', value: 'World-rank benchmark' });
-    expect(trophyMod.specRows[2][3]).toEqual({ label: 'გადახრის სიგნალი', value: 'ტექნიკის რეგრესი 7 დღეში' });
+    expect(trophyMod.specRows[2][0]).toEqual({ label: 'შედეგის ვერიფიკაცია', value: 'ოქმის კვალიფიციური ელ-ხელმოწერა' });
+    expect(trophyMod.specRows[2][1]).toEqual({ label: 'ბიომექანიკა', value: 'Motion Capture 240 fps' });
+    expect(trophyMod.specRows[2][2]).toEqual({ label: 'შედარებითი ანალიტიკა', value: 'World-Rank ბენჩმარკი' });
+    expect(trophyMod.specRows[2][3]).toEqual({ label: 'გადახრის სიგნალი', value: 'ტექნიკის რეგრესის დეტექცია' });
 
     // Tile 3 metrics
-    expect(trophyMod.specRows[3][0]).toEqual({ label: 'ნორმატივი', value: 'ეროვნული კლასიფიკაცია' });
-    expect(trophyMod.specRows[3][1]).toEqual({ label: 'ანტიდოპინგი', value: 'WADA · ADAMS whereabouts' });
-    expect(trophyMod.specRows[3][2]).toEqual({ label: 'წარდგინება', value: 'სამინისტროს რეგლამენტი' });
-    expect(trophyMod.specRows[3][3]).toEqual({ label: 'დოკუმენტის ჯაჭვი', value: '4 ოქმიდან 3 დადასტურებული' });
+    expect(trophyMod.specRows[3][0]).toEqual({ label: 'ნორმატივის სტანდარტი', value: 'ეროვნული სპორტული კლასიფიკაცია' });
+    expect(trophyMod.specRows[3][1]).toEqual({ label: 'ანტიდოპინგი', value: 'WADA · ADAMS Whereabouts სისტემა' });
+    expect(trophyMod.specRows[3][2]).toEqual({ label: 'წარდგინების წესი', value: 'სპორტის სამინისტროს რეგლამენტი' });
+    expect(trophyMod.specRows[3][3]).toEqual({ label: 'დოკუმენტების ჯაჭვი', value: '4 ოქმიდან 3 დადასტურებული' });
 
     // Notes verification
     expect(trophyMod.notes[0]).toContain('ელიტა ერთეულებით ითვლება');
@@ -55,10 +55,10 @@ describe('International Masters (MST-01 / MSIC ELITE) System Mirror Implementati
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for trophy matching Claude design', () => {

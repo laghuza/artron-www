@@ -266,12 +266,16 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
                     onEnterGeorgia();
                   }
                 }}
-                className="flex items-center justify-between gap-3 px-3 py-2 border border-[#7FD4FF]/30 bg-[#7FD4FF]/[0.05] hover:bg-[#7FD4FF]/[0.12] hover:border-[#7FD4FF]/60 rounded-lg transition-all cursor-pointer group"
+                className={`flex items-center justify-between gap-3 px-3 py-2 rounded-lg transition-all cursor-pointer group ${
+                  !isDetail
+                    ? "gold-rim-pill hover:scale-[1.01]"
+                    : "border border-[#7FD4FF]/30 bg-[#7FD4FF]/[0.05] hover:bg-[#7FD4FF]/[0.12] hover:border-[#7FD4FF]/60"
+                }`}
               >
-                <span className="font-mono text-[10.5px] font-semibold tracking-[0.14em] text-[#EAF4FF] uppercase">
+                <span className={`font-mono text-[10.5px] font-semibold tracking-[0.14em] uppercase ${!isDetail ? "text-[#F5DE88] group-hover:text-white" : "text-[#EAF4FF]"}`}>
                   {isDetail ? t.backToWorld : t.exploreGeorgia}
                 </span>
-                <span className="font-mono text-[12px] text-[#7FD4FF] transition-transform duration-200 group-hover:translate-x-0.5">
+                <span className={`font-mono text-[12px] transition-transform duration-200 group-hover:translate-x-0.5 ${!isDetail ? "text-[#F5DE88]" : "text-[#7FD4FF]"}`}>
                   {isDetail ? "◎" : "→"}
                 </span>
               </button>

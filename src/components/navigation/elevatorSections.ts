@@ -9,11 +9,11 @@ export const SECTION_NODES: SectionNode[] = [
   {
     index: '01',
     id: 'pure-sports-mirror',
-    label: { ka: '01 • სისტემური სარკე', en: '01 • Systemic Mirror', ru: '01 • Системное зеркало' },
+    label: { ka: '01 • ინფრასტრუქტურა & სივრცეები', en: '01 • Infrastructure & Venues', ru: '01 • Инфраструктура и залы' },
     aiPrompt: {
-      ka: 'გამარჯობა! გაინტერესებთ, როგორ ახდენს ართრონის სარკე წევრებისა და სპორტული დარბაზის მონაცემების სრულ ანალიზს?',
-      en: 'Hello! Would you like to know how Artron Mirror performs complete sports facility and member analytics?',
-      ru: 'Здравствуйте! Хотите узнать, как Artron Mirror анализирует данные спорткомплекса и членов клуба?',
+      ka: 'გამარჯობა! გაინტერესებთ, როგორ აერთიანებს ართრონი სპორტულ სივრცეებს, პერსონალსა და ათლეტურ ოსტატობას ერთიან ეკოსისტემაში?',
+      en: 'Hello! Would you like to know how Artron unifies sports venues, workforce, and athletic mastery into a single ecosystem?',
+      ru: 'Здравствуйте! Хотите узнать, как Artron объединяет спортивные залы, персонал и спортивное мастерство в единую экосистему?',
     },
   },
   {
@@ -29,11 +29,11 @@ export const SECTION_NODES: SectionNode[] = [
   {
     index: '03',
     id: 'dashboard-features',
-    label: { ka: '03 • B2B Control Hub', en: '03 • B2B Control Hub', ru: '03 • B2B Control Hub' },
+    label: { ka: '03 • მართვის ცენტრი', en: '03 • Control Hub', ru: '03 • Центр управления' },
     aiPrompt: {
-      ka: 'ვხედავ, B2B მართვის პანელს ათვალიერებთ: IoT ტურნიკეტებს, შრომის ტაბელს, ფინანსებს, AI-სა და თავდაცვას. გსურთ დეტალები?',
-      en: 'Exploring the B2B Control Hub: IoT access, labor timesheets, finance & ROI, AI, and defense. Want details?',
-      ru: 'Изучаете B2B Control Hub: IoT турникеты, табель труда, финансы и ROI, AI и защиту. Хотите подробнее?',
+      ka: 'ვხედავ, მართვის ცენტრს ათვალიერებთ: IoT ტურნიკეტებს, შრომის ტაბელს, ფინანსებს, AI-სა და უსაფრთხოებას. გსურთ დეტალები?',
+      en: 'Exploring the Control Hub: IoT access, labor timesheets, finance & ROI, AI, and defense. Want details?',
+      ru: 'Изучаете Центр управления: IoT турникеты, табель труда, финансы и ROI, AI и защиту. Хотите подробнее?',
     },
   },
   {

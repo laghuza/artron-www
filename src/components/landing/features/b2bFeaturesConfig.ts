@@ -100,7 +100,7 @@ export const B2B_CORE_FEATURES: B2BFeatureItem[] = [
     color: '#10B981',
     icon: FileSpreadsheet,
     titles: {
-      ka: 'ბაზის უმტკივნეულო მიგრაცია',
+      ka: 'მონაცემთა შეუფერხებელი მიგრაცია',
       en: 'Zero-Downtime Data Migration',
       ru: 'Бесшовный перенос базы'
     },
@@ -205,7 +205,7 @@ export const B2B_ANALYTICS_FEATURES: B2BFeatureItem[] = [
     color: '#10B981',
     icon: RotateCcw,
     titles: {
-      ka: 'დაბრუნების ROI (Win-back)',
+      ka: 'წევრების დაბრუნება (Win-back)',
       en: 'Win-Back Analytics & ROI',
       ru: 'Аналитика возврата клиентов'
     },

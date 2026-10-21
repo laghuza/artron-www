@@ -7,9 +7,9 @@ import { MirrorUnifiedCockpitDeck } from './hud/MirrorUnifiedCockpitDeck';
 import { useLanguage, Locale } from '@/context/LanguageContext';
 
 const SLOGANS: Record<Locale, string> = {
-  ka: 'არვის მეგობარი — ყველას მოკავშირე.',
-  en: 'Friend to none — ally to all.',
-  ru: 'Никому не друг — союзник всем.',
+  ka: 'ობიექტური მონაცემები, სრული გამჭვირვალობა და ნულოვანი მიკერძოება.',
+  en: 'Objective data, complete transparency, and zero bias.',
+  ru: 'Объективные данные, полная прозрачность и ноль предвзятости.',
 };
 
 export const PureSportsMirror: React.FC = () => {
@@ -72,7 +72,7 @@ export const PureSportsMirror: React.FC = () => {
   return (
     <section
       id="pure-sports-mirror"
-      aria-label="SPORT-OS Systemic Mirror"
+      aria-label="SPORT-OS Infrastructure Matrix"
       className="relative w-full min-h-[560px] lg:min-h-[640px] xl:min-h-[720px] h-auto lg:h-[calc(100vh-88px)] max-h-[1080px] bg-[#060911] text-[#EAF2F8] overflow-hidden select-none scroll-mt-[88px] flex flex-col justify-between p-3 sm:p-4 lg:p-5"
     >
       {/* Layer 1: Procedural WebGL 3D Canvas (Preserved 3D visual dominance) */}

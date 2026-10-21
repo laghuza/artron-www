@@ -5,7 +5,7 @@ describe('Olympic Pool Claude Design Compliance', () => {
   it('should have Olympic pool module defined with exact Claude Design copy, kicker, and camera tags', () => {
     const poolMod = VENUES_MODULES.find((m) => m.id === 'pool');
     expect(poolMod).toBeDefined();
-    expect(poolMod?.headline).toBe('წყალი, რომელიც თავად ანგარიშობს.');
+    expect(poolMod?.headline).toBe('აკვა-კომპლექსის უწყვეტი,\nავტონომიური მართვა.');
     expect(poolMod?.kicker).toBe('VEN-02 / AQUATIC COMPLEX');
     expect(poolMod?.cameraTags).toEqual([
       'WIDE ESTABLISH',
@@ -16,7 +16,7 @@ describe('Olympic Pool Claude Design Compliance', () => {
     expect(poolMod?.specRows[0][0].value).toBe('50 m · 8 ბილიკი');
     expect(poolMod?.specRows[0][1].value).toBe('2 500 m³');
     expect(poolMod?.specRows[0][2].value).toBe('1 100 მოცურავე');
-    expect(poolMod?.specRows[2][0].value).toBe('pH · Cl · ORP realtime');
+    expect(poolMod?.specRows[2][0].value).toBe('pH · Cl · ORP Realtime');
     expect(poolMod?.specRows[3][0].value).toBe('FR 2 სტანდარტი');
   });
 

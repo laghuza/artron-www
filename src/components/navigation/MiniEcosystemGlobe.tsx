@@ -259,8 +259,9 @@ export const MiniEcosystemGlobe: React.FC<MiniEcosystemGlobeProps> = ({
 
     stateRef.current.reqId = requestAnimationFrame(render);
 
+    const currentState = stateRef.current;
     return () => {
-      cancelAnimationFrame(stateRef.current.reqId);
+      cancelAnimationFrame(currentState.reqId);
     };
   }, [size]);
 

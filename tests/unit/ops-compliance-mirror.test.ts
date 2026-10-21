@@ -9,40 +9,40 @@ describe('Administration & Operations (HC-04) System Mirror Implementation', () 
     if (!opsMod) return;
 
     expect(opsMod.kicker).toBe('HC-04 / OPS & COMPLIANCE');
-    expect(opsMod.headline).toBe('ოპერაცია ერთ სიმართლეზე დგას.');
+    expect(opsMod.headline).toBe('ერთიანი საოპერაციო ცენტრი\nდა შრომის აღრიცხვა.');
     expect(opsMod.cameraTags).toEqual(['ROTA RING', 'DEPARTMENT PODS', 'SERVER / CLOCK-IN', 'AUDIT LEDGER']);
     expect(opsMod.specRows).toHaveLength(4);
 
     // Verify key metrics across 4 categories
-    expect(opsMod.specRows[0][0].label).toBe('პერსონალი');
+    expect(opsMod.specRows[0][0].label).toBe('პერსონალის რაოდენობა');
     expect(opsMod.specRows[0][0].value).toBe('210 თანამშრომელი');
     expect(opsMod.specRows[0][1].label).toBe('ცვლების დაფარვა');
-    expect(opsMod.specRows[0][1].value).toBe('24/7 · 3 ცვლა');
+    expect(opsMod.specRows[0][1].value).toBe('24/7 · 3-ცვლიანი რეჟიმი');
 
     expect(opsMod.specRows[1][0].label).toBe('რეცეფცია და გაყიდვები');
-    expect(opsMod.specRows[1][0].value).toBe('Front desk · CRM');
+    expect(opsMod.specRows[1][0].value).toBe('Front Desk · CRM მოდული');
     expect(opsMod.specRows[1][1].label).toBe('ტექნიკური სამსახური');
-    expect(opsMod.specRows[1][1].value).toBe('Maintenance · HVAC');
+    expect(opsMod.specRows[1][1].value).toBe('Maintenance · HVAC კონტროლი');
     expect(opsMod.specRows[1][2].label).toBe('სისუფთავე და უსაფრთხოება');
-    expect(opsMod.specRows[1][2].value).toBe('Housekeeping · security');
+    expect(opsMod.specRows[1][2].value).toBe('Housekeeping · Security');
 
-    expect(opsMod.specRows[2][0].label).toBe('ცვლების დაგეგმვა');
+    expect(opsMod.specRows[2][0].label).toBe('ცვლების ჭკვიანი გრაფიკი');
     expect(opsMod.specRows[2][1].label).toBe('დროის აღრიცხვა');
-    expect(opsMod.specRows[2][1].value).toBe('Biometric clock-in');
+    expect(opsMod.specRows[2][1].value).toBe('ბიომეტრიული Clock-in');
 
     expect(opsMod.specRows[3][0].label).toBe('ბრძანება №01-15/ნ');
-    expect(opsMod.specRows[3][0].value).toBe('სრული შესაბამისობა');
+    expect(opsMod.specRows[3][0].value).toBe('შრომის ტაბელის 100% შესაბამისობა');
     expect(opsMod.specRows[3][1].label).toBe('შრომის უსაფრთხოება');
     expect(opsMod.specRows[3][2].label).toBe('აუდიტის კვალი');
-    expect(opsMod.specRows[3][2].value).toBe('უცვლელი ჟურნალი');
+    expect(opsMod.specRows[3][2].value).toBe('უცვლელი ციფრული ჟურნალი');
   });
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for ops matching Claude design poses', () => {

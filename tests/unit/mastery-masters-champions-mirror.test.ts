@@ -10,12 +10,12 @@ describe('Masters & Champions (MST-02 / MASTERS & CHAMPIONS) System Mirror Imple
 
     expect(podiumMod.name).toBe('ოსტატები და ჩემპიონები');
     expect(podiumMod.kicker).toBe('MST-02 / MASTERS & CHAMPIONS');
-    expect(podiumMod.headline).toBe('ჩემპიონი არ იბადება — აღირიცხება.');
+    expect(podiumMod.headline).toBe('ჩემპიონის ტიტული ეფუძნება\nზუსტ, დადასტურებულ ოქმს.');
     expect(podiumMod.description).toContain(
-      'ოსტატის წოდება სამი რგოლის ნამრავლია: სტარტი, შედეგი და ხელმოწერილი ოქმი.'
+      'სპორტის ოსტატის წოდება სამი საკვანძო რგოლის შედეგია: ოფიციალური სტარტი, დაფიქსირებული შედეგი და ხელმოწერილი ოქმი.'
     );
     expect(podiumMod.description).toContain(
-      'დღეს სამივე სხვადასხვა ფედერაციის ცხრილშია და ჯაჭვის აღდგენა ყოველ ჯერზე ხელით იწყება'
+      'სხვადასხვა ფედერაციის ცხრილებშია გაფანტული'
     );
     expect(podiumMod.sceneVariant).toBe('podium');
     expect(podiumMod.cameraTags).toEqual([
@@ -34,28 +34,28 @@ describe('Masters & Champions (MST-02 / MASTERS & CHAMPIONS) System Mirror Imple
     expect(podiumMod.specRows[3]).toHaveLength(4);
 
     // Tile 0 metrics (Scale & Capacity)
-    expect(podiumMod.specRows[0][0]).toEqual({ label: 'ოსტატის წოდება', value: '124 მფლობელი' });
-    expect(podiumMod.specRows[0][1]).toEqual({ label: 'სეზონური სტარტი', value: '46 ტურნირი' });
-    expect(podiumMod.specRows[0][2]).toEqual({ label: 'მედლის კონვერსია', value: '31%' });
-    expect(podiumMod.specRows[0][3]).toEqual({ label: 'წოდებამდე მანძილი', value: 'საშუალოდ 2 სტარტი' });
+    expect(podiumMod.specRows[0][0]).toEqual({ label: 'ოსტატის წოდების მფლობელი', value: '124 ათლეტი' });
+    expect(podiumMod.specRows[0][1]).toEqual({ label: 'სეზონური სტარტი', value: '46 ოფიციალური ტურნირი' });
+    expect(podiumMod.specRows[0][2]).toEqual({ label: 'მედლის კონვერსია', value: '31% წარმატების მაჩვენებელი' });
+    expect(podiumMod.specRows[0][3]).toEqual({ label: 'წოდებამდე მანძილი', value: 'საშუალოდ 2 სატურნირო სტარტი' });
 
     // Tile 1 metrics (Disciplines)
-    expect(podiumMod.specRows[1][0]).toEqual({ label: 'ეროვნული ჩემპიონატი', value: 'ყველა წონითი კატეგორია' });
-    expect(podiumMod.specRows[1][1]).toEqual({ label: 'თასების სისტემა', value: 'Cup · league' });
-    expect(podiumMod.specRows[1][2]).toEqual({ label: 'ვეტერანთა კლასი', value: 'Masters 35+' });
-    expect(podiumMod.specRows[1][3]).toEqual({ label: 'კატეგორიის ცვლა', value: 'წონის ისტორიით დადასტურებული' });
+    expect(podiumMod.specRows[1][0]).toEqual({ label: 'ეროვნული ჩემპიონატი', value: 'ყველა ოფიციალური წონითი კატეგორია' });
+    expect(podiumMod.specRows[1][1]).toEqual({ label: 'თასების სისტემა', value: 'ეროვნული თასი · საკლუბო ლიგა' });
+    expect(podiumMod.specRows[1][2]).toEqual({ label: 'ვეტერანთა კლასი', value: 'Masters 35+ რანგი' });
+    expect(podiumMod.specRows[1][3]).toEqual({ label: 'კატეგორიის ცვლა', value: 'წონის ისტორიით დამოწმებული' });
 
     // Tile 2 metrics (Telemetry / RFID / Bio)
-    expect(podiumMod.specRows[2][0]).toEqual({ label: 'შედეგის ჯაჭვი', value: 'Result → protocol → rank' });
-    expect(podiumMod.specRows[2][1]).toEqual({ label: 'რეიტინგის ძრავა', value: 'Elo-ტიპის მოდელი' });
-    expect(podiumMod.specRows[2][2]).toEqual({ label: 'მედალიონის RFID', value: 'ნამდვილობის შემოწმება' });
-    expect(podiumMod.specRows[2][3]).toEqual({ label: 'ოქმის მიღება', value: 'ფედერაციის API · ავტომატური' });
+    expect(podiumMod.specRows[2][0]).toEqual({ label: 'შედეგის ციფრული ჯაჭვი', value: 'Result ➔ Protocol ➔ Rank' });
+    expect(podiumMod.specRows[2][1]).toEqual({ label: 'რეიტინგის ალგორითმი', value: 'Elo-ტიპის დინამიური მოდელი' });
+    expect(podiumMod.specRows[2][2]).toEqual({ label: 'მედალიონის RFID', value: 'ნამდვილობის ციფრული შემოწმება' });
+    expect(podiumMod.specRows[2][3]).toEqual({ label: 'ოქმის მიღება', value: 'ფედერაციის API · მყისიერი სინქრონი' });
 
     // Tile 3 metrics (Compliance)
-    expect(podiumMod.specRows[3][0]).toEqual({ label: 'კლასიფიკაცია', value: 'ფედერაციის წესდება' });
-    expect(podiumMod.specRows[3][1]).toEqual({ label: 'მოსამართლის დაშვება', value: 'ლიცენზიის რეესტრი' });
-    expect(podiumMod.specRows[3][2]).toEqual({ label: 'აპელაცია', value: '72 საათიანი ფანჯარა' });
-    expect(podiumMod.specRows[3][3]).toEqual({ label: 'სადავო შედეგი', value: 'გაყინული გადაწყვეტამდე' });
+    expect(podiumMod.specRows[3][0]).toEqual({ label: 'კლასიფიკაცია', value: 'ფედერაციის ოფიციალური წესდება' });
+    expect(podiumMod.specRows[3][1]).toEqual({ label: 'მსაჯის ლიცენზია', value: 'საერთაშორისო / ეროვნული რეესტრი' });
+    expect(podiumMod.specRows[3][2]).toEqual({ label: 'აპელაციის ფანჯარა', value: '72-საათიანი რეგლამენტი' });
+    expect(podiumMod.specRows[3][3]).toEqual({ label: 'სადავო შედეგი', value: 'გაყინული საბოლოო გადაწყვეტამდე' });
 
     // Notes verification
     expect(podiumMod.notes[0]).toContain('სეზონის რგოლზე თითოეული სტარტია აღნიშნული');
@@ -66,10 +66,10 @@ describe('Masters & Champions (MST-02 / MASTERS & CHAMPIONS) System Mirror Imple
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for podium matching Claude design', () => {

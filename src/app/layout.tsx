@@ -80,7 +80,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${jetbrainsMono.variable} ${notoGeorgian.variable} h-full antialiased dark`}
     >
       <head>
-        {/* Portal Ignition Video Asset Preload */}
         <link rel="preload" href="/video/dark-minimalist-4k.mp4" as="video" type="video/mp4" />
         {/* Google Consent Mode v2 Defaults */}
         <Script

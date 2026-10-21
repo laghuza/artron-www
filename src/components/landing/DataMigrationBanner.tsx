@@ -19,7 +19,7 @@ export const DataMigrationBanner: React.FC = () => {
           </div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white">
             {locale === 'ka' 
-              ? 'გადმოიტანეთ თქვენი არსებული ბაზა უმტკივნეულოდ' 
+              ? 'გადმოიტანეთ თქვენი არსებული ბაზა შეუფერხებლად' 
               : locale === 'ru' 
                 ? 'Перенесите вашу базу без задержек и потерь' 
                 : 'Seamlessly Migrate Your Existing Database in 48 Hours'}

@@ -9,16 +9,13 @@ describe('Youth Academy (MST-05 / YOUTH ACADEMY) System Mirror Implementation', 
     if (!academyMod) return;
 
     expect(academyMod.name).toBe('იუნიორთა აკადემიები');
-    expect(academyMod.kicker).toBe('MST - 05 / YOUTH ACADEMY');
-    expect(academyMod.headline).toBe('ნიჭი ადრე ჩანს.\nმონაცემი გვიან.');
+    expect(academyMod.kicker).toBe('MST-05 / YOUTH ACADEMY');
+    expect(academyMod.headline).toBe('ახალგაზრდა ტალანტის განვითარების\nუსაფრთხო ეკოსისტემა.');
     expect(academyMod.description).toContain(
-      'აკადემიის ღირებულება ერთ კითხვაზე დგას: რომელი ბავშვი ვითარდება და რომელი გვტოვებს.'
+      'სპორტული აკადემიის წარმატება მომავალი თაობის სწორ აღზრდაზე დგას.'
     );
     expect(academyMod.description).toContain(
-      'დღეს დასწრება რვეულშია, ზრდის მრუდი — არსად, მშობელი კი მესენჯერში იღებს ინფორმაციას.'
-    );
-    expect(academyMod.description).toContain(
-      'Artron U8–U18 ტრაექტორიას ერთ ხაზად აწყობს'
+      'Artron U8–U18 ასაკობრივ ტრაექტორიას ერთიან სისტემაში აერთიანებს'
     );
     expect(academyMod.sceneVariant).toBe('academy');
     expect(academyMod.cameraTags).toEqual([
@@ -37,28 +34,28 @@ describe('Youth Academy (MST-05 / YOUTH ACADEMY) System Mirror Implementation', 
     expect(academyMod.specRows[3]).toHaveLength(4);
 
     // Tile 0 metrics (Scale & Capacity)
-    expect(academyMod.specRows[0][0]).toEqual({ label: 'აღსაზრდელი', value: '1 850 ბავშვი' });
-    expect(academyMod.specRows[0][1]).toEqual({ label: 'ასაკობრივი საფეხური', value: 'U8 – U18 · 6 საფეხური' });
-    expect(academyMod.specRows[0][2]).toEqual({ label: 'შენარჩუნება', value: '74% სეზონზე' });
-    expect(academyMod.specRows[0][3]).toEqual({ label: 'გასვლის სიგნალი', value: '3 გაცდენა ზედიზედ' });
+    expect(academyMod.specRows[0][0]).toEqual({ label: 'აღსაზრდელთა ბაზა', value: '1 850 იუნიორი' });
+    expect(academyMod.specRows[0][1]).toEqual({ label: 'ასაკობრივი საფეხურები', value: 'U8 – U18 · 6 ეტაპი' });
+    expect(academyMod.specRows[0][2]).toEqual({ label: 'შენარჩუნების მაჩვენებელი', value: '74% სეზონური Retention' });
+    expect(academyMod.specRows[0][3]).toEqual({ label: 'გასვლის ადრეული სიგნალი', value: '3 გაცდენა ზედიზედ (AI ალერტი)' });
 
     // Tile 1 metrics (Disciplines)
-    expect(academyMod.specRows[1][0]).toEqual({ label: 'საბაზისო მომზადება', value: 'ABC · coordination' });
-    expect(academyMod.specRows[1][1]).toEqual({ label: 'სპეციალიზაცია', value: '9 მიმართულება' });
-    expect(academyMod.specRows[1][2]).toEqual({ label: 'სასწავლო მატჩები', value: 'ლიგა + ფესტივალი' });
-    expect(academyMod.specRows[1][3]).toEqual({ label: 'ადრეული სპეციალიზაცია', value: 'შეზღუდული U12-მდე' });
+    expect(academyMod.specRows[1][0]).toEqual({ label: 'საბაზისო ფიზიკური მომზადება', value: 'ABC · კოორდინაცია · მოქნილობა' });
+    expect(academyMod.specRows[1][1]).toEqual({ label: 'სპეციალიზაცია', value: '9 სპორტული მიმართულება' });
+    expect(academyMod.specRows[1][2]).toEqual({ label: 'სასწავლო მატჩები', value: 'რეგიონული ლიგა + საბავშვო ფესტივალი' });
+    expect(academyMod.specRows[1][3]).toEqual({ label: 'ადრეული სპეციალიზაცია', value: 'მკაცრად შეზღუდული U12-მდე' });
 
     // Tile 2 metrics (Telemetry / RFID / Bio)
-    expect(academyMod.specRows[2][0]).toEqual({ label: 'ზრდის მონიტორინგი', value: 'PHV · სიმაღლის მრუდი' });
-    expect(academyMod.specRows[2][1]).toEqual({ label: 'უნარების ბარათი', value: 'Skill matrix 18 პარამეტრი' });
-    expect(academyMod.specRows[2][2]).toEqual({ label: 'მშობლის პორტალი', value: 'Read-only წვდომა' });
-    expect(academyMod.specRows[2][3]).toEqual({ label: 'დატვირთვა ზრდის პიკზე', value: 'ავტომატური შემცირება' });
+    expect(academyMod.specRows[2][0]).toEqual({ label: 'ზრდის მონიტორინგი', value: 'PHV · ბიოლოგიური სიმაღლის მრუდი' });
+    expect(academyMod.specRows[2][1]).toEqual({ label: 'უნარების ბარათი', value: 'Skill Matrix 18 პარამეტრით' });
+    expect(academyMod.specRows[2][2]).toEqual({ label: 'მშობლის პორტალი', value: 'დაცული Read-Only მობილური წვდომა' });
+    expect(academyMod.specRows[2][3]).toEqual({ label: 'დატვირთვა ზრდის პიკზე', value: 'ავტომატური ადაპტური შემცირება' });
 
     // Tile 3 metrics (Compliance)
-    expect(academyMod.specRows[3][0]).toEqual({ label: 'COPPA', value: 'მშობლის ვერიფიცირებული თანხმობა' });
-    expect(academyMod.specRows[3][1]).toEqual({ label: 'GDPR-K', value: 'მონაცემთა მინიმიზაცია' });
-    expect(academyMod.specRows[3][2]).toEqual({ label: 'Safeguarding', value: 'პერსონალის შემოწმება' });
-    expect(academyMod.specRows[3][3]).toEqual({ label: 'წვდომის ჟურნალი', value: 'ვინ ნახა ბავშვის მონაცემი' });
+    expect(academyMod.specRows[3][0]).toEqual({ label: 'COPPA რეგულაცია', value: 'მშობლის ვერიფიცირებული თანხმობა' });
+    expect(academyMod.specRows[3][1]).toEqual({ label: 'GDPR-K ბავშვთა დაცვა', value: 'მონაცემთა მკაცრი მინიმიზაცია' });
+    expect(academyMod.specRows[3][2]).toEqual({ label: 'Safeguarding პროტოკოლი', value: 'მწვრთნელთა პერსონალური შემოწმება' });
+    expect(academyMod.specRows[3][3]).toEqual({ label: 'წვდომის უსაფრთხოების ლოგი', value: 'ვინ და როდის ნახა ბავშვის მონაცემი' });
 
     // Notes verification
     expect(academyMod.notes![0]).toContain('კიბის თითოეული საფეხური ცალკე კოჰორტაა');
@@ -69,10 +66,10 @@ describe('Youth Academy (MST-05 / YOUTH ACADEMY) System Mirror Implementation', 
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for academy matching Claude design', () => {

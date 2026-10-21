@@ -1091,7 +1091,7 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
         style={{ left: "var(--bx, 50%)", top: "var(--by, 50%)" }}
       >
         <span
-          className="absolute left-0 top-0 h-px w-[104px] origin-left bg-gradient-to-r from-[#7FD4FF]/85 to-[#7FD4FF]/35"
+          className="absolute left-0 top-0 h-px w-[104px] origin-left bg-gradient-to-r from-[#D4AF37]/90 via-[#FFE89E]/65 to-[#A87B41]/25 shadow-[0_0_8px_rgba(212,175,55,0.45)]"
           style={{ transform: "rotate(var(--brot, -45deg))" }}
         />
         <div
@@ -1102,11 +1102,11 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
             transform: "translate(var(--bsx, 0%), var(--bsy, -100%))",
           }}
         >
-          <div className="flex flex-col gap-1.5 whitespace-nowrap border border-[#7FD4FF]/55 bg-[#0D1117]/85 px-3.5 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] backdrop-blur-md">
-            <span className="font-mono text-[10.5px] font-semibold tracking-[0.16em] text-[#EAF4FF]">
+          <div className="gold-rim-beacon-card flex flex-col gap-1.5 whitespace-nowrap px-3.5 py-2.5">
+            <span className="font-mono text-[10.5px] font-bold tracking-[0.16em] text-[#F5DE88]">
               {t.badgeTitle}
             </span>
-            <span className="font-mono text-[9.5px] tabular-nums tracking-[0.13em] text-[#7FA6BA]">
+            <span className="font-mono text-[9.5px] tabular-nums tracking-[0.13em] text-[#A8B7C7]">
               {t.badgeCoords}
             </span>
             <button
@@ -1115,7 +1115,7 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
                 soundEngine.cue("enter");
                 onEnterGeorgia();
               }}
-              className="pointer-events-auto mt-1 px-2.5 py-1 rounded bg-[#7FD4FF]/20 hover:bg-[#7FD4FF]/35 border border-[#7FD4FF]/50 text-white font-mono text-[10px] font-semibold transition-all cursor-pointer text-center"
+              className="gold-rim-beacon-btn pointer-events-auto mt-1 px-3 py-1.5 text-[#F5DE88] hover:text-white font-mono text-[10.5px] font-bold tracking-wide transition-all cursor-pointer text-center"
             >
               {t.exploreGeorgia}
             </button>

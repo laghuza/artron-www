@@ -38,10 +38,10 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
   };
 
   const dspText = state.revOn
-    ? 'AUTO-DISPATCH: TRANSMITTING -> ATHLETE_ID: 4471'
+    ? 'მყისიერი შეტყობინება ➔ იგზავნება ათლეტთან (ID: 4471)'
     : state.dispatch
-    ? `AUTO-DISPATCH: SENT -> ATHLETE_ID: 4471 (ACK: ${state.ackMs}ms)`
-    : 'AUTO-DISPATCH: STANDBY';
+    ? `მყისიერი შეტყობინება ➔ გაგზავნილია (დადასტურება: ${state.ackMs} მწმ)`
+    : 'ავტო-შეტყობინება: მზადყოფნაში';
 
   return (
     <div
@@ -61,9 +61,9 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
             boxShadow: isFresh ? '0 0 14px -2px #10B981, inset 0 2px 4px rgba(0,0,0,0.9)' : 'inset 0 2px 4px rgba(0,0,0,0.9)',
           }}
         >
-          03
+          01
         </span>
-        <span className="font-sans font-medium text-slate-300">B2B · ბიზნესის პანელი</span>
+        <span className="font-sans font-medium text-slate-300">01 · ადმინისტრატორის პულტი</span>
       </div>
 
       {/* 3D Depth Shadow Backplates from Claude Spec */}
@@ -160,9 +160,9 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
 
           {/* Section Title */}
           <div className="flex justify-between items-baseline gap-2 flex-wrap">
-            <div className="font-sans text-base sm:text-lg font-bold text-sky-100 tracking-tight">ოპერაციული მართვა</div>
+            <div className="font-sans text-base sm:text-lg font-bold text-sky-100 tracking-tight">დარბაზის ლაივ კონტროლი</div>
             <div className="text-[10px] text-slate-400 tracking-[0.16em]">
-              NODE B2B · {state.phase === 'transit' ? 'GATE OPEN' : 'QUEUE 0'}
+              {state.phase === 'transit' ? 'ტურნიკეტი: ღიაა' : 'რიგი: 0 ადამიანი'}
             </div>
           </div>
 
@@ -179,7 +179,7 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
               )}
 
               <div className="flex justify-between text-[10px] text-slate-400 tracking-wider">
-                <span>სალარო · დღეს</span>
+                <span>დღის შემოსავალი</span>
                 <span
                   className="text-emerald-400 font-bold transition-all duration-400"
                   style={{
@@ -204,13 +204,13 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
               <div className="grid grid-cols-24 gap-0.5">
                 {renderSegments(state.shownRev, state.revenueTarget, true)}
               </div>
-              <div className="text-[9.5px] text-slate-500 tracking-wider">TARGET 3,000 ₾</div>
+              <div className="text-[9.5px] text-slate-500 tracking-wider">მიზანი: 3,000 ₾</div>
             </div>
 
             {/* Visitors Box */}
             <div className="rounded-xl p-3.5 bg-[#05080C] border border-white/5 flex flex-col gap-2.5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.7)]">
               <div className="flex justify-between text-[10px] text-slate-400 tracking-wider">
-                <span>ვიზიტორები</span>
+                <span>დარბაზში იმყოფება</span>
                 <span className="text-emerald-400 font-bold" style={{ textShadow: '0 0 8px rgba(16,185,129,0.6)' }}>
                   LIVE
                 </span>
@@ -221,7 +221,7 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
               <div className="grid grid-cols-24 gap-0.5">
                 {renderSegments(state.inGym, state.capacityMax, false)}
               </div>
-              <div className="text-[9.5px] text-slate-500 tracking-wider">CAPACITY {occPct}</div>
+              <div className="text-[9.5px] text-slate-500 tracking-wider">დატვირთვა: {occPct}</div>
             </div>
           </div>
 
@@ -229,7 +229,7 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
           <div className="flex items-center justify-between gap-2.5 rounded-xl px-3.5 py-2.5 bg-[#0C131D] border border-emerald-500/25 text-[11px] text-slate-300 font-sans shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]">
             <div className="flex items-center gap-2.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] shadow-[0_0_12px_rgba(16,185,129,0.75)]" />
-              <span className="text-[#CBD5E1] text-[11.5px]">შრომის ინსპექცია (№01-15/ნ) · ავტომატური ტაბელი დაცულია</span>
+              <span className="text-[#CBD5E1] text-[11.5px]">შრომის ინსპექცია (№01-15/ნ) · ტაბელი ივსება ავტომატურად</span>
             </div>
             <button
               onClick={onOpenLaborModal}
@@ -245,8 +245,8 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
           {/* Activity Ledger Feed */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-[10px] text-slate-400 tracking-[0.16em]">
-              <span>ACTIVITY LEDGER</span>
-              <span>{state.logs.length} ROWS</span>
+              <span>ვიზიტებისა და გადახდების რეესტრი</span>
+              <span>{state.logs.length} ჩანაწერი</span>
             </div>
             <div
               className="flex items-center gap-2 text-[9.5px] tracking-wider truncate transition-colors duration-400"

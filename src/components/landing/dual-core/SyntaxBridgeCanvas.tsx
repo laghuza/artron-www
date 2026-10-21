@@ -350,7 +350,7 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
 
   const lit = state.phase === 'synced' || state.pktOn;
   const pipeColor = state.revOn || state.dispatch ? '#38BDF8' : state.phase === 'synced' ? '#10B981' : state.phase === 'transit' ? '#F59E0B' : '#E0F2FE';
-  const pipeText = state.phase === 'synced' ? (state.revOn ? 'DISPATCH' : state.dispatch ? 'LOOP CLOSED' : 'COMMITTED') : state.phase === 'transit' ? 'DISCHARGE' : state.phase === 'processing' ? 'HANDSHAKE' : 'ACTIVE';
+  const pipeText = state.phase === 'synced' ? (state.revOn ? 'გაგზავნა' : state.dispatch ? 'შეკრული წრე' : 'დადასტურებულია') : state.phase === 'transit' ? 'იმპულსი' : state.phase === 'processing' ? 'დაკავშირება' : 'აქტიური';
 
   return (
     <div
@@ -370,7 +370,7 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
         >
           02
         </span>
-        <span className="font-sans font-medium text-slate-300">ხიდი · პროგრამული სინაფსი</span>
+        <span className="font-sans font-medium text-slate-300">02 · რეალურ დროში კავშირი (0.01 წმ)</span>
       </div>
 
       <div className="relative preserve-3d flex flex-col items-center" style={{ transformStyle: 'preserve-3d' }}>
@@ -494,31 +494,36 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
           <span className="absolute left-0 inset-y-0 w-1.5 border border-sky-100/25 border-r-0" />
           <span className="absolute right-0 inset-y-0 w-1.5 border border-sky-100/25 border-l-0" />
           <span>
-            PIPELINE: <span style={{ color: pipeColor }}>{pipeText}</span> · LATENCY: <span className="text-sky-100">{state.latency ? `${state.latency}ms` : '<12ms'}</span>
+            ნაკადი: <span style={{ color: pipeColor }}>{pipeText}</span> · დაყოვნება: <span className="text-sky-100">{state.latency ? `${state.latency}მწმ` : '<12მწმ'}</span>
           </span>
-          <span className="text-[9px] text-slate-500">ENCRYPTION: TLS 1.3 / ZERO-TRUST</span>
+          <span className="text-[9px] text-slate-500">შიფრაცია: TLS 1.3 / ZERO-TRUST</span>
         </div>
 
         {/* Artery Directions */}
         <div className="mt-3.5 w-full flex flex-col gap-1 text-[9.5px] font-mono tracking-widest">
           <div className="flex justify-between text-amber-500/90">
-            <span>◂ PASS</span>
-            <span>UPPER ARTERY</span>
+            <span>◂ QR საშვი</span>
+            <span>ზედა არტერია</span>
           </div>
           <div className="flex justify-between text-sky-400/90">
-            <span>LOWER ARTERY</span>
-            <span>DISPATCH ▸</span>
+            <span>ქვედა არტერია</span>
+            <span>ტურნიკეტის სიგნალი ▸</span>
           </div>
         </div>
 
         {/* LEDGER & PASS Indicators from Claude */}
         <div className="mt-3 w-full flex justify-between items-center text-[9.5px] font-mono tracking-[0.14em] text-slate-400">
-          <span>LEDGER · B2B</span>
+          <span>მართვის პანელი</span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#F59E0B]" />
-            <span className="text-slate-300">ENNEA</span>
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-[#FACC15]"
+              style={{
+                boxShadow: '0 0 5px 1px rgba(234,179,8,0.95), 0 0 14px rgba(234,179,8,0.4)',
+              }}
+            />
+            <span className="text-slate-300">ARTRON</span>
           </span>
-          <span>PASS · B2C</span>
+          <span>მობილური აპლიკაცია</span>
         </div>
       </div>
     </div>

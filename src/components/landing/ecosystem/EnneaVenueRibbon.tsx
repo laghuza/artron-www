@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useCallback, useEffect } from "react";
+import Image from "next/image";
 import { EnneaVenue, EnneaStrings } from "./types";
 import { soundEngine } from "./EnneaAudioEngine";
 import { CreditCard } from "lucide-react";
@@ -163,16 +164,18 @@ export const EnneaVenueRibbon: React.FC<EnneaVenueRibbonProps> = ({
                     soundEngine.cue("click");
                     onSelectVenue(venue);
                   }}
-                  className={`group flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border transition-all duration-200 cursor-pointer shrink-0 ${
+                  className={`group flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl transition-all duration-200 cursor-pointer shrink-0 ${
                     isSelected
-                      ? "bg-[#7FD4FF]/15 border-[#7FD4FF] shadow-[0_0_16px_rgba(127,212,255,0.35)] scale-[1.02]"
-                      : "bg-white/[0.04] border-white/10 hover:border-white/25 hover:bg-white/[0.08]"
+                      ? "gold-rim-ribbon-card-selected"
+                      : "gold-rim-ribbon-card"
                   }`}
                 >
                   {venue.logoSrc ? (
-                    <img
+                    <Image
                       src={venue.logoSrc}
                       alt={venue.name}
+                      width={20}
+                      height={20}
                       className="w-5 h-5 rounded-full object-cover shrink-0 border border-white/20"
                       draggable={false}
                     />
@@ -184,12 +187,12 @@ export const EnneaVenueRibbon: React.FC<EnneaVenueRibbonProps> = ({
                   <div className="flex flex-col text-left">
                     <span
                       className={`font-mono text-[11px] sm:text-xs font-bold leading-tight truncate max-w-[110px] sm:max-w-[130px] transition-colors ${
-                        isSelected ? "text-white" : "text-[#EAF4FF] group-hover:text-white"
+                        isSelected ? "text-[#F5DE88]" : "text-[#EAF4FF] group-hover:text-white"
                       }`}
                     >
                       {venue.name}
                     </span>
-                    <span className="font-mono text-[9px] text-[#6E8DA0] leading-none mt-0.5 flex items-center gap-1">
+                    <span className="font-mono text-[9px] text-[#8EA3B8] leading-none mt-0.5 flex items-center gap-1">
                       <span>{venue.regionName || venue.city}{venue.regionCity && venue.regionCity !== venue.regionName ? `, ${venue.regionCity}` : ''}</span>
                       <span>·</span>
                       <span className="text-emerald-400 font-semibold">LIVE</span>
@@ -227,7 +230,7 @@ export const EnneaVenueRibbon: React.FC<EnneaVenueRibbonProps> = ({
                       onSelectPartnerTab();
                     }
                   }}
-                  className="flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border bg-white/[0.04] border-white/10 hover:border-[#FF5E00]/60 hover:bg-[#FF5E00]/10 transition-all duration-200 cursor-pointer shrink-0 group text-left"
+                  className="gold-rim-ribbon-card flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl transition-all duration-200 cursor-pointer shrink-0 group text-left"
                 >
                   {partner.icon}
                   <div className="flex flex-col text-left">

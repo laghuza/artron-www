@@ -815,6 +815,393 @@ body {
   transform-style: preserve-3d !important;
 }
 
+/* ==========================================================================
+   ARTRON GOLD RIM METALLIC DESIGN SYSTEM (Dual-Tone Gradient Border)
+   ========================================================================== */
+/* ==========================================================================
+   ARTRON GOLD RIM METALLIC DESIGN SYSTEM (Dual-Tone Gradient Border)
+   ========================================================================== */
+.gold-rim-card {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(135deg, transparent 38%, rgba(255, 255, 255, 0.03) 44%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.03) 56%, transparent 62%) padding-box,
+    linear-gradient(160deg, #141B2B 0%, #0C111C 55%, #070A12 100%) padding-box,
+    linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.65) 0%, 
+      rgba(203, 213, 225, 0.45) 20%, 
+      rgba(168, 123, 65, 0.45) 55%, 
+      #A87B41 75%, 
+      #D4AF37 90%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.7),
+    0 18px 44px -10px rgba(0, 0, 0, 0.88),
+    0 0 28px -4px rgba(212, 175, 55, 0.28);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+.gold-rim-card-active {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(135deg, transparent 35%, rgba(255, 255, 255, 0.05) 43%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.05) 57%, transparent 65%) padding-box,
+    linear-gradient(160deg, #1A2234 0%, #101524 55%, #080B13 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFE89E 0%, 
+      #D4AF37 25%, 
+      rgba(255, 255, 255, 0.75) 48%, 
+      #A87B41 72%, 
+      #F5DE88 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.32),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.75),
+    0 22px 50px -8px rgba(0, 0, 0, 0.92),
+    0 0 36px -2px rgba(212, 175, 55, 0.45);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+}
+
+.gold-rim-question-item {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.04) 50%, transparent 60%) padding-box,
+    linear-gradient(160deg, #131A27 0%, #0D121D 60%, #080B12 100%) padding-box,
+    linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.45) 0%, 
+      rgba(148, 163, 184, 0.25) 35%, 
+      rgba(168, 123, 65, 0.4) 75%, 
+      #D4AF37 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.6),
+    0 4px 14px -2px rgba(0, 0, 0, 0.55);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gold-rim-question-item:hover {
+  background: 
+    linear-gradient(135deg, transparent 35%, rgba(255, 255, 255, 0.08) 50%, transparent 65%) padding-box,
+    linear-gradient(160deg, #182030 0%, #101524 60%, #090D15 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFE89E 0%, 
+      #D4AF37 35%, 
+      #A87B41 70%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.5),
+    0 6px 20px -2px rgba(0, 0, 0, 0.7), 
+    0 0 18px -2px rgba(212, 175, 55, 0.35);
+  transform: translateX(3px);
+}
+
+.gold-rim-question-item-active {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(135deg, transparent 32%, rgba(255, 255, 255, 0.1) 48%, transparent 64%) padding-box,
+    linear-gradient(160deg, #1A2234 0%, #111726 60%, #0A0E18 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFE89E 0%, 
+      #D4AF37 30%, 
+      rgba(255, 255, 255, 0.8) 50%, 
+      #A87B41 75%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.65),
+    0 8px 26px -4px rgba(0, 0, 0, 0.8),
+    0 0 24px -2px rgba(212, 175, 55, 0.45);
+}
+
+.gold-rim-pill {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(180deg, rgba(20, 27, 41, 0.85) 0%, rgba(12, 16, 26, 0.95) 100%) padding-box,
+    linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.45) 0%, 
+      rgba(148, 163, 184, 0.2) 40%, 
+      rgba(168, 123, 65, 0.45) 80%, 
+      #D4AF37 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.gold-rim-pill:hover {
+  background: 
+    linear-gradient(180deg, rgba(25, 33, 50, 0.9) 0%, rgba(15, 20, 32, 0.98) 100%) padding-box,
+    linear-gradient(135deg, #FFE89E 0%, #D4AF37 45%, #A87B41 80%, #FFE89E 100%) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    0 0 14px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
+}
+
+.gold-rim-tab-active {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(160deg, #221C14 0%, #14100B 60%, #0A0D14 100%) padding-box,
+    linear-gradient(135deg, #FFE89E 0%, #D4AF37 40%, #A87B41 75%, #FFE89E 100%) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 230, 160, 0.3),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.6),
+    0 0 18px rgba(212, 175, 55, 0.4);
+  color: #F5DE88 !important;
+}
+
+/* ==========================================================================
+   ARTRON GOLD RIM RIBBON CARD (For Globe Bottom Marquee)
+   ========================================================================== */
+.gold-rim-ribbon-card {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(135deg, transparent 38%, rgba(255, 255, 255, 0.05) 48%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 52%, transparent 62%) padding-box,
+    linear-gradient(160deg, #131A27 0%, #0D121D 60%, #080B12 100%) padding-box,
+    linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.6) 0%, 
+      rgba(203, 213, 225, 0.3) 25%, 
+      rgba(168, 123, 65, 0.45) 65%, 
+      #A87B41 85%, 
+      #D4AF37 95%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.7),
+    0 4px 14px -2px rgba(0, 0, 0, 0.7),
+    0 0 16px -2px rgba(212, 175, 55, 0.22);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gold-rim-ribbon-card:hover {
+  background: 
+    linear-gradient(135deg, transparent 32%, rgba(255, 255, 255, 0.08) 46%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 54%, transparent 68%) padding-box,
+    linear-gradient(160deg, #182236 0%, #101625 60%, #090D16 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFE89E 0%, 
+      #D4AF37 30%, 
+      rgba(255, 255, 255, 0.8) 50%, 
+      #A87B41 72%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.65),
+    0 6px 20px -2px rgba(0, 0, 0, 0.8), 
+    0 0 22px 0px rgba(212, 175, 55, 0.38);
+  transform: translateY(-1px);
+}
+
+.gold-rim-ribbon-card-selected {
+  position: relative;
+  border: 1px solid transparent !important;
+  background: 
+    linear-gradient(135deg, transparent 28%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.22) 50%, rgba(255, 255, 255, 0.1) 55%, transparent 72%) padding-box,
+    linear-gradient(160deg, #1D263B 0%, #121929 60%, #0B0F1C 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFE89E 0%, 
+      #D4AF37 25%, 
+      rgba(255, 255, 255, 0.9) 48%, 
+      #A87B41 72%, 
+      #F5DE88 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.75),
+    0 8px 24px -4px rgba(0, 0, 0, 0.85),
+    0 0 26px 2px rgba(212, 175, 55, 0.48);
+  transform: scale(1.025);
+}
+
+/* ==========================================================================
+   ARTRON GOLD RIM GEORGIA BEACON BADGE & BUTTON (Globe Active Core)
+   ========================================================================== */
+.gold-rim-beacon-card {
+  position: relative;
+  border: 1px solid transparent !important;
+  border-radius: 0.75rem;
+  background: 
+    linear-gradient(135deg, transparent 36%, rgba(255, 255, 255, 0.05) 46%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.05) 54%, transparent 64%) padding-box,
+    linear-gradient(160deg, #141B2B 0%, #0D121D 60%, #080B12 100%) padding-box,
+    linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.75) 0%, 
+      rgba(203, 213, 225, 0.4) 22%, 
+      rgba(168, 123, 65, 0.45) 55%, 
+      #A87B41 78%, 
+      #D4AF37 92%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.7),
+    0 16px 40px -4px rgba(0, 0, 0, 0.88),
+    0 0 26px -2px rgba(212, 175, 55, 0.32);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+.gold-rim-beacon-btn {
+  position: relative;
+  border: 1px solid transparent !important;
+  border-radius: 0.5rem;
+  background: 
+    linear-gradient(180deg, rgba(212, 175, 55, 0.18) 0%, rgba(168, 123, 65, 0.08) 100%) padding-box,
+    linear-gradient(160deg, #182235 0%, #0F1422 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFE89E 0%, 
+      #D4AF37 35%, 
+      rgba(255, 255, 255, 0.8) 50%, 
+      #A87B41 75%, 
+      #FFE89E 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(212, 175, 55, 0.28);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gold-rim-beacon-btn:hover {
+  background: 
+    linear-gradient(180deg, rgba(212, 175, 55, 0.3) 0%, rgba(168, 123, 65, 0.18) 100%) padding-box,
+    linear-gradient(160deg, #1F2C44 0%, #131A2C 100%) padding-box,
+    linear-gradient(135deg, 
+      #FFF0B8 0%, 
+      #E5C158 25%, 
+      rgba(255, 255, 255, 0.95) 48%, 
+      #C6934B 72%, 
+      #FFF0B8 100%
+    ) border-box !important;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.65),
+    0 6px 20px rgba(0, 0, 0, 0.75),
+    0 0 24px 2px rgba(212, 175, 55, 0.5);
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   ARTRON MOBILE SHOWCASE V13 KEYFRAMES
+   ========================================== */
+@keyframes arRipple {
+  0% { transform: translate(-50%, -50%) scale(0.55); opacity: 0; }
+  18% { opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+@keyframes arBreath {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes arScreenIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes arDraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes arFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes arPing {
+  0% { opacity: 0; transform: scale(0.94); }
+  30% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0.6; transform: scale(1); }
+}
+
+@keyframes arRoll {
+  from { opacity: 0; transform: translateY(70%); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes arFloat {
+  0% { opacity: 0; transform: translate(-50%, 2px); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -14px); }
+}
+
+@keyframes arBurst {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.9); }
+}
+
+@keyframes arOk {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+  12%, 78% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes arScan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
+@keyframes arStamp {
+  0% { opacity: 0; transform: scale(1.35) rotate(-28deg); }
+  60% { opacity: 1; transform: scale(0.96) rotate(2deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes arSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes arNCard {
+  0% { opacity: 0; transform: translateZ(0) scale(0.27, 0.3); }
+  7% { opacity: 1; transform: translateZ(0) scale(0.27, 0.3); }
+  20% { opacity: 1; transform: translateY(30px) translateZ(var(--z, 90px)) rotateX(12deg) scale(1.02); }
+  28%, 84% { opacity: 1; transform: translateY(24px) translateZ(var(--z, 90px)) rotateX(7deg) scale(1); }
+  96% { opacity: 1; transform: translateZ(0) scale(0.27, 0.3); }
+  100% { opacity: 0; transform: translateZ(0) scale(0.27, 0.3); }
+}
+
+@keyframes arNIn {
+  0%, 15% { opacity: 0; transform: translateY(4px); }
+  27%, 82% { opacity: 1; transform: none; }
+  90%, 100% { opacity: 0; }
+}
+
+@keyframes arNSpill {
+  0%, 12% { opacity: 0; }
+  26% { opacity: 1; }
+  84% { opacity: 0.7; }
+  96%, 100% { opacity: 0; }
+}
+
+@keyframes arNGlint {
+  0%, 24% { transform: translateX(-140%) skewX(-20deg); }
+  44%, 100% { transform: translateX(420%) skewX(-20deg); }
+}
+
+@keyframes arNRing {
+  0% { opacity: 0; transform: scale(1); }
+  5% { opacity: 0.9; }
+  22%, 100% { opacity: 0; transform: scale(2.2, 2.8); }
+}
 
 
 

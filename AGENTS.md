@@ -22,6 +22,7 @@
 19. **[Penetration Testing & Red-Team Auditor]** (`artron-security-penetration-tester.md`) - პასუხისმგებელია API-ების, ფორმებისა და ავტორიზაციის უსაფრთხოების ტესტირებაზე (Penetration Testing).
 20. **[BI & Data Visualization Analyst]** (`artron-bi-data-visualization-analyst.md`) - პასუხისმგებელია ანალიტიკური მონაცემების, დიაგრამების, SVG გრაფებისა და ROI მეტრიკების ვიზუალიზაციაზე.
 21. **[Cognitive UX & Behavioral Psychology Specialist]** (`artron-cognitive-psychology-agent.md`) - პასუხისმგებელია ლენდინგის, აპლიკაციისა და სამართავი პანელის ემოციურ აუდიტზე, ნეირომარკეტინგზე, ნდობის ფსიქოლოგიასა და კოგნიტური დატვირთვის მინიმიზაციაზე.
+22. **[Senior UX Writer & Microcopy Specialist]** (`artron-ux-writer-microcopy-agent.md`) - პასუხისმგებელია აპლიკაციისა და სამართავი პანელის ინტუიციურ, კონტექსტურ მიკროტექსტებზე (ღილაკების ლეიბლები, შეცდომების მესიჯები, Empty States, Tooltips, Push შეტყობინებები) ათლეტებისთვის (B2C), მწვრთნელებისთვის, მსაჯებისთვის, ადმინისტრატორებისა და ბროკერებისთვის (B2B).
 
 
 ---
@@ -56,6 +57,7 @@
 - **[Penetration Testing & Red-Team Auditor]** ↔️ **[Backend, SecOps, IoT]**: ამოწმებს უსაფრთხოებას, SQLi/XSS მოწყვლადობებს, Socket კავშირებს და PII AES შიფრაციას.
 - **[BI & Data Visualization Analyst]** ↔️ **[Frontend, Sports Analytics, Product Manager]**: ქმნის საოპერაციო, ფინანსური და ტელემეტრიული მონაცემების SVG/Canvas ვიზუალიზაციებს.
 - **[Cognitive UX & Behavioral Psychology Specialist]** ↔️ **[Brand UI Designer, Copywriter, Growth & CRO]**: უზრუნველყოფს ემოციურ რეზონანსს, ნდობის ფსიქოლოგიურ ტრიგერებს და კოგნიტური დატვირთვის მინიმიზაციას.
+- **[Senior UX Writer & Microcopy Specialist]** ↔️ **[UI Designer, Cognitive UX, Frontend & Mobile Devs, i18n Specialist]**: გარდაქმნის UI ელემენტებს ბუნებრივ, უშეცდომო და ემოციურად ზუსტ ქართულ მიკროტექსტებად 3 ვარიანტით (Direct, Descriptive, Sports-focused) და გადასცემს დეველოპერებს.
 
 ---
 

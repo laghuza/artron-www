@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>ARTRON — Daisi Choreography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Georgian:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void-abyss: #020407;
+      --void-basalt: #050811;
+      --void-crust: #0A0F1D;
+      --metal-white: #FFFFFF;
+      --metal-plat: #E2E8F0;
+      --metal-steel: #94A3B8;
+      --metal-dark: #1E293B;
+      --metal-shadow: #060911;
+      --summit-snow: #FFFFFF;
+      --glacial-cyan: #BAE6FD;
+      --solar-gold: #D4AF37;
+      --aged-bronze: #854D0E;
+      --emerald-core: #10B981;
+      --glass-obsidian: rgba(6, 10, 18, 0.84);
+      --glass-rim: rgba(255, 255, 255, 0.08);
+      --glass-specular: rgba(255, 255, 255, 0.22);
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --scroll-p: 0;
+      --dock-p: 0;
+      --dock-pointer: none;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--solar-gold); color: #020407; }
+    body {
+      background-color: var(--void-abyss);
+      color: var(--metal-plat);
+      font-family: var(--font-primary);
+      overflow-x: hidden;
+      min-height: 340vh;
+    }
+    a { color: var(--metal-steel); text-decoration: none; }
+    a:hover { color: var(--metal-white); }
+
+    .artron-master-stage {
+      position: fixed; inset: 0; width: 100vw; height: 100vh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      perspective: 1800px; z-index: 1;
+      background-color: var(--void-abyss);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% 30%, rgba(186, 230, 253, 0.045) 0%, transparent 75%),
+        radial-gradient(ellipse 65% 45% at 50% 70%, rgba(133, 77, 14, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 95% 75% at 50% 50%, var(--void-crust) 0%, var(--void-basalt) 55%, var(--void-abyss) 100%);
+      contain: paint layout;
+    }
+    .artron-master-stage::before {
+      content: ""; position: absolute; inset: 0; opacity: 0.028; pointer-events: none; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+    .artron-master-stage::after {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(2, 4, 7, 0.65) 100%);
+      pointer-events: none; z-index: 3;
+    }
+    #spatialCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+    .alpenglow-horizon {
+      position: absolute; width: 1260px; height: 700px; border-radius: 50%;
+      background:
+        radial-gradient(ellipse 60% 45% at 50% 65%, rgba(212, 175, 55, 0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 85% 55% at 50% 30%, rgba(56, 189, 248, 0.08) 0%, transparent 75%);
+      filter: blur(120px); pointer-events: none; z-index: 1;
+      transform: translate3d(0, 0, 0); will-change: transform;
+    }
+    .monolith-cluster {
+      position: relative; z-index: 10; display: flex; align-items: center; justify-content: center;
+      gap: 1.6vw; width: min(92vw, 1100px); transform-style: preserve-3d; user-select: none;
+      will-change: transform, opacity;
+    }
+    .letter-box { flex: 1; max-width: 155px; aspect-ratio: 100 / 120; transform-style: preserve-3d; position: relative; }
+    .letter-box svg {
+      width: 100%; height: 100%; overflow: visible;
+      filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.4));
+    }
+    .facet { transform-style: preserve-3d; transform-box: fill-box; transform-origin: center center; will-change: transform; }
+    .slogan-monolith {
+      position: absolute; z-index: 12; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      text-align: center; width: min(90vw, 880px); pointer-events: none; opacity: 0;
+      will-change: opacity, transform;
+    }
+    .manifesto {
+      position: relative; display: flex; flex-wrap: wrap; justify-content: center; column-gap: 0.42em; row-gap: 0.1em; margin: 0;
+      font-family: 'Noto Sans Georgian', var(--font-primary); font-weight: 700;
+      font-size: clamp(1.6rem, 4.2vw, 3.9rem); line-height: 1.3;
+      perspective: 900px; transform-style: preserve-3d;
+    }
+    .subline {
+      margin: 1.6em 0 0; font-family: 'Noto Sans Georgian', var(--font-primary); font-weight: 400;
+      font-size: clamp(13px, 1.1vw, 16px); letter-spacing: 0.32em; color: #94A3B8; opacity: 0;
+      transform: translateY(6px); text-wrap: balance;
+      background: linear-gradient(100deg, #94A3B8 0%, #94A3B8 38%, #E2E8F0 45%, #FFF4C2 50%, #E2E8F0 55%, #94A3B8 62%, #94A3B8 100%);
+      background-size: 300% 100%; background-position: 100% 0;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .manifesto .word { display: inline-flex; white-space: nowrap; transform-style: preserve-3d; }
+    .manifesto .g {
+      display: inline-block; opacity: 0; letter-spacing: 0.30em;
+      transform: translate3d(0, 18px, -40px);
+      background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 28%, #94A3B8 68%, #1E293B 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      will-change: transform, opacity, letter-spacing, filter;
+    }
+    /* facet vocabulary borrowed from the ARTRON monolith */
+    .manifesto .g.rim {
+      background-image:
+        linear-gradient(100deg, #D4AF37 0%, rgba(255,244,194,0.7) 18%, rgba(255,255,255,0.3) 30%, transparent 42%),
+        linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 28%, #94A3B8 68%, #1E293B 100%);
+    }
+    .manifesto .g.split {
+      background-image:
+        linear-gradient(180deg, transparent 54%, #060911 54%, #0F172A 60%, rgba(56,189,248,0.45) 63%, transparent 63%),
+        linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 28%, #94A3B8 68%, #1E293B 100%);
+    }
+    .manifesto .g.edge { -webkit-text-stroke: 0.6px rgba(212,175,55,0.55); }
+    .manifesto .g.alpha {
+      background-image:
+        linear-gradient(100deg, #D4AF37 0%, rgba(255,244,194,0.7) 16%, transparent 34%),
+        linear-gradient(180deg, transparent 56%, #060911 56%, #0F172A 62%, rgba(56,189,248,0.5) 65%, transparent 65%),
+        linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 28%, #94A3B8 68%, #1E293B 100%);
+      -webkit-text-stroke: 0.6px rgba(212,175,55,0.6);
+    }
+    .velvet-header {
+      position: fixed; top: 1.5rem; left: 50%;
+      transform: translate3d(-50%, calc(-160% + (var(--dock-p, 0) * 160%)), 0);
+      opacity: var(--dock-p, 0); pointer-events: var(--dock-pointer, none);
+      z-index: 100; width: min(92%, 1200px); height: 64px; border-radius: 9999px;
+      background: var(--glass-obsidian);
+      backdrop-filter: blur(45px) saturate(200%); -webkit-backdrop-filter: blur(45px) saturate(200%);
+      border: 1px solid var(--glass-rim);
+      box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.98), inset 0 1px 1px 0 var(--glass-specular);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 1.8rem;
+    }
+    .brand-core { display: flex; align-items: center; gap: 0.85rem; cursor: pointer; }
+    .brand-title {
+      font-weight: 900; letter-spacing: 0.35em; font-size: 0.95rem;
+      background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .emerald-pulse {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--emerald-core); box-shadow: 0 0 12px var(--emerald-core);
+      animation: pulseGlow 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px var(--emerald-core); }
+      50% { opacity: 0.45; transform: scale(0.85); box-shadow: 0 0 4px var(--emerald-core); }
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.2rem; list-style: none; }
+    .nav-item {
+      color: var(--metal-steel); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em;
+      text-decoration: none; transition: color 0.25s ease; cursor: pointer;
+    }
+    .nav-item:hover { color: var(--metal-white); text-shadow: 0 0 12px rgba(255, 255, 255, 0.6); }
+    .action-group { display: flex; align-items: center; gap: 1.4rem; }
+    .lang-indicator { font-size: 0.75rem; color: #64748B; letter-spacing: 0.1em; font-weight: 600; }
+    .ignite-os-btn {
+      background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #FFFFFF; padding: 0.55rem 1.3rem; border-radius: 9999px; font-size: 0.8rem;
+      font-weight: 600; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center;
+      gap: 0.6rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit;
+    }
+    .ignite-os-btn:hover {
+      background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.9);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); transform: translateY(-1px);
+    }
+    .scroll-guide {
+      position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.68rem; letter-spacing: 0.4em; color: #64748B; text-transform: uppercase;
+      font-weight: 700; opacity: calc(1 - (var(--scroll-p, 0) * 4)); pointer-events: none; z-index: 10;
+    }
+    @media (max-width: 860px) {
+      .nav-links, .lang-indicator { display: none; }
+      .velvet-header { padding: 0 1.2rem; height: 56px; }
+      .monolith-cluster { gap: 1vw; }
+      .bezel-bracket { padding: 1.5rem 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+    <defs>
+      <linearGradient id="chiseledTitaniumRamp" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF"/>
+        <stop offset="28%" stop-color="#E2E8F0"/>
+        <stop offset="68%" stop-color="#94A3B8"/>
+        <stop offset="100%" stop-color="#1E293B"/>
+      </linearGradient>
+      <linearGradient id="solarGrazingRim" x1="0%" y1="0%" x2="80%" y2="20%">
+        <stop offset="0%" stop-color="#D4AF37"/>
+        <stop offset="45%" stop-color="#FFF4C2" stop-opacity="0.7"/>
+        <stop offset="80%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="glacialShadowUnder" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#060911"/>
+        <stop offset="70%" stop-color="#0F172A"/>
+        <stop offset="100%" stop-color="rgba(56, 189, 248, 0.2)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <main class="artron-master-stage" role="main">
+    <canvas id="spatialCanvas"></canvas>
+    <div class="alpenglow-horizon" id="auroraGlow"></div>
+
+    <div class="monolith-cluster" id="monolithCluster" aria-label="ARTRON Monolith">
+      <div class="letter-box" id="node-A">
+        <svg viewBox="0 0 100 120">
+          <g class="facet" id="a-pillar-left">
+            <polygon points="50,10 10,106 26,106 50,38" fill="url(#chiseledTitaniumRamp)"/>
+            <polyline points="20,85 50,10" fill="none" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="a-pillar-right">
+            <polygon points="50,10 50,38 74,106 90,106" fill="url(#chiseledTitaniumRamp)"/>
+            <polyline points="50,10 80,85" fill="none" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="a-bridge">
+            <polygon points="50,12 12,108 28,108 50,42 72,108 88,108" fill="url(#glacialShadowUnder)"/>
+            <rect x="25" y="65" width="50" height="13" fill="url(#chiseledTitaniumRamp)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="letter-box" id="node-R1">
+        <svg viewBox="0 0 100 120">
+          <g class="facet" id="r1-spine">
+            <rect x="14" y="10" width="16" height="96" fill="url(#chiseledTitaniumRamp)"/>
+            <line x1="14" y1="10" x2="14" y2="106" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="r1-cam">
+            <path d="M30 10 L56 10 C74 10 74 54 56 54 L30 54 Z M30 24 L52 24 C60 24 60 40 52 40 L30 40 Z" fill="url(#chiseledTitaniumRamp)"/>
+            <line x1="14" y1="10" x2="60" y2="10" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="r1-leg">
+            <polygon points="46,50 82,106 64,106 34,54" fill="url(#chiseledTitaniumRamp)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="letter-box" id="node-T">
+        <svg viewBox="0 0 100 120">
+          <g class="facet" id="t-wing-left">
+            <rect x="8" y="10" width="42" height="15" fill="url(#chiseledTitaniumRamp)"/>
+            <line x1="8" y1="10" x2="50" y2="10" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="t-wing-right">
+            <rect x="50" y="10" width="42" height="15" fill="url(#chiseledTitaniumRamp)"/>
+            <line x1="50" y1="10" x2="92" y2="10" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="t-column">
+            <rect x="8" y="24" width="84" height="4" fill="url(#glacialShadowUnder)"/>
+            <rect x="42" y="25" width="16" height="81" fill="url(#chiseledTitaniumRamp)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="letter-box" id="node-R2">
+        <svg viewBox="0 0 100 120">
+          <g class="facet" id="r2-spine">
+            <rect x="14" y="10" width="16" height="96" fill="url(#chiseledTitaniumRamp)"/>
+            <line x1="14" y1="10" x2="14" y2="106" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="r2-cam">
+            <path d="M30 10 L56 10 C74 10 74 54 56 54 L30 54 Z M30 24 L52 24 C60 24 60 40 52 40 L30 40 Z" fill="url(#chiseledTitaniumRamp)"/>
+            <line x1="14" y1="10" x2="60" y2="10" stroke="url(#solarGrazingRim)" stroke-width="1.4"/>
+          </g>
+          <g class="facet" id="r2-leg">
+            <polygon points="46,50 82,106 64,106 34,54" fill="url(#chiseledTitaniumRamp)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="letter-box" id="node-O">
+        <svg viewBox="0 0 100 120">
+          <g class="facet" id="o-iris-tl"><path d="M50 10 C32 10 18 20 12 36 L28 42 C32 30 40 25 50 25 Z" fill="url(#chiseledTitaniumRamp)"/></g>
+          <g class="facet" id="o-iris-tr"><path d="M50 10 C68 10 82 20 88 36 L72 42 C68 30 60 25 50 25 Z" fill="url(#chiseledTitaniumRamp)"/></g>
+          <g class="facet" id="o-iris-bl"><path d="M12 60 C12 88 24 110 50 110 L50 95 C34 95 28 80 28 60 Z" fill="url(#chiseledTitaniumRamp)"/></g>
+          <g class="facet" id="o-iris-br"><path d="M88 60 C88 88 76 110 50 110 L50 95 C66 95 72 80 72 60 Z" fill="url(#chiseledTitaniumRamp)"/></g>
+        </svg>
+      </div>
+      <div class="letter-box" id="node-N">
+        <svg viewBox="0 0 100 120">
+          <g class="facet" id="n-upright-left"><rect x="12" y="10" width="15" height="96" fill="url(#chiseledTitaniumRamp)"/></g>
+          <g class="facet" id="n-diagonal"><polygon points="27,10 73,106 87,106 41,10" fill="url(#chiseledTitaniumRamp)"/></g>
+          <g class="facet" id="n-upright-right"><rect x="73" y="10" width="15" height="96" fill="url(#chiseledTitaniumRamp)"/></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="slogan-monolith" id="sloganNode">
+      <h1 class="manifesto" id="manifesto" aria-label="მოძრაობა იბადება კავშირში"></h1>
+      <p class="subline" id="subline">ერთი სისტემა — ყველა მოძრაობისთვის</p>
+    </div>
+
+    <header class="velvet-header" id="velvetHeader">
+      <div class="brand-core">
+        <span class="brand-title">ARTRON</span>
+        <span class="emerald-pulse"></span>
+      </div>
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a class="nav-item">ბირთვი</a></li>
+          <li><a class="nav-item">Sport OS</a></li>
+          <li><a class="nav-item">B2B პანელი</a></li>
+          <li><a class="nav-item">ანალიტიკა</a></li>
+          <li><a class="nav-item">IoT ქსელი</a></li>
+          <li><a class="nav-item">ტარიფები</a></li>
+        </ul>
+      </nav>
+      <div class="action-group">
+        <span class="lang-indicator">KA · EN</span>
+        <button class="ignite-os-btn" type="button">
+          <span class="emerald-pulse"></span>
+          Sport OS ჩართვა
+        </button>
+      </div>
+    </header>
+
+    <div class="scroll-guide">SCROLL TO CONVERGE OS</div>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+      const canvas = document.getElementById('spatialCanvas');
+      const ctx = canvas.getContext('2d', { alpha: true });
+      let w = 0, h = 0, dpr = 1;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth; h = window.innerHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+
+      const TOTAL = 3000, FOV = 850, ANCHOR_Z = -150, TAU = Math.PI * 2;
+      // Spline-constrained manifold: every particle = (stream, rail parameter u, fixed Gaussian tube offset). No velocity, no integration.
+      const pS = new Uint8Array(TOTAL), pU = new Float32Array(TOTAL), pOX = new Float32Array(TOTAL), pOY = new Float32Array(TOTAL), pOZ = new Float32Array(TOTAL);
+      const pR = new Float32Array(TOTAL), pA = new Float32Array(TOTAL), pCol = new Uint8Array(TOTAL), pB = new Uint8Array(TOTAL), pMI = new Uint16Array(TOTAL);
+      let builderCount = 0;
+      const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+      const gauss = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * Math.random()); };
+      // stream colours: Flow-M steel / bronze / gold, Flow-F glacier / snow
+      const SCOL = [[133, 77, 14], [176, 120, 36], [212, 175, 55], [186, 230, 253], [255, 255, 255]];
+      const NM = Math.floor(TOTAL * 0.55), NF = TOTAL - NM;
+      for (let i = 0; i < TOTAL; i++) {
+        const male = i < NM, j = male ? i : i - NM, n = male ? NM : NF, sig = male ? 12 : 8, r = Math.random();
+        pS[i] = male ? 0 : 1;
+        pU[i] = ((j + Math.random()) / n) * TAU;
+        const g2 = () => clamp(gauss(), -2, 2) * sig;
+        pOX[i] = g2(); pOY[i] = g2(); pOZ[i] = g2();
+        pR[i] = male ? 0.75 + Math.random() * 0.85 : 0.5 + Math.random() * 0.55;
+        pA[i] = male ? 0.5 + Math.random() * 0.35 : 0.6 + Math.random() * 0.35;
+        pCol[i] = male ? (r < 0.5 ? 0 : r < 0.85 ? 1 : 2) : (r < 0.6 ? 3 : 4);
+        if (Math.random() < 0.62) { pB[i] = 1; pMI[i] = builderCount++; }
+      }
+      // [rgb, alpha, dark(occluding)]
+      const PAL = [
+        ['255,255,255', 1], ['11,17,31', 1, 1], ['212,175,55', 1], ['194,65,12', 1], ['212,150,60', 1],
+        ['203,213,225', 0.9], ['226,232,240', 0.95], ['158,170,184', 0.95], ['133,77,14', 1], ['150,84,38', 1],
+        ['190,214,70', 1], ['84,92,108', 1], ['186,230,253', 0.95], ['16,185,129', 1], ['26,24,22', 1, 1], ['176,120,36', 1],
+        ['204,32,42', 1], ['128,16,26', 1], ['96,50,24', 1]
+      ];
+      const PALN = PAL.map(p => p[0].split(',').map(Number));
+      const PHI = (1 + Math.sqrt(5)) / 2;
+      const norm = v => { const l = Math.hypot(v[0], v[1], v[2]); return [v[0] / l, v[1] / l, v[2] / l]; };
+      const randSphere = () => { const u = Math.random() * 2 - 1, t = Math.random() * Math.PI * 2, r = Math.sqrt(1 - u * u); return [r * Math.cos(t), u, r * Math.sin(t)]; };
+      const RND = Math.random, sph = randSphere;
+      const P = (x, y, z, c, f, g) => ({ x, y, z, c, f: f || 0, g: g || null });
+      const fill = (arr, n, fn) => { for (let i = 0; i < n; i++) arr.push(fn(i / n)); };
+      const ring = (r, a) => [Math.cos(a) * r, Math.sin(a) * r];
+      const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+
+      // ── CLUSTER I · kinetic spheres ──
+      // Telstar: truncated icosahedron, pillowed panels, recessed seams
+      function mFootball(count) {
+        const C = [];
+        [[0, 1, PHI], [0, -1, PHI], [0, 1, -PHI], [0, -1, -PHI]].forEach(([p, q, r]) => { C.push(norm([p, q, r]), norm([q, r, p]), norm([r, p, q])); });
+        const ip = 1 / PHI;
+        for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) C.push(norm([sx, sy, sz]));
+        [[0, ip, PHI], [0, -ip, PHI], [0, ip, -PHI], [0, -ip, -PHI]].forEach(([p, q, r]) => { C.push(norm([p, q, r]), norm([q, r, p]), norm([r, p, q])); });
+        const cls = v => {
+          let b1 = 1e9, b2 = 1e9, k = 0;
+          for (let j = 0; j < C.length; j++) {
+            const a = Math.acos(clamp(v[0] * C[j][0] + v[1] * C[j][1] + v[2] * C[j][2], -1, 1)) / (j < 12 ? 0.730 : 0.866);
+            if (a < b1) { b2 = b1; b1 = a; k = j; } else if (a < b2) b2 = a;
+          }
+          return { pent: k < 12, d: b1, gap: (b2 - b1) * 0.78 };
+        };
+        const pts = []; let g = 0;
+        while (pts.length < count * 0.16 && g++ < 400000) { const v = sph(), c = cls(v); if (c.gap < 0.026) { const r = 0.965; pts.push(P(v[0] * r, v[1] * r, v[2] * r, c.pent ? 14 : 7)); } }
+        while (pts.length < count) {
+          const v = sph(), c = cls(v); if (c.gap < 0.026) continue;
+          const r = 1 - 0.045 * c.d * c.d, edge = c.gap < 0.06;
+          pts.push(P(v[0] * r, v[1] * r, v[2] * r, c.pent ? (edge ? 14 : 1) : (edge ? 5 : 0), !c.pent && RND() < 0.04 ? 2 : 0));
+        }
+        // vector seams: true truncated-icosahedron edges (black on white) + inset pentagon piping (white on black)
+        const IV = C.slice(0, 12), d3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+        const nb = IV.map((a, i) => IV.map((b, j) => j).filter(j => j !== i && d3(a, IV[j]) > 0.4));
+        const Q = (i, j) => norm([2 * IV[i][0] + IV[j][0], 2 * IV[i][1] + IV[j][1], 2 * IV[i][2] + IV[j][2]]);
+        const lerpN = (a, b, t) => norm([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]);
+        const arc = (a, b, n, r) => { const o = []; for (let k = 0; k <= n; k++) { const p = lerpN(a, b, k / n); o.push([p[0] * r, p[1] * r, p[2] * r]); } return o; };
+        const seams = [], pipes = [];
+        for (let i = 0; i < 12; i++) {
+          for (const j of nb[i]) if (i < j) seams.push(arc(Q(i, j), Q(j, i), 6, 0.99));
+          for (const a of nb[i]) for (const b of nb[i]) if (a < b && d3(IV[a], IV[b]) > 0.4) {
+            seams.push(arc(Q(i, a), Q(i, b), 5, 0.99));
+            pipes.push(arc(lerpN(IV[i], Q(i, a), 0.72), lerpN(IV[i], Q(i, b), 0.72), 4, 0.995));
+          }
+        }
+        pts.lines = [{ rgb: '6,8,14', w: 1.8, a: 0.96, segs: seams }, { rgb: '238,242,248', w: 0.95, a: 0.82, segs: pipes }];
+        pts.rim = { rgb: '238,242,248', w: 1.25, a: 0.6 };
+        return pts;
+      }
+      // Basketball: pebbled terracotta shell, 2 great-circle seams + 2 true curved side seams
+      function mBasket(count) {
+        const pts = [], jit = () => (RND() - 0.5) * 0.03, rs = 0.972;
+        const off = t => 0.6 + 0.24 * Math.cos(2 * t);
+        const seam = (n, fn) => { for (let i = 0; i < n; i++) { const p = fn((i / n) * TAU); pts.push(P(p[0] * rs + jit(), p[1] * rs + jit(), p[2] * rs + jit(), 1)); } };
+        const per = Math.floor(count * 0.08);
+        seam(per, t => [Math.cos(t), 0, Math.sin(t)]); seam(per, t => [0, Math.cos(t), Math.sin(t)]);
+        for (const s of [-1, 1]) seam(Math.floor(per * 1.1), t => norm([s * off(t), Math.cos(t), Math.sin(t)]));
+        const G = 0.06;
+        while (pts.length < count) {
+          const v = sph();
+          if (Math.abs(v[1]) < G || Math.abs(v[0]) < G) continue;
+          const t = Math.atan2(v[2], v[1]), ph = Math.atan2(Math.abs(v[0]), Math.hypot(v[1], v[2]));
+          if (Math.abs(ph - Math.atan(off(t))) < G) continue;
+          const r = 1 + (RND() - 0.5) * 0.014, shade = 0.18 + 0.42 * (0.5 - 0.5 * v[1]);
+          pts.push(P(v[0] * r, v[1] * r, v[2] * r, RND() < shade ? 4 : 3, RND() < 0.05 ? 2 : 0));
+        }
+        // vector seams: light cream lines over the dark grooves, light rim on the terracotta silhouette
+        const bs = [], circ = fn => { const o = []; for (let i = 0; i <= 128; i++) { const p = fn((i / 128) * TAU); o.push([p[0] * 0.99, p[1] * 0.99, p[2] * 0.99]); } bs.push(o); };
+        circ(t => [Math.cos(t), 0, Math.sin(t)]); circ(t => [0, Math.cos(t), Math.sin(t)]);
+        for (const s of [-1, 1]) circ(t => norm([s * off(t), Math.cos(t), Math.sin(t)]));
+        pts.lines = [{ rgb: '255,234,204', w: 1.6, a: 0.94, segs: bs }];
+        pts.rim = { rgb: '255,216,174', w: 1.25, a: 0.55 };
+        return pts;
+      }
+      // American football: pebbled top-lit leather, recessed panel grooves, white end stripes, raised lace + vector seams & lacing
+      function mRugby(count) {
+        const A = 1.55, rad = x => Math.pow(Math.max(0, 1 - (x / A) * (x / A)), 0.7) * 0.92;
+        const pts = [], sp = Math.floor(count * 0.04);
+        for (let s = 0; s < 4; s++) { const ang = s * Math.PI / 2; for (let i = 0; i < sp; i++) { const x = -A * 0.97 + ((i + 0.5) / sp) * 1.94 * A, r = rad(x) * 0.975, d = (RND() - 0.5) * 0.05; pts.push(P(x, Math.cos(ang + d) * r, Math.sin(ang + d) * r, 14)); } }
+        const lp = Math.floor(count * 0.035);
+        for (let i = 0; i < lp; i++) { const x = -0.52 + (i / lp) * 1.04, r = rad(x) * 1.03; pts.push(P(x, -r, (RND() - 0.5) * 0.04, 0)); }
+        const per = Math.floor(count * 0.012);
+        for (let k = 0; k < 8; k++) { const x0 = -0.45 + (k / 7) * 0.9; for (let i = 0; i < per; i++) { const zz = (i / per - 0.5) * 0.34, r = rad(x0) * 1.045; pts.push(P(x0 + (RND() - 0.5) * 0.035, -Math.sqrt(Math.max(0, r * r - zz * zz)), zz, 0, RND() < 0.1 ? 2 : 0)); } }
+        while (pts.length < count) {
+          const x = (RND() * 2 - 1) * A, r = rad(x);
+          if (RND() > r / 0.92) continue;
+          const t = RND() * TAU, ax = Math.abs(x), cy = Math.cos(t), sm = Math.abs(((t + Math.PI / 4) % (Math.PI / 2)) - Math.PI / 4);
+          if (sm < 0.035 && ax < A * 0.95) continue;
+          let c = RND() < 0.15 + 0.4 * (0.5 + 0.5 * cy) + (sm < 0.1 ? 0.25 : 0) ? 18 : 9;
+          if (ax > 0.98 && ax < 1.1) c = 0;
+          else if (ax > 1.38) c = 8;
+          const rr = r * (1 + (RND() - 0.5) * 0.012 - (sm < 0.1 ? 0.012 * (1 - sm / 0.1) : 0));
+          pts.push(P(x, cy * rr, Math.sin(t) * rr, c, c === 9 && RND() < 0.08 ? 2 : 0));
+        }
+        const seams = [], stripes = [], lace = [];
+        const ringAt = (x, k) => { const o = [], r = rad(x) * k; for (let i = 0; i <= 72; i++) { const t = (i / 72) * TAU; o.push([x, Math.cos(t) * r, Math.sin(t) * r]); } return o; };
+        for (let s = 0; s < 4; s++) { const ang = s * Math.PI / 2, o = []; for (let i = 0; i <= 64; i++) { const x = -A * 0.985 + (i / 64) * 1.97 * A, r = rad(x) * 0.995; o.push([x, Math.cos(ang) * r, Math.sin(ang) * r]); } seams.push(o); }
+        for (const sg of [-1, 1]) for (const xs of [0.985, 1.04, 1.095]) stripes.push(ringAt(sg * xs, 1.006));
+        { const o = []; for (let i = 0; i <= 40; i++) { const x = -0.54 + (i / 40) * 1.08; o.push([x, -rad(x) * 1.035, 0]); } lace.push(o); }
+        for (let k = 0; k < 8; k++) { const x0 = -0.45 + (k / 7) * 0.9, r = rad(x0) * 1.05, o = []; for (let i = 0; i <= 8; i++) { const zz = (i / 8 - 0.5) * 0.34; o.push([x0, -Math.sqrt(Math.max(0, r * r - zz * zz)), zz]); } lace.push(o); }
+        pts.lines = [{ rgb: '34,16,8', w: 1.5, a: 0.92, segs: seams }, { rgb: '246,242,232', w: 1.4, a: 0.9, segs: stripes }, { rgb: '250,248,240', w: 2.2, a: 0.97, segs: lace }];
+        return pts;
+      }
+
+      // ── CLUSTER II · precision & summit ──
+      function mEpee() {
+        const a = [];
+        fill(a, 470, () => { const u = RND(), y = -172 + u * 168, [x, z] = ring(0.8 + 2 * u, RND() * TAU); return P(x, y, z, RND() < 0.8 ? 6 : 12); });
+        fill(a, 70, () => { const v = sph(), r = 3.6; return P(v[0] * r, -176 + v[1] * r, v[2] * r, 2, 1); });
+        fill(a, 680, () => { const v = sph(), hh = Math.abs(v[1]); return P(v[0] * 42, -hh * 28, v[2] * 42, hh > 0.93 ? 2 : (RND() < 0.55 ? 6 : 7)); });
+        fill(a, 130, u => { const [x, z] = ring(42, u * TAU); return P(x, (RND() - 0.5) * 1.6, z, 2); });
+        fill(a, 240, () => { const u = RND(), [x, z] = ring(4.6 + 0.6 * Math.sin(u * Math.PI), RND() * TAU); return P(x + 5 * Math.sin(u * 1.4), 4 + u * 62, z, RND() < 0.85 ? 11 : 2, RND() < 0.1 ? 2 : 0); });
+        fill(a, 90, () => { const v = sph(); return P(5 * Math.sin(1.4) + v[0] * 7, 73 + v[1] * 8, v[2] * 7, 2); });
+        return a;
+      }
+      function mDriver() {
+        const a = [], N = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+        for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) N.push(norm([sx * 0.9, sy, sz * 0.9]));
+        const sx = y => -4 + ((y + 130) / 226) * 4;
+        fill(a, 190, () => { const y = -130 + RND() * 62, [x, z] = ring(3.8 - ((y + 130) / 62) * 0.6, RND() * TAU); return P(sx(y) + x, y, z, 11, RND() < 0.1 ? 2 : 0); });
+        fill(a, 340, () => { const y = -68 + RND() * 164, [x, z] = ring(1.7 - ((y + 68) / 164) * 0.6, RND() * TAU); return P(sx(y) + x, y, z, 7); });
+        fill(a, 60, () => { const u = RND(), [x, z] = ring(2 + 2.5 * u, RND() * TAU); return P(x, 96 + u * 12, z, 6); });
+        fill(a, 860, () => {
+          const v = sph(); let m1 = 0, m2 = 0;
+          for (const n of N) { const d = v[0] * n[0] + v[1] * n[1] + v[2] * n[2]; if (d > m1) { m2 = m1; m1 = d; } else if (d > m2) m2 = d; }
+          const p = [v[0] / m1, v[1] / m1, v[2] / m1], X = p[0] * 48, Y = p[1] * 21, Z = p[2] * 38;
+          let c = p[1] < -0.15 ? 11 : 7;
+          if (m1 - m2 < 0.035) c = 6;
+          if (p[2] > 0.62) c = Math.abs((Y + 40) % 5) < 0.9 ? 1 : 6;
+          if (p[1] < -0.3 && Math.abs(X - 6) < 1.8 && p[2] > 0.1) c = 2;
+          return P(34 + X, 128 + Y, Z, c);
+        });
+        fill(a, 250, () => { const v = sph(), r = 13; return P(40 + v[0] * r, 136 + v[1] * r, 74 + v[2] * r, 0, RND() < 0.3 ? 2 : 0); });
+        return a;
+      }
+      // Technical ice axe (curved toothed pick, adze, bent shaft, grip, spike) + screw-lock carabiner on its own spin
+      function mAxe() {
+        const a = [];
+        const shx = y => -9 * Math.sin(Math.PI * (y + 92) / 200) + (y > 60 ? -(y - 60) * 0.18 : 0);
+        fill(a, 430, () => { const y = -92 + RND() * 196, [x, z] = ring(4.2, RND() * TAU), grip = y > 56; return P(shx(y) + x * 1.1, y, z * 0.75, grip ? 11 : 7, grip && RND() < 0.12 ? 2 : 0); });
+        fill(a, 60, u => { const y = u < 0.5 ? 56 : 104, [x, z] = ring(4.7, RND() * TAU); return P(shx(y) + x, y + (RND() - 0.5) * 2, z * 0.8, 2); });
+        fill(a, 40, () => { const u = RND(); return P(shx(56) - 4 - u * 9, 56 + u * 4, (RND() - 0.5) * 5, 2); });
+        fill(a, 70, () => { const u = RND(), [x, z] = ring(3.6 * (1 - u) + 0.3, RND() * TAU); return P(shx(104) + x, 104 + u * 18, z, 6); });
+        fill(a, 90, () => P(-9 + RND() * 18, -104 + RND() * 14, (RND() * 2 - 1) * 4.5, 6));
+        fill(a, 340, () => { const s = RND(), yc = -98 + 48 * Math.pow(s, 1.7), hh = 8 * (1 - s) + 1.5; return P(8 + 96 * s, yc + (RND() * 2 - 1) * hh, (RND() * 2 - 1) * 2.4 * (1 - 0.6 * s), 6); });
+        fill(a, 160, () => { const s = 0.35 + RND() * 0.62, yc = -98 + 48 * Math.pow(s, 1.7), hh = 8 * (1 - s) + 1.5; return P(8 + 96 * s, yc + hh + 4.5 * ((s * 28) % 1), (RND() * 2 - 1) * 1.6, 12); });
+        fill(a, 24, () => { const v = sph(); return P(104 + v[0] * 2.6, -50 + v[1] * 2.6, v[2] * 2.6, 2, 1); });
+        fill(a, 170, () => { const s = RND(); return P(-8 - 36 * s, -100 + 6 * s * s + (RND() * 2 - 1) * 1.4, (RND() * 2 - 1) * (4 + 8 * s), 6); });
+        fill(a, 40, () => P(-44 + (RND() - 0.5) * 1.2, -94 + (RND() - 0.5) * 2, (RND() * 2 - 1) * 12, 2));
+        const g = { x: -64, y: 30, z: 0 };
+        const D = t => [g.x + 15 * Math.cos(t) * (1 + 0.22 * Math.sin(t)), g.y + 28 * Math.sin(t)];
+        fill(a, 380, () => {
+          const t = RND() * TAU, p0 = D(t), p1 = D(t + 0.01), tx = p1[0] - p0[0], ty = p1[1] - p0[1], tl = Math.hypot(tx, ty);
+          const nx = ty / tl, ny = -tx / tl, sleeve = t > 0.05 && t < 0.75, r = sleeve ? 4.2 : 2.8, ph = RND() * TAU;
+          return P(p0[0] + nx * Math.cos(ph) * r, p0[1] + ny * Math.cos(ph) * r, Math.sin(ph) * r, sleeve ? 2 : 6, 0, g);
+        });
+        return a;
+      }
+
+      // ── CLUSTER III · combat ──
+      // Boxing glove: top-lit red leather fist, recessed back-panel welt w/ gold piping, knuckle stripe, curled thumb + tie, white band, laced black cuff
+      function mGlove() {
+        const a = [];
+        const fist = (v0, v1, v2) => { const fr = v2 > 0 ? 1 + 0.08 * v2 * (1 - Math.abs(v1)) : 0.86; return [v0 * 50, -30 + v1 * 58 * (v1 < 0 ? 1.04 : 1), v2 * 47 * fr]; };
+        fill(a, 1000, () => {
+          const v = sph(), p = fist(v[0], v[1], v[2]);
+          if (Math.abs(v[2] + 0.3) < 0.035 && v[1] > -0.35) return P(p[0], p[1], p[2], 14);
+          let c = RND() < 0.12 + 0.45 * (0.5 + 0.5 * v[1]) ? 17 : 16;
+          if (v[2] < -0.3 && v[1] > -0.35) c = 17;
+          if (v[2] > 0.55 && Math.abs(v[1] + 0.25) < 0.03) c = 0;
+          return P(p[0], p[1], p[2], c, c === 16 && RND() < 0.06 ? 2 : 0);
+        });
+        const tA = [-46, 14, 6], tB = [-28, -40, 32], d = norm([tB[0] - tA[0], tB[1] - tA[1], tB[2] - tA[2]]), e1 = norm(cross(d, [0, 0, 1])), e2 = cross(d, e1);
+        const tc = u => [tA[0] + (tB[0] - tA[0]) * u - 9 * Math.sin(Math.PI * u), tA[1] + (tB[1] - tA[1]) * u, tA[2] + (tB[2] - tA[2]) * u], trr = u => 15 * (1 - 0.25 * u * u);
+        fill(a, 340, () => {
+          const u = RND(), c = tc(u), r = trr(u), ph = RND() * TAU, cp = Math.cos(ph), spp = Math.sin(ph);
+          return P(c[0] + r * (cp * e1[0] + spp * e2[0]), c[1] + r * (cp * e1[1] + spp * e2[1]), c[2] + r * (cp * e1[2] + spp * e2[2]), spp > 0.2 ? 17 : 16, RND() < 0.05 ? 2 : 0);
+        });
+        fill(a, 70, () => { const v = sph(); return P(tB[0] + v[0] * 11.5, tB[1] + v[1] * 11.5, tB[2] + v[2] * 11.5, 16); });
+        fill(a, 80, () => { const u = RND(), w = (RND() - 0.5) * 6; return P(tB[0] + 8 + u * 22, tB[1] - 4 + u * 2 + w * 0.3, tB[2] + 6 - u * 2 + w, 14); });
+        const cr = y => 38 - ((y - 28) / 80) * 4;
+        fill(a, 130, () => { const y = 24 + RND() * 10, t = RND() * TAU; return P(Math.cos(t) * (cr(y) + 2), y, Math.sin(t) * (cr(y) + 2) * 0.9, 0); });
+        fill(a, 400, () => { const y = 34 + RND() * 74, t = RND() * TAU; return P(Math.cos(t) * cr(y), y, Math.sin(t) * cr(y) * 0.9, 14); });
+        fill(a, 60, () => { const y = 40 + Math.floor(RND() * 7) * 10, th = Math.PI / 2 + (RND() < 0.5 ? 1 : -1) * 0.45, r = cr(y) + 1; return P(Math.cos(th) * r + (RND() - 0.5) * 1.5, y + (RND() - 0.5) * 1.5, Math.sin(th) * r * 0.9, 2, 2); });
+        fill(a, 160, u => { const y = u < 0.5 ? 35 : 108, t = RND() * TAU, r = cr(y) + 1; return P(Math.cos(t) * r, y + (RND() - 0.5) * 2.5, Math.sin(t) * r * 0.9, 2); });
+        const ln = (n, fn) => { const o = []; for (let i = 0; i <= n; i++) o.push(fn(i / n)); return o; };
+        const pipe = [], white = [], laces = [];
+        const pr = Math.sqrt(1 - 0.09), t0 = Math.asin(-0.35 / pr);
+        pipe.push(ln(96, u => { const t = t0 + u * (Math.PI - 2 * t0); return fist(pr * Math.cos(t) * 1.01, pr * Math.sin(t), -0.3 * 1.01); }));
+        const qr = Math.sqrt(1 - 0.1225), s0 = Math.asin(-0.3 / qr);
+        pipe.push(ln(48, u => { const s = Math.PI - s0 + u * (Math.PI + 2 * s0); return fist(qr * Math.cos(s) * 1.01, -0.35, qr * Math.sin(s) * 1.01); }));
+        for (const sg of [-1, 1]) pipe.push(ln(40, u => { const c = tc(u), r = trr(u) * 1.03; return [c[0] + sg * r * e1[0], c[1] + sg * r * e1[1], c[2] + sg * r * e1[2]]; }));
+        const kr = Math.sqrt(1 - 0.0625), k0 = Math.asin(0.55 / kr);
+        white.push(ln(40, u => { const s = k0 + u * (Math.PI - 2 * k0); return fist(kr * Math.cos(s) * 1.01, -0.25, kr * Math.sin(s) * 1.01); }));
+        const cring = (y, k) => ln(72, u => { const t = u * TAU, r = cr(y) + k; return [Math.cos(t) * r, y, Math.sin(t) * r * 0.9]; });
+        white.push(cring(24, 2.2)); pipe.push(cring(35, 1.6), cring(108, 1.6));
+        const ey = (y, s) => { const th = Math.PI / 2 + s * 0.45, r = cr(y) + 1.8; return [Math.cos(th) * r, y, Math.sin(th) * r * 0.9]; };
+        for (let k = 0; k < 6; k++) for (const s of [-1, 1]) { const y0 = 40 + k * 10; laces.push(ln(8, u => { const th = Math.PI / 2 + s * 0.45 * (1 - 2 * u), y = y0 + 10 * u, r = cr(y) + 2; return [Math.cos(th) * r, y, Math.sin(th) * r * 0.9]; })); }
+        laces.push(ln(4, u => { const p = ey(40, -1), q = ey(40, 1); return [p[0] + (q[0] - p[0]) * u, 40, p[2] + (q[2] - p[2]) * u + 3 * Math.sin(Math.PI * u)]; }));
+        a.lines = [{ rgb: '236,192,92', w: 1.6, a: 0.95, segs: pipe }, { rgb: '248,246,240', w: 2.2, a: 0.95, segs: white }, { rgb: '244,240,230', w: 1.5, a: 0.92, segs: laces }];
+        return a;
+      }
+      // Master black belt: double wrap, square knot, two tails with gold rank bars
+      function mBelt() {
+        const a = [], W = 12, rib = (c, e) => Math.abs(e) > 0.8 ? 2 : c;
+        fill(a, 800, () => { const t = RND() * TAU, e = RND() * 2 - 1, layer = RND() < 0.5 ? -1 : 1; return P(Math.cos(t) * 112, e * W + layer * 13, Math.sin(t) * 58, rib(11, e)); });
+        fill(a, 330, () => { const v = sph(), x = v[0] * 22, y = v[1] * 17; return P(x, y, 66 + v[2] * 10, Math.abs(x * 0.7 - y) < 3 ? 2 : 11); });
+        for (const s of [-1, 1]) {
+          const dl = Math.hypot(34, 104), px = 104 / dl, py = -s * 34 / dl;
+          fill(a, 310, () => { const u = RND(), e = RND() * 2 - 1, c = u > 0.72 && u < 0.86 ? 2 : rib(11, e); return P(s * (6 + 34 * u) + e * W * px, 14 + 104 * u + e * W * py, 70 + 10 * u + e * 2, c); });
+        }
+        return a;
+      }
+
+      // ── CLUSTER IV · speed ──
+      const sm3 = t => t * t * (3 - 2 * t);
+      // Figure skate: sculpted black boot, laced instep, gold eyelets & rim, steel holder, rockered blade + toe pick
+      function mSkate() {
+        const a = [];
+        const ht = x => { let h = Math.max(34, 112 - Math.max(0, x + 8) * 1.05); if (x > 50) h *= Math.sqrt(Math.max(0.04, 1 - Math.pow((x - 50) / 22, 2))); return h; };
+        const wd = x => { let w = 23 + 7 * sm3(clamp((x + 20) / 60, 0, 1)); if (x < -52) w *= Math.sqrt(Math.max(0, 1 - Math.pow((-52 - x) / 10, 2))); if (x > 52) w *= Math.sqrt(Math.max(0, 1 - Math.pow((x - 52) / 20, 2))); return w; };
+        const sq = (v, e) => Math.sign(v) * Math.pow(Math.abs(v), e);
+        fill(a, 1150, () => {
+          let x, th, s, c;
+          for (;;) { x = -62 + RND() * 134; th = RND() * TAU; s = Math.sin(th); if (!(x < -8 && s > 0.9)) break; }
+          const h = ht(x), w = wd(x), y = -h / 2 - (h / 2) * sq(s, 0.55), z = w * sq(Math.cos(th), 0.55);
+          c = 14;
+          if (x < -8 && s > 0.82) c = 2;
+          else if (s < -0.93) c = 2;
+          else if (x < -34 && s < 0.25) c = 11;
+          else if (x > 50) c = 11;
+          return P(x, y, z, c, c === 14 && RND() < 0.03 ? 2 : 0);
+        });
+        fill(a, 90, () => { const x = -16 + RND() * 14, hh = RND(); return P(x, -112 - hh * 12, (RND() - 0.5) * 18, 11); });
+        for (let k = 0; k < 7; k++) {
+          const x0 = -6 + k * 8;
+          fill(a, 34, () => { const u = RND(), x = x0 + u * 8, sgn = RND() < 0.5 ? 1 : -1; return P(x, -ht(x) - 1.6, sgn * (-10 + 20 * u), 0); });
+          for (const zs of [-1, 1]) fill(a, 8, () => { const v = sph(); return P(x0 + v[0] * 1.6, -ht(x0) - 1 + v[1] * 1.6, zs * 11 + v[2] * 1.6, 2, k === 0 ? 1 : 0); });
+        }
+        fill(a, 260, () => { const x = RND() < 0.5 ? -58 + RND() * 30 : 12 + RND() * 46, yy = 2 + RND() * 24; return P(x, yy, (RND() < 0.5 ? -1 : 1) * (3.2 - yy * 0.06), 7); });
+        fill(a, 140, () => P(-58 + RND() * 116, 24 + RND() * 4, (RND() - 0.5) * 3, 7));
+        const yb = x => 46 - 3 * Math.pow(x / 120, 2);
+        fill(a, 520, () => { const x = -78 + RND() * 154; return P(x, 28 + RND() * (yb(x) - 28), (RND() < 0.5 ? -1 : 1) * 0.9, 6); });
+        fill(a, 230, () => { const x = -76 + RND() * 150; return P(x, yb(x) + (RND() - 0.5) * 0.8, (RND() - 0.5) * 0.6, 12, RND() < 0.25 ? 2 : 0); });
+        fill(a, 90, () => { const t = RND(), x = 76 + t * 8 * (0.6 + 0.4 * Math.abs(Math.sin(t * Math.PI * 4))); return P(x, 28 + t * 16, (RND() - 0.5) * 1.6, 6); });
+        return a;
+      }
+      // Aero helmet: white teardrop shell, wrap visor w/ glint, gold crown stripe & rim, intake vents, chin strap
+      function mHelmet(count) {
+        const a = [];
+        while (a.length < count * 0.9) {
+          const x = -1 + RND() * 2.9, r = x < 0 ? Math.sqrt(1 - x * x) : Math.pow(1 - x / 1.9, 0.78);
+          if (RND() > r) continue;
+          const t = RND() * TAU, ct = Math.cos(t), st = Math.sin(t);
+          const cutoff = -0.4 + 0.5 * sm3(clamp((x - 0.6) / 0.9, 0, 1));
+          if (ct < cutoff && x < 1.5) continue;
+          const yc = 0.2 * Math.pow(Math.max(0, x) / 1.9, 1.4);
+          let c = 0, f = 0, rr = r;
+          const vis = x < 0.1 && ct < 0.22;
+          if (vis) { c = 12; rr = r * 1.012; if (Math.abs(st * 0.7 + ct - 0.05) < 0.06) { c = 0; f = 2; } }
+          else if (x < 0.16 && ct < 0.3) c = 2;
+          else if (Math.abs(st) < 0.06 && ct > 0) c = 2;
+          else if (ct - cutoff < 0.06) c = 7;
+          else if (x > -0.75 && x < -0.45 && ct > 0.55 && Math.abs(st) > 0.12 && Math.abs(st) < 0.42) c = 14;
+          else if (x > 1.05 && x < 1.4 && Math.abs(Math.abs(st) - 0.75) < 0.12 && Math.abs(ct) < 0.4) c = 14;
+          else if (x > 0.25 && x < 1.3 && Math.abs(ct - 0.15 - 0.15 * x) < 0.035 && ct > 0) c = 5;
+          a.push(P(x, yc - ct * rr * 0.86, st * rr * 0.92, c, f));
+        }
+        for (const s of [-1, 1]) {
+          const ear = [0.25, 0.42, s * 0.88], chin = [-0.55, 1.02, 0];
+          fill(a, count * 0.04, () => { const u = RND(), sag = 0.08 * Math.sin(Math.PI * u); return P(ear[0] + (chin[0] - ear[0]) * u, ear[1] + (chin[1] - ear[1]) * u + sag, ear[2] * (1 - u) + (RND() - 0.5) * 0.02, 11); });
+        }
+        fill(a, count * 0.015, () => { const v = sph(); return P(-0.55 + v[0] * 0.05, 1.02 + v[1] * 0.04, v[2] * 0.06, 2, 1); });
+        return a;
+      }
+      // Track disc wheel: carbon twill lens, gold logo arcs, alloy braking band, tyre w/ sidewall line, hub + cassette
+      function mWheel() {
+        const a = [];
+        fill(a, 1150, () => {
+          const r = 0.12 + 0.72 * Math.sqrt(RND()), t = RND() * TAU, s = RND() < 0.5 ? -1 : 1;
+          const tw = (Math.floor(t * 40 / TAU + r * 18) + Math.floor(r * 18)) % 2;
+          let c = tw ? 11 : 14, f = 0;
+          if (Math.abs(r - 0.62) < 0.016) c = 2;
+          else if (r > 0.66 && r < 0.75 && ((t * 3 / TAU) % 1) < 0.22) { c = 2; f = RND() < 0.2 ? 2 : 0; }
+          return P(Math.cos(t) * r, Math.sin(t) * r, s * (0.09 * (1 - r * r) + 0.012), c, f);
+        });
+        fill(a, 200, () => { const r = 0.84 + RND() * 0.08, t = RND() * TAU, s = RND() < 0.5 ? -1 : 1; return P(Math.cos(t) * r, Math.sin(t) * r, s * (0.03 + (0.92 - r) * 0.12), 7, RND() < 0.06 ? 2 : 0); });
+        fill(a, 330, () => { const t = RND() * TAU, ph = RND() * TAU, R = 0.965 + 0.04 * Math.cos(ph), c = Math.abs(Math.sin(ph)) > 0.82 && Math.abs(Math.sin(ph)) < 0.9 ? 0 : 1; return P(Math.cos(t) * R, Math.sin(t) * R, 0.048 * Math.sin(ph), c); });
+        fill(a, 20, () => { const v = sph(); return P(0.8 + v[0] * 0.02, v[1] * 0.02, 0.05 + v[2] * 0.01, 2, 1); });
+        fill(a, 150, () => { const t = RND() * TAU; return P(Math.cos(t) * 0.085, Math.sin(t) * 0.085, (RND() * 2 - 1) * 0.16, 2); });
+        for (let k = 0; k < 4; k++) { const R = 0.2 - k * 0.025, zz = -0.11 - k * 0.018; fill(a, 50, () => { const t = RND() * TAU, tooth = ((t * (36 - k * 4) / TAU) % 1) < 0.5 ? 0.012 : 0; return P(Math.cos(t) * (R + tooth), Math.sin(t) * (R + tooth), zz, 6); }); }
+        fill(a, 30, () => { const v = sph(); return P(v[0] * 0.03, v[1] * 0.03, (RND() < 0.5 ? -1 : 1) * 0.18, 2, 1); });
+        return a;
+      }
+
+      // normalise: optional roll, recentre on bbox, scale bounding radius → R px (at k = 1), shuffle
+      const mk = (pts, R, roll) => {
+        const piv = new Set(); for (const p of pts) if (p.g) piv.add(p.g);
+        const all = pts.concat([...piv]), LS = pts.lines ? pts.lines.flatMap(l => l.segs.flat()) : [];
+        if (roll) { const c = Math.cos(roll), s = Math.sin(roll); for (const p of all) { const x = p.x * c - p.y * s, y = p.x * s + p.y * c; p.x = x; p.y = y; } for (const q of LS) { const x = q[0] * c - q[1] * s, y = q[0] * s + q[1] * c; q[0] = x; q[1] = y; } }
+        const lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
+        for (const p of pts) { lo[0] = Math.min(lo[0], p.x); lo[1] = Math.min(lo[1], p.y); lo[2] = Math.min(lo[2], p.z); hi[0] = Math.max(hi[0], p.x); hi[1] = Math.max(hi[1], p.y); hi[2] = Math.max(hi[2], p.z); }
+        const mx = (lo[0] + hi[0]) / 2, my = (lo[1] + hi[1]) / 2, mz = (lo[2] + hi[2]) / 2;
+        for (const p of all) { p.x -= mx; p.y -= my; p.z -= mz; } for (const q of LS) { q[0] -= mx; q[1] -= my; q[2] -= mz; }
+        let rb = 0; for (const p of pts) rb = Math.max(rb, Math.hypot(p.x, p.y, p.z));
+        const f = R / rb; for (const p of all) { p.x *= f; p.y *= f; p.z *= f; } for (const q of LS) { q[0] *= f; q[1] *= f; q[2] *= f; }
+        for (let i = pts.length - 1; i > 0; i--) { const j = (RND() * (i + 1)) | 0; const t = pts[i]; pts[i] = pts[j]; pts[j] = t; }
+        return { pts, n: pts.length, rb: R, lines: pts.lines, rim: pts.rim };
+      };
+      const M = {
+        football: mk(mFootball(1800), 120), basket: mk(mBasket(1800), 120), rugby: mk(mRugby(1800), 135, -0.32),
+        epee: mk(mEpee(), 140, -0.62), driver: mk(mDriver(), 140, 0.3), axe: mk(mAxe(), 135, 0.16),
+        glove: mk(mGlove(), 125, -0.1), belt: mk(mBelt(), 130), skate: mk(mSkate(), 140, -0.08), helmet: mk(mHelmet(1800), 125, 0.1), wheel: mk(mWheel(), 125)
+      };
+      // Flank alternation: one side active, the other rests on the Daisi rails
+      const CL = [
+        { side: -1, s: [M.football, M.basket, M.rugby] },
+        { side: 1, s: [M.epee, M.driver, M.axe] },
+        { side: -1, s: [M.glove, M.belt] },
+        { side: 1, s: [M.skate, M.helmet, M.wheel] }
+      ];
+      const HOLD = 4.2, MORPH = 1.3, WAVE = 2.6, INTRO_ORBIT = 2.4, INTRO_COND = 1.9;
+      let LOOP = 0; for (const c of CL) { c.sd = c.s.length * HOLD + (c.s.length - 1) * MORPH; c.t0 = LOOP; LOOP += c.sd + WAVE; }
+      const smooth = t => t * t * (3 - 2 * t);
+      // C1 smooth max (polynomial) — keeps the keep-out push free of corners
+      const smax = (a, b, k) => { const q = clamp(0.5 + 0.5 * (b - a) / k, 0, 1); return a + (b - a) * q + k * q * (1 - q); };
+      function timeline(T) {
+        if (T < INTRO_ORBIT) return { st: 0 };
+        if (T < INTRO_ORBIT + INTRO_COND) return { st: 1, p: (T - INTRO_ORBIT) / INTRO_COND, A: CL[0].s[0], B: CL[0].s[0], mix: 0, sa: CL[0].side, sb: CL[0].side };
+        const tt = (T - INTRO_ORBIT - INTRO_COND) % LOOP;
+        let ci = CL.length - 1; while (ci > 0 && CL[ci].t0 > tt) ci--;
+        const c = CL[ci], lt = tt - c.t0;
+        if (lt < c.sd) {
+          const j = Math.min(Math.floor(lt / (HOLD + MORPH)), c.s.length - 1), r = lt - j * (HOLD + MORPH);
+          const m = r > HOLD && j < c.s.length - 1 ? smooth(clamp((r - HOLD) / MORPH, 0, 1)) : 0;
+          return { st: 2, A: c.s[j], B: c.s[Math.min(j + 1, c.s.length - 1)], mix: m, sa: c.side, sb: c.side };
+        }
+        const nx = CL[(ci + 1) % CL.length];
+        return { st: 3, p: (lt - c.sd) / WAVE, A: c.s[c.s.length - 1], B: nx.s[0], mix: 0, sa: c.side, sb: nx.side };
+      }
+
+      const clusterEl = document.getElementById('monolithCluster');
+      let cRect = { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
+      function measure() { cRect = clusterEl.getBoundingClientRect(); }
+      window.addEventListener('resize', measure, { passive: true });
+      setTimeout(measure, 300); measure();
+
+      // flank anchor: ±440 spec px, never closer to the wordmark than its edge + margin; shrinks to fit, lifts above on narrow screens
+      // real letter extents (not the wider flex container)
+      let lRect = { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
+      function measureLetters() {
+        const L = clusterEl.querySelectorAll('.letter-box');
+        if (!L.length) { lRect = cRect; return; }
+        let l = 1e9, r = -1e9, t = 1e9, bt = -1e9;
+        L.forEach(el => { const q = el.getBoundingClientRect(); l = Math.min(l, q.left); r = Math.max(r, q.right); t = Math.min(t, q.top); bt = Math.max(bt, q.bottom); });
+        lRect = { left: l, right: r, top: t, bottom: bt, width: r - l, height: bt - t };
+      }
+      window.addEventListener('resize', measureLetters, { passive: true });
+      setTimeout(measureLetters, 300); measureLetters();
+
+      // flank anchor at ±440 spec px; full 240–280px size kept — if it can't sit beside the letters it lifts clear of their band; shrinks only as last resort
+      function anchorFor(side, R, S) {
+        const mg = 22, cx = w * 0.5, cy = h * 0.5, LR = lRect.width ? lRect : cRect;
+        let k = clamp(w / 1440, 0.75, 1.15), rs = R * k * 1.06;
+        const maxR = Math.max(Math.min(w * 0.25 - mg, h * 0.5 - mg), 20);
+        if (rs > maxR) { k *= maxR / rs; rs = maxR; }
+        const gap = side > 0 ? w - LR.right : LR.left;
+        let ax, ay;
+        if ((gap - 2 * mg) / 2 >= rs) {
+          ax = cx + side * Math.max(440 * S, LR.width * 0.5 + mg + rs);
+          ax = side > 0 ? clamp(ax, LR.right + mg + rs, w - mg - rs) : clamp(ax, mg + rs, LR.left - mg - rs);
+          ay = clamp(cy, rs + 16, h - rs - 16);
+          return { x: ax, y: ay, k, rs };
+        }
+        ax = clamp(cx + side * 440 * S, rs + mg, w - rs - mg);
+        if (side > 0 ? ax - rs < cx + mg : ax + rs > cx - mg) ax = cx + side * (rs + mg);
+        const above = LR.top - mg, below = h - LR.bottom - mg - 40;
+        const room = Math.max(above, below);
+        if (room < rs * 2) { const r2 = Math.max(room / 2, 40); k *= r2 / rs; rs = r2; }
+        ay = above >= below ? LR.top - mg - rs : LR.bottom + mg + rs;
+        ay = clamp(ay, rs + 8, h - rs - 8);
+        return { x: ax, y: ay, k, rs };
+      }
+
+      let scrollProgress = 0, railClock = 0, last = performance.now();
+      const T0 = performance.now();
+      const mouse = { tx: -9999, ty: -9999, x: -9999, y: -9999, on: 0, ton: 0 };
+      window.addEventListener('pointermove', e => { mouse.tx = e.clientX; mouse.ty = e.clientY; mouse.ton = 1; if (mouse.x < -9000) { mouse.x = mouse.tx; mouse.y = mouse.ty; } }, { passive: true });
+      document.addEventListener('pointerleave', () => { mouse.ton = 0; });
+
+      // gimbal: RotY = t·0.45, PitchX = 18°·sin(t·0.2)
+      let cY = 1, sY = 0, cP = 1, sP = 0;
+      const PJ = { x: 0, y: 0, z: 0, s: 1, sh: 1 };
+      function proj(x, y, z, an, rb) {
+        const x1 = x * cY - z * sY, z1 = x * sY + z * cY, y2 = y * cP - z1 * sP, z2 = y * sP + z1 * cP, s = FOV / (FOV + z2 * an.k);
+        PJ.x = an.x + x1 * an.k * s; PJ.y = an.y + y2 * an.k * s; PJ.z = z2; PJ.s = s; PJ.sh = clamp(0.66 - (z2 / rb) * 0.42, 0.22, 1);
+      }
+      // depth-sorted object buffer (painter's order so dark panels occlude the far side)
+      const oX = new Float32Array(TOTAL), oY = new Float32Array(TOTAL), oS = new Float32Array(TOTAL), oZ = new Float32Array(TOTAL), oA = new Float32Array(TOTAL), oF = new Uint8Array(TOTAL), oC = new Array(TOTAL);
+      const oI = []; let oN = 0;
+
+      // 5 · vector contour pass: front-hemisphere seams (back-face faded) + silhouette rim
+      function drawLines(m, an, la) {
+        if (!m.lines || !an || la < 0.01) return;
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        for (const L of m.lines) {
+          const bk = [null, null, null, null];
+          for (const seg of L.segs) {
+            let x0 = 0, y0 = 0, v0 = 0;
+            for (let i = 0; i < seg.length; i++) {
+              const q = seg[i]; proj(q[0], q[1], q[2], an, m.rb);
+              const v = clamp((-PJ.z / m.rb + 0.05) / 0.3, 0, 1), x = PJ.x, y = PJ.y;
+              if (i) { const vm = Math.min(v, v0); if (vm > 0.03) { const b = Math.min(3, (vm * 4) | 0), pth = bk[b] || (bk[b] = new Path2D()); pth.moveTo(x0, y0); pth.lineTo(x, y); } }
+              x0 = x; y0 = y; v0 = v;
+            }
+          }
+          ctx.lineWidth = Math.max(L.w * an.k, 0.75);
+          for (let b = 0; b < 4; b++) if (bk[b]) { ctx.strokeStyle = 'rgba(' + L.rgb + ',' + (L.a * la * (b + 1) / 4).toFixed(3) + ')'; ctx.stroke(bk[b]); }
+        }
+        if (m.rim) {
+          ctx.beginPath(); ctx.arc(an.x, an.y, Math.max(m.rb * an.k * 1.004, 0.5), 0, TAU);
+          ctx.lineWidth = Math.max(m.rim.w * an.k, 0.75); ctx.strokeStyle = 'rgba(' + m.rim.rgb + ',' + (m.rim.a * la).toFixed(3) + ')'; ctx.stroke();
+        }
+      }
+
+      function renderFrame(now) {
+        requestAnimationFrame(renderFrame);
+        if (w !== window.innerWidth || h !== window.innerHeight) { resize(); measure(); measureLetters(); }
+        if (w < 10 || h < 10) return;
+        const dt = Math.min((now - last) / 1000, 0.05); last = now;
+        const T = (now - T0) / 1000 + (window.__artronSeek || 0);
+        const tl = timeline(T);
+        const live = 1 - smooth(clamp(scrollProgress * 6, 0, 1));
+        railClock += dt * (1 + scrollProgress * 0.6);
+        // calm recession into depth: Z 0 → -450, alpha 0.8 → 0.15 — no radial streaks
+        const depth = smooth(clamp(scrollProgress / 0.75, 0, 1)), depthK = FOV / (FOV + 450 * depth), depthA = 1 - depth * 0.8125;
+        const gM = (TAU / 20) * railClock, gF = (TAU / 20) * railClock;
+        const rpT = railClock % 10, ripM = Math.exp(-Math.pow((rpT - 0.6) / 0.35, 2)), ripF = Math.exp(-Math.pow((rpT - 1.05) / 0.45, 2));
+        mouse.x += (mouse.tx - mouse.x) * 0.12; mouse.y += (mouse.ty - mouse.y) * 0.12; mouse.on += (mouse.ton - mouse.on) * 0.05;
+        const mnx = mouse.on * clamp((mouse.x - w * 0.5) / (w * 0.5), -1, 1), mny = mouse.on * clamp((mouse.y - h * 0.5) / (h * 0.5), -1, 1);
+        const MR = clamp(w * 0.11, 70, 170);
+        const mobile = w < 760, cx = w * 0.5, cy = h * 0.5;
+        const S = clamp((cRect.width * 0.5 + 16) / 430, 0.4, 1.5), Sy = Math.min(S, h * 0.44 / 300);
+        const KA = Math.max(430 * S, cRect.width * 0.5 + 16), KB = Math.max(120 * Sy, cRect.height * 0.5 + 14);
+
+        const A = tl.A, B = tl.B;
+        const anA = tl.st ? anchorFor(tl.sa, Math.max(A.rb, B.rb), S) : null;
+        const anB = tl.st === 3 ? anchorFor(tl.sb, B.rb, S) : anA;
+        const yaw = T * 0.45 + mnx * 0.35, pitch = 0.3142 * Math.sin(T * 0.2) + mny * 0.2;
+        cY = Math.cos(yaw); sY = Math.sin(yaw); cP = Math.cos(pitch); sP = Math.sin(pitch);
+        const spin = T * 1.25, cG = Math.cos(spin), sG = Math.sin(spin);
+        const holdW = tl.st === 2 ? 1 : tl.st === 1 ? smooth(tl.p) : tl.st === 3 ? 1 - smooth(clamp(tl.p * 3, 0, 1)) : 0;
+        const morphJ = tl.st === 2 ? Math.sin(Math.PI * tl.mix) : 0;
+        const peakY = Math.max(Math.min((lRect.width ? lRect.top : cRect.top) - 46 * Sy, anA ? Math.min(anA.y, anB.y) - 50 : 1e9), 30), ctrlY = anA ? 2 * peakY - 0.5 * (anA.y + anB.y) : 0;
+        const pulse = 0.5 + 0.5 * Math.sin(now * 0.0065);
+        const reach = KA * 2.4;
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'screen';
+        oN = 0;
+
+        for (let i = 0; i < TOTAL; i++) {
+          // 1 · Daisi guiderails (Flow-M ellipse / Flow-F 3-lobed) + fixed Gaussian tube offset
+          let X, Y, Z, ang, rip;
+          if (pS[i] === 0) {
+            const a = pU[i] - gM + 0.44;
+            X = 580 * Math.cos(a); Y = 280 * Math.sin(a); Z = 85 * Math.cos(pU[i] - gM); ang = a; rip = ripM;
+          } else {
+            const th = pU[i], a = th - gF;
+            X = (460 + 20 * Math.cos(3 * th - gF)) * Math.cos(a); Y = (170 + 12 * Math.sin(3 * th - gF)) * Math.sin(a); Z = 35 * Math.sin(2 * a); ang = a; rip = ripF;
+          }
+          const ca = Math.cos(ang), sa = Math.sin(ang);
+          X = (X + ca * pOX[i]) * S; Y = (Y + sa * pOX[i]) * Sy; Z = (Z + pOZ[i]) * S;
+          const zP = 0;
+          const sc = FOV / (FOV + zP), dz = FOV / (FOV + Z);
+          const ox = cx + X * sc, oy = cy + Y * sc;
+          const dAng = Math.atan2(Math.sin(ang), Math.cos(ang)), glow = rip * Math.exp(-dAng * dAng / 0.18);
+
+          // 2 · lock-in progress
+          let q = 0, flight = 0;
+          if (pB[i] && tl.st) {
+            if (tl.st === 1) { const s = clamp(Math.hypot(ox - anA.x, oy - anA.y) / reach, 0, 1); q = clamp((tl.p - 0.4 * s) / 0.6, 0, 1); }
+            else if (tl.st === 2) q = 1;
+            else { q = 1; flight = smooth(clamp((tl.p - 0.38 * ((pMI[i] * 0.6180339) % 1)) / 0.62, 0, 1)); }
+          }
+          const hp = smooth(q) * live;
+          const inFlight = flight > 0.02 && flight < 0.98;
+
+          let px = ox, py = oy, size = Math.max(pR[i] * sc * dz * (1 + glow * 0.9), 0.5), src = null, zd = 0, dark = 0;
+          const oc = SCOL[pCol[i]];
+          let cr = oc[0], cg = oc[1], cb = oc[2];
+          if (glow > 0.01) { const tg = pS[i] === 0 ? [255, 214, 120] : [255, 236, 190], gk = glow * 0.75; cr += (tg[0] - cr) * gk; cg += (tg[1] - cg) * gk; cb += (tg[2] - cb) * gk; }
+          let alpha = Math.min(1, pA[i] * (0.62 + 0.38 * Math.sin(pU[i] * 4 - railClock * 2.2)) * clamp(0.55 + 0.6 * dz, 0.35, 1) * (1 + glow * 1.4));
+
+          if (!pB[i] && holdW > 0) { const dd = Math.hypot(ox - anA.x, oy - anA.y) / (anA.rs * 1.1); alpha *= 1 - 0.8 * holdW * Math.exp(-dd * dd); }
+          if (hp > 0) {
+            const mi = pMI[i], pa = A.pts[mi % A.n], pb = B.pts[mi % B.n];
+            const ea = mi < A.n ? 1 : 0, eb = mi < B.n ? 1 : 0;
+            let ax_ = pa.x, az_ = pa.z, bx_ = pb.x, bz_ = pb.z;
+            if (pa.g) { const dx = pa.x - pa.g.x, dzz = pa.z - pa.g.z; ax_ = pa.g.x + dx * cG - dzz * sG; az_ = pa.g.z + dx * sG + dzz * cG; }
+            if (pb.g) { const dx = pb.x - pb.g.x, dzz = pb.z - pb.g.z; bx_ = pb.g.x + dx * cG - dzz * sG; bz_ = pb.g.z + dx * sG + dzz * cG; }
+            let tx, ty, tsc, sh, exists, tr, tg2, tb, pa1;
+            if (tl.st !== 3) {
+              const m = tl.mix, jj = morphJ * 1.6;
+              proj(ax_ + (bx_ - ax_) * m + pOX[i] * jj, pa.y + (pb.y - pa.y) * m + pOY[i] * jj, az_ + (bz_ - az_) * m + pOZ[i] * jj, anA, A.rb);
+              tx = PJ.x; ty = PJ.y; tsc = PJ.s; sh = PJ.sh; zd = PJ.z;
+              src = m < 0.5 ? pa : pb; exists = ea + (eb - ea) * m;
+              const tc = PALN[src.c]; tr = tc[0]; tg2 = tc[1]; tb = tc[2]; pa1 = PAL[src.c][1]; dark = PAL[src.c][2] ? 1 : 0;
+            } else {
+              proj(ax_, pa.y, az_, anA, A.rb); const x0 = PJ.x, y0 = PJ.y, s0 = PJ.s, h0 = PJ.sh, z0 = PJ.z;
+              proj(bx_, pb.y, bz_, anB, B.rb);
+              const f = flight, u = 1 - f, arc = Math.sin(Math.PI * f);
+              tx = u * u * x0 + 2 * u * f * (cx + pOX[i] * 2.4) + f * f * PJ.x;
+              ty = u * u * y0 + 2 * u * f * (ctrlY + pOY[i] * 2.4) + f * f * PJ.y;
+              tsc = s0 + (PJ.s - s0) * f; sh = h0 + (PJ.sh - h0) * f; zd = z0 + (PJ.z - z0) * f;
+              src = f < 0.5 ? pa : pb; exists = ea + (eb - ea) * f;
+              const c0 = PALN[pa.c], c1 = PALN[pb.c], sd = arc * 0.65;
+              tr = c0[0] + (c1[0] - c0[0]) * f; tg2 = c0[1] + (c1[1] - c0[1]) * f; tb = c0[2] + (c1[2] - c0[2]) * f;
+              tr += (255 - tr) * sd; tg2 += (236 - tg2) * sd; tb += (190 - tb) * sd;
+              pa1 = PAL[src.c][1] * (1 - 0.25 * arc); dark = inFlight ? 0 : (PAL[src.c][2] ? 1 : 0);
+            }
+            px = ox + (tx - ox) * hp; py = oy + (ty - oy) * hp;
+            cr += (tr - cr) * hp; cg += (tg2 - cg) * hp; cb += (tb - cb) * hp;
+            const mA = (dark ? pa1 : pa1 * sh) * exists;
+            alpha += (mA - alpha) * hp;
+            let mSize = (0.95 + sh * 0.85) * tsc * (mobile ? 1.1 : 1) * (dark ? 1.3 : 1);
+            if (tl.st === 3) mSize *= 1 - 0.3 * Math.sin(Math.PI * flight);
+            size += (mSize - size) * hp;
+            if (src.f === 1) { size *= 1 + hp * (0.2 + pulse * 1.1); alpha = Math.min(1, alpha * (1 - hp * 0.3 * (1 - pulse))); }
+            else if (src.f === 2) alpha *= 1 - hp * 0.55 * (0.5 - 0.5 * Math.sin(now * 0.005 + i * 0.7));
+          }
+
+          if (mouse.on > 0.01) {
+            const mdx = px - mouse.x, mdy = py - mouse.y, md = Math.hypot(mdx, mdy) || 1, f = Math.exp(-(md / MR) * (md / MR)) * mouse.on * (1 - hp * 0.85);
+            if (f > 0.002) { const ux = mdx / md, uy = mdy / md, sw = pS[i] === 0 ? 0.35 : -0.45, cap = (pS[i] === 0 ? 14 : 10) * S; px += (ux + uy * sw) * f * cap; py += (uy - ux * sw) * f * cap; alpha = Math.min(1, alpha * (1 + f * 0.6)); }
+          }
+          // 3 · keep-out sanctuary around the wordmark (applies to rail dust and to dust in flight)
+          const kw = inFlight ? 1 : 1 - hp;
+          const ex = (px - cx) / KA, ey = (py - cy) / KB, e = Math.sqrt(ex * ex + ey * ey);
+          if (kw > 0.001 && e > 0.001 && e < 1.3) { const f = 1 + (smax(e, 1.06, 0.14) / e - 1) * kw; px = cx + (px - cx) * f; py = cy + (py - cy) * f; }
+
+          if (depth > 0.001) { px = cx + (px - cx) * depthK; py = cy + (py - cy) * depthK; size = Math.max(size * depthK, 0.5); alpha *= depthA; }
+          if (px < -30 || px > w + 30 || py < -30 || py > h + 30 || alpha < 0.01) continue;
+          const rgb = (cr | 0) + ',' + (cg | 0) + ',' + (cb | 0);
+          if (hp > 0.6 && !inFlight) {
+            oX[oN] = px; oY[oN] = py; oS[oN] = size; oZ[oN] = zd; oA[oN] = alpha; oC[oN] = rgb; oF[oN] = src && src.f && hp > 0.5 ? 1 : 0; oN++;
+            continue;
+          }
+          ctx.beginPath(); ctx.arc(px, py, Math.max(size, 0.3), 0, 6.2832);
+          ctx.fillStyle = 'rgba(' + rgb + ',' + alpha.toFixed(3) + ')'; ctx.fill();
+        }
+        // 4 · solid sculpture pass, far → near
+        if (oN) {
+          oI.length = oN; for (let j = 0; j < oN; j++) oI[j] = j;
+          oI.sort((a, b) => oZ[b] - oZ[a]);
+          ctx.globalCompositeOperation = 'source-over';
+          for (let n = 0; n < oN; n++) {
+            const j = oI[n];
+            if (!(oS[j] > 0)) continue;
+            ctx.beginPath(); ctx.arc(oX[j], oY[j], oS[j], 0, 6.2832);
+            ctx.fillStyle = 'rgba(' + oC[j] + ',' + oA[j].toFixed(3) + ')'; ctx.fill();
+            if (oF[j]) { ctx.beginPath(); ctx.arc(oX[j], oY[j], oS[j] * 3.2, 0, 6.2832); ctx.fillStyle = 'rgba(' + oC[j] + ',' + (oA[j] * 0.14).toFixed(3) + ')'; ctx.fill(); }
+          }
+        }
+        ctx.globalCompositeOperation = 'source-over';
+        if (tl.st) {
+          let laA = 0, laB = 0;
+          if (tl.st === 1) laA = smooth(clamp((tl.p - 0.55) / 0.45, 0, 1));
+          else if (tl.st === 2) { laA = 1 - smooth(clamp(tl.mix * 3, 0, 1)); laB = A === B ? 0 : smooth(clamp((tl.mix - 0.67) * 3, 0, 1)); }
+          else { laA = 1 - smooth(clamp(tl.p * 5, 0, 1)); laB = smooth(clamp((tl.p - 0.85) / 0.15, 0, 1)); }
+          drawLines(A, anA, laA * live); if (B !== A) drawLines(B, anB, laB * live);
+        }
+      }
+      requestAnimationFrame(renderFrame);
+
+      const monolithCluster = document.getElementById('monolithCluster');
+      const sloganNode = document.getElementById('sloganNode');
+      // glyph assembly: each word owns a scroll window; glyphs stagger inside it (scroll-bound, no timers)
+      const WORDS = [['მოძრაობა', 0.42, 0.52, false], ['იბადება', 0.50, 0.60, false], ['კავშირში', 0.58, 0.68, true]];
+      const manifesto = document.getElementById('manifesto');
+      const subline = document.getElementById('subline');
+      const GLYPHS = [];
+      WORDS.forEach(([w, a, b, gold], wi) => {
+        const wEl = document.createElement('span'); wEl.className = 'word' + (gold ? ' gold' : ''); wEl.setAttribute('aria-hidden', 'true');
+        const chars = [...w], n = chars.length, len = (b - a) * 0.42;
+        const CYCLE = ['', 'rim', '', 'split', 'rim edge', '', 'split', 'rim'];
+        chars.forEach((c, i) => {
+          const g = document.createElement('span');
+          const v = c === 'ა' ? 'alpha' : CYCLE[(GLYPHS.length + wi * 3) % CYCLE.length];
+          g.className = 'g' + (v ? ' ' + v : ''); g.textContent = c;
+          if (i === n - 1) g.style.letterSpacing = '0';
+          wEl.appendChild(g);
+          GLYPHS.push({ el: g, s: a + (b - a - len) * (n > 1 ? i / (n - 1) : 0), len, gold, last: i === n - 1, u: 0 });
+        });
+        manifesto.appendChild(wEl);
+      });
+      const GLYPH_N = GLYPHS.length; GLYPHS.forEach((g, i) => g.u = i / (GLYPH_N - 1));
+      function assemble(p) {
+        const lock = smooth(clamp((p - 0.68) / 0.06, 0, 1));
+        const beamX = -0.15 + 1.3 * clamp((p - 0.68) / 0.06, 0, 1), beamOn = p > 0.68 && p < 0.74;
+        for (const g of GLYPHS) {
+          const e = smooth(clamp((p - g.s) / g.len, 0, 1));
+          const st = g.el.style;
+          st.opacity = e.toFixed(3);
+          st.transform = `translate3d(0, ${(18 * (1 - e)).toFixed(2)}px, ${(-40 * (1 - e)).toFixed(2)}px)`;
+          if (!g.last) st.letterSpacing = (0.30 - 0.16 * e).toFixed(4) + 'em';
+          const crest = g.gold ? e : e * (0.35 + 0.65 * lock);
+          const beam = beamOn ? Math.exp(-Math.pow((beamX - g.u) / 0.07, 2)) : 0;
+          st.filter = `brightness(${(1 + 0.55 * beam).toFixed(3)}) drop-shadow(0 -1px 0 rgba(212,175,55,${Math.min(1, crest + beam).toFixed(3)})) drop-shadow(0 7px 9px rgba(10,13,20,${(0.95 * e).toFixed(3)}))`;
+        }
+      }
+      const aurora = document.getElementById('auroraGlow');
+      const root = document.documentElement;
+      const $ = id => document.getElementById(id);
+      const FACETS = [
+        ['a-pillar-left', p => `translate(${-25 * p}px, 0) rotate(${-8 * p}deg)`],
+        ['a-pillar-right', p => `translate(${25 * p}px, 0) rotate(${8 * p}deg)`],
+        ['a-bridge', p => `translate(0, ${15 * p}px) scale(${1 - 0.25 * p})`],
+        ['t-wing-left', p => `translate(${-35 * p}px, 0)`],
+        ['t-wing-right', p => `translate(${35 * p}px, 0)`],
+        ['t-column', p => `translate(0, ${25 * p}px) scaleY(${1 - 0.15 * p})`],
+        ['o-iris-tl', p => `translate(${-28 * p}px, ${-28 * p}px) rotate(${-15 * p}deg)`],
+        ['o-iris-tr', p => `translate(${28 * p}px, ${-28 * p}px) rotate(${15 * p}deg)`],
+        ['o-iris-bl', p => `translate(${-28 * p}px, ${28 * p}px) rotate(${15 * p}deg)`],
+        ['o-iris-br', p => `translate(${28 * p}px, ${28 * p}px) rotate(${-15 * p}deg)`],
+        ['r1-leg', p => `translate(${20 * p}px, ${15 * p}px) rotate(${12 * p}deg)`],
+        ['r2-leg', p => `translate(${20 * p}px, ${15 * p}px) rotate(${12 * p}deg)`],
+        ['r1-cam', p => `translate(${10 * p}px, ${-14 * p}px)`],
+        ['r2-cam', p => `translate(${10 * p}px, ${-14 * p}px)`],
+        ['n-diagonal', p => `scale(${1 - 0.2 * p})`],
+        ['n-upright-left', p => `translate(${-16 * p}px, 0)`],
+        ['n-upright-right', p => `translate(${16 * p}px, 0)`]
+      ].map(([id, fn]) => [$(id), fn]).filter(f => f[0]);
+      let ticking = false;
+
+      function onScroll() {
+        const p = Math.min(Math.max(window.scrollY / 560, 0), 1);
+        scrollProgress = p;
+        root.style.setProperty('--scroll-p', p);
+        const fp = smooth(Math.min(p * 2.6, 1));
+        for (const [el, fn] of FACETS) el.style.transform = fn(fp);
+        const lOp = p >= 0.30 ? 0 : 1 - smooth(clamp((p - 0.12) / 0.18, 0, 1));
+        monolithCluster.style.opacity = lOp;
+        monolithCluster.style.visibility = lOp <= 0 ? 'hidden' : 'visible';
+        monolithCluster.style.transform = `scale(${1 - p * 0.08}) translate3d(0, ${-25 * p}px, 0)`;
+        // glyph assembly 0.42 → 0.68 · full lock + beam 0.68 → 0.74 · ascend into header 0.74 → 0.76
+        assemble(p);
+        const sUp = smooth(clamp((p - 0.84) / 0.08, 0, 1));
+        const sloganOpacity = p < 0.42 || p >= 0.92 ? 0 : 1 - sUp;
+        const sY = -sUp * (window.innerHeight * 0.5 - 48), sZ = 0, sS = 1 - 0.08 * sUp;
+        const subP = smooth(clamp((p - 0.66) / 0.08, 0, 1));
+        subline.style.opacity = (subP * 0.9).toFixed(3);
+        subline.style.transform = `translateY(${(6 * (1 - subP)).toFixed(2)}px)`;
+        const shine = smooth(clamp((p - 0.72) / 0.10, 0, 1));
+        subline.style.backgroundPosition = `${(100 - 100 * shine).toFixed(2)}% 0`;
+        sloganNode.style.opacity = sloganOpacity;
+        sloganNode.style.visibility = sloganOpacity <= 0 ? 'hidden' : 'visible';
+        sloganNode.style.filter = sUp > 0 ? `blur(${(sUp * 6).toFixed(2)}px)` : 'none';
+        sloganNode.style.transform = `translate(-50%, -50%) translate3d(0, ${sY}px, ${sZ}px) scale(${sS})`;
+        const dockProgress = smooth(clamp((p - 0.84) / 0.12, 0, 1));
+        root.style.setProperty('--dock-p', dockProgress);
+        root.style.setProperty('--dock-pointer', dockProgress > 0.85 ? 'auto' : 'none');
+        aurora.style.transform = `scale(${1 + p * 0.35}) translate3d(0, ${-30 * p}px, 0)`;
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+      }, { passive: true });
+      onScroll();
+    })();
+  </script>
+</body>
+</html>

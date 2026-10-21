@@ -9,7 +9,7 @@ describe('Coaching Staff (HC-01) System Mirror Implementation', () => {
     if (!coachMod) return;
 
     expect(coachMod.kicker).toBe('HC-01 / COACHING STAFF');
-    expect(coachMod.headline).toBe('მწვრთნელი მიდის — მეთოდიკა რჩება.');
+    expect(coachMod.headline).toBe('მწვრთნელის ცოდნა და მეთოდიკა —\nკლუბის უცვლელი აქტივი.');
     expect(coachMod.cameraTags).toEqual(['STAFF FLOOR', 'GAME MODEL', 'GPS LOAD', 'LICENCE WALL']);
     expect(coachMod.notes).toHaveLength(4);
     expect(coachMod.specRows).toHaveLength(4);
@@ -21,10 +21,10 @@ describe('Coaching Staff (HC-01) System Mirror Implementation', () => {
     expect(coachMod.specRows[3]).toHaveLength(4);
 
     // Verify specific key metrics
-    expect(coachMod.specRows[0][0].label).toBe('შტაბი');
+    expect(coachMod.specRows[0][0].label).toBe('შტაბის შემადგენლობა');
     expect(coachMod.specRows[0][1].label).toBe('მწვრთნელი / ათლეტი');
     expect(coachMod.specRows[2][0].label).toBe('დატვირთვის მართვა');
-    expect(coachMod.specRows[2][1].label).toBe('უსაფრთხო დიაპაზონი');
+    expect(coachMod.specRows[2][1].label).toBe('ოპტიმალური დიაპაზონი');
     expect(coachMod.specRows[3][0].label).toBe('მწვრთნელის ლიცენზია');
 
     // Verify notes match offline handoff specifications
@@ -36,10 +36,10 @@ describe('Coaching Staff (HC-01) System Mirror Implementation', () => {
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for coach matching handoff poses', () => {

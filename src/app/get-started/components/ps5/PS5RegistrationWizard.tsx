@@ -134,35 +134,7 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
     isAgreed &&
     isBiometricAgreed;
 
-  const handleNext = useCallback(() => {
-    if (step === 1 && isStep1Valid) { ps5Audio.playSelect(); setStep(2); }
-    else if (step === 2 && isStep2Valid) { ps5Audio.playSelect(); setStep(3); }
-    else if (step === 3 && isStep3Valid) { ps5Audio.playSelect(); setStep(4); }
-    else if (step === 4 && isStep4Valid) { handleSubmit(); }
-  }, [step, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid]);
-
-  const handleBack = useCallback(() => {
-    ps5Audio.playBack();
-    if (step > 1) setStep((prev) => prev - 1);
-    else onReset();
-  }, [step, onReset]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') return;
-      if (e.key === 'Enter') {
-        if (step === 1 && isStep1Valid) handleNext();
-        else if (step === 2 && isStep2Valid) handleNext();
-        else if (step === 3 && isStep3Valid) handleNext();
-        else if (step === 4 && isStep4Valid && !isSubmitting) handleSubmit();
-      } else if (e.key === 'Escape') handleBack();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [step, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isSubmitting, handleNext, handleBack]);
-
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
     setSubmitError(null);
     ps5Audio.playSelect();
@@ -198,7 +170,56 @@ export const PS5RegistrationWizard: React.FC<PS5RegistrationWizardProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [
+    city,
+    clubAddress,
+    turnstilesCount,
+    isAntiPassbackEnabled,
+    trainersCount,
+    clubName,
+    clubLegalForm,
+    clubCode,
+    facilityType,
+    membersCapacity,
+    branchesCount,
+    firstName,
+    lastName,
+    position,
+    phone,
+    email,
+    password,
+    personalId,
+    selectedPlan,
+    billingCycle,
+  ]);
+
+  const handleNext = useCallback(() => {
+    if (step === 1 && isStep1Valid) { ps5Audio.playSelect(); setStep(2); }
+    else if (step === 2 && isStep2Valid) { ps5Audio.playSelect(); setStep(3); }
+    else if (step === 3 && isStep3Valid) { ps5Audio.playSelect(); setStep(4); }
+    else if (step === 4 && isStep4Valid) { handleSubmit(); }
+  }, [step, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, handleSubmit]);
+
+  const handleBack = useCallback(() => {
+    ps5Audio.playBack();
+    if (step > 1) setStep((prev) => prev - 1);
+    else onReset();
+  }, [step, onReset]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA') return;
+      if (e.key === 'Enter') {
+        if (step === 1 && isStep1Valid) handleNext();
+        else if (step === 2 && isStep2Valid) handleNext();
+        else if (step === 3 && isStep3Valid) handleNext();
+        else if (step === 4 && isStep4Valid && !isSubmitting) handleSubmit();
+      } else if (e.key === 'Escape') handleBack();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [step, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isSubmitting, handleNext, handleBack, handleSubmit]);
 
   const isCurrentNextDisabled =
     (step === 1 && !isStep1Valid) || (step === 2 && !isStep2Valid) ||

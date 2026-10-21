@@ -4,7 +4,7 @@ import React, { useRef, useState, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 import { Zap, Sparkles } from 'lucide-react';
 import { soundEngine } from '@/core';
-import { usePortalIgnition } from './GlobalPortalIgnition';
+import { useSafePortalIgnition } from './GlobalPortalIgnition';
 
 interface ShockwaveRing {
   id: number;
@@ -53,13 +53,7 @@ export const IgnitionButton: React.FC<IgnitionButtonProps> = ({
   const [shockwaves, setShockwaves] = useState<ShockwaveRing[]>([]);
 
   // Safe portal ignition hook
-  let portalIgnition: ReturnType<typeof usePortalIgnition> | null = null;
-  try {
-    portalIgnition = usePortalIgnition();
-  } catch {
-    // Graceful fallback if rendered outside provider
-    portalIgnition = null;
-  }
+  const portalIgnition = useSafePortalIgnition();
 
   // Magnetic displacement physics
   const x = useMotionValue(0);

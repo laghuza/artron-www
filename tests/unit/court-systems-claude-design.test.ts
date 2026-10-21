@@ -13,12 +13,12 @@ describe('Phase 49: Court Systems (Tennis & Padel) Claude Design Parity', () => 
   });
 
   it('should have exact 3-line kinetic headline structure matching Claude design', () => {
-    expect(courtMod?.headline).toBe('კორტი, რომელიც\nარასდროს\nცარიელია.');
+    expect(courtMod?.headline).toBe('კორტების 100%-იანი დატვირთვა\nდა ჭკვიანი განათება.');
   });
 
   it('should have exact corrected description copy matching Claude design', () => {
     expect(courtMod?.description).toBe(
-      'ჯავშნის გაუქმება ბოლო წუთს, გამორთული განათების ხარჯი და ტელეფონით დაჯავშნის ქაოსი კორტის მარჟას წლიურად ნახევრად ჭრის. Artron ავტომატურად ავსებს გამოთავისუფლებულ სლოტს ლოდინის სიიდან და განათებას მხოლოდ ნამდვილ თამაშზე რთავს.'
+      'ბოლო წუთს გაუქმებული ჯავშნები, ცარიელ კორტზე ჩართული განათების ხარჯი და სატელეფონო ჩაწერის ქაოსი ობიექტის მომგებიანობას მკვეთრად ამცირებს. Artron-ის ჭკვიანი სისტემა გაუქმებულ სლოტს ავტომატურად ავსებს ლოდინის სიიდან და განათებას/დაშვებას მხოლოდ დადასტურებული თამაშის დროს ააქტიურებს.'
     );
   });
 
@@ -27,25 +27,25 @@ describe('Phase 49: Court Systems (Tennis & Padel) Claude Design Parity', () => 
     // Tile 0: Scale
     expect(courtMod?.specRows[0]).toEqual([
       { label: 'კორტების რაოდენობა', value: '4 ჩოგბურთი · 6 პადელი' },
-      { label: 'სლოტის შევსება', value: '87% საშუალო' },
-      { label: 'დაკავშნის ფანჯარა', value: '30 დღე წინ' },
+      { label: 'სლოტების შევსება', value: '87% საშუალო დატვირთვა' },
+      { label: 'წინასწარი ჯავშანი', value: '30 დღის ფანჯარა' },
     ]);
     // Tile 1: Disciplines
     expect(courtMod?.specRows[1]).toEqual([
-      { label: 'ჩოგბურთი', value: 'Hard · Clay · Indoor' },
-      { label: 'პადელი', value: 'Panoramic glass' },
-      { label: 'სკვოში / ბადმინტონი', value: 'ოპციური ბლოკი' },
+      { label: 'ჩოგბურთის საფარი', value: 'Hard · Clay · Indoor' },
+      { label: 'პადელის კორტები', value: 'Panoramic Glass' },
+      { label: 'სკვოში / ბადმინტონი', value: 'მულტიფუნქციური ბლოკი' },
     ]);
     // Tile 2: Telemetry
     expect(courtMod?.specRows[2]).toEqual([
-      { label: 'ჭკვიანი განათება', value: 'Presence-based LED' },
-      { label: 'მატჩის ანალიტიკა', value: 'Court cam · dwell' },
-      { label: 'წვდომა', value: 'QR · PIN კოდი' },
+      { label: 'ჭკვიანი განათება', value: 'ყოფნის სენსორით (Presence LED)' },
+      { label: 'მატჩის ანალიტიკა', value: 'Court Cam · Dwell Time' },
+      { label: 'ავტონომიური წვდომა', value: 'დინამიური QR · PIN კოდი' },
     ]);
     // Tile 3: Compliance
     expect(courtMod?.specRows[3]).toEqual([
-      { label: 'ITF / FIP', value: 'კორტის განზომილება' },
-      { label: 'განათების დონე', value: '500–750 lux' },
+      { label: 'ITF / FIP სტანდარტი', value: 'საერთაშორისო გეომეტრია' },
+      { label: 'განათების ინტენსივობა', value: '500–750 lux (ტურნირის რეჟიმი)' },
       { label: 'დაზღვევა', value: 'პასუხისმგებლობის პოლისი' },
     ]);
   });

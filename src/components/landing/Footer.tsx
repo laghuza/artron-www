@@ -27,6 +27,20 @@ export const Footer: React.FC = () => {
     }, 30);
   }, []);
 
+  const fallbackCopy = (text: string) => {
+    try {
+      const t = document.createElement('textarea');
+      t.value = text;
+      t.style.cssText = 'position:fixed;opacity:0;left:-9999px';
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand('copy');
+      t.remove();
+    } catch {
+      // Ignored fallback
+    }
+  };
+
   const handleCopy = useCallback((key: string, text: string) => {
     const markDone = () => {
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
@@ -44,20 +58,6 @@ export const Footer: React.FC = () => {
       markDone();
     }
   }, []);
-
-  const fallbackCopy = (text: string) => {
-    try {
-      const t = document.createElement('textarea');
-      t.value = text;
-      t.style.cssText = 'position:fixed;opacity:0;left:-9999px';
-      document.body.appendChild(t);
-      t.select();
-      document.execCommand('copy');
-      t.remove();
-    } catch {
-      // Ignored fallback
-    }
-  };
 
   const handleOpenCookiePrefs = useCallback(() => {
     if (typeof window !== 'undefined') {

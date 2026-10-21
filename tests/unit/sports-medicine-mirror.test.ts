@@ -10,8 +10,8 @@ describe('Sports Medicine & Rehabilitation (HC-02) System Mirror Implementation'
 
     expect(medMod.name).toBe('ექიმები და რეაბილიტაცია');
     expect(medMod.kicker).toBe('HC-02 / SPORTS MEDICINE');
-    expect(medMod.headline).toBe('ათლეტი ბრუნდება,\nროცა სხეული\nმზადაა.');
-    expect(medMod.description).toContain('სამედიცინო ჩანაწერი ფურცელზეა');
+    expect(medMod.headline).toBe('ობიექტურ მონაცემზე\nდაფუძნებული რეაბილიტაცია.');
+    expect(medMod.description).toContain('სამედიცინო ჩანაწერების ფურცელზე წარმოება');
     expect(medMod.cameraTags).toEqual(['TREATMENT BAY', 'JOINT SCAN', 'BIOMETRICS', 'RTP GATES']);
     expect(medMod.notes).toHaveLength(4);
     expect(medMod.specRows).toHaveLength(4);
@@ -24,18 +24,18 @@ describe('Sports Medicine & Rehabilitation (HC-02) System Mirror Implementation'
 
     // Verify specific key metrics matching Claude handoff and screenshot
     expect(medMod.specRows[0][0]).toEqual({ label: 'სამედიცინო შტაბი', value: '9 ექიმი · 12 რეაბილიტოლოგი' });
-    expect(medMod.specRows[0][1]).toEqual({ label: 'ათლეტის ბარათი', value: '1 400 აქტიური' });
-    expect(medMod.specRows[0][2]).toEqual({ label: 'სკრინინგი', value: 'კვარტალში ერთხელ' });
-    expect(medMod.specRows[0][3]).toEqual({ label: 'ექიმი ↔ მწვრთნელი', value: 'ერთი საერთო ბარათი' });
+    expect(medMod.specRows[0][1]).toEqual({ label: 'ათლეტის ბარათი', value: '1 400 აქტიური პროფილი' });
+    expect(medMod.specRows[0][2]).toEqual({ label: 'სკრინინგი', value: 'კვარტალური სრული შემოწმება' });
+    expect(medMod.specRows[0][3]).toEqual({ label: 'ექიმი ↔ მწვრთნელი', value: 'ერთიანი ელექტრონული ბარათი' });
 
-    expect(medMod.specRows[1][0]).toEqual({ label: 'ორთოპედია', value: 'სახსარი · მუხლი' });
-    expect(medMod.specRows[1][1]).toEqual({ label: 'ფიზიოთერაპია', value: 'Manual · instrumental' });
+    expect(medMod.specRows[1][0]).toEqual({ label: 'ორთოპედია', value: 'სახსრებისა და იოგების დიაგნოსტიკა' });
+    expect(medMod.specRows[1][1]).toEqual({ label: 'ფიზიოთერაპია', value: 'Manual · Instrumental თერაპია' });
 
-    expect(medMod.specRows[2][0]).toEqual({ label: 'დილის შემოწმება', value: 'HRV · ძილი · SpO₂' });
-    expect(medMod.specRows[2][1]).toEqual({ label: 'რისკის ქულა', value: 'ყოველდღიური · 0–100' });
+    expect(medMod.specRows[2][0]).toEqual({ label: 'დილის მონიტორინგი', value: 'HRV · ძილი · SpO₂' });
+    expect(medMod.specRows[2][1]).toEqual({ label: 'რისკის ქულა', value: 'ყოველდღიური ინდექსი (0–100)' });
 
-    expect(medMod.specRows[3][0]).toEqual({ label: 'სამედიცინო მონაცემები', value: 'GDPR Art. 9 რეჟიმი' });
-    expect(medMod.specRows[3][1]).toEqual({ label: 'წვდომა', value: 'მხოლოდ ექიმი + ათლეტი' });
+    expect(medMod.specRows[3][0]).toEqual({ label: 'სამედიცინო მონაცემები', value: 'GDPR Art. 9 სპეციალური რეჟიმი' });
+    expect(medMod.specRows[3][1]).toEqual({ label: 'წვდომის კონტროლი', value: 'მხოლოდ ექიმი + ათლეტი' });
 
     // Verify notes match offline handoff specifications
     expect(medMod.notes?.[0]).toContain('წითელი ჯვარი — სამედიცინო ბლოკი');
@@ -46,10 +46,10 @@ describe('Sports Medicine & Rehabilitation (HC-02) System Mirror Implementation'
 
   it('should match the 4 spec tile category titles and subtitles', () => {
     expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' });
-    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'დისციპლინები', subtitle: 'DISCIPLINES' });
+    expect(SPEC_TILE_CATEGORIES[0]).toEqual({ title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' });
+    expect(SPEC_TILE_CATEGORIES[1]).toEqual({ title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' });
     expect(SPEC_TILE_CATEGORIES[2]).toEqual({ title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' });
-    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' });
+    expect(SPEC_TILE_CATEGORIES[3]).toEqual({ title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' });
   });
 
   it('should have all 4 camera focus poses defined for med matching handoff poses', () => {

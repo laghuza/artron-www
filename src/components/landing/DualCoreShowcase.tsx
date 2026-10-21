@@ -2,14 +2,12 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { motion } from 'framer-motion';
 import { LaborComplianceModal } from './LaborComplianceModal';
-import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 import { useDualCoreSync } from './dual-core/useDualCoreSync';
 import { B2BConsoleCard } from './dual-core/B2BConsoleCard';
 import { SyntaxBridgeCanvas } from './dual-core/SyntaxBridgeCanvas';
 import { B2CMobilePass } from './dual-core/B2CMobilePass';
-import { SyncStepsExplainer } from './dual-core/SyncStepsExplainer';
+import { RoleIntentSelector } from './RoleIntentSelector';
 
 export const DualCoreShowcase: React.FC = () => {
   const { locale } = useLanguage();
@@ -39,32 +37,41 @@ export const DualCoreShowcase: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-500/20 bg-cyan-950/30 text-cyan-400 font-mono text-[11px] mb-4 backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span>DUAL-CORE ECOSYSTEM · LIVE SYNC</span>
+            <span>
+              {locale === 'ka'
+                ? 'ორმხრივი სინქრონიზაცია · REAL-TIME CORE'
+                : locale === 'ru'
+                ? 'ДВУСТОРОННЯЯ СИНХРОНИЗАЦИЯ · REAL-TIME CORE'
+                : 'DUAL-CORE SYNC · REAL-TIME CORE'}
+            </span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
             {locale === 'ka'
-              ? 'სინქრონული ეკოსისტემა: B2B პანელი & B2C აპლიკაცია'
+              ? 'კლუბის მართვის პანელი და წევრის ციფრული საშვი'
               : locale === 'ru'
-              ? 'Синхронная экосистема: B2B панель и B2C приложение'
-              : 'Synchronized Ecosystem: B2B Dashboard & B2C App'}
+              ? 'Панель управления клубом и цифровой пропуск резидента'
+              : 'Club Management Console & Athlete Digital Pass'}
           </h2>
           <p className="text-sm sm:text-base text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
             {locale === 'ka'
-              ? 'ერთიანი ციფრული ბირთვი, სადაც სპორტსმენის მობილური აპლიკაცია, ადმინისტრაციის სამართავი პანელი და IoT ტურნიკეტები სინქრონულად მუშაობს რეალურ დროში.'
+              ? 'მყისიერი კავშირი ადმინისტრაციასა და სპორტსმენს შორის: მობილურით შეძენილი აბონემენტი, ტურნიკეტის ავტომატური გახსნა და შემოსავლების ლაივ აღრიცხვა.'
               : locale === 'ru'
-              ? 'Единое цифровое ядро, где мобильное приложение атлета, панель администратора и IoT-турникеты работают синхронно в реальном времени.'
-              : 'A unified digital core where the athlete mobile app, admin dashboard, and IoT turnstiles operate in real-time synchronicity.'}
+              ? 'Мгновенная связь между администрацией и атлетом: покупка абонемента через приложение, автоматическое открытие турникета и учет доходов в реальном времени.'
+              : 'Instant synchronization between administration and member: mobile pass purchase, automated turnstile entry, and real-time revenue ledger.'}
           </p>
         </div>
+
+        {/* B2B vs B2C Role Intent Selector */}
+        <RoleIntentSelector className="mb-10 sm:mb-14" />
 
         {/* 3D Perspective Stage Container */}
         <div
           onMouseMove={onMouseMove}
           onMouseLeave={onMouseLeave}
-          className="relative pt-12 pb-16 sm:pb-24 preserve-3d"
+          className="relative pt-6 sm:pt-8 pb-16 sm:pb-24 preserve-3d"
           style={{ perspective: '1700px', perspectiveOrigin: '50% 40%', transformStyle: 'preserve-3d' }}
         >
           {/* Ambient Ground Glow */}
@@ -78,43 +85,116 @@ export const DualCoreShowcase: React.FC = () => {
 
           {/* 3D Perspective Floor Plane */}
           <div
-            className="absolute left-[2%] right-[2%] bottom-12 h-[380px] rounded-t-xl overflow-hidden pointer-events-none font-mono text-sky-100/20"
+            className="absolute left-[1%] right-[1%] bottom-[50px] h-[380px] rounded-t-[12px] overflow-hidden pointer-events-none font-mono text-[#E0F2FE]/20"
             style={{
               transformOrigin: '50% 100%',
               transform: 'rotateX(74deg)',
               background:
-                'radial-gradient(ellipse 55% 65% at 50% 70%, rgba(217,119,6,0.08) 0%, rgba(217,119,6,0) 72%), linear-gradient(180deg, #090D12 0%, #0C1118 55%, #0F141B 100%)',
-              boxShadow: 'inset 0 1px 0 rgba(224,242,254,0.12)',
+                'radial-gradient(ellipse 55% 65% at 50% 70%, rgba(217,119,6,0.08) 0%, rgba(217,119,6,0) 72%), radial-gradient(ellipse 45% 60% at 10% 0%, rgba(224,242,254,0.05) 0%, rgba(224,242,254,0) 70%), linear-gradient(180deg, #090D12 0%, #0C1118 55%, #0F141B 100%)',
+              boxShadow:
+                'inset 0 1px 0 rgba(224,242,254,0.12), inset 1px 0 0 rgba(224,242,254,0.05), inset -1px 0 0 rgba(224,242,254,0.04)',
             }}
           >
-            {/* Markers */}
-            <span className="absolute left-[3%] top-[6%] text-xl">+</span>
-            <span className="absolute right-[3%] top-[6%] text-xl">+</span>
-            <span className="absolute left-[3%] bottom-[4%] text-xl">+</span>
-            <span className="absolute right-[3%] bottom-[4%] text-xl">+</span>
-            <span className="absolute inset-x-0 bottom-[12%] text-center text-lg tracking-[0.5em] text-slate-500/40">
-              [03 // 02 // 01]
+            {/* Dynamic Dawn Radial Ambient Glow */}
+            <div
+              className="absolute left-[26%] right-[26%] top-0 h-[78%] pointer-events-none transition-opacity duration-800"
+              style={{
+                background:
+                  'radial-gradient(ellipse 50% 60% at 50% 28%, rgba(234,179,8,0.22) 0%, rgba(217,119,6,0.07) 45%, rgba(217,119,6,0) 75%)',
+                opacity: state.gateOpen ? 1 : state.phase === 'processing' ? 0.75 : 0.5,
+              }}
+            />
+
+            {/* Dynamic Glacier Radial Ambient Glow */}
+            <div
+              className="absolute left-[16%] right-[16%] top-[6%] h-[84%] pointer-events-none transition-opacity duration-900"
+              style={{
+                background:
+                  'radial-gradient(ellipse 50% 55% at 50% 40%, rgba(56,189,248,0.2) 0%, rgba(56,189,248,0.06) 45%, rgba(56,189,248,0) 75%)',
+                opacity: state.revOn ? 1 : state.dispatch ? 0.6 : 0,
+              }}
+            />
+
+            {/* Corner Markers */}
+            <span className="absolute left-[3%] top-[6%] text-[22px] font-mono leading-none select-none">+</span>
+            <span className="absolute right-[3%] top-[6%] text-[22px] font-mono leading-none select-none">+</span>
+            <span className="absolute left-[3%] bottom-[4%] text-[22px] font-mono leading-none select-none">+</span>
+            <span className="absolute right-[3%] bottom-[4%] text-[22px] font-mono leading-none select-none">+</span>
+
+            {/* Midfield Track Markers */}
+            <span className="absolute left-[12%] top-[30%] text-[20px] font-mono tracking-[0.4em] leading-none select-none">
+              · · ·
+            </span>
+            <span className="absolute right-[12%] top-[30%] text-[20px] font-mono tracking-[0.4em] leading-none select-none">
+              · · ·
             </span>
 
+            {/* Center Station Sequence */}
+            <span className="absolute inset-x-0 bottom-[12%] text-center font-mono text-[18px] sm:text-[20px] tracking-[0.5em] text-[#E0F2FE]/25 select-none">
+              [01 // 02 // 03]
+            </span>
+
+            {/* Technological Tick Ruler / Scale */}
+            <div
+              className="absolute left-[6%] right-[6%] bottom-[3%] h-[14px]"
+              style={{
+                background:
+                  'repeating-linear-gradient(90deg, rgba(224,242,254,0.16) 0 1px, transparent 1px 28px)',
+              }}
+            />
+
             {/* Glowing Fiber Artery Channel */}
-            <div className="absolute left-[5%] right-[5%] top-[58%] h-2.5 rounded-full bg-gradient-to-b from-black to-[#080B10] shadow-[inset_0_3px_4px_black] overflow-hidden">
-              <div className="absolute inset-x-0 top-1 h-0.5 bg-amber-500/25" />
-              <div className="absolute top-0.5 h-1 w-[22%] rounded bg-gradient-to-r from-transparent via-amber-500/80 to-transparent shadow-[0_0_12px_rgba(245,158,11,0.6)] animate-[fiber_4s_linear_infinite]" />
+            <div
+              className="absolute left-[5%] right-[5%] top-[58%] h-[10px] rounded-[5px] overflow-hidden"
+              style={{
+                background: 'linear-gradient(180deg, #010203 0%, #080B10 100%)',
+                boxShadow:
+                  'inset 0 3px 4px rgba(0,0,0,1), 0 1px 0 rgba(224,242,254,0.12), 0 -1px 0 rgba(0,0,0,0.8)',
+              }}
+            >
+              {/* Upper Rail Track */}
+              <div
+                className="absolute inset-x-0 top-[4px] h-[2px] transition-colors duration-400"
+                style={{
+                  background: 'rgba(245,158,11,0.22)',
+                }}
+              />
+              {/* Lower Rail Track */}
+              <div className="absolute inset-x-0 top-[7px] h-[1px] bg-sky-400/[0.22]" />
+
+              {/* Dynamic Traveling Light Pulses */}
+              <div className="absolute top-[3px] h-[4px] w-[22%] rounded-[2px] bg-gradient-to-r from-transparent via-amber-500/75 to-transparent shadow-[0_0_12px_rgba(245,158,11,0.5)] animate-[fiber_4s_linear_infinite]" />
               {state.revOn && (
-                <div className="absolute top-1 h-0.5 w-[18%] rounded bg-gradient-to-r from-transparent via-sky-400/80 to-transparent shadow-[0_0_10px_rgba(56,189,248,0.6)] animate-[fiberR_5s_linear_infinite]" />
+                <div className="absolute top-[6px] h-[3px] w-[18%] rounded-[2px] bg-gradient-to-r from-transparent via-sky-400/75 to-transparent shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-[fiberR_5s_linear_infinite]" />
               )}
             </div>
           </div>
 
-          {/* 3D Pedestal Lip */}
-          <div className="absolute left-[2%] right-[2%] bottom-6 h-6 rounded-b-xl bg-gradient-to-b from-[#141A22] via-[#090C11] to-[#040507] shadow-[inset_0_1px_0_rgba(224,242,254,0.12),0_40px_70px_rgba(0,0,0,0.95)] pointer-events-none" />
+          {/* 3D Pedestal Lip with Ambient Underside Glow */}
+          <div
+            className="absolute left-[1%] right-[1%] bottom-[26px] h-[24px] rounded-b-[10px] pointer-events-none"
+            style={{
+              background: 'linear-gradient(180deg, #141A22 0%, #090C11 45%, #040507 100%)',
+              boxShadow:
+                'inset 0 1px 0 rgba(224,242,254,0.12), inset 0 -8px 14px -8px rgba(217,119,6,0.16), 0 40px 70px -10px rgba(0,0,0,0.95)',
+            }}
+          />
 
           {/* 3D Interactive Row with Stations */}
           <div
             className="relative preserve-3d z-10 flex flex-wrap justify-center items-center gap-8 sm:gap-11 transition-transform duration-300 ease-out"
             style={{ transform: rowTransform, transformStyle: 'preserve-3d' }}
           >
-            {/* Station 03: B2B Business Console */}
+            {/* Ambient Contact Shadow under Stations */}
+            <div
+              className="absolute left-[2%] right-[2%] -bottom-[110px] h-[200px] pointer-events-none"
+              style={{
+                background:
+                  'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 35%, transparent 70%)',
+                transform: 'translateZ(-140px) rotateX(72deg)',
+              }}
+            />
+            {/* Station 01: B2B Business Console */}
             <B2BConsoleCard
               state={state}
               onOpenLaborModal={() => setIsLaborModalOpen(true)}
@@ -123,7 +203,7 @@ export const DualCoreShowcase: React.FC = () => {
             {/* Station 02: Software Synapse Bridge */}
             <SyntaxBridgeCanvas state={state} />
 
-            {/* Station 01: B2C Mobile Pass */}
+            {/* Station 03: B2C Mobile Pass */}
             <B2CMobilePass
               state={state}
               onRun={run}
@@ -133,19 +213,6 @@ export const DualCoreShowcase: React.FC = () => {
           </div>
         </div>
 
-        {/* Step-by-Step Closed-Loop Explainer */}
-        <SyncStepsExplainer phase={state.phase} locale={locale} />
-
-        {/* App Store & Google Play Download Badges */}
-        <div className="mt-10 sm:mt-14 w-full flex flex-col items-center">
-          <AppStoreBadges
-            variant="default"
-            align="center"
-            layout="horizontal"
-            showIndicator={true}
-            className="w-full max-w-lg"
-          />
-        </div>
       </div>
 
       {/* Labor Compliance Order №01-15/n Audit Modal */}

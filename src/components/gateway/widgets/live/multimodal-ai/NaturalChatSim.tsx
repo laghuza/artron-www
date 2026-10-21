@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { CHAT_SCENARIOS } from '@/data/multimodalAiData';
 import { ChatScenario, ExtractedEntityData } from '@/types/multimodalAi';
 import { SmartConfirmationCard } from './SmartConfirmationCard';
@@ -30,7 +30,7 @@ export const NaturalChatSim: React.FC<NaturalChatSimProps> = ({ onActivityLog })
   const [extractedData, setExtractedData] = useState<ExtractedEntityData | null>(null);
   const [isCommitted, setIsCommitted] = useState(false);
 
-  const handleSendPrompt = (scenario: ChatScenario) => {
+  const handleSendPrompt = useCallback((scenario: ChatScenario) => {
     setIsCommitted(false);
     setExtractedData(null);
 
@@ -65,7 +65,7 @@ export const NaturalChatSim: React.FC<NaturalChatSimProps> = ({ onActivityLog })
         onActivityLog(`[Gemini Function Calling] ამოქმედდა ${scenario.functionName}. მზადდება დადასტურების ბარათი.`);
       }
     }, 700);
-  };
+  }, [onActivityLog]);
 
   const handleApprove = (data: ExtractedEntityData) => {
     setIsCommitted(true);

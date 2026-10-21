@@ -1,11 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import {
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+} from 'framer-motion';
 
 /**
  * Hook for scroll-driven Unified Header Slide-Down Kinematics.
- * Operates the header as a single, cohesive, high-performance glass bar.
+ * Synchronized with the Daisi Choreography Hero manifesto ascension (p: 0.80 -> 0.92).
  */
 export function useHeaderKinematics(hideOnInitialScroll: boolean) {
   const shouldReduceMotion = useReducedMotion();
@@ -16,14 +22,35 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
   // Active progress value: if reduced motion or subpage, lock to fully docked
   const isDynamic = hideOnInitialScroll && !shouldReduceMotion;
 
-  // Unified slide-down progress: smoothly slides down as user leaves the hero [40px -> 180px]
-  const progress = useTransform(scrollY, [40, 180], [0, 1], { clamp: true });
+  // Motion value for dock progress (0 to 1)
+  const dockValue = useMotionValue(isDynamic ? 0 : 1);
 
-  // Header surface position: translates smoothly from -100% (tucked above) to 0% (docked)
-  const headerY = useTransform(progress, [0, 1], [isDynamic ? '-100%' : '0%', '0%']);
-  const headerAlpha = useTransform(progress, [0, 0.3, 1], [isDynamic ? 0 : 1, isDynamic ? 0.7 : 1, 1]);
+  useEffect(() => {
+    if (!isDynamic) {
+      dockValue.set(1);
+      setIsInteractive(true);
+      return;
+    }
 
-  // Track interaction state with strict memoization to eliminate React re-render thrashing
+    const handleHeroProgress = (e: Event) => {
+      const customEvent = e as CustomEvent<{ progress: number }>;
+      const p = customEvent.detail.progress;
+      // In Claude Master: dock starts at p >= 0.80 and finishes at p >= 0.92
+      const clampVal = Math.min(Math.max((p - 0.80) / 0.12, 0), 1);
+      const smoothVal = clampVal * clampVal * (3 - 2 * clampVal);
+      dockValue.set(smoothVal);
+
+      const interactive = smoothVal > 0.6;
+      setIsInteractive((prev) => (prev !== interactive ? interactive : prev));
+      const past = smoothVal > 0.9;
+      setIsScrolledPast((prev) => (prev !== past ? past : prev));
+    };
+
+    window.addEventListener('artron-hero-progress', handleHeroProgress);
+    return () => window.removeEventListener('artron-hero-progress', handleHeroProgress);
+  }, [isDynamic, dockValue]);
+
+  // Fallback scroll-distance listener: in case hero is skipped or on direct anchor jump
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (!hideOnInitialScroll) {
       setIsInteractive(true);
@@ -31,13 +58,22 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
       setIsScrolledPast((prev) => (prev !== past ? past : prev));
       return;
     }
-    const nextInteractive = latest > 60;
-    const nextScrolledPast = latest > 180;
-    setIsInteractive((prev) => (prev !== nextInteractive ? nextInteractive : prev));
-    setIsScrolledPast((prev) => (prev !== nextScrolledPast ? nextScrolledPast : prev));
+
+    const threshold = typeof window !== 'undefined' ? window.innerHeight * 1.4 : 1200;
+    if (latest >= threshold) {
+      dockValue.set(1);
+      setIsInteractive(true);
+      setIsScrolledPast(true);
+    } else if (latest < 40) {
+      dockValue.set(0);
+      setIsInteractive(false);
+      setIsScrolledPast(false);
+    }
   });
 
-  // Sub-elements remain stationary relative to the header bar (no loose internal wobbling)
+  const headerY = useTransform(dockValue, [0, 1], [isDynamic ? '-100%' : '0%', '0%']);
+  const headerAlpha = useTransform(dockValue, [0, 0.4, 1], [isDynamic ? 0 : 1, isDynamic ? 0.8 : 1, 1]);
+
   const neutral = useTransform(() => 0);
   const neutralScale = useTransform(() => 1);
   const neutralAlpha = useTransform(() => 1);

@@ -87,16 +87,15 @@ export const FaqMobileDeck: React.FC<FaqMobileDeckProps> = ({
               role="tab"
               aria-selected={isActive}
               onClick={() => onTabChange(tabKey)}
-              className="shrink-0 min-h-[34px] px-3.5 rounded-full flex items-center gap-1.5 text-xs font-medium cursor-pointer"
-              style={{
-                background: isActive ? '#f4f6fa' : 'rgba(255,255,255,.05)',
-                color: isActive ? '#0a0d16' : '#b4bcc9',
-                boxShadow: isActive ? '0 0 16px rgba(160,190,255,.25)' : 'none',
-              }}
+              className={`shrink-0 min-h-[34px] px-3.5 rounded-full flex items-center gap-1.5 text-xs font-medium cursor-pointer transition-all duration-300 ${
+                isActive
+                  ? 'gold-rim-tab-active shadow-[0_0_16px_rgba(212,175,55,0.35)]'
+                  : 'gold-rim-pill text-[#a6b0bf] hover:text-white'
+              }`}
             >
               <span>{ui[tabKey]}</span>
               {tabKey !== 'all' && (
-                <span className="font-mono text-[10px] opacity-60">
+                <span className={`font-mono text-[10px] ${isActive ? 'text-[#FFE89E]' : 'opacity-60'}`}>
                   {tabKey.toUpperCase()}
                 </span>
               )}
@@ -113,27 +112,39 @@ export const FaqMobileDeck: React.FC<FaqMobileDeckProps> = ({
       >
         {visibleItems.map((item) => {
           const isCurrent = item.id === activeId;
-          const itemColor = QC_COLORS[item.id] || '#5cc8ff';
           return (
             <article
               key={item.id}
               data-card-id={item.id}
               onClick={() => onSelectFaq(item.id)}
-              className="shrink-0 w-[84vw] max-w-[340px] snap-center rounded-[20px] p-4.5 flex flex-col justify-between transition-all duration-300 cursor-pointer"
+              className={`relative shrink-0 w-[84vw] max-w-[340px] snap-center rounded-[20px] p-4.5 flex flex-col justify-between transition-all duration-300 cursor-pointer overflow-hidden ${
+                isCurrent ? 'gold-rim-card-active' : 'gold-rim-card'
+              }`}
               style={{
-                background:
-                  'linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.025))',
-                backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)',
-                boxShadow: isCurrent
-                  ? `0 0 0 1.5px rgba(255,255,255,.9), 0 0 30px ${hexToRgba(itemColor, 0.35)}, 0 16px 40px rgba(0,0,0,.6)`
-                  : 'inset 0 1px 0 rgba(255,255,255,.08)',
-                opacity: isCurrent ? 1 : 0.6,
+                opacity: isCurrent ? 1 : 0.65,
                 transform: isCurrent ? 'scale(1)' : 'scale(.96)',
               }}
             >
+              {/* Top gloss rim line */}
+              <div
+                aria-hidden="true"
+                className="absolute top-0 left-6 right-6 h-[1px] opacity-80 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent)',
+                }}
+              />
+              {/* Bottom Gold Rim Metallic Glow Line */}
+              <div
+                aria-hidden="true"
+                className="absolute bottom-0 left-6 right-6 h-[1.5px] opacity-95 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(90deg, transparent, #A87B41, #D4AF37, #FFE89E, #D4AF37, #A87B41, transparent)',
+                  boxShadow: '0 -2px 10px rgba(212, 175, 55, 0.5)',
+                }}
+              />
+
               <div className="flex flex-col gap-2">
-                <span className="text-[10px] font-mono text-[#8d96a6]">
+                <span className="text-[10px] font-mono text-[#D4AF37]">
                   {ui.topics[TOPIC_MAP[item.id] || 'turnstile']}
                 </span>
                 <h3 className="m-0 text-[15px] font-semibold text-white leading-snug">
@@ -148,7 +159,7 @@ export const FaqMobileDeck: React.FC<FaqMobileDeckProps> = ({
                       key={idx}
                       className="grid grid-cols-[5px_minmax(0,1fr)] gap-2 items-baseline text-xs text-[#9aa3b2]"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: itemColor }} />
+                      <span className="w-1.5 h-1.5 rounded-full mt-0.5 bg-[#D4AF37] shadow-[0_0_6px_rgba(212,175,55,0.6)]" />
                       <span>{pt}</span>
                     </li>
                   ))}
@@ -165,9 +176,9 @@ export const FaqMobileDeck: React.FC<FaqMobileDeckProps> = ({
                     onCopyLink(item.id);
                   }}
                   aria-label={ui.copy}
-                  className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center text-xs text-[#a1a1aa]"
+                  className="w-9 h-9 rounded-full gold-rim-pill flex items-center justify-center text-xs text-[#c2c8d2] hover:text-white"
                 >
-                  <Link2 className="w-3.5 h-3.5" />
+                  <Link2 className="w-3.5 h-3.5 text-[#D4AF37]" />
                 </button>
 
                 <div className="flex items-center gap-2 text-xs text-[#8d96a6]">
@@ -181,7 +192,7 @@ export const FaqMobileDeck: React.FC<FaqMobileDeckProps> = ({
                           e.stopPropagation();
                           onRate(item.id, 'up');
                         }}
-                        className="w-7 h-7 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center text-xs"
+                        className="w-7 h-7 rounded-full gold-rim-pill flex items-center justify-center text-xs"
                       >
                         👍
                       </button>
@@ -190,7 +201,7 @@ export const FaqMobileDeck: React.FC<FaqMobileDeckProps> = ({
                           e.stopPropagation();
                           onRate(item.id, 'down');
                         }}
-                        className="w-7 h-7 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center text-xs"
+                        className="w-7 h-7 rounded-full gold-rim-pill flex items-center justify-center text-xs"
                       >
                         👎
                       </button>

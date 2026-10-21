@@ -1,5 +1,5 @@
 import { PureSportsMirror } from '@/components/landing/pure-sports-mirror/PureSportsMirror';
-import { DashboardFeaturesSection } from '@/components/DashboardFeaturesSection';
+import { B2BControlCenterSection } from '@/components/landing/b2b-suite';
 import { ArtronAiSection } from '@/components/landing/ArtronAiSection';
 import { PricingSection } from '@/components/landing/PricingSection';
 import { PartnerEcosystem } from '@/components/landing/PartnerEcosystem';
@@ -45,8 +45,8 @@ export default function Home() {
         <DualCoreShowcase />
         <SectionTransition variant="laser" />
 
-        {/* 3. B2B Control Hub: 4-Node Core Matrix (Operations & Security) & 6-Node Analytics */}
-        <DashboardFeaturesSection />
+        {/* 3. B2B Control Hub: 10-Node Artron B2B Suite Showroom */}
+        <B2BControlCenterSection />
         <SectionTransition variant="laser" />
 
         {/* 4. B2C Athlete Digital Freedom: Mobile App for Members */}

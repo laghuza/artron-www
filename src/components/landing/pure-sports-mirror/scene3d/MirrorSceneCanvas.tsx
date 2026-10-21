@@ -52,8 +52,8 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
     sweepLight: null,
     fillLight: null,
     rafId: 0,
-    lastTime: typeof performance !== 'undefined' ? performance.now() : 0,
-    startTime: typeof performance !== 'undefined' ? performance.now() : 0,
+    lastTime: 0,
+    startTime: 0,
     pointer: new THREE.Vector2(),
     camGoal: new THREE.Vector3(0, 2.5, 7.4),
     tgtGoal: new THREE.Vector3(0, 0, 0),
@@ -68,6 +68,10 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    const now = typeof performance !== 'undefined' ? performance.now() : 0;
+    stateRef.current.lastTime = now;
+    stateRef.current.startTime = now;
 
     const width = container.clientWidth || 900;
     const height = container.clientHeight || 600;

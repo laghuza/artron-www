@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Noto+Serif+Georgian:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>if(!window.THREE){var s=document.createElement('script');s.src='https://unpkg.com/three@0.149.0/build/three.min.js';document.head.appendChild(s);}</script>
+<script src="./artron-showroom-3d.js"></script>
+<style>
+html,body{margin:0;background:#030508}
+*{box-sizing:border-box}
+a{color:#A9B9CA;text-decoration:none}a:hover{color:#F0F9FF}
+::selection{background:rgba(16,185,129,0.3)}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" data-screen-label="Hero Showroom" style="position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(ellipse 46% 52% at 70% 44%, rgba(16,185,129,0.07), transparent 70%),radial-gradient(ellipse 50% 40% at 14% 0%, rgba(186,230,253,0.06), transparent 70%),radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(0,0,0,0.6) 100%),#030508;color:#F0F9FF;font-family:'Noto Sans Georgian',sans-serif">
+
+  <header style="position:relative;z-index:3;display:flex;flex-direction:column;gap:22px;padding:{{ headPad }}">
+    <nav ref="{{ navRef }}" aria-label="ARTRON ლოგიკები" style="display:grid;grid-auto-flow:column;grid-auto-columns:{{ railCol }};gap:14px;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:0 2px">
+      <sc-for list="{{ rail }}" as="n" hint-placeholder-count="10">
+        <button onClick="{{ n.onClick }}" aria-current="{{ n.cur }}" style="min-width:0;min-height:52px;display:flex;flex-direction:column;gap:6px;padding:12px 2px 4px;background:none;border:none;border-top:1px solid {{ n.bd }};box-shadow:{{ n.sh }};cursor:pointer;text-align:left;font-family:inherit;transition:border-color .5s,box-shadow .5s">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:{{ n.ixc }};transition:color .5s">{{ n.ix }}</span>
+          <span style="font-size:13px;font-weight:{{ n.fw }};color:{{ n.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .5s">{{ n.s }}</span>
+        </button>
+      </sc-for>
+    </nav>
+  </header>
+
+  <sc-if value="{{ heroScrim }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#030508 0%,rgba(3,5,8,0.88) 26%,rgba(3,5,8,0.35) 46%,transparent 60%)"></div>
+  </sc-if>
+
+  <sc-if value="{{ isHero }}" hint-placeholder-val="{{ true }}">
+    <main style="position:relative;z-index:2;flex:1;display:flex;align-items:center;padding:{{ mainPad }};pointer-events:none">
+      <div style="pointer-events:auto;width:100%;max-width:600px;display:flex;flex-direction:column;gap:32px">
+        <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#BAE6FD"><span style="width:24px;height:1px;background:#F59E0B"></span>01 / 10 · SMART ACCESS · IoT CONTROL</span>
+        <h1 style="margin:0;display:flex;flex-direction:column;gap:14px">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:{{ h1a }};font-weight:600;line-height:0.95;letter-spacing:0.16em;color:#F0F9FF">ARTRON <span style="color:#F59E0B;letter-spacing:0">—</span></span>
+          <span style="font-family:'Noto Serif Georgian',serif;font-size:{{ h1b }};font-weight:600;line-height:1.28;color:#F0F9FF;text-wrap:balance">ჭკვიანი დაშვების <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;color:#F59E0B">&amp;</span> IoT მართვის ცენტრი</span>
+        </h1>
+        <p style="margin:0;max-width:48ch;font-size:15px;line-height:1.7;color:#A9B9CA;text-wrap:pretty">ტურნიკეტები, სენსორები და ჯავშნები — ერთ ცენტრში. ARTRON ამოწმებს თითოეულ გავლას წამის მეასედებში და განაგრძობს მუშაობას ინტერნეტის გათიშვისასაც.</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding:12px 16px;border-radius:10px;border:1px solid rgba(186,230,253,0.12);background:rgba(6,9,14,0.5);font-family:'JetBrains Mono',monospace;font-size:12px;color:#A9B9CA;max-width:max-content">
+          <span style="color:#F59E0B">t</span><span>= t<sub>სკან</sub> + t<sub>ვერიფ</sub> + t<sub>ძრავა</sub></span><span>= 12 + 18 + 10</span><span style="color:#10B981">= 40 მწმ</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:{{ mGap }}">
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid rgba(186,230,253,0.18)">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:{{ mFs }};font-weight:600;line-height:1;color:#F0F9FF;font-variant-numeric:lining-nums tabular-nums">99.98%</span>
+            <span style="font-size:12px;line-height:1.4;color:#A9B9CA">Uptime · 30 დღე</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid rgba(186,230,253,0.18)">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:{{ mFs }};font-weight:600;line-height:1;color:#F0F9FF;font-variant-numeric:lining-nums tabular-nums">0.04<span style="font-family:'Noto Sans Georgian',sans-serif;font-size:0.42em;font-weight:500;color:#A9B9CA">წმ</span></span>
+            <span style="font-size:12px;line-height:1.4;color:#A9B9CA">რეაგირების დრო</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid {{ passBd }};transition:border-color .8s">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:{{ mFs }};font-weight:600;line-height:1;color:{{ passFg }};font-variant-numeric:lining-nums tabular-nums;transition:color .8s">{{ passes }}</span>
+            <span style="display:flex;align-items:center;gap:7px;font-size:12px;line-height:1.4;color:#A9B9CA"><span style="width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981"></span>დაშვება დღეს</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px">
+          <a href="#" style="display:flex;align-items:center;min-height:48px;padding:0 26px;border-radius:999px;background:linear-gradient(180deg,#10B981 0%,#059669 100%);border:1px solid rgba(167,243,208,0.45);color:#022C22;font-size:14px;font-weight:700;box-shadow:0 0 0 4px rgba(16,185,129,0.10),0 12px 34px -10px rgba(16,185,129,0.7);transition:box-shadow .4s,transform .4s" style-hover="color:#022C22;transform:translateY(-1px);box-shadow:0 0 0 6px rgba(16,185,129,0.16),0 16px 40px -10px rgba(16,185,129,0.9)">დემოს დაჯავშნა</a>
+          <button onClick="{{ goNext }}" style="display:flex;align-items:center;gap:10px;min-height:44px;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:#F0F9FF" style-hover="color:#10B981">შემდეგი ლოგიკა · ჯავშნები <span style="font-family:'JetBrains Mono',monospace">→</span></button>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <div ref="{{ stageRef }}" data-screen-label="3D Turnstile" style="position:{{ sPos }};inset:0;height:{{ sH }};z-index:0;opacity:{{ sOp }};visibility:{{ sVis }};pointer-events:{{ sPe }};transition:opacity .5s"></div>
+
+  <sc-if value="{{ isHero }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Live Telemetry" style="position:relative;z-index:2;display:grid;grid-template-columns:{{ cardCols }};gap:16px;padding:{{ cardPad }};pointer-events:none">
+      <div style="pointer-events:auto;min-width:0;display:flex;flex-direction:column;gap:6px;padding:20px 22px;border-radius:14px;background:linear-gradient(180deg,rgba(17,23,34,0.5),rgba(6,9,14,0.38));backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(186,230,253,0.12);border-top-color:rgba(240,249,255,0.22);box-shadow:inset 0 1px 0 rgba(240,249,255,0.05),0 30px 60px -30px rgba(0,0,0,0.9)">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;padding-bottom:6px">
+          <span style="font-size:13px;font-weight:600;color:#F0F9FF;white-space:nowrap">დაშვების ჟურნალი</span>
+          <span style="display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#10B981"><span style="width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981"></span>LIVE · AES-256</span>
+        </div>
+        <sc-for list="{{ log }}" as="row" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:{{ logCols }};align-items:baseline;gap:14px;padding:9px 10px;margin:0 -10px;border-radius:8px;border-top:1px solid rgba(186,230,253,0.08);background:{{ row.bg }};transition:background 1s">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#76869A">{{ row.t }}</span>
+            <span style="min-width:0;font-size:13px;color:{{ row.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 1s">{{ row.name }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#76869A;white-space:nowrap">{{ row.gate }}</span>
+            <span style="font-size:12px;color:#10B981;white-space:nowrap">დადასტურდა</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="pointer-events:auto;min-width:0;display:flex;flex-direction:column;gap:6px;padding:20px 22px;border-radius:14px;background:linear-gradient(180deg,rgba(17,23,34,0.5),rgba(6,9,14,0.38));backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(186,230,253,0.12);border-top-color:rgba(240,249,255,0.22);box-shadow:inset 0 1px 0 rgba(240,249,255,0.05),0 30px 60px -30px rgba(0,0,0,0.9)">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;padding-bottom:6px">
+          <span style="font-size:13px;font-weight:600;color:#F0F9FF;white-space:nowrap">სისტემის სტატუსი</span>
+          <span style="font-size:12px;color:#10B981;white-space:nowrap">ყველა სისტემა ნორმაშია</span>
+        </div>
+        <sc-for list="{{ status }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid rgba(186,230,253,0.08)">
+            <span style="display:flex;align-items:center;gap:9px;min-width:0;font-size:13px;color:#A9B9CA"><span style="flex:none;width:5px;height:5px;border-radius:50%;background:{{ s.dot }};box-shadow:0 0 6px {{ s.dot }}"></span>{{ s.k }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F0F9FF;white-space:nowrap">{{ s.v }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isSheet }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Logic Sheet" style="position:relative;z-index:2;flex:1;display:grid;grid-template-columns:{{ sheetCols }};gap:{{ sheetGap }};align-items:start;padding:{{ sheetPad }}">
+      <div style="min-width:0;display:flex;flex-direction:column;gap:26px">
+        <span style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#BAE6FD"><span style="width:24px;height:1px;background:#F59E0B"></span>{{ L.ix }} / 10 · {{ L.code }}</span>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h2 style="margin:0;font-family:'Noto Serif Georgian',serif;font-size:{{ h2fs }};font-weight:600;line-height:1.25;color:#F0F9FF;text-wrap:balance">{{ L.t }}</h2>
+          <p style="margin:0;max-width:46ch;font-size:15px;line-height:1.7;color:#A9B9CA;text-wrap:pretty">{{ L.v }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;padding:18px 20px 8px;border-radius:14px;background:linear-gradient(180deg,rgba(17,23,34,0.55),rgba(6,9,14,0.4));backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(186,230,253,0.12);border-top-color:rgba(240,249,255,0.22);box-shadow:inset 0 1px 0 rgba(240,249,255,0.05),0 30px 60px -30px rgba(0,0,0,0.9)">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#76869A"><span>მათემატიკური მოდელი</span><span style="color:#F59E0B">ƒ</span></div>
+          <sc-for list="{{ L.eqs }}" as="q" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:6px 16px;padding:12px 0;border-top:1px solid rgba(186,230,253,0.08)">
+              <div style="min-width:0;display:flex;flex-direction:column;gap:5px">
+                <span style="font-size:12px;color:#76869A">{{ q.k }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:#F0F9FF;overflow-wrap:anywhere">{{ q.e }}</span>
+              </div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:{{ q.c }};white-space:nowrap;text-align:right">{{ q.r }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid rgba(16,185,129,0.6)">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:{{ kpiFs }};font-weight:600;line-height:1;color:#F0F9FF;font-variant-numeric:lining-nums tabular-nums">{{ L.kpi }}</span>
+            <span style="font-size:12px;color:#A9B9CA">{{ L.kpiL }}</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button onClick="{{ goPrev }}" aria-label="წინა ლოგიკა" style="width:44px;height:44px;border-radius:50%;cursor:pointer;background:rgba(12,18,27,0.5);border:1px solid rgba(186,230,253,0.22);color:#F0F9FF;font-family:'JetBrains Mono',monospace;font-size:14px;transition:border-color .4s" style-hover="border-color:rgba(16,185,129,0.6)">←</button>
+            <button onClick="{{ goNext }}" aria-label="შემდეგი ლოგიკა" style="width:44px;height:44px;border-radius:50%;cursor:pointer;background:rgba(12,18,27,0.5);border:1px solid rgba(186,230,253,0.22);color:#F0F9FF;font-family:'JetBrains Mono',monospace;font-size:14px;transition:border-color .4s" style-hover="border-color:rgba(16,185,129,0.6)">→</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="min-width:0;display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:16px;background:linear-gradient(180deg,rgba(17,23,34,0.5),rgba(6,9,14,0.38));backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(186,230,253,0.12);border-top-color:rgba(240,249,255,0.22);box-shadow:inset 0 1px 0 rgba(240,249,255,0.05),0 40px 80px -40px rgba(0,0,0,0.9)">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#BAE6FD">{{ L.stage }}</span>
+          <span style="display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;color:#10B981"><span style="width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981"></span>LIVE</span>
+        </div>
+
+        <sc-if value="{{ v1 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:grid;grid-template-columns:{{ bkCols }};gap:6px">
+              <span></span>
+              <sc-for list="{{ hours }}" as="h" hint-placeholder-count="6"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#76869A;text-align:center">{{ h }}</span></sc-for>
+            </div>
+            <sc-for list="{{ bkRows }}" as="r" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:{{ bkCols }};gap:6px;align-items:center">
+                <div style="min-width:0;display:flex;flex-direction:column;gap:3px"><span style="font-size:13px;color:#F0F9FF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.n }}</span><span style="font-size:11px;color:#76869A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.a }}</span></div>
+                <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="6">
+                  <button onClick="{{ c.onClick }}" style="min-width:0;min-height:56px;border-radius:8px;cursor:pointer;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-family:'JetBrains Mono',monospace;font-size:10.5px;transition:all .35s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 3px;overflow:hidden"><span style="max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.t }}</span><span style="max-width:100%;font-family:'Noto Sans Georgian',sans-serif;font-size:11px;color:{{ c.mf }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.m }}</span></button>
+                </sc-for>
+              </div>
+            </sc-for>
+            <div style="display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:10px;font-size:12px;color:#A9B9CA">
+              <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:3px;background:rgba(16,185,129,0.22);border:1px solid rgba(16,185,129,0.7)"></span>დაჯავშნილი · დრო და მწვრთნელი · შეხებით გაუქმება</span>
+              <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:3px;border:1px dashed rgba(186,230,253,0.35)"></span>თავისუფალი · შეხებით დაჯავშნა</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v2 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+            <div style="position:relative;width:100%;max-width:440px;aspect-ratio:1">
+              <sc-for list="{{ rings }}" as="g" hint-placeholder-count="3">
+                <button onClick="{{ g.onClick }}" style="position:absolute;left:50%;top:50%;width:{{ g.s }};height:{{ g.s }};transform:translate(-50%,-50%);border-radius:50%;cursor:pointer;border:1px {{ g.ls }} {{ g.bd }};background:{{ g.bg }};box-shadow:{{ g.sh }};padding:0;font-family:inherit;transition:all .5s">
+                  <span style="position:absolute;left:50%;top:{{ g.lt }};transform:translate(-50%,-50%);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:{{ g.fg }};white-space:nowrap">{{ g.n }} · e={{ g.e }}</span>
+                </button>
+              </sc-for>
+              <div style="position:absolute;left:50%;top:50%;width:28%;height:28%;transform:translate(-50%,-50%);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:radial-gradient(circle,rgba(16,185,129,0.28),rgba(16,185,129,0.05) 70%);border:1px solid rgba(16,185,129,0.8);box-shadow:0 0 30px -6px rgba(16,185,129,0.7);text-align:center;pointer-events:none">
+                <span style="font-size:11px;font-weight:600;color:#F0F9FF">ბირთვი</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#10B981">{{ coreTxt }}</span>
+              </div>
+            </div>
+            <button onClick="{{ toggleNet }}" style="display:flex;align-items:center;gap:10px;min-height:44px;padding:0 20px;border-radius:999px;cursor:pointer;background:rgba(12,18,27,0.6);border:1px solid {{ netBd }};color:#F0F9FF;font-family:inherit;font-size:13px;font-weight:600;transition:border-color .4s"><span style="width:6px;height:6px;border-radius:50%;background:{{ netDot }};box-shadow:0 0 8px {{ netDot }}"></span>{{ netBtn }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v3 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ migRows }}" as="m" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:9px;padding:14px 0;border-top:1px solid rgba(186,230,253,0.08)">
+                <div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:#F0F9FF">{{ m.name }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A9B9CA;white-space:nowrap">{{ m.done }} / {{ m.rec }}</span></div>
+                <div style="position:relative;height:6px;border-radius:3px;background:rgba(186,230,253,0.08);overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:{{ m.w }};border-radius:3px;background:linear-gradient(90deg,#059669,#10B981);box-shadow:0 0 12px rgba(16,185,129,0.6)"></div></div>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#76869A">წილი ჯამში: {{ m.share }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding-top:6px">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ migStateC }}">{{ migState }}</span>
+              <button onClick="{{ runMig }}" style="min-height:44px;padding:0 22px;border-radius:999px;cursor:pointer;background:linear-gradient(180deg,#10B981,#059669);border:1px solid rgba(167,243,208,0.45);color:#022C22;font-family:inherit;font-size:13px;font-weight:700">{{ migBtn }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v4 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <sc-for list="{{ sliders }}" as="sl" hint-placeholder-count="3">
+              <label style="display:flex;flex-direction:column;gap:8px">
+                <span style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:#A9B9CA">{{ sl.k }}</span><span style="font-family:'JetBrains Mono',monospace;color:#F0F9FF">{{ sl.lbl }}</span></span>
+                <input type="range" min="{{ sl.min }}" max="{{ sl.max }}" step="{{ sl.step }}" value="{{ sl.v }}" onChange="{{ sl.on }}" style="width:100%;height:28px;accent-color:#10B981;cursor:pointer">
+              </label>
+            </sc-for>
+            <div style="display:flex;flex-direction:column;gap:12px;padding-top:14px;border-top:1px solid rgba(186,230,253,0.1)">
+              <sc-for list="{{ cmp }}" as="b" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 84px;align-items:center;gap:12px">
+                  <span style="font-size:12px;color:#A9B9CA">{{ b.k }}</span>
+                  <div style="height:22px;border-radius:4px;background:rgba(186,230,253,0.05);overflow:hidden"><div style="height:100%;width:{{ b.w }};min-width:2px;background:{{ b.bg }};border-radius:4px;transition:width .4s"></div></div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F0F9FF;text-align:right">{{ b.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v5 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:{{ okrCols }};gap:18px">
+            <sc-for list="{{ okrs }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.onClick }}" style="min-width:0;display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 10px;border-radius:12px;cursor:pointer;background:{{ o.bg }};border:1px solid {{ o.bd }};font-family:inherit;transition:all .4s">
+                <div style="position:relative;width:100%;max-width:170px;aspect-ratio:1;border-radius:50%;background:conic-gradient(#10B981 0 {{ o.pd }}, rgba(186,230,253,0.08) 0)">
+                  <div style="position:absolute;inset:6%;border-radius:50%;background:#070B11"></div>
+                  <div style="position:absolute;inset:14%;border-radius:50%;background:conic-gradient(#F59E0B 0 {{ o.td }}, rgba(245,158,11,0.10) 0)"></div>
+                  <div style="position:absolute;inset:18%;border-radius:50%;background:#070B11;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+                    <span style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;line-height:1;color:#F0F9FF">{{ o.p }}%</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#F59E0B">π {{ o.pace }}</span>
+                  </div>
+                </div>
+                <span style="display:flex;flex-direction:column;gap:3px;text-align:center"><span style="font-size:13px;font-weight:600;color:#F0F9FF">{{ o.t }}</span><span style="font-size:11px;color:#76869A">{{ o.kr }}</span></span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12px;color:#A9B9CA">
+            <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:2px;background:#10B981"></span>გარე რკალი — შესრულება p</span>
+            <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:2px;background:#F59E0B"></span>შიდა რკალი — გასული დრო τ</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v6 }}" hint-placeholder-val="{{ false }}">
+          <div style="position:relative;height:280px;display:flex;align-items:flex-end;gap:{{ barGap }};padding-bottom:26px">
+            <sc-for list="{{ guides }}" as="gd" hint-placeholder-count="4">
+              <div style="position:absolute;left:0;right:0;bottom:{{ gd.b }};border-top:1px dashed rgba(186,230,253,0.08);pointer-events:none"><span style="position:absolute;right:0;top:-16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#76869A">{{ gd.l }}</span></div>
+            </sc-for>
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="12">
+              <button onClick="{{ b.onClick }}" style="position:relative;flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;background:none;border:none;padding:0;cursor:pointer;font-family:inherit">
+                <span style="position:absolute;left:50%;bottom:calc({{ b.h }} + 6px);transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;color:#10B981;white-space:nowrap;opacity:{{ b.lo }}">{{ b.v }}</span>
+                <div style="height:{{ b.h }};border-radius:4px 4px 0 0;background:{{ b.bg }};border:1px {{ b.ls }} {{ b.bd }};box-shadow:{{ b.sh }};transition:all .4s"></div>
+                <span style="position:absolute;left:0;right:0;bottom:-22px;text-align:center;font-size:10.5px;color:{{ b.mc }}">{{ b.m }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v7 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:center">
+            <div style="position:relative;width:100%;max-width:440px;aspect-ratio:1">
+              <sc-for list="{{ orbits }}" as="ob" hint-placeholder-count="4">
+                <div style="position:absolute;left:50%;top:50%;width:{{ ob.s }};height:{{ ob.s }};transform:translate(-50%,-50%);border-radius:50%;border:1px {{ ob.ls }} {{ ob.bd }};pointer-events:none"><span style="position:absolute;left:50%;top:0;transform:translate(-50%,-50%);padding:0 6px;background:#0A0F16;font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ ob.fg }}">{{ ob.l }}</span></div>
+              </sc-for>
+              <div style="position:absolute;left:50%;top:50%;width:14px;height:14px;transform:translate(-50%,-50%);border-radius:50%;background:#10B981;box-shadow:0 0 18px #10B981"></div>
+              <sc-for list="{{ members }}" as="mb" hint-placeholder-count="5">
+                <button onClick="{{ mb.onClick }}" style="position:absolute;left:{{ mb.x }};top:{{ mb.y }};transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:5px;min-width:44px;min-height:44px;justify-content:center;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;transition:left .6s,top .6s">
+                  <span style="width:{{ mb.d }};height:{{ mb.d }};border-radius:50%;background:{{ mb.c }};box-shadow:0 0 {{ mb.glow }} {{ mb.c }};outline:1px solid {{ mb.ring }};outline-offset:4px;transition:all .4s"></span>
+                  <span style="font-size:11px;color:{{ mb.fg }};white-space:nowrap">{{ mb.n }} · {{ mb.r }}%</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v8 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:grid;grid-template-columns:44px repeat(6,minmax(0,1fr));gap:5px">
+              <span></span>
+              <sc-for list="{{ bands }}" as="bn" hint-placeholder-count="6"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#76869A;text-align:center">{{ bn }}:00</span></sc-for>
+            </div>
+            <sc-for list="{{ heat }}" as="hr" hint-placeholder-count="7">
+              <div style="display:grid;grid-template-columns:44px repeat(6,minmax(0,1fr));gap:5px;align-items:center">
+                <span style="font-size:12px;color:#A9B9CA">{{ hr.d }}</span>
+                <sc-for list="{{ hr.cells }}" as="hc" hint-placeholder-count="6">
+                  <button onClick="{{ hc.onClick }}" style="min-width:0;min-height:40px;border-radius:6px;cursor:pointer;background:{{ hc.bg }};border:1px solid {{ hc.bd }};color:{{ hc.fg }};font-family:'JetBrains Mono',monospace;font-size:11px;transition:all .3s">{{ hc.l }}</button>
+                </sc-for>
+              </div>
+            </sc-for>
+            <div style="display:flex;flex-wrap:wrap;gap:8px 18px;padding-top:10px;font-size:12px;color:#A9B9CA">
+              <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:3px;border:1px solid #F59E0B"></span>პიკური · L &gt; 85</span>
+              <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:3px;background:rgba(16,185,129,0.5)"></span>შეფერილობა ∝ დატვირთვა</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ v9 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:grid;grid-template-columns:{{ segCols }};gap:8px">
+              <sc-for list="{{ segs }}" as="sg" hint-placeholder-count="3">
+                <button onClick="{{ sg.onClick }}" style="min-width:0;min-height:56px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:10px 14px;border-radius:10px;cursor:pointer;text-align:left;background:{{ sg.bg }};border:1px solid {{ sg.bd }};font-family:inherit;transition:all .4s">
+                  <span style="font-size:12px;color:{{ sg.fg }}">{{ sg.k }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#76869A">n={{ sg.n }} · c={{ sg.c }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:4px">
+              <sc-for list="{{ dots }}" as="dt" hint-placeholder-count="120">
+                <span style="aspect-ratio:1;border-radius:50%;background:{{ dt.bg }};box-shadow:{{ dt.sh }};transition:background .5s"></span>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#76869A">1 წერტილი = 1 წევრი</span>
+              <button onClick="{{ launch }}" style="min-height:44px;padding:0 22px;border-radius:999px;cursor:pointer;background:linear-gradient(180deg,#10B981,#059669);border:1px solid rgba(167,243,208,0.45);color:#022C22;font-family:inherit;font-size:13px;font-weight:700">{{ launchBtn }}</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </main>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLogic&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;0&quot;,&quot;options&quot;:[&quot;0&quot;,&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;6&quot;,&quot;7&quot;,&quot;8&quot;,&quot;9&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;ნავიგაცია&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;live&quot;,&quot;options&quot;:[&quot;still&quot;,&quot;calm&quot;,&quot;live&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D&quot;},&quot;neon&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;emerald&quot;,&quot;options&quot;:[&quot;emerald&quot;,&quot;ice&quot;,&quot;amber&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D&quot;},&quot;autoPass&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;3D&quot;}}">
+const NAMES = ['გიორგი მ.', 'ნინო ქ.', 'ლუკა ბ.', 'ანა ჯ.', 'დავით ხ.', 'მარიამ ტ.', 'საბა ლ.', 'თეკლა რ.'];
+const GATES = ['T-01 · QR', 'T-02 · NFC', 'T-01 · FACE', 'T-03 · NFC', 'T-02 · QR', 'T-04 · FACE'];
+const NEON = { emerald: 0x10B981, ice: 0x7DD3FC, amber: 0xF59E0B };
+const SPEED = { still: 0, calm: 0.45, live: 1 };
+const pad = n => String(n).padStart(2, '0');
+const fmtT = d => pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const reduced = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const EM = '#10B981', AM = '#F59E0B', INK = '#F0F9FF', MU = '#A9B9CA', DIM = '#76869A';
+
+const LOGICS = [
+  { s: 'IoT', t: 'მართვის ცენტრი და IoT', v: 'ფიზიკური დაშვება და შრომის უსაფრთხოება', code: 'ACCESS · LATENCY BUDGET', stage: 'T-01 · ტრიპოდ-ტურნიკეტი' },
+  { s: 'ჯავშნები', t: 'განრიგი და ჯავშნები', v: 'კორტებისა და ბილიკების სრული ათვისება — ერთი სლოტი, ერთი მფლობელი, გადაფარვა მათემატიკურად გამორიცხულია.', code: 'BOOKING · INTERVAL ALGEBRA', stage: '3 ობიექტი × 6 სლოტი × 5 მწვრთნელი · შეხება: დაჯავშნა / გაუქმება' },
+  { s: 'კიბერდაცვა', t: 'კიბერდაცვა და ავტონომია', v: 'სამი დამოუკიდებელი ფენა ამცირებს გარღვევის ალბათობას ნამრავლით. ინტერნეტის გათიშვისას ბირთვი ლოკალურად აგრძელებს ვერიფიკაციას.', code: 'DEFENSE · LAYERED PROBABILITY', stage: 'ZERO-TRUST · კონცენტრული ფენები · ბიჯი 24%' },
+  { s: 'მიგრაცია', t: 'მონაცემთა მიგრაცია', v: '1C, Excel და ძველი ბაზების უწყვეტი გადმოტანა. თითოეული ჩანაწერი მოწმდება საკონტროლო ჯამით — არაფერი იკარგება.', code: 'ETL · CONSERVATION CHECK', stage: 'ETL ნაკადი · 3 წყარო → ბირთვი' },
+  { s: 'ეკონომია', t: 'ეკონომიის გამოთვლა', v: 'ადმინისტრაციული ხარჯის პირდაპირი შემცირება: ხელით რეგისტრაციის დრო იცვლება 0.04 წამიანი ავტომატური ვერიფიკაციით.', code: 'COST · TIME × RATE', stage: 'პარამეტრები · შეცვალეთ და ნახეთ შედეგი' },
+  { s: 'მიზნები', t: 'სტრატეგიული მიზნები', v: 'კვარტალური OKR-ები იზომება არა მხოლოდ პროცენტით, არამედ ტემპით — შესრულება გაყოფილი გასულ დროზე.', code: 'OKR · PACE INDEX', stage: 'Q4 · 61 / 92 დღე · შეეხეთ მიზანს' },
+  { s: 'მაჩვენებლები', t: 'აღმასრულებელი მაჩვენებლები', v: 'ყოველთვიური შემოსავლის (MRR) სურათი რეალურ დროში — რთული პროცენტით გამოთვლილი ზრდა და პროგნოზი.', code: 'MRR · COMPOUND GROWTH', stage: 'MRR · ათასი ₾ · 11 თვე + პროგნოზი' },
+  { s: 'შენარჩუნება', t: 'წევრთა შენარჩუნება', v: 'აბონემენტის გაუქმების წინასწარი შეჩერება. რისკი არის სამი ფაქტორის შეწონილი ჯამი; მანძილი ბირთვიდან = რისკი.', code: 'CHURN · WEIGHTED RISK', stage: 'წევრთა ორბიტა · რადიუსი ∝ R' },
+  { s: 'პიკი', t: 'პიკური საათები', v: 'ფასი, რომელიც დატვირთვას მიჰყვება — უბან-უბან განსაზღვრული ფუნქცია, საბაზისო ტარიფი ₾ 40.', code: 'PRICING · PIECEWISE LOAD', stage: 'დატვირთვის რუკა · 7 დღე × 6 ზოლი · შეეხეთ უჯრას' },
+  { s: 'კამპანია', t: 'დაბრუნების კამპანია', v: 'პასიური წევრების ხელახალი მოწვევა. დაბრუნება ₾ 8 ჯდება, ახლის მოზიდვა — ₾ 35.', code: 'WIN-BACK · EXPECTED RETURN', stage: 'სეგმენტი → მოსალოდნელი დაბრუნება' }
+];
+const FAC = [{ n: 'ცენტრალური კორტი A', a: 'მყარი საფარი' }, { n: 'კორტი B', a: 'თიხა' }, { n: 'საცურაო ბილიკი 1', a: '26.5°C' }];
+const HOURS = [16, 17, 18, 19, 20, 21];
+const LAYERS = [{ n: 'TLS 1.3', e: 0.92, s: 100 }, { n: 'IP თეთრი სია', e: 0.85, s: 76 }, { n: 'ZERO-TRUST', e: 0.97, s: 52 }];
+const MIG = [{ name: '1C: საწარმო 8.3', rec: 2180 }, { name: 'Excel / CSV ცხრილები', rec: 1460 }, { name: 'ძველი SQL ბაზა', rec: 610 }];
+const MIG_N = MIG.reduce((a, m) => a + m.rec, 0);
+const OKR = [{ t: 'შემოსავლის გეგმა', kr: '₾ 490,000 კვარტალში', p: 84 }, { t: 'წევრთა ზრდა +18%', kr: '240 ახალი აბონემენტი', p: 61 }, { t: 'კორტების ათვისება 92%', kr: 'უქმი საათები −35%', p: 88 }];
+const Q_DONE = 61, Q_LEN = 92;
+const MONTHS = ['ნოე', 'დეკ', 'იან', 'თებ', 'მარ', 'აპრ', 'მაი', 'ივნ', 'ივლ', 'აგვ', 'სექ', 'ოქტ'];
+const MRR = [31.4, 32.8, 30.9, 34.2, 36.0, 37.5, 39.1, 38.4, 41.6, 43.9, 45.7];
+const G = Math.pow(MRR[10] / MRR[0], 1 / 10) - 1;
+const PROJ = MRR[10] * (1 + G);
+const MEMBERS = [
+  { n: 'ლევან ც.', d: 14, e: 6, dv: 0.5 }, { n: 'თამარ გ.', d: 12, e: 12, dv: 0.6 }, { n: 'ირაკლი ფ.', d: 18, e: 3, dv: 0.2 },
+  { n: 'სალომე ნ.', d: 6, e: 25, dv: 0.35 }, { n: 'ნიკა ა.', d: 3, e: 28, dv: 0.1 }
+].map(m => { const a = Math.min(m.d / 21, 1), b = 1 - m.e / 30, c = m.dv; return { ...m, a, b, c, R: Math.round((0.45 * a + 0.35 * b + 0.2 * c) * 100) }; });
+const DAYS = ['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვი'];
+const DAYS_FULL = ['ორშაბათი', 'სამშაბათი', 'ოთხშაბათი', 'ხუთშაბათი', 'პარასკევი', 'შაბათი', 'კვირა'];
+const BANDS = ['06', '09', '12', '15', '18', '21'];
+const LOAD = [[22, 38, 31, 46, 82, 61], [25, 41, 34, 49, 86, 64], [24, 39, 33, 47, 84, 62], [27, 43, 36, 52, 89, 67], [29, 45, 38, 58, 94, 72], [18, 71, 78, 66, 58, 40], [12, 64, 74, 59, 47, 28]];
+const tier = v => v > 85 ? ['პიკური', 25] : v > 65 ? ['მაღალი', 10] : v < 35 ? ['დაბალი', -15] : ['სტანდარტული', 0];
+const SEGS = [{ k: '30+ დღე პასიური', n: 214, c: 0.14 }, { k: '60+ დღე პასიური', n: 131, c: 0.09 }, { k: 'გაუქმებული ≤ 90 დღე', n: 58, c: 0.06 }];
+const eq = (k, e, r, c) => ({ k, e, r, c: c || EM });
+
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  stageRef = React.createRef();
+  navRef = React.createRef();
+  constructor(p) {
+    super(p);
+    const now = Date.now();
+    this.state = {
+      w: typeof window !== 'undefined' ? window.innerWidth : 1280, passes: 360, tick: 0, sync: 1, fresh: false, freshAt: 0,
+      log: [0, 1, 2, 3, 4].map(i => ({ t: fmtT(new Date(now - (i * 47 + 12) * 1000)), name: NAMES[(i + 2) % NAMES.length], gate: GATES[(i + 1) % GATES.length] })),
+      node: Math.max(0, Math.min(9, parseInt(this.props.defaultLogic ?? 0, 10) || 0)),
+      occ: [[1, 0, 1, 1, 0, 1], [0, 1, 1, 0, 1, 1], [1, 1, 0, 1, 0, 0]],
+      offline: false, queue: 0, layer: 2, mig: 0, migRun: false,
+      visits: 360, mins: 0.78, rate: 12, okr: 0, month: 10, mem: 0, cell: [4, 4], seg: 0, launched: false
+    };
+  }
+  mob() { return this.state.w < 1100; }
+  shift() { return this.mob() ? 0 : this.state.w >= 1400 ? 0.2 : 0.24; }
+  speed() { return reduced() ? 0 : SPEED[this.props.motion ?? 'live'] ?? 1; }
+  go(n) { this.setState({ node: (n + 10) % 10 }); if (this.rootRef.current) { const el = this.rootRef.current.parentElement; window.scrollTo && window.scrollTo({ top: 0, behavior: 'smooth' }); } }
+  componentDidMount() {
+    if (this.rootRef.current) { this._ro = new ResizeObserver(es => { const w = Math.round(es[0].contentRect.width); if (Math.abs(w - this.state.w) > 4) this.setState({ w }); }); this._ro.observe(this.rootRef.current); }
+    this._boot = setInterval(() => this.boot(), 80);
+    this._t = setInterval(() => {
+      this.setState(s => ({ tick: s.tick + 1, sync: s.sync >= 5 ? 1 : s.sync + 1, fresh: s.fresh && s.tick + 1 - s.freshAt < 3, queue: s.offline ? s.queue + 1 + (s.tick % 3) : s.queue }));
+      if ((this.props.autoPass ?? true) && this.speed() > 0 && this.state.node === 0 && this.state.tick % 7 === 6) this.pass(false);
+    }, 1000);
+    this._key = e => {
+      const tg = e.target && e.target.tagName; if (tg === 'INPUT' || tg === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') this.go(this.state.node + 1); else if (e.key === 'ArrowLeft') this.go(this.state.node - 1);
+    };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { this._ro && this._ro.disconnect(); clearInterval(this._boot); clearInterval(this._t); clearInterval(this._mt); window.removeEventListener('keydown', this._key); this._3d && this._3d.dispose(); }
+  boot() {
+    if (!window.THREE || !window.ArtronShowroom || !this.stageRef.current) return;
+    clearInterval(this._boot);
+    try {
+      const lite = this.mob() || !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+      this._3d = window.ArtronShowroom.create(this.stageRef.current, { lite, neon: NEON[this.props.neon ?? 'emerald'], motion: this.state.node === 0 ? this.speed() : 0, shift: this.shift(), onPass: () => this.pass(true) });
+    } catch (e) { console.warn('3D unavailable', e); }
+  }
+  componentDidUpdate() {
+    const nav = this.navRef.current;
+    if (nav && this._lastNode !== this.state.node) {
+      this._lastNode = this.state.node;
+      const b = nav.children[this.state.node];
+      if (b && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: Math.max(0, b.offsetLeft - nav.offsetLeft - (nav.clientWidth - b.offsetWidth) / 2), behavior: 'smooth' });
+    }
+    if (!this._3d) return;
+    this._3d.setNeon(NEON[this.props.neon ?? 'emerald'] ?? NEON.emerald);
+    this._3d.setMotion(this.state.node === 0 ? this.speed() : 0);
+    this._3d.setShift(this.shift());
+  }
+  pass(manual) {
+    const s = this.state, name = NAMES[s.passes % NAMES.length];
+    const gate = manual ? 'T-01 · MANUAL' : GATES[s.passes % GATES.length];
+    this.setState({ passes: s.passes + 1, fresh: true, freshAt: s.tick, log: [{ t: fmtT(new Date()), name, gate }, ...s.log].slice(0, 5) });
+    this._3d && this._3d.pass(name);
+  }
+  runMig() {
+    clearInterval(this._mt);
+    this.setState({ mig: 0, migRun: true });
+    this._mt = setInterval(() => {
+      const m = Math.min(1, this.state.mig + 0.02);
+      this.setState({ mig: m, migRun: m < 1 });
+      if (m >= 1) clearInterval(this._mt);
+    }, 50);
+  }
+  logic() {
+    const s = this.state, mob = this.mob(), L = LOGICS[s.node], o = {};
+    let eqs = [], kpi = '', kpiL = '';
+    if (s.node === 1) {
+      const cnt = s.occ.flat().reduce((a, b) => a + b, 0), pct = Math.round(cnt / 18 * 100);
+      const TR = ['გ. ბერიძე', 'ნ. ლომიძე', 'ლ. კაპანაძე', 'თ. გელაშვილი', 'ს. ჩხეიძე'];
+      const coach = (r, c) => TR[(2 * r + c) % TR.length];
+      const used = new Set(); s.occ.forEach((row, r) => row.forEach((v, c) => v && used.add(coach(r, c))));
+      eqs = [eq('ათვისების კოეფიციენტი', 'U = Σ oᵢⱼ / (3 × 6)', `${cnt}/18 = ${pct}%`), eq('გადაფარვის აკრძალვა', '[a₁,b₁) ∩ [a₂,b₂) = ∅', 'b₁ ≤ a₂ ∨ b₂ ≤ a₁', AM), eq('მწვრთნელის კონფლიქტი', '∀ m, t : Σᵢ xᵢ(m,t) ≤ 1', '0 კონფლიქტი', INK), eq('დროის რესურსი', `T = ${cnt} × 60 წთ`, `${cnt} სთ · ${used.size} მწვრთნელი`)];
+      kpi = pct + '%'; kpiL = 'ათვისება · დღეს 16:00–22:00';
+      o.hours = HOURS.map(h => h + ':00');
+      o.bkCols = mob ? '78px repeat(6,minmax(0,1fr))' : '150px repeat(6,minmax(0,1fr))';
+      o.bkRows = FAC.map((f, r) => ({ n: f.n, a: f.a, cells: s.occ[r].map((v, c) => ({
+        t: v ? (mob ? `${HOURS[c]}–${HOURS[c] + 1}` : `${HOURS[c]}:00–${HOURS[c] + 1}:00`) : '+', m: v ? (mob ? coach(r, c).split(' ')[1].slice(0, 5) + '.' : coach(r, c)) : '60 წთ',
+        bg: v ? 'rgba(16,185,129,0.16)' : 'transparent', bd: v ? 'rgba(16,185,129,0.6)' : 'rgba(186,230,253,0.22)', fg: v ? EM : DIM, mf: v ? '#F0F9FF' : DIM,
+        onClick: () => this.setState(st => ({ occ: st.occ.map((row, ri) => row.map((x, ci) => ri === r && ci === c ? 1 - x : x)) }))
+      })) }));
+    } else if (s.node === 2) {
+      const P = LAYERS.reduce((a, l) => a * (1 - l.e), 1), ly = LAYERS[s.layer];
+      eqs = [eq('ფენების ეფექტურობა', 'e = (0.92, 0.85, 0.97)', '3 ფენა', INK), eq('გარღვევის ალბათობა', 'P = Π(1 − eᵢ) = 0.08 · 0.15 · 0.03', (P * 100).toFixed(3) + '%', AM), eq(`არჩეული ფენა · ${ly.n}`, `P(გავლა) = 1 − ${ly.e}`, (100 - ly.e * 100).toFixed(0) + '%', INK), eq('ავტონომიის რეჟიმი', s.offline ? 'ქსელი = 0 → ლოკალური ვერიფიკაცია' : 'ქსელი = 1 → ღრუბელთან სინქრონი', 'Q = ' + s.queue, s.offline ? AM : EM)];
+      kpi = ((1 - P) * 100).toFixed(3) + '%'; kpiL = 'შეტევის შეჩერების ალბათობა';
+      o.rings = LAYERS.map((l, i) => {
+        const inner = i < 2 ? LAYERS[i + 1].s : 28, on = s.layer === i, out = i === 0 && s.offline;
+        return { n: l.n, e: l.e, s: l.s + '%', lt: ((l.s - inner) / 4 / l.s * 100).toFixed(2) + '%', ls: out ? 'dashed' : 'solid',
+          bd: out ? 'rgba(245,158,11,0.7)' : on ? 'rgba(16,185,129,0.8)' : 'rgba(186,230,253,0.2)',
+          bg: on ? 'rgba(16,185,129,0.07)' : 'rgba(6,9,14,0.35)', sh: on ? '0 0 28px -8px rgba(16,185,129,0.6)' : 'none', fg: on ? EM : out ? AM : MU,
+          onClick: () => this.setState({ layer: i }) };
+      });
+      o.coreTxt = s.offline ? 'ლოკალური · Q ' + s.queue : 'ონლაინ';
+      o.netBtn = s.offline ? 'ინტერნეტის აღდგენა · სინქრონი' : 'ინტერნეტის გათიშვის სიმულაცია';
+      o.netDot = s.offline ? AM : EM; o.netBd = s.offline ? 'rgba(245,158,11,0.6)' : 'rgba(186,230,253,0.24)';
+      o.toggleNet = () => this.setState(st => ({ offline: !st.offline, queue: st.offline ? 0 : st.queue }));
+    } else if (s.node === 3) {
+      const done = MIG.map(m => Math.round(m.rec * s.mig)), tot = done.reduce((a, b) => a + b, 0);
+      eqs = [eq('ნაკადების ჯამი', 'N = 2,180 + 1,460 + 610', fmt(MIG_N), INK), eq('გადმოტანილია', `n(t) = N × ${s.mig.toFixed(2)}`, fmt(tot)), eq('მთლიანობის შემოწმება', 'Σ hash(src) = Σ hash(dst)', s.mig >= 1 ? 'ემთხვევა' : 'მიმდინარეობს', s.mig >= 1 ? EM : AM), eq('სერვისის შეფერხება', 'Δt = 0', '0 წმ')];
+      kpi = fmt(tot); kpiL = 'ჩანაწერი ბირთვში · ' + fmt(MIG_N) + '-დან';
+      o.migRows = MIG.map((m, i) => ({ name: m.name, rec: fmt(m.rec), done: fmt(done[i]), w: (s.mig * 100).toFixed(1) + '%', share: (m.rec / MIG_N * 100).toFixed(1) + '%' }));
+      o.migState = s.migRun ? 'ნაკადი აქტიურია…' : s.mig >= 1 ? 'დასრულდა · 0 დანაკარგი' : 'მზადაა გასაშვებად';
+      o.migStateC = s.mig >= 1 ? EM : s.migRun ? AM : MU;
+      o.migBtn = s.mig >= 1 ? 'ხელახლა გაშვება' : 'მიგრაციის გაშვება';
+      o.runMig = () => this.runMig();
+    } else if (s.node === 4) {
+      const H = s.visits * s.mins * 30 / 60, Ha = s.visits * 0.04 * 30 / 3600, sv = (H - Ha) * s.rate;
+      eqs = [eq('ხელით რეგისტრაცია', `H = ${s.visits} × ${s.mins} წთ × 30 / 60`, H.toFixed(1) + ' სთ', INK), eq('ARTRON', `H′ = ${s.visits} × 0.04 წმ × 30 / 3600`, Ha.toFixed(2) + ' სთ', INK), eq('თვიური ეკონომია', `₾ = (H − H′) × ${s.rate}`, '₾ ' + fmt(sv)), eq('წლიური', '₾ × 12', '₾ ' + fmt(sv * 12), AM)];
+      kpi = Math.round(H - Ha) + ' სთ'; kpiL = 'თვეში ბრუნდება გუნდთან';
+      o.sliders = [
+        { k: 'ვიზიტი დღეში', lbl: String(s.visits), min: 50, max: 1000, step: 10, v: s.visits, on: e => this.setState({ visits: +e.target.value }) },
+        { k: 'ხელით რეგისტრაცია / ვიზიტი', lbl: s.mins.toFixed(2) + ' წთ', min: 0.2, max: 3, step: 0.02, v: s.mins, on: e => this.setState({ mins: +e.target.value }) },
+        { k: 'ადმინისტრატორის განაკვეთი', lbl: '₾ ' + s.rate + ' / სთ', min: 6, max: 40, step: 1, v: s.rate, on: e => this.setState({ rate: +e.target.value }) }
+      ];
+      o.cmp = [{ k: 'ხელით', w: '100%', bg: 'linear-gradient(90deg,rgba(245,158,11,0.5),#F59E0B)', v: H.toFixed(1) + ' სთ' }, { k: 'ARTRON', w: Math.max(0.5, Ha / H * 100).toFixed(2) + '%', bg: EM, v: Ha.toFixed(2) + ' სთ' }];
+    } else if (s.node === 5) {
+      const tau = Q_DONE / Q_LEN, ok = OKR[s.okr], pace = ok.p / 100 / tau, fc = ok.p * Q_LEN / Q_DONE;
+      eqs = [eq('კვარტლის გასვლა', `τ = ${Q_DONE} / ${Q_LEN} დღე`, (tau * 100).toFixed(1) + '%', AM), eq(`ტემპის ინდექსი · ${ok.t}`, `π = ${ok.p}% / ${(tau * 100).toFixed(1)}%`, pace.toFixed(2), pace >= 1 ? EM : AM), eq('კვარტლის პროგნოზი', `p̂ = ${ok.p} × ${Q_LEN} / ${Q_DONE}`, Math.round(fc) + '%', fc >= 100 ? EM : AM), eq('საჭირო დღიური ტემპი', `(100 − ${ok.p}) / ${Q_LEN - Q_DONE}`, Math.max(0, (100 - ok.p) / (Q_LEN - Q_DONE)).toFixed(2) + '% / დღე', INK)];
+      kpi = 'π ' + pace.toFixed(2); kpiL = pace >= 1 ? 'π ≥ 1 → გეგმა გადაჭარბდება' : 'π < 1 → საჭიროა აჩქარება';
+      o.okrCols = this.state.w < 640 ? 'minmax(0,1fr)' : 'repeat(3,minmax(0,1fr))';
+      o.okrs = OKR.map((k, i) => ({ t: k.t, kr: k.kr, p: k.p, pd: (k.p * 3.6).toFixed(1) + 'deg', td: (tau * 360).toFixed(1) + 'deg', pace: (k.p / 100 / tau).toFixed(2),
+        bg: s.okr === i ? 'rgba(16,185,129,0.06)' : 'transparent', bd: s.okr === i ? 'rgba(16,185,129,0.5)' : 'rgba(186,230,253,0.1)', onClick: () => this.setState({ okr: i }) }));
+    } else if (s.node === 6) {
+      const m = s.month, val = m < 11 ? MRR[m] : PROJ, prev = m > 0 ? (m < 11 ? MRR[m - 1] : MRR[10]) : null;
+      eqs = [eq('საშუალო თვიური ზრდა (CMGR)', 'g = (45.7 / 31.4)^(1/10) − 1', (G * 100).toFixed(2) + '%'), eq('შემდეგი თვის პროგნოზი', 'M₁₂ = 45.7 × (1 + g)', '₾ ' + PROJ.toFixed(1) + 'K', AM), eq('წლიური ტემპი', '(1 + g)¹² − 1', ((Math.pow(1 + G, 12) - 1) * 100).toFixed(1) + '%', INK),
+        eq(`არჩეული · ${MONTHS[m]}`, prev ? `Δ = ${val.toFixed(1)} / ${prev.toFixed(1)} − 1` : 'საწყისი თვე', prev ? ((val / prev - 1) * 100).toFixed(2) + '%' : '—', prev && val < prev ? AM : EM)];
+      kpi = '₾ 45.7K'; kpiL = 'MRR · სექტემბერი';
+      o.barGap = mob ? '4px' : '8px';
+      o.guides = [10, 20, 30, 40].map(v => ({ b: `calc(26px + ${(v / 50 * 100).toFixed(0)}% * 254 / 280)`, l: v + 'K' }));
+      o.bars = MONTHS.map((mm, i) => {
+        const v = i < 11 ? MRR[i] : PROJ, on = s.month === i, pj = i === 11;
+        return { m: mm, v: v.toFixed(1), h: (v / 50 * 100).toFixed(1) + '%', lo: on ? 1 : 0, ls: pj ? 'dashed' : 'solid',
+          bg: pj ? 'rgba(245,158,11,0.08)' : on ? 'linear-gradient(180deg,#10B981,#059669)' : 'linear-gradient(180deg,rgba(186,230,253,0.22),rgba(186,230,253,0.06))',
+          bd: pj ? 'rgba(245,158,11,0.7)' : on ? 'rgba(167,243,208,0.6)' : 'rgba(186,230,253,0.12)', sh: on ? '0 0 22px -4px rgba(16,185,129,0.7)' : 'none', mc: on ? INK : DIM,
+          onClick: () => this.setState({ month: i }) };
+      });
+    } else if (s.node === 7) {
+      const mb = MEMBERS[s.mem], hi = MEMBERS.filter(x => x.R >= 60).length;
+      eqs = [eq('რისკის ფორმულა', 'R = 0.45·min(d/21, 1) + 0.35·(1 − e/30) + 0.20·Δv', 'Σw = 1', INK), eq(`${mb.n} · d=${mb.d}, e=${mb.e}, Δv=${mb.dv}`, `R = 0.45·${mb.a.toFixed(2)} + 0.35·${mb.b.toFixed(2)} + 0.20·${mb.c.toFixed(2)}`, mb.R + '%', mb.R >= 60 ? AM : EM), eq('ზღვარი', 'R ≥ 60% → ავტომატური შეთავაზება', mb.R >= 60 ? 'გააქტიურდა' : 'მონიტორინგი', mb.R >= 60 ? AM : MU)];
+      kpi = String(hi); kpiL = 'წევრი ზღვარს ზემოთ · R ≥ 60%';
+      o.orbits = [25, 50, 75, 100].map(v => ({ s: v + '%', l: v + '%', ls: 'solid', bd: 'rgba(186,230,253,0.1)', fg: DIM })).concat([{ s: '60%', l: 'ზღვარი 60%', ls: 'dashed', bd: 'rgba(245,158,11,0.55)', fg: AM }]);
+      o.members = MEMBERS.map((x, i) => {
+        const th = (-90 + i * 72) * Math.PI / 180, r = x.R / 2, on = s.mem === i, c = x.R >= 60 ? AM : EM;
+        return { n: x.n, r: x.R, x: (50 + r * Math.cos(th)).toFixed(2) + '%', y: (50 + r * Math.sin(th)).toFixed(2) + '%', c, d: on ? '14px' : '10px', glow: on ? '16px' : '8px', ring: on ? c : 'transparent', fg: on ? INK : MU, onClick: () => this.setState({ mem: i }) };
+      });
+    } else if (s.node === 8) {
+      const [d, b] = s.cell, Lv = LOAD[d][b], [tn, k] = tier(Lv), P = 40 * (1 + k / 100), avg = LOAD[d].reduce((a, x) => a + x, 0) / 6;
+      eqs = [eq('დატვირთვა', `L(${DAYS_FULL[d]}, ${BANDS[b]}:00)`, Lv + '%', INK), eq('ფასის ფუნქცია', 'k(L) = +25 | +10 | 0 | −15 %', 'L>85 | >65 | ≥35 | <35', AM), eq('საბოლოო ფასი', `P = 40 × (1 ${k >= 0 ? '+' : '−'} ${(Math.abs(k) / 100).toFixed(2)})`, '₾ ' + P.toFixed(0)), eq('დღის საშუალო', 'ρ = Σ L / 6', avg.toFixed(1) + '%', INK)];
+      kpi = '₾ ' + P.toFixed(0); kpiL = tn + ' ტარიფი · ' + DAYS_FULL[d] + ' ' + BANDS[b] + ':00';
+      o.bands = BANDS;
+      o.heat = LOAD.map((row, di) => ({ d: DAYS[di], cells: row.map((v, bi) => {
+        const on = di === d && bi === b;
+        return { l: v, bg: `rgba(16,185,129,${(v / 100 * 0.7).toFixed(2)})`, bd: on ? INK : v > 85 ? AM : 'rgba(186,230,253,0.06)', fg: v > 55 ? INK : MU, onClick: () => this.setState({ cell: [di, bi] }) };
+      }) }));
+    } else if (s.node === 9) {
+      const sg = SEGS[s.seg], R = Math.round(sg.n * sg.c), rev = R * 95, sv = R * 27;
+      eqs = [eq('მოსალოდნელი დაბრუნება', `R = ${sg.n} × ${(sg.c * 100).toFixed(0)}%`, String(R), INK), eq('აღდგენილი შემოსავალი', `₾ = ${R} × 95`, '₾ ' + fmt(rev) + ' / თვე'), eq('მოზიდვის ეკონომია', `Δ = ${R} × (35 − 8)`, '₾ ' + fmt(sv)), eq('ხარჯის თანაფარდობა', '35 / 8', '4.38×', AM)];
+      kpi = String(R); kpiL = s.launched ? 'წევრი დაბრუნდა · კამპანია აქტიურია' : 'წევრი დაბრუნდება · პროგნოზი';
+      o.segCols = this.state.w < 640 ? 'minmax(0,1fr)' : 'repeat(3,minmax(0,1fr))';
+      o.segs = SEGS.map((x, i) => ({ k: x.k, n: x.n, c: (x.c * 100).toFixed(0) + '%', fg: s.seg === i ? INK : MU, bg: s.seg === i ? 'rgba(16,185,129,0.08)' : 'transparent', bd: s.seg === i ? 'rgba(16,185,129,0.55)' : 'rgba(186,230,253,0.12)', onClick: () => this.setState({ seg: i, launched: false }) }));
+      o.dots = Array.from({ length: sg.n }, (_, i) => {
+        const hit = i < R;
+        return { bg: hit ? (s.launched ? EM : 'rgba(16,185,129,0.4)') : 'rgba(186,230,253,0.13)', sh: hit && s.launched ? '0 0 6px rgba(16,185,129,0.8)' : 'none' };
+      });
+      o.launchBtn = s.launched ? 'გადატვირთვა' : 'კამპანიის გაშვება';
+      o.launch = () => this.setState(st => ({ launched: !st.launched }));
+    }
+    return { L: { ix: pad(s.node + 1), t: L.t, v: L.v, code: L.code, stage: L.stage, eqs, kpi, kpiL }, ...o };
+  }
+  renderVals() {
+    const s = this.state, mob = this.mob(), narrow = s.w < 520, hero = s.node === 0;
+    const vis = {}; for (let i = 1; i < 10; i++) vis['v' + i] = s.node === i;
+    return {
+      rootRef: this.rootRef, stageRef: this.stageRef, navRef: this.navRef, desk: !mob, passes: s.passes,
+      isHero: hero, isSheet: !hero, heroScrim: hero && !mob, ...vis,
+      ...(hero ? {} : this.logic()),
+      goHome: () => this.go(0), goNext: () => this.go(s.node + 1), goPrev: () => this.go(s.node - 1),
+      rail: LOGICS.map((l, i) => {
+        const on = s.node === i;
+        return { ix: pad(i + 1), s: l.s, cur: on ? 'page' : 'false', fw: on ? 600 : 500, fg: on ? INK : MU, ixc: on ? AM : DIM,
+          bd: on ? EM : 'rgba(186,230,253,0.16)', sh: on ? 'inset 0 1px 0 #10B981, 0 -8px 16px -10px rgba(16,185,129,0.9)' : 'none', onClick: () => this.go(i) };
+      }),
+      railCol: mob ? '104px' : 'minmax(0,1fr)',
+      passFg: s.fresh ? EM : INK, passBd: s.fresh ? 'rgba(16,185,129,0.7)' : 'rgba(186,230,253,0.18)',
+      headPad: mob ? '18px 20px 0' : '28px clamp(24px,4vw,64px) 0',
+      mainPad: mob ? '28px 20px 8px' : '20px clamp(24px,4vw,64px) 40px',
+      sheetPad: mob ? '28px 16px 32px' : '40px clamp(24px,4vw,64px) 48px',
+      sheetCols: mob ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1.618fr)', sheetGap: mob ? '28px' : 'clamp(32px,4vw,64px)',
+      h2fs: mob ? '28px' : 'clamp(30px,2.8vw,42px)', kpiFs: narrow ? '44px' : 'clamp(48px,4.4vw,64px)',
+      cardPad: mob ? '0 16px 20px' : '0 clamp(24px,4vw,64px) 32px',
+      cardCols: mob ? 'minmax(0,1fr)' : 'minmax(0,1.618fr) minmax(0,1fr)',
+      logCols: narrow ? '62px minmax(0,1fr) auto' : '70px minmax(0,1fr) auto auto',
+      sPos: mob && hero ? 'relative' : 'absolute', sH: mob ? '420px' : '100vh', sOp: hero ? 1 : 0, sVis: hero ? 'visible' : 'hidden', sPe: hero ? 'auto' : 'none',
+      h1a: mob ? '46px' : 'clamp(52px,5.4vw,84px)', h1b: mob ? '26px' : 'clamp(28px,2.6vw,40px)',
+      mFs: narrow ? '30px' : 'clamp(34px,3.2vw,46px)', mGap: narrow ? '14px' : '24px',
+      log: s.log.map((r, i) => {
+        const hot = i === 0 && s.fresh;
+        return { t: r.t, name: r.name, gate: narrow ? '' : r.gate, fg: hot ? EM : i === 0 ? INK : MU, bg: hot ? 'rgba(16,185,129,0.07)' : 'transparent' };
+      }),
+      status: [
+        { k: 'ტურნიკეტები', v: '4 / 4 ონლაინ', dot: EM },
+        { k: 'IoT სენსორები', v: '38 / 38', dot: EM },
+        { k: 'ლოკალური სერვერი', v: 'აქტიური', dot: EM },
+        { k: 'ღრუბელთან სინქრონი', v: s.sync + ' წმ წინ', dot: '#BAE6FD' },
+        { k: 'დაშიფვრა', v: 'AES-256 · TLS 1.3', dot: AM }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

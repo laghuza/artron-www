@@ -5,16 +5,16 @@ describe('Phase 46: Arena & Stadiums Claude Design Compliance', () => {
   it('should have arena module defined with exact Claude Design copy and camera tags', () => {
     const arenaMod = VENUES_MODULES.find((m) => m.id === 'arena');
     expect(arenaMod).toBeDefined();
-    expect(arenaMod?.headline).toBe('არენა ერთი ეკრანიდან.');
-    expect(arenaMod?.kicker).toBe('VER 01 / MULTIPURPOSE ARENA');
+    expect(arenaMod?.headline).toBe('მრავალფუნქციური არენის\nცენტრალიზებული კონტროლი.');
+    expect(arenaMod?.kicker).toBe('VEN-05 / MULTIPURPOSE ARENA');
     expect(arenaMod?.cameraTags).toEqual([
       'WIDE ESTABLISH',
       'DISCIPLINE PASS',
       'TECH CLOSE-UP',
       'STANDARD SWEEP',
     ]);
-    expect(arenaMod?.specRows[0][2].value).toBe('180+');
-    expect(arenaMod?.specRows[3][2].label).toBe('წნევის ნორმა');
+    expect(arenaMod?.specRows[0][2].value).toBe('180+ საერთაშორისო ივენთი');
+    expect(arenaMod?.specRows[3][2].label).toBe('ჰაერის ხარისხი & HVAC');
   });
 
   it('should have all 4 camera focus poses defined for arena matching Claude Design', () => {

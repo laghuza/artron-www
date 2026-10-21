@@ -47,8 +47,8 @@ export interface MirrorDimension {
 }
 
 export const SPEC_TILE_CATEGORIES: SpecTileCategory[] = [
-  { title: 'მასშტაბი', subtitle: 'SCALE & CAPACITY' },
-  { title: 'დისციპლინები', subtitle: 'DISCIPLINES' },
+  { title: 'გამტარუნარიანობა', subtitle: 'SCALE & CAPACITY' },
+  { title: 'სპორტული ზონები', subtitle: 'DISCIPLINES' },
   { title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' },
-  { title: 'უმაღლესი სტანდარტი', subtitle: 'COMPLIANCE' },
+  { title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' },
 ];

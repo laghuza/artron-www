@@ -25,10 +25,10 @@ describe('SPORT-OS Console Design 2: 3D Digital Twins & Specifications', () => {
 
     it('should have 4 standard spec tile categories', () => {
       expect(SPEC_TILE_CATEGORIES).toHaveLength(4);
-      expect(SPEC_TILE_CATEGORIES[0].title).toBe('მასშტაბი');
-      expect(SPEC_TILE_CATEGORIES[1].title).toBe('დისციპლინები');
+      expect(SPEC_TILE_CATEGORIES[0].title).toBe('გამტარუნარიანობა');
+      expect(SPEC_TILE_CATEGORIES[1].title).toBe('სპორტული ზონები');
       expect(SPEC_TILE_CATEGORIES[2].title).toBe('საკვანძო ტექნოლოგია');
-      expect(SPEC_TILE_CATEGORIES[3].title).toBe('უმაღლესი სტანდარტი');
+      expect(SPEC_TILE_CATEGORIES[3].title).toBe('სტანდარტები & უსაფრთხოება');
     });
   });
 

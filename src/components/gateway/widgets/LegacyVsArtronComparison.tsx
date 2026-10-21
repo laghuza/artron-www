@@ -18,7 +18,7 @@ export const LegacyVsArtronComparison: React.FC = () => {
     },
     {
       titleKey: 'comparison.leakage_title',
-      legacyNote: 'ძველი მეთოდი: 10-15% გაპარვა',
+      legacyNote: 'ძველი მეთოდი: 10-15% უნებართვო შესვლა',
       legacyNoteEn: 'Legacy: 10-15% unpaid entries',
       legacyNoteRu: 'Старый метод: 10-15% неоплачено',
       artronKey: 'comparison.leakage_artron',

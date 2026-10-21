@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { MirrorModule } from '../data/mirrorDataTypes';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MirrorSubNavProps {
   modules: MirrorModule[];
@@ -18,6 +19,7 @@ export const MirrorSubNav: React.FC<MirrorSubNavProps> = ({
   onSelectModule,
   onNextModule,
 }) => {
+  const { locale } = useLanguage();
   const itemRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
 
   React.useEffect(() => {
@@ -51,7 +53,7 @@ export const MirrorSubNav: React.FC<MirrorSubNavProps> = ({
           })}
         </div>
         <span className="font-mono text-[9px] tracking-widest text-slate-400 font-tabular">
-          {String(activeModuleIndex + 1).padStart(2, '0')} / {String(modules.length).padStart(2, '0')} · ← →
+          {String(activeModuleIndex + 1).padStart(2, '0')} / {String(modules.length).padStart(2, '0')}
         </span>
       </div>
 
@@ -93,16 +95,6 @@ export const MirrorSubNav: React.FC<MirrorSubNavProps> = ({
               </button>
             );
           })}
-          {onNextModule && (
-            <button
-              type="button"
-              onClick={onNextModule}
-              className="flex items-center gap-1.5 px-3 py-1 sm:py-1.5 rounded-full cursor-pointer font-mono text-[9.5px] tracking-[0.2em] bg-transparent border border-dashed border-white/20 hover:border-white/40 hover:bg-white/[0.08] transition-all duration-200 whitespace-nowrap flex-shrink-0 select-none active:scale-[0.97]"
-              style={{ color: accentColor }}
-            >
-              NEXT →
-            </button>
-          )}
         </div>
       </div>
     </div>

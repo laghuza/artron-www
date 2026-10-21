@@ -5,9 +5,9 @@ describe('Octagon Combat Arts - Claude Design & Wall Correction Compliance', () 
   it('should have octagon module defined with exact Claude Design copy and camera tags', () => {
     const octMod = VENUES_MODULES.find((m) => m.id === 'octagon');
     expect(octMod).toBeDefined();
-    expect(octMod?.name).toBe('დოჯოები და რინგი');
+    expect(octMod?.name).toBe('საბრძოლო დარბაზები და რინგი');
     expect(octMod?.kicker).toBe('VEN-04 / COMBAT ARTS');
-    expect(octMod?.headline).toBe('ყოველი დარტყმა აღრიცხულია.');
+    expect(octMod?.headline).toBe('საბრძოლო ხელოვნების ზუსტი\nტელემეტრია და უსაფრთხოება.');
     expect(octMod?.cameraTags).toEqual([
       'WIDE ESTABLISH',
       'DISCIPLINE PASS',

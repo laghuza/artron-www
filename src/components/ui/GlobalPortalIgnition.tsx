@@ -36,6 +36,11 @@ export const usePortalIgnition = () => {
   return context;
 };
 
+export const useSafePortalIgnition = () => {
+  const context = useContext(PortalIgnitionContext);
+  return context ?? null;
+};
+
 export const PortalIgnitionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();

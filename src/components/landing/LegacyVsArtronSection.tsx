@@ -56,7 +56,7 @@ export const LegacyVsArtronSection: React.FC = () => {
       accentColor: '#00ff87',
       legacy: {
         title: t('comparison.leakage_legacy'),
-        detail: '10-15% გაპარული ან გაუვალიდებელი ვიზიტორი, მეგობრული დაშვებები',
+        detail: '10-15% არაავტორიზებული ან გაუვალიდებელი ვიზიტორი, მეგობრული დაშვებები',
         detailEn: '10-15% unpaid / unverified visits, unauthorized friend entries',
         detailRu: '10-15% неоплаченных визитов, пропуски по знакомству',
         status: 'negative',
@@ -327,7 +327,7 @@ export const LegacyVsArtronSection: React.FC = () => {
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white">
                 {locale === 'ka' 
-                  ? 'გადმოიტანეთ თქვენი არსებული ბაზა უმტკივნეულოდ' 
+                  ? 'გადმოიტანეთ თქვენი არსებული ბაზა შეუფერხებლად' 
                   : locale === 'ru' 
                     ? 'Перенесите вашу базу без задержек и потерь' 
                     : 'Seamlessly Migrate Your Existing Database in 48 Hours'}

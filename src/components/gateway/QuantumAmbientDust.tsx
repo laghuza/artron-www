@@ -61,7 +61,7 @@ export const QuantumAmbientDust: React.FC<{
       };
     });
 
-    let startTime = performance.now();
+    const startTime = performance.now();
 
     const render = (time: number) => {
       const elapsed = time - startTime;

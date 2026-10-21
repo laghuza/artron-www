@@ -21,17 +21,7 @@ interface DeviceItem {
   isCurrent?: boolean;
 }
 
-export const SecurityAuditVisualizer: React.FC<SecurityAuditVisualizerProps> = ({ subChapterId }) => {
-  // If subChapterId is explicitly 08.5, render the dedicated deep-dive IP Whitelist stage
-  if (subChapterId === '08.5') {
-    return <IpWhitelistSecurityStage />;
-  }
-
-  // If subChapterId is explicitly 08.6, render the dedicated deep-dive Dynamic RBAC & CASL stage
-  if (subChapterId === '08.6') {
-    return <DynamicRbacSecurityStage />;
-  }
-
+const StandardSecurityAuditView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<DemoTab>('passkey');
   const [passkeyState, setPasskeyState] = useState<'IDLE' | 'SCANNING' | 'SUCCESS'>('IDLE');
   const [qrState, setQrState] = useState<'WAITING' | 'PAIRING' | 'AUTHENTICATED'>('WAITING');
@@ -283,4 +273,14 @@ export const SecurityAuditVisualizer: React.FC<SecurityAuditVisualizerProps> = (
       </div>
     </div>
   );
+};
+
+export const SecurityAuditVisualizer: React.FC<SecurityAuditVisualizerProps> = ({ subChapterId }) => {
+  if (subChapterId === '08.5') {
+    return <IpWhitelistSecurityStage />;
+  }
+  if (subChapterId === '08.6') {
+    return <DynamicRbacSecurityStage />;
+  }
+  return <StandardSecurityAuditView />;
 };

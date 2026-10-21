@@ -242,7 +242,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       href: '/#dashboard-features?tab=migration',
       tab: 'migration',
-      label: locale === 'ka' ? 'ბაზის უმტკივნეულო მიგრაცია' : locale === 'ru' ? 'Бесшовный перенос базы' : 'Zero-Downtime Migration',
+      label: locale === 'ka' ? 'მონაცემთა შეუფერხებელი მიგრაცია' : locale === 'ru' ? 'Бесшовный перенос базы' : 'Zero-Downtime Migration',
       desc: locale === 'ka' ? 'Excel/CSV/1C-დან 48 საათში, 0 დანაკარგი' : locale === 'ru' ? 'Перенос из Excel/1C за 48 часов' : 'From Excel/CSV/1C in 48h, 0 data loss',
       icon: FileSpreadsheet,
       badge: 'Zero-Downtime',
@@ -300,7 +300,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       href: '/#dashboard-features?tab=winback',
       tab: 'winback',
-      label: locale === 'ka' ? 'დაბრუნების ROI (Win-back)' : locale === 'ru' ? 'Возврат клиентов (Win-back)' : 'Win-Back Analytics',
+      label: locale === 'ka' ? 'წევრების დაბრუნება (Win-back)' : locale === 'ru' ? 'Возврат клиентов (Win-back)' : 'Win-Back Analytics',
       desc: locale === 'ka' ? 'პასიური წევრების დაბრუნების კამპანიები' : locale === 'ru' ? 'Кампании по возврату пассивных членов' : 'Lapsed member reactivation ROI',
       icon: RotateCcw,
       badge: 'Retention',
@@ -310,10 +310,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   /* ── Main Navigation Links (Chronological Page Sequence) ── */
   const navLinks = [
-    { href: '/#pure-sports-mirror', label: t('nav_mirror') || 'სარკე', dropdown: 'none' as const },
-    { href: '/#ecosystem',          label: t('nav_sync') || 'სინქრონულობა', dropdown: 'none' as const },
-    { href: '/#dashboard-features', label: t('nav_control_panel') || 'B2B პანელი',  dropdown: 'control' as const },
-    { href: '/#mobile-app',         label: t('nav_athlete_freedom') || 'სპორტული თავისუფლება', dropdown: 'none' as const },
+    { href: '/#pure-sports-mirror', label: t('nav_mirror') || (locale === 'ka' ? 'ინფრასტრუქტურა' : locale === 'ru' ? 'Инфраструктура' : 'Infrastructure'), dropdown: 'none' as const },
+    { href: '/#ecosystem',          label: t('nav_sync') || (locale === 'ka' ? 'ეკოსისტემა' : locale === 'ru' ? 'Экосистема' : 'Ecosystem'), dropdown: 'none' as const },
+    { href: '/#dashboard-features', label: t('nav_control_panel') || (locale === 'ka' ? 'მართვის ცენტრი' : locale === 'ru' ? 'Центр управления' : 'Control Hub'),  dropdown: 'control' as const },
+    { href: '/#mobile-app',         label: t('nav_athlete_freedom') || (locale === 'ka' ? 'მობილური აპი' : locale === 'ru' ? 'Мобильное приложение' : 'Mobile App'), dropdown: 'none' as const },
     { href: '/#ai-intelligence',    label: t('nav_ai') || (locale === 'ka' ? 'AI ასისტენტი' : locale === 'ru' ? 'AI Ассистент' : 'AI Assistant'), dropdown: 'none' as const },
     { href: '/#pricing',            label: t('nav_pricing'),   dropdown: 'none' as const },
     { href: '/#partner-ecosystem',  label: t('nav_partners'),  dropdown: 'none' as const },
@@ -327,7 +327,7 @@ export const Header: React.FC<HeaderProps> = ({
     activeNav === '/#roi' ||
     activeNav.startsWith('/#analytics-');
   const isAnalyticsActive = activeNav.startsWith('/#analytics-showcase') || activeNav === '/#roi' || activeNav.startsWith('/#analytics-');
-  const systemAccessLabel = locale === 'ka' ? 'Sport OS-ის ჩართვა' : locale === 'ru' ? 'Запуск Sport OS' : 'Launch Sport OS';
+  const systemAccessLabel = locale === 'ka' ? 'Sport OS დემო' : locale === 'ru' ? 'Демо Sport OS' : 'Sport OS Demo';
   const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა & IOT' : locale === 'ru' ? 'Спортивная Экосистема & IOT' : 'SPORTS & IOT ECOSYSTEM';
 
   /* ── Glass header surface ── */
@@ -760,6 +760,26 @@ export const Header: React.FC<HeaderProps> = ({
             className="xl:hidden overflow-hidden border-t border-white/[0.06] bg-[#0B0E14]/98 backdrop-blur-2xl max-h-[85vh] overflow-y-auto"
           >
             <div className="px-4 pb-4 pt-2 flex flex-col gap-1">
+              {/* Quick Role Switcher for Mobile Navigation */}
+              <div className="grid grid-cols-2 gap-2 mb-2 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={(e) => handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, '/#dashboard-features')}
+                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg bg-[#00A3FF]/15 border border-[#00A3FF]/30 text-[#00E5FF] text-[11px] font-bold cursor-pointer active:scale-95 transition-transform"
+                >
+                  <Cpu className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{locale === 'ka' ? 'დარბაზი (B2B)' : locale === 'ru' ? 'Клуб (B2B)' : 'Gym (B2B)'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, '/#mobile-app')}
+                  className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg bg-[#10B981]/15 border border-[#10B981]/30 text-[#34D399] text-[11px] font-bold cursor-pointer active:scale-95 transition-transform"
+                >
+                  <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{locale === 'ka' ? 'წევრი (B2C)' : locale === 'ru' ? 'Член (B2C)' : 'Member (B2C)'}</span>
+                </button>
+              </div>
+
               {navLinks.map((link, i) => {
                 const isControlPanelLink = link.dropdown === 'control';
                 const isActive = isControlPanelLink

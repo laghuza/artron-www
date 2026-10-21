@@ -69,12 +69,12 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
 
   const btnLabel =
     state.phase === 'idle'
-      ? 'დაჯავშნე, გადაიხადე & გამოსცადე საშვი'
+      ? 'გამოსცადეთ: დაჯავშნეთ და გააღეთ ტურნიკეტი'
       : state.phase === 'processing'
-      ? 'მუშავდება გადახდა & სკანირება...'
+      ? 'გადახდა დადასტურდა · ტურნიკეტი იღება...'
       : state.phase === 'transit'
-      ? 'კარი ღიაა · წვდომა დაშვებულია'
-      : 'ჯავშანი & დაშვება წარმატებულია (თავიდან)';
+      ? 'ტურნიკეტი ღიაა · კეთილი იყოს თქვენი მობრძანება!'
+      : 'შესვლა დაფიქსირდა (თავიდან მოსინჯვა)';
 
   return (
     <div className="flex-none preserve-3d relative">
@@ -88,9 +88,9 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
             boxShadow: isSynced ? '0 0 14px -2px #10B981' : busy ? '0 0 14px -2px #F59E0B' : 'none',
           }}
         >
-          01
+          03
         </span>
-        <span className="font-sans font-medium text-slate-300">B2C · მომხმარებლის საშვი</span>
+        <span className="font-sans font-medium text-slate-300">03 · წევრის მობილური აპლიკაცია</span>
       </div>
 
       {/* 3D Smartphone Frame */}
@@ -110,7 +110,25 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
           style={{ transform: 'translateZ(-7px)' }}
         />
 
-        <div className="relative w-[334px] p-2.5 rounded-[56px] bg-gradient-to-b from-[#303C4B] via-[#1B2330] to-[#1E1710] shadow-[0_2px_2px_rgba(0,0,0,0.6),0_35px_80px_-20px_rgba(0,0,0,0.95)]">
+        <div
+          className="relative w-[334px] p-2.5 rounded-[56px] shadow-[0_2px_2px_rgba(0,0,0,0.6),0_35px_80px_-20px_rgba(0,0,0,0.95)]"
+          style={{
+            background: 'linear-gradient(172deg, #303C4B 0%, #1B2330 30%, #111620 72%, #1E1710 92%, #3A2510 100%)',
+          }}
+        >
+          {/* Ambient Top Sheen & Bottom Amber Rim Overlays */}
+          <div
+            className="absolute inset-0 rounded-[56px] pointer-events-none"
+            style={{
+              background: 'linear-gradient(135deg, rgba(224,242,254,0.24) 0%, rgba(56,189,248,0.06) 30%, transparent 48%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 rounded-[56px] pointer-events-none"
+            style={{
+              background: 'linear-gradient(0deg, rgba(245,158,11,0.2) 0%, rgba(180,83,9,0.06) 14%, transparent 28%)',
+            }}
+          />
           {/* Side Hardware Buttons */}
           <div className="absolute -right-1 top-42 w-1.5 h-19 rounded-r bg-gradient-to-r from-[#111620] to-[#3A4658]" />
           <div className="absolute -left-1 top-32 w-1.5 h-8 rounded-l bg-gradient-to-l from-[#111620] to-[#3A4658]" />
@@ -162,15 +180,15 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
                       }}
                     />
                     {state.dispatch && (
-                      <span className="text-emerald-400 font-bold text-[9px]">[LIVE] DISPATCH // ACK {state.ackMs}ms</span>
+                      <span className="text-emerald-400 font-bold text-[9px]">[LIVE] დადასტურება // {state.ackMs} მწმ</span>
                     )}
                   </div>
                   <span className="w-3.5 h-3.5 rounded-full bg-slate-900 border border-slate-700/60" />
                 </div>
                 {state.dispatch && (
                   <div className="px-3 pb-2 text-[10px] text-slate-300 font-sans leading-tight">
-                    <div className="text-sky-100 font-semibold truncate">Tbilisi Arena // კორტი #1 მზადაა</div>
-                    <div className="text-slate-400 text-[9px]">19:00 – 20:00 · <span className="text-sky-400">მწვრთნელი ადგილზეა</span></div>
+                    <div className="text-sky-100 font-semibold truncate">დაჯავშნილია: კორტი #1</div>
+                    <div className="text-slate-400 text-[9px]">19:00 – 20:00 · <span className="text-sky-400">მწვრთნელი გელოდებათ</span></div>
                   </div>
                 )}
               </div>
@@ -185,9 +203,9 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
               <div className="flex-1 flex flex-col gap-3 p-4 pt-1">
                 {/* Athlete ID Card */}
                 <div className="flex flex-col gap-1 p-2.5 rounded-xl bg-[#05080C] border border-white/5 text-[10.5px]">
-                  <span className="text-slate-500 text-[9px] tracking-wider">ATHLETE // ID: 4471</span>
+                  <span className="text-slate-500 text-[9px] tracking-wider">სპორტსმენი // ID: 4471</span>
                   <span className="text-slate-200 font-semibold flex items-center justify-between">
-                    გიორგი მ. <span className="text-emerald-400 text-[10px]">[PASS ACTIVE]</span>
+                    გიორგი მ. <span className="text-emerald-400 text-[10px]">[საშვი აქტიურია]</span>
                   </span>
                 </div>
 
@@ -201,9 +219,9 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
                   )}
 
                   <div className="flex justify-between text-[10px] tracking-wider">
-                    <span className="text-slate-400">DYNAMIC PASS</span>
+                    <span className="text-slate-400">დინამიური QR საშვი</span>
                     <span style={{ color: ttlColor }} className="font-bold tabular-nums">
-                      TTL {ttlSec}s
+                      განახლება: {ttlSec} წმ
                     </span>
                   </div>
 
@@ -224,8 +242,8 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
                     {/* Success Overlay */}
                     {isSynced && (
                       <div className="absolute inset-0 rounded-xl bg-emerald-500/95 flex flex-col items-center justify-center gap-1 text-slate-950 font-bold">
-                        <span className="text-sm tracking-wider">ACCESS · OK</span>
-                        <span className="text-[10px] font-sans font-medium text-slate-900">43 / 60 · +50 ₾</span>
+                        <span className="text-sm tracking-wider">დაშვება · ნებადართულია</span>
+                        <span className="text-[10px] font-sans font-medium text-slate-900">დარბაზში: 43 / 60 · +50 ₾</span>
                       </div>
                     )}
                   </div>
@@ -240,9 +258,9 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
 
                 {/* State Tag */}
                 <div className="flex justify-between text-[10px] tracking-widest text-slate-500">
-                  <span>STATE</span>
+                  <span>სტატუსი</span>
                   <span style={{ color: isSynced ? '#10B981' : busy ? '#F59E0B' : '#94A3B8' }}>
-                    {isSynced ? 'SYNCED' : busy ? 'PROCESSING' : 'STANDBY'}
+                    {isSynced ? 'დაშვებულია' : busy ? 'მუშავდება' : 'მზადყოფნა'}
                   </span>
                 </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Image from "next/image";
 import { MapPin, Search, ChevronDown } from "lucide-react";
 import { EnneaVenue, EnneaRegion, EnneaStrings } from "./types";
 import { soundEngine } from "./EnneaAudioEngine";
@@ -158,6 +159,8 @@ export const EnneaVenueFilterList: React.FC<EnneaVenueFilterListProps> = ({
         <div className="relative flex items-center">
           <Search className="w-3.5 h-3.5 absolute left-3 text-[#6E8DA0] pointer-events-none" />
           <input
+            id="venue-fast-search"
+            name="venueSearch"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -196,9 +199,11 @@ export const EnneaVenueFilterList: React.FC<EnneaVenueFilterListProps> = ({
               <span className="absolute left-0 top-0 bottom-0 w-[2px] opacity-0 group-hover:opacity-100 transition-opacity bg-[#00A3FF] shadow-[0_0_10px_#00A3FF]" />
               <div className="flex items-center gap-3 min-w-0">
                 {venue.logoSrc ? (
-                  <img
+                  <Image
                     src={venue.logoSrc}
                     alt={venue.name}
+                    width={28}
+                    height={28}
                     className="w-7 h-7 rounded-full object-cover shrink-0 border border-white/20"
                   />
                 ) : (

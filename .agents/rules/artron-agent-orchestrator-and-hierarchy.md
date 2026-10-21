@@ -30,6 +30,7 @@ This document defines the strict organizational structure, role responsibilities
 7. **`artron-brand-guidelines`** — Brandbook Guardian (Persona, Philosophy, Tone of Voice).
 8. **`artron-ui-ux-designer-agent`** — Lead UI/UX Designer (Design System, CSS tokens `#00A3FF`, Framer Motion 60 FPS, Dual-Core Showcase, 3-Language KA/EN/RU layouts).
 9. **`artron-cognitive-psychology-agent`** — Cognitive UX & Behavioral Psychology Specialist (Emotional Journey Mapping, Cognitive Load, Trust Architecture, Fear/Friction Reduction).
+10. **`artron-ux-writer-microcopy-agent`** — Senior UX Writer & Microcopy Specialist (In-App Microcopy, Action-Oriented Buttons, Error/Empty States, Tooltips, Multi-Audience ToV).
 
 ---
 
