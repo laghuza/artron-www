@@ -45,7 +45,7 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
 
   return (
     <div
-      className="flex-1 max-w-[560px] relative preserve-3d"
+      className="flex-1 max-w-[560px] relative lg:preserve-3d mobile-flat-3d"
       style={{
         transformStyle: 'preserve-3d',
         transform: 'rotateY(7deg) translateZ(-24px)',
@@ -66,17 +66,17 @@ export const B2BConsoleCard: React.FC<B2BConsoleCardProps> = ({ state, onOpenLab
         <span className="font-sans font-medium text-slate-300">01 · ადმინისტრატორის პულტი</span>
       </div>
 
-      {/* 3D Depth Shadow Backplates from Claude Spec */}
+      {/* 3D Depth Shadow Backplates from Claude Spec (Desktop only) */}
       <div
-        className="absolute inset-0 rounded-[20px] bg-[#030406] pointer-events-none"
+        className="hidden lg:block absolute inset-0 rounded-[20px] bg-[#030406] pointer-events-none"
         style={{ transform: 'translateZ(-24px)', boxShadow: '0 60px 120px -20px rgba(0,0,0,1)' }}
       />
       <div
-        className="absolute inset-0 rounded-[20px] bg-[#080B11] border border-sky-100/10 pointer-events-none"
+        className="hidden lg:block absolute inset-0 rounded-[20px] bg-[#080B11] border border-sky-100/10 pointer-events-none"
         style={{ transform: 'translateZ(-16px)' }}
       />
       <div
-        className="absolute inset-0 rounded-[20px] bg-[#0A0E15] border border-sky-100/[0.14] pointer-events-none"
+        className="hidden lg:block absolute inset-0 rounded-[20px] bg-[#0A0E15] border border-sky-100/[0.14] pointer-events-none"
         style={{ transform: 'translateZ(-8px)' }}
       />
 

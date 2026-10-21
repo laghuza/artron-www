@@ -550,6 +550,24 @@ body {
   box-shadow: 0 32px 80px rgba(0, 163, 255, 0.18), 0 0 0 1px rgba(0, 163, 255, 0.12);
 }
 
+/* Safari WebKit 3D Backface Fixes */
+.safari-backface-hidden {
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* On mobile/tablet screens (< 1024px), flatten 3D perspective cards to prevent Z-buffer plane slicing */
+@media (max-width: 1023px) {
+  .mobile-flat-3d {
+    transform: none !important;
+    perspective: none !important;
+    -webkit-transform-style: flat !important;
+    transform-style: flat !important;
+  }
+}
+
 @keyframes shockwave-expand {
   0% {
     width: 0px;

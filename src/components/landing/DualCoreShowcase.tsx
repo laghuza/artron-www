@@ -82,7 +82,7 @@ export const DualCoreShowcase: React.FC = () => {
         <div
           onMouseMove={onMouseMove}
           onMouseLeave={onMouseLeave}
-          className="relative pt-6 sm:pt-8 pb-16 sm:pb-24 preserve-3d"
+          className="relative pt-6 sm:pt-8 pb-16 sm:pb-24 preserve-3d mobile-flat-3d"
           style={{ perspective: '1700px', perspectiveOrigin: '50% 40%', transformStyle: 'preserve-3d' }}
         >
           {/* Ambient Ground Glow */}
@@ -94,9 +94,9 @@ export const DualCoreShowcase: React.FC = () => {
             }}
           />
 
-          {/* 3D Perspective Floor Plane */}
+          {/* 3D Perspective Floor Plane (Desktop only: on mobile stacked cards intersect this plane) */}
           <div
-            className="absolute left-[1%] right-[1%] bottom-[50px] h-[380px] rounded-t-[12px] overflow-hidden pointer-events-none font-mono text-[#E0F2FE]/20"
+            className="hidden lg:block absolute left-[1%] right-[1%] bottom-[50px] h-[380px] rounded-t-[12px] overflow-hidden pointer-events-none font-mono text-[#E0F2FE]/20"
             style={{
               transformOrigin: '50% 100%',
               transform: 'rotateX(74deg)',
@@ -181,9 +181,9 @@ export const DualCoreShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* 3D Pedestal Lip with Ambient Underside Glow */}
+          {/* 3D Pedestal Lip with Ambient Underside Glow (Desktop only) */}
           <div
-            className="absolute left-[1%] right-[1%] bottom-[26px] h-[24px] rounded-b-[10px] pointer-events-none"
+            className="hidden lg:block absolute left-[1%] right-[1%] bottom-[26px] h-[24px] rounded-b-[10px] pointer-events-none"
             style={{
               background: 'linear-gradient(180deg, #141A22 0%, #090C11 45%, #040507 100%)',
               boxShadow:
@@ -193,12 +193,12 @@ export const DualCoreShowcase: React.FC = () => {
 
           {/* 3D Interactive Row with Stations */}
           <div
-            className="relative preserve-3d z-10 flex flex-wrap justify-center items-center gap-8 sm:gap-11 transition-transform duration-300 ease-out"
+            className="relative lg:preserve-3d z-10 flex flex-wrap justify-center items-center gap-8 sm:gap-11 transition-transform duration-300 ease-out mobile-flat-3d"
             style={{ transform: rowTransform, transformStyle: 'preserve-3d' }}
           >
-            {/* Ambient Contact Shadow under Stations */}
+            {/* Ambient Contact Shadow under Stations (Desktop only) */}
             <div
-              className="absolute left-[2%] right-[2%] -bottom-[110px] h-[200px] pointer-events-none"
+              className="hidden lg:block absolute left-[2%] right-[2%] -bottom-[110px] h-[200px] pointer-events-none"
               style={{
                 background:
                   'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 35%, transparent 70%)',

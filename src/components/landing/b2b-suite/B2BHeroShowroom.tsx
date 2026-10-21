@@ -56,23 +56,23 @@ export const B2BHeroShowroom: React.FC<B2BHeroShowroomProps> = ({
         </div>
 
         {/* 3 Numerical KPI Stats */}
-        <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-2">
-          <div className="flex flex-col gap-1.5 pt-3 border-t border-[#BAE6FD]/20">
-            <span className="font-serif text-2xl sm:text-3xl font-semibold text-[#F0F9FF] tabular-nums">99.98%</span>
-            <span className="text-xs text-[#A9B9CA]">Uptime · 30 დღე</span>
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-6 pt-2">
+          <div className="flex flex-col gap-1 sm:gap-1.5 pt-2.5 sm:pt-3 border-t border-[#BAE6FD]/20">
+            <span className="font-serif text-lg sm:text-2xl md:text-3xl font-semibold text-[#F0F9FF] tabular-nums">99.98%</span>
+            <span className="text-[10.5px] sm:text-xs text-[#A9B9CA] leading-tight">Uptime · 30 დღე</span>
           </div>
-          <div className="flex flex-col gap-1.5 pt-3 border-t border-[#BAE6FD]/20">
-            <span className="font-serif text-2xl sm:text-3xl font-semibold text-[#F0F9FF] tabular-nums">
-              0.04<span className="text-xs font-sans text-[#A9B9CA] ml-1">წმ</span>
+          <div className="flex flex-col gap-1 sm:gap-1.5 pt-2.5 sm:pt-3 border-t border-[#BAE6FD]/20">
+            <span className="font-serif text-lg sm:text-2xl md:text-3xl font-semibold text-[#F0F9FF] tabular-nums">
+              0.04<span className="text-[10px] sm:text-xs font-sans text-[#A9B9CA] ml-0.5 sm:ml-1">წმ</span>
             </span>
-            <span className="text-xs text-[#A9B9CA]">რეაგირების დრო</span>
+            <span className="text-[10.5px] sm:text-xs text-[#A9B9CA] leading-tight">რეაგირების დრო</span>
           </div>
-          <div className={`flex flex-col gap-1.5 pt-3 border-t transition-colors duration-700 ${fresh ? 'border-[#10B981]' : 'border-[#BAE6FD]/20'}`}>
-            <span className={`font-serif text-2xl sm:text-3xl font-semibold tabular-nums transition-colors duration-700 ${fresh ? 'text-[#10B981]' : 'text-[#F0F9FF]'}`}>
+          <div className={`flex flex-col gap-1 sm:gap-1.5 pt-2.5 sm:pt-3 border-t transition-colors duration-700 ${fresh ? 'border-[#10B981]' : 'border-[#BAE6FD]/20'}`}>
+            <span className={`font-serif text-lg sm:text-2xl md:text-3xl font-semibold tabular-nums transition-colors duration-700 ${fresh ? 'text-[#10B981]' : 'text-[#F0F9FF]'}`}>
               {passes}
             </span>
-            <span className="flex items-center gap-1.5 text-xs text-[#A9B9CA]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse" />
+            <span className="flex items-center gap-1 sm:gap-1.5 text-[10.5px] sm:text-xs text-[#A9B9CA] leading-tight">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse shrink-0" />
               დაშვება დღეს
             </span>
           </div>

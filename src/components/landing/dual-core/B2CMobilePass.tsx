@@ -77,7 +77,7 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
       : 'შესვლა დაფიქსირდა (თავიდან მოსინჯვა)';
 
   return (
-    <div className="flex-none preserve-3d relative">
+    <div className="flex-none lg:preserve-3d relative mobile-flat-3d">
       {/* Station Tag */}
       <div className="absolute left-1.5 -top-11 flex items-center gap-2.5 text-[10.5px] tracking-[0.18em] text-slate-400 whitespace-nowrap">
         <span
@@ -95,18 +95,19 @@ export const B2CMobilePass: React.FC<B2CMobilePassProps> = ({ state, onRun, onBt
 
       {/* 3D Smartphone Frame */}
       <div
-        className="relative preserve-3d"
+        className="relative lg:preserve-3d mobile-flat-3d"
         style={{
           transformStyle: 'preserve-3d',
           transform: 'rotateY(-8deg) rotateX(4deg)',
         }}
       >
+        {/* 3D Extrusion Backplates (Desktop only) */}
         <div
-          className="absolute inset-0 rounded-[56px] bg-[#05070B] shadow-[0_70px_120px_-20px_rgba(0,0,0,1)] pointer-events-none"
+          className="hidden lg:block absolute inset-0 rounded-[56px] bg-[#05070B] shadow-[0_70px_120px_-20px_rgba(0,0,0,1)] pointer-events-none"
           style={{ transform: 'translateZ(-14px)' }}
         />
         <div
-          className="absolute inset-0 rounded-[56px] bg-gradient-to-br from-[#1B2330] to-[#0A0D13] pointer-events-none"
+          className="hidden lg:block absolute inset-0 rounded-[56px] bg-gradient-to-br from-[#1B2330] to-[#0A0D13] pointer-events-none"
           style={{ transform: 'translateZ(-7px)' }}
         />
 

@@ -78,9 +78,10 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
     // Build complete turnstile elements
     const T = buildTurnstileScene(scene, neon);
 
-    // 3D Projected Floating Tag
+    // 3D Projected Floating Tag (Desktop only — on mobile < 1024px it collides with foreground KPI cards)
+    const isMobileViewport = (el.clientWidth || window.innerWidth) < 1024;
     const tag = document.createElement('div');
-    tag.style.cssText = 'position:absolute;left:0;top:0;z-index:20;pointer-events:none;display:flex;align-items:center;gap:0;will-change:transform;transition:opacity .4s';
+    tag.style.cssText = `position:absolute;left:0;top:0;z-index:20;pointer-events:none;display:${isMobileViewport ? 'none' : 'flex'};align-items:center;gap:0;will-change:transform;transition:opacity .4s`;
     tag.innerHTML =
       '<span data-d style="width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;flex:none"></span>' +
       '<span style="width:46px;height:1px;background:rgba(186,230,253,0.4);flex:none"></span>' +
@@ -117,7 +118,11 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
 
     // Cache bounding box to eliminate synchronous layout reflows on pointer movement
     let cachedRect = el.getBoundingClientRect();
-    const updateRect = () => { cachedRect = el.getBoundingClientRect(); };
+    const updateRect = () => {
+      cachedRect = el.getBoundingClientRect();
+      const currentW = el.clientWidth || window.innerWidth;
+      tag.style.display = currentW < 1024 ? 'none' : 'flex';
+    };
     window.addEventListener('resize', updateRect, { passive: true });
     window.addEventListener('scroll', updateRect, { passive: true });
 

@@ -176,7 +176,7 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
                       onSelect(frontId);
                     }
                   }}
-                  className={`[grid-area:1/1] relative overflow-hidden rounded-2xl flex flex-col gap-2 cursor-pointer [backface-visibility:hidden] transition-all duration-500 border ${
+                  className={`[grid-area:1/1] relative overflow-hidden rounded-2xl flex flex-col gap-2 cursor-pointer safari-backface-hidden transition-all duration-500 border ${
                     isFrontActive
                       ? 'border-white/20 shadow-2xl'
                       : 'border-white/[0.07] bg-gradient-to-br from-white/[0.032] to-white/[0.008] hover:border-white/15'
@@ -184,6 +184,10 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
                   style={{
                     padding: '21px 26px',
                     pointerEvents: peF as any,
+                    opacity: flips % 2 === 0 ? 1 : 0,
+                    visibility: flips % 2 === 0 ? 'visible' : 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
                     boxShadow: isFrontActive
                       ? `0 1px 0 rgba(255,255,255,.04), 0 2px 0 rgba(0,0,0,.6), 0 21px 34px -13px rgba(0,0,0,.8), 0 34px 55px -34px rgba(${frontCfg.rgb},.4)`
                       : '0 1px 0 rgba(255,255,255,.02), 0 13px 21px -13px rgba(0,0,0,.6)',
@@ -254,7 +258,7 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
                       onSelect(backId);
                     }
                   }}
-                  className={`[grid-area:1/1] relative overflow-hidden rounded-2xl flex flex-col gap-2 cursor-pointer [backface-visibility:hidden] [transform:rotateX(180deg)] transition-all duration-500 border ${
+                  className={`[grid-area:1/1] relative overflow-hidden rounded-2xl flex flex-col gap-2 cursor-pointer safari-backface-hidden [transform:rotateX(180deg)] transition-all duration-500 border ${
                     isBackActive
                       ? 'border-white/20 shadow-2xl'
                       : 'border-white/[0.07] bg-gradient-to-br from-white/[0.032] to-white/[0.008] hover:border-white/15'
@@ -262,6 +266,10 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
                   style={{
                     padding: '21px 26px',
                     pointerEvents: peB as any,
+                    opacity: flips % 2 !== 0 ? 1 : 0,
+                    visibility: flips % 2 !== 0 ? 'visible' : 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
                     boxShadow: isBackActive
                       ? `0 1px 0 rgba(255,255,255,.04), 0 2px 0 rgba(0,0,0,.6), 0 21px 34px -13px rgba(0,0,0,.8), 0 34px 55px -34px rgba(${backCfg.rgb},.4)`
                       : '0 1px 0 rgba(255,255,255,.02), 0 13px 21px -13px rgba(0,0,0,.6)',

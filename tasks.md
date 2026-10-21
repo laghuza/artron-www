@@ -651,6 +651,9 @@
     - [x] `ArtronAiSection.tsx`: AI სექციის ქვესათაურის მობილური შემოკლება და H2-ის რესპონსიული მასშტაბირება.
     - [x] `ArtronMobileShowcase.tsx`: B2C მობილური შოურუმის H2-ის clamp ზომის ოპტიმიზაცია (`clamp(26px, 4.6vw, 62px)`) და ლაკონიური ქვესათაური.
     - [x] `PartnerEcosystem.tsx` & `PricingSection.tsx`: ჰედერების რესპონსიული ტიპოგრაფია (`text-2xl sm:text-4xl`) მობილურ ეკრანებზე ზედმეტი გადახვევების აღმოსაფხვრელად.
-  - [ ] **ეტაპი 5: სრული სისტემური შემოწმება & iPhone 17-ზე Vercel-ით ვერიფიკაცია** — TypeScript (`npx tsc --noEmit`), ტესტები და ცოცხალი მობილური შემოწმება.
+  - [x] **ეტაპი 5: სრული სისტემური შემოწმება & iPhone-ზე Vercel-ით ვერიფიკაცია** — TypeScript (`npx tsc --noEmit`), ტესტები და ცოცხალი მობილური შემოწმება.
+    - [x] `DualCoreShowcase.tsx`, `B2BConsoleCard.tsx`, `B2CMobilePass.tsx`: 3D Floor Plane-ის, Pedestal Lip-ისა და უარყოფითი Z-ღერძის ჩრდილების მობილურზე დამალვა (`hidden lg:block`) და `.mobile-flat-3d` წესით მობილურზე Z-Buffer-ის დიაგონალური ჩამოჭრის სრული აღმოფხვრა.
+    - [x] `MobileFeatureDeck.tsx`: `-webkit-backface-visibility: hidden`, `.safari-backface-hidden` და ხილვადობის მკაცრი კონტროლი (`opacity` + `visibility: hidden`), რითაც Safari-ში 180°-ით ამობრუნებული ტექსტების გადაფარვა სრულად აღმოიფხვრა.
+    - [x] `B2BShowroom3DCanvas.tsx` & `B2BHeroShowroom.tsx`: მცურავი 3D ტეგის დამალვა მობილურზე (`< 1024px`) და 3 KPI მეტრიკის ადაპტიური შრიფტები (`text-lg sm:text-2xl`), რითაც ტექსტების შეჯახება და გადაფარვა გამოირიცხა.
 
 
