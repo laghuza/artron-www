@@ -114,16 +114,21 @@ export const B2BHeroShowroom: React.FC<B2BHeroShowroomProps> = ({
               return (
                 <div
                   key={`${row.t}-${row.name}-${i}`}
-                  className={`grid grid-cols-12 items-center gap-2 py-2 px-2.5 -mx-1.5 rounded-lg transition-colors duration-700 ${
+                  className={`flex items-center justify-between gap-2 py-2 px-2.5 -mx-1.5 rounded-lg transition-colors duration-700 ${
                     isFirst && fresh ? 'bg-[#10B981]/15 text-[#10B981]' : 'hover:bg-white/[0.03]'
                   }`}
                 >
-                  <span className="col-span-3 font-mono text-xs text-[#76869A]">{row.t}</span>
-                  <span className={`col-span-4 text-xs font-medium truncate ${isFirst && fresh ? 'text-[#10B981]' : 'text-[#F0F9FF]'}`}>
-                    {row.name}
-                  </span>
-                  <span className="col-span-3 font-mono text-[11px] text-[#76869A] truncate">{row.gate}</span>
-                  <span className="col-span-2 text-right text-xs text-[#10B981] font-semibold">დადასტურდა</span>
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="font-mono text-xs text-[#76869A] shrink-0">{row.t}</span>
+                    <span className={`text-xs font-medium truncate ${isFirst && fresh ? 'text-[#10B981]' : 'text-[#F0F9FF]'}`}>
+                      {row.name}
+                    </span>
+                    <span className="font-mono text-[11px] text-[#76869A] truncate hidden sm:inline">{row.gate}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="font-mono text-[10px] text-[#76869A] sm:hidden">{row.gate}</span>
+                    <span className="text-right text-[11px] sm:text-xs text-[#10B981] font-semibold shrink-0">დადასტურდა</span>
+                  </div>
                 </div>
               );
             })}

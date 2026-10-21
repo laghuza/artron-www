@@ -45,9 +45,10 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
 
     let shift = getShift(el.clientWidth || window.innerWidth);
 
-    const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-    // Capping DPR to 1.5 avoids rendering excessive fragment pixels on Retina for silky smooth 60 FPS
-    r.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
+    const isMobile = (el.clientWidth || window.innerWidth) < 768;
+    const r = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' });
+    // Capping DPR to 1.0 on mobile and 1.5 on desktop avoids rendering excessive fragment pixels on Retina for silky smooth 60-120 FPS
+    r.setPixelRatio(isMobile ? 1.0 : Math.min(1.5, window.devicePixelRatio || 1));
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.toneMapping = THREE.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.2;

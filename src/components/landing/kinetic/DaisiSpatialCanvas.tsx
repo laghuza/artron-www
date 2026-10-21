@@ -48,7 +48,8 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
     let w = 0, h = 0, dpr = 1;
     function resize() {
       if (!canvas) return;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isMobile = window.innerWidth < 768;
+      dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;
@@ -214,7 +215,8 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
       ctx.globalCompositeOperation = 'screen';
       oN = 0;
 
-      for (let i = 0; i < TOTAL; i++) {
+      const activeTotal = mobile ? Math.floor(TOTAL * 0.35) : TOTAL;
+      for (let i = 0; i < activeTotal; i++) {
         let X: number, Y: number, Z: number, ang: number, rip: number;
         if (pS[i] === 0) {
           const a = pU[i] - gM + 0.44;
