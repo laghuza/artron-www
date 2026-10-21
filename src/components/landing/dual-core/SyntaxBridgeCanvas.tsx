@@ -355,7 +355,7 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
   return (
     <div
       ref={containerRef}
-      className="flex-[0_1_300px] max-w-[320px] min-w-[260px] relative preserve-3d"
+      className="hidden lg:block flex-[0_1_300px] max-w-[320px] min-w-[260px] relative preserve-3d"
       style={{ transformStyle: 'preserve-3d', transform: 'translateZ(16px)' }}
     >
       {/* Station Tag */}

@@ -189,8 +189,31 @@ export const ArtronAiSection: React.FC = () => {
           {/* Main 2-Column Bento Layout */}
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             
-            {/* Left Column: 3 Integrated AI Capabilities */}
-            <div className="lg:col-span-5 flex flex-col justify-between space-y-3">
+            {/* Mobile Tab Pills (< lg) */}
+            <div className="flex lg:hidden overflow-x-auto gap-2 pb-2 -mx-2 px-2 scrollbar-none snap-x">
+              {capabilities.map((cap) => {
+                const Icon = cap.icon;
+                const isActive = activeTab === cap.id;
+                return (
+                  <button
+                    key={cap.id}
+                    type="button"
+                    onClick={() => setActiveTab(cap.id)}
+                    className={`snap-center shrink-0 flex items-center gap-2 px-3.5 py-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-[#080E18] border-[#00E5FF]/60 text-white shadow-[0_0_15px_rgba(0,229,255,0.2)]'
+                        : 'bg-[#080B10]/70 border-white/10 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" style={{ color: cap.color }} />
+                    <span>{locale === 'ka' ? cap.titleKa : locale === 'ru' ? cap.titleRu : cap.titleEn}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Desktop Left Column (lg+): 3 Integrated AI Capabilities */}
+            <div className="hidden lg:flex lg:col-span-5 flex-col justify-between space-y-3">
               <div className="space-y-3">
                 {capabilities.map((cap) => {
                   const Icon = cap.icon;
