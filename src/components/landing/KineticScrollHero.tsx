@@ -56,7 +56,7 @@ export const KineticScrollHero: React.FC = () => {
     <section
       ref={containerRef}
       id="hero"
-      className="relative w-full h-[175vh] bg-[#020407] select-none"
+      className="relative w-full h-[160vh] md:h-[170vh] bg-[#020407] select-none"
       aria-label="ARTRON Daisi Choreography Hero"
     >
       {/* Pinned 100vh Stage Viewport */}

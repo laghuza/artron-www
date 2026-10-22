@@ -16,6 +16,7 @@ import { ChurnRadarStage } from './stages/ChurnRadarStage';
 import { LoadHeatmapStage } from './stages/LoadHeatmapStage';
 import { WinbackMatrixStage } from './stages/WinbackMatrixStage';
 import { soundEngine } from '@/core';
+import { useLanguage } from '@/context/LanguageContext';
 
 // Dynamically import 3D Turnstile Canvas to avoid SSR issues
 const B2BShowroom3DCanvas = dynamic(
@@ -24,6 +25,7 @@ const B2BShowroom3DCanvas = dynamic(
 );
 
 export const B2BControlCenterSection: React.FC = () => {
+  const { locale } = useLanguage();
   const [node, setNode] = useState<number>(0);
   const [passes, setPasses] = useState<number>(361);
   const [fresh, setFresh] = useState<boolean>(false);
@@ -342,7 +344,25 @@ export const B2BControlCenterSection: React.FC = () => {
       )}
 
       {/* Top 10-Logic Rail Header */}
-      <header className="relative z-30 flex flex-col gap-5 px-4 sm:px-8 lg:px-14 pt-2 pb-4">
+      <header className="relative z-30 flex flex-col gap-6 sm:gap-8 px-4 sm:px-8 lg:px-14 pt-2 pb-4">
+        {/* Section Master Header */}
+        <div className="w-full flex flex-col items-center justify-center text-center max-w-4xl mx-auto pt-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-[0_2px_16px_rgba(0,0,0,0.85)]">
+            {locale === 'ka' 
+              ? 'დარბაზის ცოცხალი მართვის პანელი'
+              : locale === 'ru'
+                ? 'Живая панель управления клубом'
+                : 'Real-Time Gym Command Cockpit'}
+          </h2>
+          <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-[#94A3B8] font-normal leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)] max-w-3xl">
+            {locale === 'ka'
+              ? 'დააკვირდით და მართეთ ობიექტის თითოეული წამი: ტურნიკეტის ყოველი გავლა, ჯავშნები, გადინების რისკები და პიკური საათები ერთ ინტერფეისში.'
+              : locale === 'ru'
+                ? 'Отслеживайте и управляйте каждой секундой объекта: проходы через турникеты, бронирования, риски оттока и пиковые часы в едином интерфейсе.'
+                : 'Monitor and manage every second of your facility: turnstile passages, bookings, churn risks, and peak hours in a unified interface.'}
+          </p>
+        </div>
+
         <nav
           ref={navRef}
           aria-label="ARTRON B2B Suite ლოგიკები"

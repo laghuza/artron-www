@@ -328,7 +328,7 @@ export const Header: React.FC<HeaderProps> = ({
     activeNav.startsWith('/#analytics-');
   const isAnalyticsActive = activeNav.startsWith('/#analytics-showcase') || activeNav === '/#roi' || activeNav.startsWith('/#analytics-');
   const systemAccessLabel = locale === 'ka' ? 'Sport OS დემო' : locale === 'ru' ? 'Демо Sport OS' : 'Sport OS Demo';
-  const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა & IOT' : locale === 'ru' ? 'Спортивная Экосистема & IOT' : 'SPORTS & IOT ECOSYSTEM';
+  const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა' : locale === 'ru' ? 'Спортивная Экосистема' : 'SPORTS ECOSYSTEM';
 
   /* ── Glass header surface ── */
   const glassClass = kinematics.isScrolledPast
@@ -368,13 +368,9 @@ export const Header: React.FC<HeaderProps> = ({
               <ArtronLogo className="w-7 h-7 sm:w-7.5 sm:h-7.5 transition-transform duration-500 group-hover:scale-110 filter drop-shadow-[0_0_14px_rgba(0,230,118,0.5)] shrink-0" />
             </div>
             <div className="block">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center">
                 <span className="text-[12.5px] sm:text-[13px] font-black tracking-[0.14em] leading-none text-white whitespace-nowrap uppercase font-sans group-hover:text-[#00E676] transition-colors duration-300">
                   ARTRON
-                </span>
-                <span className="inline-flex items-center gap-1 px-1.5 py-[2px] rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[7px] sm:text-[7.5px] font-mono font-bold text-emerald-400 tracking-wider uppercase">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00E676] animate-pulse" />
-                  CORE
                 </span>
               </div>
               <p className="text-[7px] sm:text-[7.5px] text-[#94A3B8]/90 mt-0.5 font-medium tracking-wider uppercase whitespace-nowrap font-mono">

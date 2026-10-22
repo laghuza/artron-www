@@ -110,11 +110,11 @@ export const ManifestoSloganAssembly: React.FC<ManifestoSloganAssemblyProps> = (
     return list;
   }, [currentLang]);
 
-  // Slogan node kinematics - stays visible once assembled and drifts gracefully into natural page scroll
-  const sUp = smooth(clamp((p - 0.82) / 0.14, 0, 1));
-  const sloganOpacity = p < 0.24 ? 0 : 1;
-  const sY = -sUp * 32;
-  const sS = 1 - 0.04 * sUp;
+  // Slogan stays visible once assembled, gently drifting upward into the natural page scroll
+  const sUp = smooth(clamp((p - 0.86) / 0.14, 0, 1));
+  const sloganOpacity = p < 0.22 ? 0 : 1;
+  const sY = -sUp * 24;
+  const sS = 1 - 0.02 * sUp;
 
   // Subline kinematics
   const subP = smooth(clamp((p - 0.60) / 0.10, 0, 1));
@@ -136,7 +136,6 @@ export const ManifestoSloganAssembly: React.FC<ManifestoSloganAssemblyProps> = (
       style={{
         opacity: sloganOpacity,
         visibility: sloganOpacity <= 0 ? 'hidden' : 'visible',
-        filter: sUp > 0 ? `blur(${sUp * 1.5}px)` : 'none',
         transform: `translate(-50%, -50%) translate3d(0, ${sY}px, 0) scale(${sS})`,
       }}
       aria-label={currentLang.ariaLabel}

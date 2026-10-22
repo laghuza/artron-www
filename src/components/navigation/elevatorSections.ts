@@ -49,7 +49,7 @@ export const SECTION_NODES: SectionNode[] = [
   {
     index: '05',
     id: 'ai-intelligence',
-    label: { ka: '05 • AI ასისტენტი & ავტომატიზაცია', en: '05 • AI Assistant & Automation', ru: '05 • AI Ассистент и автоматизация' },
+    label: { ka: '05 • ჭკვიანი ასისტენტი', en: '05 • Smart Assistant', ru: '05 • Умный ассистент' },
     aiPrompt: {
       ka: 'გაინტერესებთ, როგორ ეხმარება AI ასისტენტი სპორტდარბაზის მენეჯერს 5-წამიანი OCR რეგისტრაციით, ქართული ხმოვანი ბრძანებებითა და გადინების პრევენციით?',
       en: 'Interested in how the Smart Assistant empowers gym managers with 5-second OCR onboarding, voice commands, and churn prevention?',

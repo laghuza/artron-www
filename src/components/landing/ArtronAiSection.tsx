@@ -10,7 +10,6 @@ import {
   ShieldCheck, 
   ChevronRight,
   Zap,
-  Activity,
   Cpu
 } from 'lucide-react';
 import { SimplifiedAiShowcase, AiShowcaseTab } from '@/components/gateway/widgets/live/multimodal-ai/SimplifiedAiShowcase';
@@ -92,50 +91,32 @@ export const ArtronAiSection: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
-
-
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             {locale === 'ka' 
-              ? 'AI ასისტენტი & ავტომატიზაცია — მენეჯერის საიმედო საყრდენი 24/7-ზე'
+              ? 'ჭკვიანი ასისტენტი'
               : locale === 'ru'
-                ? 'AI Ассистент и автоматизация — надежная опора управляющего 24/7'
-                : 'AI Assistant & Automation — 24/7 Superpower for Facility Managers'}
+                ? 'Умный ассистент'
+                : 'Smart Assistant'}
           </h2>
 
           <p className="mt-3 sm:mt-4 text-xs sm:text-base md:text-lg text-[#94A3B8] font-normal sm:font-medium leading-relaxed">
             {locale === 'ka' ? (
               <>
-                <span className="hidden sm:inline">გაათავისუფლეთ პერსონალი რუტინისგან: 5-წამიანი რეგისტრაცია ქართული ხმითა და OCR სკანერით, წევრების გადინების პრევენცია და 24/7 ვირტუალური კონსიერჟი.</span>
-                <span className="sm:hidden">5-წამიანი რეგისტრაცია ხმით & OCR-ით, გადინების პრევენცია და 24/7 ვირტუალური კონსიერჟი.</span>
+                <span className="hidden sm:inline">ნულოვანი რუტინა რეცეფციაზე: წევრების მომენტალური რეგისტრაცია ხმით, გადინების ჭკვიანი პრევენცია და მუდმივი ციფრული მხარდაჭერა.</span>
+                <span className="sm:hidden">ნულოვანი რუტინა: წევრების მომენტალური რეგისტრაცია ხმით, გადინების პრევენცია და მუდმივი ციფრული მხარდაჭერა.</span>
               </>
             ) : locale === 'ru' ? (
               <>
-                <span className="hidden sm:inline">Освободите персонал от рутины: 5-секундная регистрация голосом и OCR сканером, предиктивный контроль оттока и виртуальный консьерж 24/7.</span>
-                <span className="sm:hidden">5-секундная регистрация голосом & OCR, контроль оттока и виртуальный консьерж.</span>
+                <span className="hidden sm:inline">Ноль рутины на ресепшене: моментальная регистрация голосом, умный контроль оттока и непрерывная цифровая поддержка.</span>
+                <span className="sm:hidden">Ноль рутины: быстрая регистрация голосом, контроль оттока и цифровая поддержка.</span>
               </>
             ) : (
               <>
-                <span className="hidden sm:inline">Free your team from routine: 5-second voice & OCR onboarding, predictive churn radar, and 24/7 virtual concierge.</span>
-                <span className="sm:hidden">5-second voice & OCR onboarding, predictive churn radar, and 24/7 concierge.</span>
+                <span className="hidden sm:inline">Zero front-desk routine: instant voice registration, intelligent churn prevention, and continuous digital support.</span>
+                <span className="sm:hidden">Zero routine: instant voice onboarding, churn prevention, and seamless digital support.</span>
               </>
             )}
           </p>
-
-          {/* Quick Metrics Bar */}
-          <div className="mt-7 grid grid-cols-3 gap-2 sm:gap-3 max-w-xl mx-auto p-2 rounded-2xl bg-[#05070a]/80 border border-white/10 backdrop-blur-xl">
-            <div className="text-center p-2">
-              <div className="text-base sm:text-2xl font-black font-mono text-[#00E5FF]">5 წამი</div>
-              <div className="text-[10px] text-[#94A3B8] font-mono mt-0.5">სრული რეგისტრაცია</div>
-            </div>
-            <div className="text-center p-2 border-x border-white/10">
-              <div className="text-base sm:text-2xl font-black font-mono text-[#00ff87]">-60%</div>
-              <div className="text-[10px] text-[#94A3B8] font-mono mt-0.5">რეცეფციის დატვირთვა</div>
-            </div>
-            <div className="text-center p-2">
-              <div className="text-base sm:text-2xl font-black font-mono text-[#00A3FF]">24/7</div>
-              <div className="text-[10px] text-[#94A3B8] font-mono mt-0.5">ავტო-ასისტენტი</div>
-            </div>
-          </div>
         </div>
 
         {/* UNIFIED COCKPIT FRAME WITH SPOTLIGHT CURSOR GLOW */}
@@ -168,28 +149,53 @@ export const ArtronAiSection: React.FC = () => {
             }}
           />
 
-          {/* Top Console Bar */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-5 mb-6 border-b border-white/10">
+          {/* Top Console Bar with Integrated Live Telemetry */}
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-5 mb-6 border-b border-white/10">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#00E5FF]/15 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.25)]">
-                <Cpu className="w-4 h-4" />
+              <div className="w-10 h-10 rounded-xl bg-[#00E5FF]/15 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.25)] shrink-0">
+                <Cpu className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
-                  <span>{locale === 'ka' ? 'Sport OS ჭკვიანი AI მოდული' : 'Sport OS Smart AI Engine'}</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    Live Active
-                  </span>
+                <h3 className="text-sm sm:text-base font-black text-white">
+                  {locale === 'ka' 
+                    ? 'Sport OS ჭკვიანი ასისტენტი' 
+                    : locale === 'ru'
+                      ? 'Умный ассистент Sport OS'
+                      : 'Sport OS Smart Assistant'}
                 </h3>
-                <p className="text-xs text-[#94A3B8]">
+                <p className="text-xs text-[#94A3B8] mt-0.5">
                   {locale === 'ka' ? 'აირჩიეთ ფუნქცია მარცხნივ და გამოსცადეთ რეალურ დროში' : 'Select a capability on the left to test in real time'}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-[11px] font-mono text-[#00E5FF]">
-              <Activity className="w-3.5 h-3.5 animate-pulse text-[#00E5FF]" />
-              <span>GEMINI FLASH &amp; SPEECH STT</span>
+            {/* Integrated Live Telemetry Metrics */}
+            <div className="w-full lg:w-auto grid grid-cols-3 gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-[#080B10]/90 border border-white/10 backdrop-blur-xl shadow-inner">
+              <div className="text-center px-2.5 py-1">
+                <div className="text-sm sm:text-base font-black font-mono text-[#00E5FF] flex items-center justify-center gap-1">
+                  <Zap className="w-3 h-3 hidden sm:inline" />
+                  {locale === 'ka' ? '5 წამი' : locale === 'ru' ? '5 сек' : '5 sec'}
+                </div>
+                <div className="text-[9px] sm:text-[10px] text-[#94A3B8] font-mono whitespace-nowrap mt-0.5">
+                  {locale === 'ka' ? 'სრული რეგისტრაცია' : locale === 'ru' ? 'Регистрация' : 'Onboarding'}
+                </div>
+              </div>
+              <div className="text-center px-2.5 py-1 border-x border-white/10">
+                <div className="text-sm sm:text-base font-black font-mono text-[#00ff87]">
+                  -60%
+                </div>
+                <div className="text-[9px] sm:text-[10px] text-[#94A3B8] font-mono whitespace-nowrap mt-0.5">
+                  {locale === 'ka' ? 'რეცეფციის დატვირთვა' : locale === 'ru' ? 'Нагрузка' : 'Reception Load'}
+                </div>
+              </div>
+              <div className="text-center px-2.5 py-1">
+                <div className="text-sm sm:text-base font-black font-mono text-[#00A3FF]">
+                  {locale === 'ka' ? '0 წმ' : locale === 'ru' ? '0 сек' : '0 sec'}
+                </div>
+                <div className="text-[9px] sm:text-[10px] text-[#94A3B8] font-mono whitespace-nowrap mt-0.5">
+                  {locale === 'ka' ? 'ლოდინის დრო' : locale === 'ru' ? 'Ожидание' : 'Wait Time'}
+                </div>
+              </div>
             </div>
           </div>
 

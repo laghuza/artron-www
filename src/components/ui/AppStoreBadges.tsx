@@ -2,168 +2,228 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { Sparkles, CheckCircle2, Info } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 interface AppStoreBadgesProps {
   variant?: 'hero' | 'default' | 'compact';
   align?: 'left' | 'center' | 'right';
   layout?: 'horizontal' | 'vertical';
   showIndicator?: boolean;
+  showPlatformSubtext?: boolean;
   className?: string;
+  onNotify?: () => void;
 }
 
 export const AppStoreBadges: React.FC<AppStoreBadgesProps> = ({
-  variant = 'default',
   align = 'center',
   layout = 'horizontal',
-  showIndicator = true,
+  showIndicator = false,
+  showPlatformSubtext = false,
   className = '',
+  onNotify,
 }) => {
   const { t } = useLanguage();
   const [showNotice, setShowNotice] = useState(false);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (onNotify) {
+      onNotify();
+      return;
+    }
     setShowNotice(true);
     setTimeout(() => {
       setShowNotice(false);
     }, 4000);
   };
 
-  const alignClass = 
-    align === 'left' 
-      ? 'items-start text-left' 
-      : align === 'right' 
-        ? 'items-end text-right' 
+  const alignClass =
+    align === 'left'
+      ? 'items-start text-left'
+      : align === 'right'
+        ? 'items-end text-right'
         : 'items-center text-center';
 
-  const flexJustify = 
-    align === 'left' 
-      ? 'justify-start' 
-      : align === 'right' 
-        ? 'justify-end' 
+  const flexJustify =
+    align === 'left'
+      ? 'justify-start'
+      : align === 'right'
+        ? 'justify-end'
         : 'justify-center';
 
   const isVertical = layout === 'vertical';
 
   return (
-    <div className={`relative flex flex-col ${alignClass} gap-2.5 ${className}`}>
-      {/* Live Coming Soon & Review Status Indicator */}
+    <div className={`relative flex flex-col ${alignClass} gap-3 ${className}`}>
+      {/* Optional Live Status Tag */}
       {showIndicator && (
-        <div className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#00ff87]/10 border border-[#00ff87]/25 text-[10px] font-mono font-bold text-[#00ff87] tracking-wider uppercase backdrop-blur-md shadow-[0_0_12px_rgba(0,255,135,0.12)] ${flexJustify}`}>
+        <div
+          className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10B981]/10 border border-[#10B981]/30 text-[10px] font-mono font-bold text-[#10B981] tracking-wider uppercase backdrop-blur-md shadow-[0_0_12px_rgba(16,185,129,0.12)] ${flexJustify}`}
+        >
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff87] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ff87]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
           </span>
           <span>{t('store_coming_soon_badge')}</span>
           <span className="text-white/30 hidden sm:inline">|</span>
-          <span className="text-[#94A3B8] text-[9px] font-mono hidden sm:inline">{t('store_status_pill')}</span>
+          <span className="text-[#94A3B8] text-[9px] font-mono hidden sm:inline">
+            {t('store_status_pill')}
+          </span>
         </div>
       )}
 
       {/* Badges Container */}
-      <div className={`flex ${isVertical ? 'flex-col items-stretch w-full max-w-[240px]' : 'flex-wrap items-center'} gap-2.5 ${flexJustify}`}>
-        {/* Apple App Store Badge */}
+      <div
+        className={`flex ${
+          isVertical ? 'flex-col items-stretch w-full max-w-[280px]' : 'flex-wrap items-center'
+        } gap-3.5 ${flexJustify}`}
+      >
+        {/* Apple App Store */}
         <button
           type="button"
           onClick={handleClick}
-          aria-label="Download on Apple App Store (Coming Soon)"
-          className={`group relative inline-flex items-center ${isVertical ? 'justify-between' : 'gap-3'} px-4 py-2.5 rounded-xl bg-[#05070a]/90 hover:bg-[#0c1017] border border-[#8a99ad]/20 hover:border-[#00ff87]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(0,255,135,0.18)] hover:-translate-y-0.5 active:scale-95 cursor-pointer overflow-hidden`}
-          style={{ minHeight: '44px' }}
+          aria-label={`${t('store_app_store_name')} — ${t('footer_soon')}`}
+          className="group relative flex items-center gap-3 sm:gap-3.5 min-h-[58px] sm:min-h-[64px] px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl text-[#F8FAFC] transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] select-none text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#77A4F6]/50"
+          style={{
+            background:
+              'radial-gradient(120% 160% at 0% 0%, rgba(119,164,246,0.20) 0%, transparent 52%), radial-gradient(120% 160% at 100% 100%, rgba(168,148,238,0.18) 0%, transparent 52%), linear-gradient(172deg, #171E29 0%, #0C1017 52%, #06080C 100%)',
+            boxShadow:
+              'inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.85), inset 0 -14px 22px -14px rgba(168,148,238,0.3), inset 0 14px 22px -16px rgba(119,164,246,0.22), 0 0 0 1px rgba(0,0,0,0.9), 0 8px 14px rgba(0,0,0,0.6), 0 26px 44px -14px rgba(0,0,0,0.85), -14px 28px 52px -24px rgba(119,164,246,0.42), 14px 28px 52px -24px rgba(168,148,238,0.42)',
+          }}
         >
-          {/* Left content (Logo + Texts) */}
-          <div className="flex items-center gap-3">
-            {/* Apple SVG Logo */}
-            <svg
-              viewBox="0 0 384 512"
-              className="w-5 h-5 fill-white text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-transform duration-300 group-hover:scale-110 shrink-0"
-              aria-hidden="true"
-            >
-              <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
-            </svg>
+          {/* Conic specular border */}
+          <span
+            className="absolute inset-0 rounded-2xl p-[1px] pointer-events-none opacity-80"
+            style={{
+              background:
+                'conic-gradient(from 210deg, #77A4F6 0deg, rgba(255,255,255,0.9) 40deg, #A894EE 110deg, rgba(168,148,238,0.15) 180deg, rgba(119,164,246,0.15) 250deg, #77A4F6 360deg)',
+              WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+              WebkitMaskComposite: 'xor',
+              mask: 'linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0)',
+            }}
+          />
 
-            {/* Text Labels */}
-            <div className="flex flex-col items-start leading-none text-left">
-              <span className="text-[9px] font-sans font-medium text-[#94A3B8] tracking-wider uppercase">
-                {t('store_app_store_sub')}
-              </span>
-              <span className="text-sm font-bold text-white tracking-tight mt-0.5 font-sans group-hover:text-[#00ff87] transition-colors">
-                {t('store_app_store_name')}
-              </span>
-            </div>
+          {/* Apple Logo */}
+          <svg
+            viewBox="0 0 24 24"
+            className="w-[24px] h-[24px] sm:w-[26px] sm:h-[26px] shrink-0 fill-current text-white transition-transform duration-300 group-hover:scale-105"
+            style={{
+              filter:
+                'drop-shadow(0 1px 0 rgba(0,0,0,0.7)) drop-shadow(0 0 8px rgba(119,164,246,0.45))',
+            }}
+            aria-hidden="true"
+          >
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.56.65-.96 1.7-0.83 2.72.99.08 2.02-.48 2.53-1.22z" />
+          </svg>
+
+          {/* Texts */}
+          <div className="flex flex-col gap-[1px] leading-tight">
+            <span className="text-[10px] sm:text-[11px] font-normal tracking-[0.02em] text-[#B4C0D0]">
+              {t('store_app_store_sub')}
+            </span>
+            <span className="text-[16px] sm:text-[18px] md:text-[19px] font-semibold tracking-[-0.015em] leading-[1.1] text-white">
+              {t('store_app_store_name')}
+            </span>
           </div>
 
-          {/* Mini Status Tag */}
-          <span className="text-[8px] font-mono font-bold text-[#00ff87] bg-[#00ff87]/15 border border-[#00ff87]/30 px-1.5 py-0.5 rounded ml-2 uppercase shrink-0">
-            SOON
+          {/* Golden Badge */}
+          <span
+            className="font-mono text-[9px] sm:text-[10px] font-semibold tracking-[0.1em] text-[#E2C06D] rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 ml-1.5 sm:ml-2.5 uppercase shrink-0"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(198,159,50,0.14), rgba(198,159,50,0.03))',
+              boxShadow:
+                'inset 0 1px 1px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(198,159,50,0.42), 0 1px 0 rgba(255,255,255,0.08), 0 0 14px rgba(198,159,50,0.18)',
+            }}
+          >
+            {t('footer_soon')}
           </span>
         </button>
 
-        {/* Google Play Store Badge */}
+        {/* Google Play Store */}
         <button
           type="button"
           onClick={handleClick}
-          aria-label="Get it on Google Play (Coming Soon)"
-          className={`group relative inline-flex items-center ${isVertical ? 'justify-between' : 'gap-3'} px-4 py-2.5 rounded-xl bg-[#05070a]/90 hover:bg-[#0c1017] border border-[#8a99ad]/20 hover:border-[#00e5ff]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(0,229,255,0.18)] hover:-translate-y-0.5 active:scale-95 cursor-pointer overflow-hidden`}
-          style={{ minHeight: '44px' }}
+          aria-label={`${t('store_google_play_name')} — ${t('footer_soon')}`}
+          className="group relative flex items-center gap-3 sm:gap-3.5 min-h-[58px] sm:min-h-[64px] px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl text-[#F8FAFC] transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] select-none text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#4CBD88]/50"
+          style={{
+            background:
+              'radial-gradient(120% 160% at 0% 0%, rgba(76,189,136,0.20) 0%, transparent 52%), radial-gradient(120% 160% at 100% 100%, rgba(198,159,50,0.18) 0%, transparent 52%), linear-gradient(172deg, #171E29 0%, #0C1017 52%, #06080C 100%)',
+            boxShadow:
+              'inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.85), inset 0 -14px 22px -14px rgba(198,159,50,0.3), inset 0 14px 22px -16px rgba(76,189,136,0.22), 0 0 0 1px rgba(0,0,0,0.9), 0 8px 14px rgba(0,0,0,0.6), 0 26px 44px -14px rgba(0,0,0,0.85), -14px 28px 52px -24px rgba(76,189,136,0.42), 14px 28px 52px -24px rgba(198,159,50,0.42)',
+          }}
         >
-          {/* Left content (Logo + Texts) */}
-          <div className="flex items-center gap-3">
-            {/* Google Play Colorful SVG Logo */}
-            <svg
-              viewBox="0 0 512 512"
-              className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110"
-              aria-hidden="true"
-            >
-              <path
-                d="M325.3 234.3L104.6 13l280.8 161.2-60.1 59.9z"
-                fill="#00e5ff"
-              />
-              <path
-                d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z"
-                fill="#00A3FF"
-              />
-              <path
-                d="M325.3 277.7l60.1 60.1L104.6 499l220.7-221.3z"
-                fill="#00ff87"
-              />
-              <path
-                d="M486.8 230.1L385.4 172.2 325.3 234.3l60.1 60.1 101.4-58c14.2-8.1 23.2-22.6 23.2-38.1 0-15.6-9-30.1-23.2-38.2z"
-                fill="#ffd15c"
-              />
-            </svg>
+          {/* Conic specular border */}
+          <span
+            className="absolute inset-0 rounded-2xl p-[1px] pointer-events-none opacity-80"
+            style={{
+              background:
+                'conic-gradient(from 210deg, #4CBD88 0deg, rgba(255,255,255,0.9) 40deg, #C69F32 110deg, rgba(198,159,50,0.15) 180deg, rgba(76,189,136,0.15) 250deg, #4CBD88 360deg)',
+              WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+              WebkitMaskComposite: 'xor',
+              mask: 'linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0)',
+            }}
+          />
 
-            {/* Text Labels */}
-            <div className="flex flex-col items-start leading-none text-left">
-              <span className="text-[9px] font-sans font-medium text-[#94A3B8] tracking-wider uppercase">
-                {t('store_google_play_sub')}
-              </span>
-              <span className="text-sm font-bold text-white tracking-tight mt-0.5 font-sans group-hover:text-[#00e5ff] transition-colors">
-                {t('store_google_play_name')}
-              </span>
-            </div>
+          {/* Google Play Colorful Logo */}
+          <svg
+            className="w-[22px] h-[22px] sm:w-[24px] sm:h-[24px] shrink-0 transition-transform duration-300 group-hover:scale-105"
+            viewBox="2.6 1.4 19.2 21.2"
+            aria-hidden="true"
+            style={{
+              filter:
+                'drop-shadow(0 1px 0 rgba(0,0,0,0.7)) drop-shadow(0 0 8px rgba(76,189,136,0.45))',
+            }}
+          >
+            <path fill="#4285F4" d="M3.6 1.8L13.3 12 3.6 22.2c-.3-.2-.5-.6-.5-1.1V2.9c0-.5.2-.9.5-1.1z" />
+            <path fill="#34A853" d="M3.6 1.8c.3-.2.8-.2 1.3.1l11.7 6.7L13.3 12z" />
+            <path fill="#FBBC04" d="M16.6 8.6l3.8 2.2c.9.5.9 1.9 0 2.4l-3.8 2.2L13.3 12z" />
+            <path fill="#EA4335" d="M3.6 22.2L13.3 12l3.3 3.4-11.7 6.7c-.5.3-1 .3-1.3.1z" />
+          </svg>
+
+          {/* Texts */}
+          <div className="flex flex-col gap-[1px] leading-tight">
+            <span className="text-[10px] sm:text-[11px] font-normal tracking-[0.06em] text-[#B4C0D0]">
+              {t('store_google_play_sub')}
+            </span>
+            <span className="text-[16px] sm:text-[18px] md:text-[19px] font-semibold tracking-[-0.015em] leading-[1.1] text-white">
+              {t('store_google_play_name')}
+            </span>
           </div>
 
-          {/* Mini Status Tag */}
-          <span className="text-[8px] font-mono font-bold text-[#00e5ff] bg-[#00e5ff]/15 border border-[#00e5ff]/30 px-1.5 py-0.5 rounded ml-2 uppercase shrink-0">
-            SOON
+          {/* Golden Badge */}
+          <span
+            className="font-mono text-[9px] sm:text-[10px] font-semibold tracking-[0.1em] text-[#E2C06D] rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 ml-1.5 sm:ml-2.5 uppercase shrink-0"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(198,159,50,0.14), rgba(198,159,50,0.03))',
+              boxShadow:
+                'inset 0 1px 1px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(198,159,50,0.42), 0 1px 0 rgba(255,255,255,0.08), 0 0 14px rgba(198,159,50,0.18)',
+            }}
+          >
+            {t('footer_soon')}
           </span>
         </button>
       </div>
 
+      {/* Subtext */}
+      {showPlatformSubtext && (
+        <span className="font-mono text-xs tracking-[0.14em] text-[#8E99A8] text-center pt-1">
+          {t('footer_app_os')} — NATIVE
+        </span>
+      )}
+
       {/* Review & Launch Info Toast Notification */}
       {showNotice && (
-        <div className="animate-fadeIn mt-1 p-2.5 rounded-xl bg-[#121722]/95 border border-[#00ff87]/30 text-white shadow-xl max-w-sm flex items-center gap-2.5 text-xs backdrop-blur-md">
-          <div className="w-6 h-6 rounded-full bg-[#00ff87]/20 border border-[#00ff87]/40 flex items-center justify-center text-[#00ff87] shrink-0">
+        <div className="animate-fadeIn mt-2 p-3 rounded-xl bg-[#121722]/95 border border-[#10B981]/30 text-white shadow-xl max-w-sm flex items-center gap-2.5 text-xs backdrop-blur-md">
+          <div className="w-6 h-6 rounded-full bg-[#10B981]/20 border border-[#10B981]/40 flex items-center justify-center text-[#10B981] shrink-0">
             <CheckCircle2 className="w-3.5 h-3.5" />
           </div>
           <div className="leading-snug">
-            <span className="font-bold text-[#00ff87] block text-[11px] font-mono">
+            <span className="font-bold text-[#10B981] block text-[11px] font-mono">
               [ APP STORE & GOOGLE PLAY REVIEW ]
             </span>
-            <span className="text-[10px] text-[#94A3B8]">
-              {t('store_review_info')}
-            </span>
+            <span className="text-[10px] text-[#94A3B8]">{t('store_review_info')}</span>
           </div>
         </div>
       )}
