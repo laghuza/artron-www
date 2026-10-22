@@ -1,11 +1,10 @@
 'use client';
 
 import React from 'react';
-import { Check, ArrowRight, TrendingUp, Users, Cpu, Shield, Sparkles } from 'lucide-react';
+import { Check, TrendingUp, Users, Cpu, Shield, Sparkles, MessageCircle, ArrowRight } from 'lucide-react';
 import { PricingTier, BillingCycle } from '@/types/pricing';
-import { soundEngine } from '@/core';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
-import { MagneticButton } from '@/components/ui/MagneticButton';
+import { soundEngine } from '@/core';
 
 interface PricingTierCardProps {
   tier: PricingTier;
@@ -13,7 +12,7 @@ interface PricingTierCardProps {
   currencySymbol: string;
   currencyMultiplier: number;
   billingCycle: BillingCycle;
-  onRequestDemo: (tier: PricingTier) => void;
+  onRequestDemo?: (tier: PricingTier) => void;
   t: (key: string) => string;
 }
 
@@ -23,7 +22,6 @@ export const PricingTierCard: React.FC<PricingTierCardProps> = ({
   currencySymbol,
   currencyMultiplier,
   billingCycle,
-  onRequestDemo,
   t,
 }) => {
   const baseCalculated = Math.round(tier.basePrice * currencyMultiplier);
@@ -139,31 +137,30 @@ export const PricingTierCard: React.FC<PricingTierCardProps> = ({
           </ul>
         </div>
 
-        {/* Action Buttons */}
-        <div className="relative z-10 space-y-2 pt-2 border-t border-white/5">
+        {/* Action Button: Triggers Right-Hand Omnichannel Floating Dock */}
+        <div className="relative z-10 pt-4 border-t border-white/5 mt-auto">
           <button
             type="button"
             onClick={() => {
-              soundEngine.playPulseNode();
-              onRequestDemo(tier);
+              try {
+                soundEngine.playPulseNode();
+              } catch {}
+              window.dispatchEvent(
+                new CustomEvent('artron-open-omnichannel', {
+                  detail: { planId: tier.id, planName: t(tier.nameKey) },
+                })
+              );
             }}
-            className="w-full py-3 px-4 rounded-xl text-xs font-bold font-mono uppercase tracking-wider bg-white/5 hover:bg-[#00A3FF]/20 text-white hover:text-[#00D2FF] border border-white/10 hover:border-[#00A3FF]/50 transition-all cursor-pointer flex items-center justify-center gap-2"
+            className={`w-full py-3 px-4 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 group/btn ${
+              isPopular
+                ? 'bg-gradient-to-r from-[#00ff87] via-[#00e5ff] to-[#00A3FF] text-black font-extrabold shadow-[0_0_20px_rgba(0,255,135,0.35)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] hover:scale-[1.02] active:scale-[0.98]'
+                : 'bg-white/5 hover:bg-[#00A3FF]/20 text-white hover:text-[#00D2FF] border border-white/10 hover:border-[#00A3FF]/50 shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(0,163,255,0.25)]'
+            }`}
           >
-            <span>{t('pricing_btn_request_demo')}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <MessageCircle className={`w-3.5 h-3.5 ${isPopular ? 'text-black fill-black' : 'text-[#00A3FF]'}`} />
+            <span>{t('pricing_btn_consultation')}</span>
+            <ArrowRight className={`w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-1 ${isPopular ? 'text-black' : 'text-[#00A3FF]'}`} />
           </button>
-
-          <MagneticButton
-            href={`/get-started?mode=register&plan=${tier.id}&cycle=${billingCycle.toLowerCase()}`}
-            onClick={() => soundEngine.playPulseNode()}
-            fullWidth
-            variant={isPopular ? 'primary' : 'secondary'}
-            shockwaveColor="rgba(0, 163, 255, 0.7)"
-            className="w-full py-3 px-4 rounded-xl text-xs uppercase tracking-wider font-bold"
-          >
-            <span>{t('pricing_btn_activate')}</span>
-            <ArrowRight className="w-4 h-4" />
-          </MagneticButton>
         </div>
       </div>
     </TiltSpotlightCard>

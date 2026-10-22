@@ -12,17 +12,17 @@ export const ArtronMobileShowcase: React.FC = () => {
 
   return (
     <section
-      id="b2c-mobile"
+      id="mobile-app"
       data-screen-label="B2C Mobile Showcase"
-      className="relative w-full overflow-hidden text-[#F8FAFC] select-none"
+      className="relative w-full overflow-hidden text-[#F8FAFC] select-none scroll-mt-20"
       style={{
         background:
           'radial-gradient(ellipse 38% 26% at 78% 10%, rgba(248,250,252,.03) 0%, rgba(224,242,254,.02) 45%, rgba(224,242,254,0) 75%), radial-gradient(ellipse 70% 55% at 75% 35%, rgba(14,34,61,.75) 0%, rgba(8,20,38,.4) 45%, rgba(4,6,10,0) 75%), radial-gradient(ellipse 50% 40% at 6% 0%, rgba(8,20,38,.55) 0%, rgba(4,6,10,0) 70%), linear-gradient(180deg, rgba(224,242,254,.018) 0%, rgba(224,242,254,0) 28%), #04060A',
       }}
     >
       {/* Anchor targets */}
-      <div id="mobile-app" className="absolute -top-24 left-0" />
-      <div id="b2c-experience" className="absolute -top-24 left-0" />
+      <span id="b2c-mobile" className="absolute -top-24 left-0 pointer-events-none" />
+      <span id="b2c-experience" className="absolute -top-24 left-0 pointer-events-none" />
 
       {/* Sacred Geometry Background Grid & Golden Ratio Lines */}
       <div

@@ -108,7 +108,7 @@ export const FooterSlogan: React.FC<FooterSloganProps> = ({ sloganRef, onShock }
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12 pb-4 md:pb-6 flex flex-col items-center gap-6 md:gap-8">
         {/* Colossal Fluid Slogan */}
-        <div data-reveal="slogan" className="relative text-center w-full select-none">
+        <div className="relative text-center w-full select-none">
           {/* Atmosphere Glow Behind Slogan */}
           <div
             aria-hidden="true"
@@ -145,8 +145,6 @@ export const FooterSlogan: React.FC<FooterSloganProps> = ({ sloganRef, onShock }
 
         {/* Lower Copyright & Telemetry Bar */}
         <div
-          data-reveal="rise"
-          data-order="4"
           data-rim="top"
           className="relative w-full flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-400/10 text-xs text-[#64748B]"
         >

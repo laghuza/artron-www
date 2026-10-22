@@ -20,9 +20,9 @@ export const FooterNavGrid: React.FC<FooterNavGridProps> = ({
   const { t } = useLanguage();
   const pathname = usePathname();
 
-  const ecoLinks = [
-    { label: t('footer_eco_b2b'), href: '/sports-os' },
-    { label: t('footer_eco_app'), href: '#mobile' },
+  const ecoLinks: { label: string; href?: string }[] = [
+    { label: t('footer_eco_b2b') },
+    { label: t('footer_eco_app'), href: '/#b2c-mobile' },
   ];
 
   const legalLinks = [
@@ -62,8 +62,6 @@ export const FooterNavGrid: React.FC<FooterNavGridProps> = ({
     <section className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 pt-6 md:pt-8 pb-8 md:pb-12">
       {/* Column 01: ეკოსისტემა (Ecosystem) */}
       <div
-        data-reveal="rise"
-        data-order="1"
         className="relative flex flex-col gap-3 md:pr-8 lg:pr-10"
       >
         <div className="flex items-center gap-2.5 mb-1">
@@ -73,16 +71,25 @@ export const FooterNavGrid: React.FC<FooterNavGridProps> = ({
         </div>
 
         <nav className="flex flex-col space-y-1">
-          {ecoLinks.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="group min-h-[36px] flex items-center text-sm leading-snug text-[#CBD5E1] hover:text-white transition-all duration-300 relative pl-0 hover:pl-4 focus:outline-none focus:text-white"
-            >
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0 h-0.5 bg-gradient-to-r from-[#10B981] to-[#059669] group-hover:w-3 transition-all duration-300" />
-              <span>{item.label}</span>
-            </Link>
-          ))}
+          {ecoLinks.map((item) =>
+            item.href ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="group min-h-[36px] flex items-center text-sm leading-snug text-[#CBD5E1] hover:text-white transition-all duration-300 relative pl-0 hover:pl-4 focus:outline-none focus:text-white"
+              >
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0 h-0.5 bg-gradient-to-r from-[#10B981] to-[#059669] group-hover:w-3 transition-all duration-300" />
+                <span>{item.label}</span>
+              </Link>
+            ) : (
+              <div
+                key={item.label}
+                className="min-h-[36px] flex items-center text-sm leading-snug text-[#CBD5E1] select-none cursor-default"
+              >
+                <span>{item.label}</span>
+              </div>
+            )
+          )}
         </nav>
 
         {/* Social Channels */}
@@ -114,13 +121,32 @@ export const FooterNavGrid: React.FC<FooterNavGridProps> = ({
               <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z" />
             </svg>
           </a>
+
+          <a
+            href={CONTACT_CONFIG.email.mailto}
+            aria-label="Email"
+            title="info@artron.ge"
+            data-rim="rect"
+            onPointerDown={handlePulse}
+            className="footer-social-btn select-none focus:outline-none focus:ring-1 focus:ring-[#D4AF37]/50"
+          >
+            <svg
+              className="w-[18px] h-[18px] fill-none stroke-current"
+              viewBox="0 0 24 24"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect width="20" height="16" x="2" y="4" rx="2.5" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+          </a>
         </div>
       </div>
 
       {/* Column 02: სამართლებრივი (Legal) */}
       <div
-        data-reveal="rise"
-        data-order="2"
         className="relative flex flex-col gap-3 md:px-8 lg:px-10"
       >
         {/* Desktop Left Divider */}
@@ -221,8 +247,6 @@ export const FooterNavGrid: React.FC<FooterNavGridProps> = ({
 
       {/* Column 03: კონტაქტი & იურიდიული პირი (Contact & Legal Entity) */}
       <div
-        data-reveal="rise"
-        data-order="3"
         className="relative flex flex-col gap-3 md:pl-8 lg:pl-10"
       >
         {/* Desktop Left Divider */}

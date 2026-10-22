@@ -13,8 +13,6 @@ export const FooterAppBadges: React.FC<FooterAppBadgesProps> = ({ onNotify }) =>
 
   return (
     <section
-      data-reveal="rise"
-      data-order="0"
       className="relative flex flex-wrap items-center justify-between gap-4 md:gap-8 pb-5 md:pb-7"
     >
       {/* Left: Live Pulse Status & App Title */}

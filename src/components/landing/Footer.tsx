@@ -71,78 +71,9 @@ export const Footer: React.FC = () => {
     }
   }, []);
 
-  // Reveal animations setup for elements inside the footer
+  // Cleanup timers on unmount
   useEffect(() => {
-    const host = footerRef.current;
-    if (!host || typeof window === 'undefined') return;
-
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce || !('IntersectionObserver' in window) || !Element.prototype.animate) return;
-
-    const els = Array.from(host.querySelectorAll<HTMLElement>('[data-reveal]'));
-    const hiddenMap: Record<string, string> = {
-      slogan: 'translate3d(0,6px,0) scale(.95)',
-      beam: 'scaleX(0)',
-      glow: 'translate3d(-50%,0,0) scaleX(0)',
-      rise: 'translate3d(0,20px,0)',
-    };
-    const showMap: Record<string, string> = {
-      slogan: 'translate3d(0,0,0) scale(1)',
-      beam: 'scaleX(1)',
-      glow: 'translate3d(-50%,0,0) scaleX(1)',
-      rise: 'translate3d(0,0,0)',
-    };
-
-    els.forEach((el) => {
-      const t = el.dataset.reveal || '';
-      if (!hiddenMap[t]) return;
-      el.style.opacity = '0';
-      el.style.transform = hiddenMap[t];
-      el.style.willChange = 'transform,opacity';
-    });
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-
-        els.forEach((el) => {
-          const t = el.dataset.reveal || '';
-          if (!hiddenMap[t]) return;
-
-          const delay =
-            t === 'slogan'
-              ? 0
-              : t === 'beam'
-              ? 400
-              : t === 'glow'
-              ? 420
-              : 700 + (parseInt(el.dataset.order || '0', 10) || 0) * 60;
-
-          const duration = t === 'slogan' ? 400 : t === 'beam' ? 300 : t === 'glow' ? 520 : 360;
-
-          const anim = el.animate(
-            [
-              { opacity: 0, transform: hiddenMap[t] },
-              { opacity: 1, transform: showMap[t] },
-            ],
-            { delay, duration, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both' }
-          );
-
-          anim.onfinish = () => {
-            el.style.opacity = '1';
-            el.style.transform = showMap[t];
-            el.style.willChange = '';
-          };
-        });
-      },
-      { threshold: 0.12 }
-    );
-
-    observer.observe(host);
-
     return () => {
-      observer.disconnect();
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
     };
@@ -192,7 +123,6 @@ export const Footer: React.FC = () => {
 
       {/* Top Arc Glow Flare */}
       <div
-        data-reveal="glow"
         aria-hidden="true"
         className="absolute left-1/2 top-0 w-[min(720px,70%)] h-[90px] -translate-x-1/2 z-0 pointer-events-none"
         style={{
@@ -203,7 +133,6 @@ export const Footer: React.FC = () => {
 
       {/* Top Beam Border Highlight with Celestial Arch */}
       <div
-        data-reveal="beam"
         aria-hidden="true"
         className="absolute inset-0 z-[2] pointer-events-none origin-top pt-[1.5px]"
         style={{

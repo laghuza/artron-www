@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CONTACT_CONFIG } from '@/config/contact';
 import { MessageCircle, Phone, X } from 'lucide-react';
@@ -19,6 +19,25 @@ export const OmnichannelCluster: React.FC<OmnichannelClusterProps> = ({
   setHoveredNode,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+
+  // Listen for trigger from Pricing cards or other CTA elements
+  useEffect(() => {
+    const handleTrigger = () => {
+      setIsOpen(true);
+      setIsHighlighted(true);
+      playTactileFeedback();
+
+      // Remove highlight after 4 seconds
+      const timer = setTimeout(() => {
+        setIsHighlighted(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    };
+
+    window.addEventListener('artron-open-omnichannel', handleTrigger);
+    return () => window.removeEventListener('artron-open-omnichannel', handleTrigger);
+  }, [playTactileFeedback]);
 
   return (
     <div className="relative mt-2">
@@ -26,14 +45,17 @@ export const OmnichannelCluster: React.FC<OmnichannelClusterProps> = ({
         onClick={() => {
           playTactileFeedback();
           setIsOpen(!isOpen);
+          setIsHighlighted(false);
         }}
         onMouseEnter={() => {
           setHoveredNode('omnichannel-trigger');
           playTactileFeedback();
         }}
         onMouseLeave={() => setHoveredNode(null)}
-        className={`relative w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none ${
-          isOpen
+        className={`relative w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 focus:outline-none ${
+          isHighlighted
+            ? 'bg-gradient-to-tr from-[#00ff87] to-[#00E5FF] text-[#080C14] ring-2 ring-[#00ff87] shadow-[0_0_25px_rgba(0,255,135,0.7)] animate-bounce'
+            : isOpen
             ? 'bg-gradient-to-tr from-[#00A3FF] to-[#00E5FF] text-[#080C14] shadow-[0_0_16px_rgba(0,229,255,0.5)]'
             : 'text-slate-300 hover:text-[#00E5FF] hover:bg-[#00E5FF]/15 border border-white/10 hover:border-[#00E5FF]/30'
         }`}

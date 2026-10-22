@@ -30,7 +30,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import ArtronLogo from '@/components/ui/ArtronLogo';
 import { audioManager } from '@/lib/audioManager';
 import { useHeaderKinematics } from '@/core/hooks/useHeaderKinematics';
-import { IgnitionButton } from '@/components/ui/IgnitionButton';
+import { useSectionScrollSpy, SECTION_IDS } from '@/core/hooks/useSectionScrollSpy';
 import PS5LanguageSelector from '@/components/navigation/PS5LanguageSelector';
 
 interface HeaderProps {
@@ -41,17 +41,6 @@ interface HeaderProps {
   className?: string;
   hideOnInitialScroll?: boolean;
 }
-
-const SECTION_IDS = [
-  'pure-sports-mirror',
-  'ecosystem',
-  'dashboard-features',
-  'mobile-app',
-  'ai-intelligence',
-  'pricing',
-  'partner-ecosystem',
-  'faq',
-];
 
 const CONTROL_PANEL_IDS = [
   '/#dashboard-features',
@@ -76,6 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMobileControlPanelExpanded, setIsMobileControlPanelExpanded] = useState(false);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [activeNav, setActiveNav] = useState<string>('');
+  const { activeId, setManualActive } = useSectionScrollSpy();
   const controlPanelMenuRef = useRef<HTMLDivElement>(null);
   const controlPanelTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -104,70 +94,16 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, []);
 
-  /* ── Active section detection on scroll (Viewport ScrollSpy) ── */
+  /* ── Active section detection synced via useSectionScrollSpy ── */
   useEffect(() => {
     if (pathname === '/about') {
       setActiveNav('/about');
       return;
     }
-    if (pathname !== '/') return;
-
-    let ticking = false;
-
-    const updateActiveSection = () => {
-      const scrollY = window.scrollY;
-
-      // 1. Top boundary: clear active nav when in hero area
-      if (scrollY < 120) {
-        setActiveNav((prev) => (prev !== '' ? '' : prev));
-        return;
-      }
-
-      // 2. Bottom boundary: highlight FAQ when scrolled to the very bottom
-      const scrollBottom = scrollY + window.innerHeight;
-      const scrollHeight = document.documentElement.scrollHeight;
-      if (scrollHeight > 0 && scrollBottom >= scrollHeight - 60) {
-        setActiveNav((prev) => (prev !== '/#faq' ? '/#faq' : prev));
-        return;
-      }
-
-      // 3. Focal reading line (42% down the viewport) for natural section tracking
-      const focalPoint = window.innerHeight * 0.42;
-      let currentNav = '';
-
-      for (const id of SECTION_IDS) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= focalPoint) {
-          currentNav = `/#${id}`;
-        }
-      }
-
-      if (currentNav) {
-        setActiveNav((prev) => (prev !== currentNav ? currentNav : prev));
-      }
-    };
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          updateActiveSection();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
-    updateActiveSection();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, [pathname]);
+    if (pathname === '/') {
+      setActiveNav(activeId ? `/#${activeId}` : '');
+    }
+  }, [activeId, pathname]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     audioManager.playClick();
@@ -190,6 +126,12 @@ export const Header: React.FC<HeaderProps> = ({
         (targetId === 'ai' || targetId === 'multimodal-ai' ? document.getElementById('ai-intelligence') : null) ||
         (targetId === 'roi' ? document.getElementById('analytics-showcase') : null) ||
         document.getElementById('dashboard-features');
+
+      const primaryId = SECTION_IDS.includes(targetId)
+        ? targetId
+        : (targetId === 'ai' || targetId === 'multimodal-ai' ? 'ai-intelligence' : 'dashboard-features');
+
+      setManualActive(primaryId);
 
       if (el && pathname === '/') {
         e.preventDefault();
@@ -327,7 +269,6 @@ export const Header: React.FC<HeaderProps> = ({
     activeNav === '/#roi' ||
     activeNav.startsWith('/#analytics-');
   const isAnalyticsActive = activeNav.startsWith('/#analytics-showcase') || activeNav === '/#roi' || activeNav.startsWith('/#analytics-');
-  const systemAccessLabel = locale === 'ka' ? 'Sport OS დემო' : locale === 'ru' ? 'Демо Sport OS' : 'Sport OS Demo';
   const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა' : locale === 'ru' ? 'Спортивная Экосистема' : 'SPORTS ECOSYSTEM';
 
   /* ── Glass header surface ── */
@@ -423,7 +364,7 @@ export const Header: React.FC<HeaderProps> = ({
                           layoutId="active-nav-pill"
                           className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00A3FF]/25 via-[#00A3FF]/15 to-[#00D2FF]/25 border border-[#00A3FF]/50 shadow-[0_0_14px_rgba(0,163,255,0.35)]"
                           initial={false}
-                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                          transition={{ type: 'spring', stiffness: 550, damping: 35 }}
                         />
                       )}
 
@@ -620,7 +561,7 @@ export const Header: React.FC<HeaderProps> = ({
                       layoutId="active-nav-pill"
                       className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00A3FF]/25 via-[#00A3FF]/15 to-[#00D2FF]/25 border border-[#00A3FF]/50 shadow-[0_0_14px_rgba(0,163,255,0.35)]"
                       initial={false}
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      transition={{ type: 'spring', stiffness: 550, damping: 35 }}
                     />
                   )}
 
@@ -685,31 +626,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>{locale === 'ka' ? 'მთავარი' : locale === 'ru' ? 'Главная' : 'Home'}</span>
               </Link>
             </div>
-          ) : (
-            <>
-              {/* ⚡ SYSTEM ACCESS BUTTON — Reverse Kinetic from R2 & N trajectory */}
-              <motion.div
-                style={{
-                  x: kinematics.access.x,
-                  y: kinematics.access.y,
-                  rotate: kinematics.access.rotate,
-                  scale: kinematics.access.scale,
-                  opacity: kinematics.access.opacity,
-                }}
-                className="will-change-transform shrink-0 hidden sm:block"
-              >
-                <IgnitionButton
-                  href="/sports-os"
-                  variant="emerald"
-                  size="sm"
-                  className="px-2.5 sm:px-3.5 h-8.5 text-[10.5px] sm:text-xs rounded-xl"
-                  aria-label="Sport OS Ignition"
-                >
-                  {systemAccessLabel}
-                </IgnitionButton>
-              </motion.div>
-            </>
-          )}
+          ) : null}
 
           {/* ══ PS5 AIRY LANGUAGE SWITCHER — Reverse Kinetic from Letter O trajectory ══ */}
           <motion.div
@@ -914,19 +831,6 @@ export const Header: React.FC<HeaderProps> = ({
                 />
               </div>
 
-              {/* Mobile CTA */}
-              <div className="mt-2 pt-2 border-t border-white/[0.08]">
-                <IgnitionButton
-                  href="/sports-os"
-                  variant="emerald"
-                  size="md"
-                  fullWidth={true}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  aria-label="Sport OS Ignition Mobile"
-                >
-                  {systemAccessLabel}
-                </IgnitionButton>
-              </div>
             </div>
           </motion.div>
         )}

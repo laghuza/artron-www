@@ -63,6 +63,15 @@ export const FloatingContactWidget: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const handleOmnichannelOpen = () => {
+      setIsOpen(true);
+      audioManager.playClick();
+    };
+    window.addEventListener('artron-open-omnichannel', handleOmnichannelOpen);
+    return () => window.removeEventListener('artron-open-omnichannel', handleOmnichannelOpen);
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) setIsOpen(false);
     };
