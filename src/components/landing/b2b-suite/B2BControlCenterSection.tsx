@@ -103,8 +103,23 @@ export const B2BControlCenterSection: React.FC = () => {
     }, 60);
   }, []);
 
-  // Sync timers
+  const [isSectionVisible, setIsSectionVisible] = useState(true);
+
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsSectionVisible(entry.isIntersecting);
+    }, { threshold: 0.05 });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Sync timers (only run when section is visible)
+  useEffect(() => {
+    if (!isSectionVisible) return;
     const timer = setInterval(() => {
       setSync((s) => (s >= 5 ? 1 : s + 1));
       if (offline) {
@@ -112,16 +127,16 @@ export const B2BControlCenterSection: React.FC = () => {
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [offline]);
+  }, [isSectionVisible, offline]);
 
-  // Auto-pass every 7s on Node 0
+  // Auto-pass every 7s on Node 0 (only run when section is visible)
   useEffect(() => {
-    if (node !== 0) return;
+    if (node !== 0 || !isSectionVisible) return;
     const autoPassInterval = setInterval(() => {
       handlePass(false);
     }, 7000);
     return () => clearInterval(autoPassInterval);
-  }, [node, handlePass]);
+  }, [node, handlePass, isSectionVisible]);
 
   // Keyboard navigation
   useEffect(() => {

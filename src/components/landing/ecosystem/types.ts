@@ -50,6 +50,7 @@ export interface EnneaVenue {
   logoSrc?: string;
   isPartner?: boolean;
   workingHours?: VenueWorkingHours;
+  url?: string;
 }
 
 

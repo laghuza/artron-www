@@ -52,7 +52,7 @@ export const PartnerNetworkRadar: React.FC = () => {
             <div className="p-3.5 rounded-xl bg-[#0C121D]/90 border border-white/5 space-y-1">
               <div className="flex items-center gap-2 text-[#00A3FF] text-[10px] font-mono font-bold uppercase">
                 <Radio className="w-3.5 h-3.5" />
-                <span>6 ACTIVE NODES</span>
+                <span>7 ACTIVE NODES</span>
               </div>
               <div className="text-xs font-bold text-white">
                 {locale === 'ka' ? 'ქუთაისი • თერჯოლა • თბილისი' : locale === 'ru' ? 'Кутаиси • Тержола • Тбилиси' : 'Kutaisi • Terjola • Tbilisi'}

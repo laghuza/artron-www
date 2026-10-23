@@ -16,19 +16,29 @@ import {
 export function useHeaderKinematics(hideOnInitialScroll: boolean) {
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
-  const [isInteractive, setIsInteractive] = useState(!hideOnInitialScroll);
-  const [isScrolledPast, setIsScrolledPast] = useState(false);
 
-  // Active progress value: if reduced motion or subpage, lock to fully docked
+  // Active progress value: dynamic only if hideOnInitialScroll and full motion enabled
   const isDynamic = hideOnInitialScroll && !shouldReduceMotion;
+
+  const [isInteractive, setIsInteractive] = useState(!isDynamic);
+  const [isScrolledPast, setIsScrolledPast] = useState(!isDynamic);
 
   // Motion value for dock progress (0 to 1)
   const dockValue = useMotionValue(isDynamic ? 0 : 1);
 
   useEffect(() => {
-    if (!isDynamic) {
+    // Check if navigating directly to a section anchor or cross-page target
+    let hasTargetAnchor = false;
+    try {
+      hasTargetAnchor = Boolean(
+        window.location.hash || sessionStorage.getItem('artron_target_nav')
+      );
+    } catch {}
+
+    if (!isDynamic || hasTargetAnchor) {
       dockValue.set(1);
       setIsInteractive(true);
+      setIsScrolledPast(true);
       return;
     }
 

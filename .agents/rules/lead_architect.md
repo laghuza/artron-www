@@ -124,3 +124,13 @@ Your objective is to build a high-converting, Dark Futurist, Enterprise-Grade B2
 - Clean code architecture with strict TypeScript types for all data structures.
 - Mobile-first responsive breakpoints (sm, md, lg, xl).
 - Zero reliance on external heavy UI libraries that compromise speed; use Tailwind utility classes.
+
+---
+
+## 6. NEXT.JS 15 & REACT 19 MODERN ARCHITECTURAL LAWS
+1. **Async Params Law:** Never access `params` or `searchParams` synchronously. Always `await params`.
+2. **Server Auth Integrity:** Disallow `getSession()` on server. Require cryptographically verified `getUser()`.
+3. **Server Actions Contract:** Validate all Server Action inputs with Zod schemas; return `{ success: boolean, data?, error? }`.
+4. **Waterfall Elimination:** Use `Promise.all` for parallel fetching and `<Suspense>` boundaries for non-blocking UI streaming.
+5. **Zero Secret Leakage:** Strictly forbid importing server credentials or environment variables without `NEXT_PUBLIC_` inside `'use client'` components.
+6. **File Size Enforcement:** Maintain 250–300 lines soft target, with a hard maximum ceiling of 400 lines across all files.

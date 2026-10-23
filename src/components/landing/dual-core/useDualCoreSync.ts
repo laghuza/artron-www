@@ -55,8 +55,24 @@ export function useDualCoreSync() {
     timersRef.current.push(t);
   }, []);
 
-  // TTL Countdown & QR Regeneration when Idle
+  const [isVisible, setIsVisible] = useState(true);
+
   useEffect(() => {
+    const el = document.getElementById('ecosystem');
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    }, { threshold: 0.05 });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // TTL Countdown & QR Regeneration when Idle (only while visible)
+  useEffect(() => {
+    if (!isVisible) return;
+
     const interval = setInterval(() => {
       setState((prev) => {
         if (prev.phase !== 'idle') return prev;
@@ -68,7 +84,7 @@ export function useDualCoreSync() {
     }, 100);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isVisible]);
 
   // Smooth Revenue Numeric Tween (2,450 -> 2,500)
   const tweenRevenue = useCallback((from: number, to: number) => {

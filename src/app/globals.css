@@ -608,6 +608,23 @@ body {
   }
 }
 
+@keyframes packet-slide-flow {
+  0% {
+    transform: translate3d(-100px, -50%, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(calc(100vw + 100px), -50%, 0);
+    opacity: 0;
+  }
+}
+
 @keyframes packet-beacon {
   0%, 100% {
     transform: scale(1);

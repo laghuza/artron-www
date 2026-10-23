@@ -78,38 +78,6 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
     // Build complete turnstile elements
     const T = buildTurnstileScene(scene, neon);
 
-    // 3D Projected Floating Tag (Desktop only — on mobile < 1024px it collides with foreground KPI cards)
-    const isMobileViewport = (el.clientWidth || window.innerWidth) < 1024;
-    const tag = document.createElement('div');
-    tag.style.cssText = `position:absolute;left:0;top:0;z-index:20;pointer-events:none;display:${isMobileViewport ? 'none' : 'flex'};align-items:center;gap:0;will-change:transform;transition:opacity .4s`;
-    tag.innerHTML =
-      '<span data-d style="width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;flex:none"></span>' +
-      '<span style="width:46px;height:1px;background:rgba(186,230,253,0.4);flex:none"></span>' +
-      '<span style="display:flex;flex-direction:column;gap:3px;padding:8px 12px;border-radius:8px;background:rgba(6,9,14,0.65);backdrop-filter:blur(12px);border:1px solid rgba(186,230,253,0.18);font-family:monospace;font-size:10.5px;letter-spacing:0.12em;white-space:nowrap;box-shadow:0 10px 25px -5px rgba(0,0,0,0.8)">' +
-      '<span data-a style="color:#F0F9FF;font-weight:600"></span>' +
-      '<span data-b style="font-family:sans-serif;letter-spacing:0.02em;font-size:11.5px"></span>' +
-      '</span>';
-    el.appendChild(tag);
-
-    const tA = tag.querySelector('[data-a]') as HTMLElement;
-    const tB = tag.querySelector('[data-b]') as HTMLElement;
-    const tD = tag.querySelector('[data-d]') as HTMLElement;
-    let tagTxt = '';
-    const setTag = (a: string, b: string, hot: boolean) => {
-      const k = a + b + hot;
-      if (k === tagTxt) return;
-      tagTxt = k;
-      if (tA) tA.textContent = a;
-      if (tB) {
-        tB.textContent = b;
-        tB.style.color = hot ? '#' + neon.getHexString() : '#A9B9CA';
-      }
-      if (tD) {
-        tD.style.background = '#' + neon.getHexString();
-        tD.style.boxShadow = '0 0 10px #' + neon.getHexString();
-      }
-    };
-
     let nx = 0, ny = 0, mx = 0, my = 0, drag = 0;
     let dragS: { x: number; y: number; d: number; m: number } | null = null;
     let inside = false;
@@ -119,12 +87,10 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
     // Cache bounding box to eliminate synchronous layout reflows on pointer movement
     let cachedRect = el.getBoundingClientRect();
     const updateRect = () => {
-      cachedRect = el.getBoundingClientRect();
-      const currentW = el.clientWidth || window.innerWidth;
-      tag.style.display = currentW < 1024 ? 'none' : 'flex';
+      if (el) cachedRect = el.getBoundingClientRect();
     };
     window.addEventListener('resize', updateRect, { passive: true });
-    window.addEventListener('scroll', updateRect, { passive: true });
+    el.addEventListener('pointerenter', updateRect, { passive: true });
 
     const ray = new THREE.Raycaster();
     const ndc = new THREE.Vector2();
@@ -162,13 +128,11 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
     };
 
     let tr = 0, cur = 0, flash = 0, pulseT = 9;
-    let hotName = '';
 
-    const doPass = (name?: string) => {
+    const doPass = (_name?: string) => {
       tr += TAU / 3;
       flash = 1;
       pulseT = 0;
-      hotName = name || 'ნიკოლოზ ბ.';
     };
     triggerPassRef.current = doPass;
 
@@ -214,10 +178,8 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
     let raf: number;
     let t = 0;
     let lastTime = performance.now();
-    const tmp = new THREE.Vector3();
     const base = new THREE.Color();
     const tc = new THREE.Color();
-    let lastTagX = -999, lastTagY = -999;
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
@@ -294,22 +256,7 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
       T.motes.geometry.attributes.position.needsUpdate = true;
       T.motes.rotation.y += dt * 0.03 * mo;
 
-      // Project tag onto screen with hardware accelerated transform
-      T.anchor.getWorldPosition(tmp);
-      tmp.project(cam);
-      const px = (tmp.x * 0.5 + 0.5) * w;
-      const py = (-tmp.y * 0.5 + 0.5) * h;
-      if (Math.abs(px - lastTagX) > 0.4 || Math.abs(py - lastTagY) > 0.4) {
-        lastTagX = px;
-        lastTagY = py;
-        tag.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) translateY(-50%)`;
-      }
 
-      if (f > 0.25 && hotName) {
-        setTag('T-01 · ACCESS GRANTED', 'დაშვება · ' + hotName, true);
-      } else {
-        setTag('T-01 · TRIPOD · ONLINE', 'დააჭირეთ მოდელს — გავლა', false);
-      }
 
       r.render(scene, cam);
     };
@@ -323,7 +270,7 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
       io.disconnect();
       window.removeEventListener('pointermove', pm);
       window.removeEventListener('resize', updateRect);
-      window.removeEventListener('scroll', updateRect);
+      el.removeEventListener('pointerenter', updateRect);
       r.domElement.removeEventListener('pointerdown', pd);
       window.removeEventListener('pointerup', pu);
       document.documentElement.removeEventListener('pointerleave', pl2);
@@ -338,7 +285,6 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
       if (scene.environment) scene.environment.dispose();
       r.dispose();
       if (el.contains(r.domElement)) el.removeChild(r.domElement);
-      if (el.contains(tag)) el.removeChild(tag);
     };
   }, [motion, neonColorHex]);
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Image from "next/image";
 import { ChevronRight, ArrowLeft, X, Building2, Handshake } from "lucide-react";
 import { EnneaVenue, EnneaRegion, EnneaStrings, HeroStat, ViewMode } from "./types";
 import { soundEngine } from "./EnneaAudioEngine";
@@ -198,13 +199,26 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
           {selectedVenue ? (
             /* Selected Venue Header */
             <div className="flex items-center justify-between gap-2">
-              <div className="flex flex-col min-w-0">
-                <h1 className="text-lg font-bold text-[#F4FAFF] truncate font-mono">
-                  {selectedVenue.name}
-                </h1>
-                <span className="text-xs text-[#8AA3B2] font-mono">
-                  {selectedVenue.category} · {selectedVenue.city}
-                </span>
+              <div className="flex items-center gap-3 min-w-0">
+                {selectedVenue.logoSrc ? (
+                  <Image
+                    src={selectedVenue.logoSrc}
+                    alt={selectedVenue.name}
+                    width={36}
+                    height={36}
+                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-white/20 shadow-md"
+                  />
+                ) : (
+                  <span className="w-3 h-3 rounded-full bg-[#00A3FF] shrink-0 shadow-[0_0_8px_#00A3FF]" />
+                )}
+                <div className="flex flex-col min-w-0">
+                  <h1 className="text-lg font-bold text-[#F4FAFF] truncate font-mono">
+                    {selectedVenue.name}
+                  </h1>
+                  <span className="text-xs text-[#8AA3B2] font-mono">
+                    {selectedVenue.category} · {selectedVenue.city}
+                  </span>
+                </div>
               </div>
               <button
                 type="button"

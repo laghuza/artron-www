@@ -88,6 +88,25 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
       }
     };
 
+    let w = cv.clientWidth || 400;
+    let h = cv.clientHeight || 200;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const updateSize = () => {
+      if (!cv) return;
+      w = cv.clientWidth;
+      h = cv.clientHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      if (w > 0 && h > 0) {
+        cv.width = Math.round(w * dpr);
+        cv.height = Math.round(h * dpr);
+      }
+    };
+    updateSize();
+
+    const ro = new ResizeObserver(updateSize);
+    ro.observe(cv);
+
     const loop = (now: number) => {
       rafId = requestAnimationFrame(loop);
       if (!isVisibleRef.current) return;
@@ -95,15 +114,9 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      const W = cv.clientWidth;
-      const H = cv.clientHeight;
-      const dpr = window.devicePixelRatio || 1;
+      const W = w;
+      const H = h;
       if (!W || !H) return;
-
-      if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) {
-        cv.width = Math.round(W * dpr);
-        cv.height = Math.round(H * dpr);
-      }
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
@@ -345,7 +358,10 @@ export const SyntaxBridgeCanvas: React.FC<SyntaxBridgeCanvasProps> = ({ state })
     };
 
     rafId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafId);
+    return () => {
+      cancelAnimationFrame(rafId);
+      ro.disconnect();
+    };
   }, [state.pktOn, state.revOn, state.dispatch]);
 
   const lit = state.phase === 'synced' || state.pktOn;

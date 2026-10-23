@@ -44,13 +44,11 @@ export const SectionTransition: React.FC<SectionTransitionProps> = ({
         <div className="absolute w-1 h-1 rounded-full bg-white shadow-[0_0_4px_#FFFFFF]" />
       </div>
 
-      {/* Quantum Data Packet Flowing Left -> Right */}
       <div
         className="absolute h-[2px] w-16 rounded-full bg-gradient-to-r from-transparent via-[#00D2FF] to-transparent shadow-[0_0_10px_#00D2FF,0_0_20px_#00A3FF]"
         style={{
           top: '50%',
-          transform: 'translateY(-50%)',
-          animation: 'laser-pulse-flow 7s ease-in-out infinite',
+          animation: 'packet-slide-flow 7s ease-in-out infinite',
         }}
       />
 

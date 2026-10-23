@@ -79,3 +79,5 @@ Production `.env` variables, database passwords, and JWT private keys MUST be ma
 - ❌ NEVER expose raw PostgreSQL database ports (5432) directly to the public internet. Access MUST go through PgBouncer / Private VPC.
 - ❌ NEVER perform manual SQL schema mutations directly in production databases. All changes MUST be committed via migration scripts.
 - ❌ NEVER commit `.env` or configuration files with active secrets into Git repositories.
+- ❌ NEVER use `getSession()` in server code; only cryptographically verified `getUser()` is permitted.
+- ❌ NEVER expose server secrets (`DATABASE_URL`, Stripe private keys, Redis auth tokens) in client bundles or `'use client'` components.

@@ -13,18 +13,39 @@ export interface SectionScrollState {
   isHero: boolean;
 }
 
-export function useSectionScrollSpy() {
-  const [state, setState] = useState<SectionScrollState>({
-    activeId: '',
-    activeIndex: -1,
-    sectionProgress: 0,
-    isVisible: false,
-    isHero: true,
-  });
+const INITIAL_SCROLL_STATE: SectionScrollState = {
+  activeId: '',
+  activeIndex: -1,
+  sectionProgress: 0,
+  isVisible: false,
+  isHero: true,
+};
+
+export function useSectionScrollSpy(trackProgress = true) {
+  const [state, setState] = useState<SectionScrollState>(INITIAL_SCROLL_STATE);
 
   const isManualNavRef = useRef<boolean>(false);
   const manualNavTimerRef = useRef<NodeJS.Timeout | null>(null);
   const tickingRef = useRef<boolean>(false);
+  const sectionTopsRef = useRef<number[]>([]);
+  const lastMeasureTimeRef = useRef<number>(0);
+
+  const measureSectionTops = useCallback(() => {
+    if (typeof window === 'undefined') return [];
+    const scrollY = window.scrollY;
+    const tops: number[] = [];
+    for (let i = 0; i < SECTION_IDS.length; i++) {
+      const el = document.getElementById(SECTION_IDS[i]);
+      if (el) {
+        tops.push(el.getBoundingClientRect().top + scrollY);
+      } else {
+        tops.push(tops[i - 1] ?? 0);
+      }
+    }
+    sectionTopsRef.current = tops;
+    lastMeasureTimeRef.current = Date.now();
+    return tops;
+  }, []);
 
   const releaseManualNav = useCallback(() => {
     if (isManualNavRef.current) {
@@ -41,10 +62,13 @@ export function useSectionScrollSpy() {
     const scrollHeight = document.documentElement.scrollHeight;
     const docHeight = scrollHeight - viewportHeight;
 
-    const firstSection = document.getElementById(SECTION_IDS[0]);
-    const firstSectionTop = firstSection
-      ? firstSection.getBoundingClientRect().top + scrollY
-      : 500;
+    // Use cached section tops or measure if stale (> 2500ms or empty)
+    let sectionTops = sectionTopsRef.current;
+    if (sectionTops.length === 0 || Date.now() - lastMeasureTimeRef.current > 2500) {
+      sectionTops = measureSectionTops();
+    }
+
+    const firstSectionTop = sectionTops[0] ?? 500;
     const triggerOffset = Math.max(firstSectionTop - 280, 180);
 
     // 1. Top / Hero Boundary
@@ -82,17 +106,7 @@ export function useSectionScrollSpy() {
     // 3. Focal Point tracking (38% of viewport for natural eye level)
     const focalScroll = scrollY + viewportHeight * 0.38;
 
-    const sectionTops: number[] = [];
-    for (let i = 0; i < SECTION_IDS.length; i++) {
-      const el = document.getElementById(SECTION_IDS[i]);
-      if (el) {
-        sectionTops.push(el.getBoundingClientRect().top + scrollY);
-      } else {
-        sectionTops.push(sectionTops[i - 1] ?? 0);
-      }
-    }
-
-    let foundIndex = 0;
+    let foundIndex = -1;
     for (let i = sectionTops.length - 1; i >= 0; i--) {
       if (focalScroll >= sectionTops[i]) {
         foundIndex = i;
@@ -100,9 +114,24 @@ export function useSectionScrollSpy() {
       }
     }
 
-    // Continuous fractional progress for seamless elevator cable line
+    // If focal scroll has not reached the first section yet, keep in Hero state
+    if (foundIndex === -1) {
+      setState((prev) => {
+        if (prev.isHero && !prev.isVisible && prev.activeIndex === -1) return prev;
+        return {
+          activeId: '',
+          activeIndex: -1,
+          sectionProgress: 0,
+          isVisible: false,
+          isHero: true,
+        };
+      });
+      return;
+    }
+
+    // Continuous fractional progress for seamless elevator cable line (if requested)
     let progress = foundIndex;
-    if (foundIndex < sectionTops.length - 1) {
+    if (trackProgress && foundIndex < sectionTops.length - 1) {
       const currentTop = sectionTops[foundIndex];
       const nextTop = sectionTops[foundIndex + 1];
       const span = nextTop - currentTop;
@@ -115,13 +144,32 @@ export function useSectionScrollSpy() {
     const currentId = SECTION_IDS[foundIndex] || '';
 
     setState((prev) => {
-      // Avoid re-renders if index/id hasn't changed and progress moved insignificantly
+      // For hooks that do not track progress (e.g. Header), only re-render when section actually changes
+      if (!trackProgress) {
+        if (
+          prev.activeIndex === foundIndex &&
+          prev.activeId === currentId &&
+          prev.isVisible &&
+          !prev.isHero
+        ) {
+          return prev;
+        }
+        return {
+          activeId: currentId,
+          activeIndex: foundIndex,
+          sectionProgress: foundIndex,
+          isVisible: true,
+          isHero: false,
+        };
+      }
+
+      // Avoid re-renders if index/id hasn't changed and progress moved insignificantly (< 0.025)
       if (
         prev.activeIndex === foundIndex &&
         prev.activeId === currentId &&
         prev.isVisible &&
         !prev.isHero &&
-        Math.abs(prev.sectionProgress - progress) < 0.015
+        Math.abs(prev.sectionProgress - progress) < 0.025
       ) {
         return prev;
       }
@@ -133,7 +181,7 @@ export function useSectionScrollSpy() {
         isHero: false,
       };
     });
-  }, []);
+  }, [trackProgress, measureSectionTops]);
 
   const handleScroll = useCallback(() => {
     if (!tickingRef.current) {
@@ -153,7 +201,7 @@ export function useSectionScrollSpy() {
     if (manualNavTimerRef.current) clearTimeout(manualNavTimerRef.current);
     manualNavTimerRef.current = setTimeout(() => {
       isManualNavRef.current = false;
-    }, 900);
+    }, 3500);
 
     const targetProgress = Math.max(0, targetIndex);
     setState({
@@ -184,7 +232,7 @@ export function useSectionScrollSpy() {
       if (manualNavTimerRef.current) clearTimeout(manualNavTimerRef.current);
       manualNavTimerRef.current = setTimeout(() => {
         isManualNavRef.current = false;
-      }, 900);
+      }, 3500);
 
       setState({
         activeId: detail.id,
@@ -200,12 +248,42 @@ export function useSectionScrollSpy() {
     window.addEventListener('wheel', releaseManualNav, { passive: true });
     window.addEventListener('touchmove', releaseManualNav, { passive: true });
     window.addEventListener('artron-section-change', handleExternalSectionChange);
-    if ('onscrollend' in window) {
-      window.addEventListener('scrollend', releaseManualNav, { passive: true });
-    }
 
-    // Initial check
-    updateSectionState();
+    // Initial check on mount: check URL hash or target nav from sessionStorage
+    let initialTargetHandled = false;
+    try {
+      let stored = sessionStorage.getItem('artron_target_nav');
+      if (!stored && window.location.hash) {
+        stored = `/#${window.location.hash.replace(/^#/, '')}`;
+      }
+      if (stored) {
+        const id = stored.replace(/^\/?#/, '').split('?')[0];
+        const primaryId = SECTION_IDS.includes(id)
+          ? id
+          : (id === 'ai' || id === 'multimodal-ai' ? 'ai-intelligence' : (id === 'roi' ? 'dashboard-features' : ''));
+        const index = SECTION_IDS.indexOf(primaryId);
+        if (index !== -1) {
+          isManualNavRef.current = true;
+          if (manualNavTimerRef.current) clearTimeout(manualNavTimerRef.current);
+          manualNavTimerRef.current = setTimeout(() => {
+            isManualNavRef.current = false;
+          }, 3500);
+
+          setState({
+            activeId: primaryId,
+            activeIndex: index,
+            sectionProgress: index,
+            isVisible: true,
+            isHero: false,
+          });
+          initialTargetHandled = true;
+        }
+      }
+    } catch {}
+
+    if (!initialTargetHandled) {
+      updateSectionState();
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -213,9 +291,6 @@ export function useSectionScrollSpy() {
       window.removeEventListener('wheel', releaseManualNav);
       window.removeEventListener('touchmove', releaseManualNav);
       window.removeEventListener('artron-section-change', handleExternalSectionChange);
-      if ('onscrollend' in window) {
-        window.removeEventListener('scrollend', releaseManualNav);
-      }
       if (manualNavTimerRef.current) clearTimeout(manualNavTimerRef.current);
     };
   }, [handleScroll, updateSectionState, releaseManualNav]);

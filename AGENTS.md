@@ -73,6 +73,9 @@
 8. **`framer-motion`**: 60 FPS Spring Physics, LazyMotion Bundle ოპტიმიზაცია, Shared Layout (`layoutId`) და EnneaCore SVG ანიმაციები.
 9. **`b2b-saas-positioning`**: April Dunford-ის Obviously Awesome პოზიციონირება, ICP სეგმენტაცია (დარბაზები, აუზები, სტუდიები, ფედერაციები) და კონკურენტული დიფერენცირება.
 10. **`value-proposition-crafting`**: StoryBrand 7-Part Framework, FAB+ROI 4-დონიანი ფორმულა და საქართველოს ბაზრის რეგულაციების (ბრძანება №01-15/ნ, ტურნიკეტების Anti-passback) ბიზნეს-ღირებულებად გადათარგმნა.
+11. **`codebase-design`**: Deep Modules არქიტექტურა (Ousterhout), 250–300 ხაზის Soft Target / 400 ხაზის ჭერი და `artron-backend-knowledge` MCP-ით DTO-ების გადამოწმება.
+12. **`improve-codebase-architecture`**: კოდბაზის არქიტექტურული ხახუნის სკანირება, ვიზუალური HTML რეპორტები Mermaid-ით და `chrome-devtools` MCP-ით ავტომატური აუდიტი.
+13. **`diagnosing-bugs`**: 6-ფაზიანი სამეცნიერო დიაგნოსტიკის ციკლი (წითელი სიგნალი → მინიმიზაცია → ჰიპოთეზები `sequential-thinking`-ით → ინსტრუმენტირება → ფიქსი).
 
 
 

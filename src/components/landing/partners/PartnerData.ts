@@ -17,6 +17,7 @@ export interface GymClient {
   regionName?: string;
   regionCity?: string;
   logoSrc?: string;
+  url?: string;
 }
 
 export interface Partner {
@@ -37,10 +38,40 @@ export interface Partner {
   badges?: string[];
 }
 
+const createLogoBadge = (logoSrc: string, alt: string, borderColor = '#00A3FF', isContained = false, fallbackInitials?: string) =>
+  React.createElement(
+    'div',
+    { className: `w-12 h-12 rounded-full ${isContained ? 'bg-white p-1' : 'bg-[#05070a]'} border-2 border-white/20 flex items-center justify-center relative shadow-lg shrink-0 overflow-hidden` },
+    React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse z-10" }),
+    React.createElement('img', {
+      src: logoSrc,
+      alt,
+      className: `w-full h-full ${isContained ? 'object-contain' : 'object-cover'}`,
+      onError: (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const target = e.currentTarget;
+        target.style.display = 'none';
+        const parent = target.parentElement;
+        if (parent) {
+          const fallback = parent.querySelector('.logo-fallback') as HTMLElement;
+          if (fallback) fallback.style.display = 'flex';
+        }
+      }
+    }),
+    React.createElement(
+      'span',
+      {
+        className: 'logo-fallback hidden absolute inset-0 items-center justify-center text-[10px] font-black tracking-tight select-none uppercase px-1 text-center',
+        style: { color: borderColor }
+      },
+      fallbackInitials || alt.split(' ').map(w => w[0]).join('').slice(0, 3)
+    )
+  );
+
+
 export const gymClients: GymClient[] = [
   {
     id: 'x-area',
-    name: 'X AREA GYM',
+    name: 'X AREA FITNESS',
     subtitleKa: 'პრემიუმ ფიტნეს სივრცე',
     subtitleEn: 'Premium Fitness Space',
     subtitleRu: 'Премиум фитнес-пространство',
@@ -52,16 +83,13 @@ export const gymClients: GymClient[] = [
     brandColor: '#CCFF00',
     regionName: 'იმერეთი',
     regionCity: 'ქუთაისი',
-    badge: React.createElement(
-      'div',
-      { className: "w-12 h-12 rounded-full bg-black border-2 border-white/20 flex flex-col items-center justify-center relative overflow-hidden shadow-lg shrink-0" },
-      React.createElement('span', { className: "text-[9px] font-black text-white leading-none tracking-tighter" }, 'X AREA'),
-      React.createElement('span', { className: "text-[10px] font-extrabold text-[#CCFF00] leading-none tracking-tighter" }, 'GYM')
-    ),
+    logoSrc: '/logo/client logo/x-area-fitness.jpg',
+    url: 'https://www.facebook.com/GymXarea/',
+    badge: createLogoBadge('/logo/client logo/x-area-fitness.jpg', 'X AREA FITNESS', '#CCFF00'),
   },
   {
     id: 'flex-fitness',
-    name: 'Flex Fitness',
+    name: 'FLEX FITNESS',
     subtitleKa: 'ძალისმიერი & ფუნქციური დარბაზი',
     subtitleEn: 'Strength & Functional Gym',
     subtitleRu: 'Силовой и функциональный зал',
@@ -73,16 +101,13 @@ export const gymClients: GymClient[] = [
     brandColor: '#00D2FF',
     regionName: 'იმერეთი',
     regionCity: 'ქუთაისი',
-    badge: React.createElement(
-      'div',
-      { className: "w-12 h-12 rounded-full bg-[#0d121d] border-2 border-[#00D2FF] flex items-center justify-center relative shadow-lg shrink-0" },
-      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse" }),
-      React.createElement('span', { className: "text-[11px] font-black text-[#00D2FF] tracking-tight" }, 'FF')
-    ),
+    logoSrc: '/logo/client logo/flex-fitness.jpg',
+    url: 'https://www.facebook.com/p/Flex-Fitness-61575290080789/',
+    badge: createLogoBadge('/logo/client logo/flex-fitness.jpg', 'FLEX FITNESS', '#00D2FF'),
   },
   {
     id: 'pixl-fitness',
-    name: 'PIXL Fitness',
+    name: 'PIXL FITNESS',
     subtitleKa: 'პიქსელ ფიტნესი • ინოვაციური კლუბი',
     subtitleEn: 'PIXL Fitness • Innovative Club',
     subtitleRu: 'Пиксель Фитнес • Инновационный клуб',
@@ -94,19 +119,16 @@ export const gymClients: GymClient[] = [
     brandColor: '#FF4D4D',
     regionName: 'იმერეთი',
     regionCity: 'ქუთაისი',
-    badge: React.createElement(
-      'div',
-      { className: "w-12 h-12 rounded-full bg-[#0e1420] border-2 border-[#00A3FF] flex items-center justify-center relative shadow-lg shrink-0" },
-      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse" }),
-      React.createElement('span', { className: "text-[12px] font-black text-[#FF4D4D] tracking-tighter" }, 'FX')
-    ),
+    logoSrc: '/logo/client logo/pixl-fitness.jpg',
+    url: 'https://www.facebook.com/p/PIXL-Fitness-%E1%83%9E%E1%83%98%E1%83%A5%E1%83%A1%E1%83%94%E1%83%9A-%E1%83%A4%E1%83%98%E1%83%A2%E1%83%9C%E1%83%94%E1%83%A1%E1%83%98-61582333325219/',
+    badge: createLogoBadge('/logo/client logo/pixl-fitness.jpg', 'PIXL FITNESS', '#FF4D4D'),
   },
   {
     id: 'fitness-zona-15',
-    name: 'Fitness Zona 15',
-    subtitleKa: 'სპორტული დარბაზი',
-    subtitleEn: 'Sports Fitness Gym',
-    subtitleRu: 'Спортивный зал',
+    name: 'FITNESS ZONA 15',
+    subtitleKa: 'ფიტნეს ზონა 15 · სპორტული დარბაზი',
+    subtitleEn: 'Fitness Zone 15 · Sports Gym',
+    subtitleRu: 'Фитнес Зона 15 · Спортивный зал',
     followers: '1,400+',
     tags: ['IoT ტურნიკეტები', 'სპორტული დარბაზი', 'CRM', 'QR დაშვება'],
     descKa: 'სრული ავტომატიზაცია, წევრების ბაზა და QR დაშვების სისტემა.',
@@ -115,17 +137,13 @@ export const gymClients: GymClient[] = [
     brandColor: '#22C55E',
     regionName: 'იმერეთი',
     regionCity: 'თერჯოლა',
-    badge: React.createElement(
-      'div',
-      { className: "w-12 h-12 rounded-full bg-black border-2 border-[#22C55E] flex flex-col items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
-      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse" }),
-      React.createElement('span', { className: "text-[7.5px] font-black text-[#22C55E] tracking-tighter uppercase leading-tight" }, 'FITNESS'),
-      React.createElement('span', { className: "text-[9.5px] font-black text-white tracking-tighter leading-tight" }, 'ზონა 15')
-    ),
+    logoSrc: '/logo/client logo/fitness-zona-15.jpg',
+    url: 'https://www.facebook.com/p/Fitness-Zona-15-%E1%83%A4%E1%83%98%E1%83%A2%E1%83%9C%E1%83%94%E1%83%A1-%E1%83%96%E1%83%9D%E1%83%9C%E1%83%90-15-61590491499705/',
+    badge: createLogoBadge('/logo/client logo/fitness-zona-15.jpg', 'FITNESS ZONA 15', '#22C55E'),
   },
   {
     id: 'athletic-kutaisi',
-    name: 'Athletic.ათლეტიკი',
+    name: 'ATHLETIC FITNESS',
     subtitleKa: 'ფიტნეს კლუბი & დარბაზი',
     subtitleEn: 'Fitness Club & Gym',
     subtitleRu: 'Фитнес-клуб и тренажерный зал',
@@ -137,44 +155,45 @@ export const gymClients: GymClient[] = [
     brandColor: '#FF9900',
     regionName: 'იმერეთი',
     regionCity: 'ქუთაისი',
-    badge: React.createElement(
-      'div',
-      { className: "w-12 h-12 rounded-full bg-black border-2 border-[#00A3FF] flex items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
-      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse z-10" }),
-      React.createElement(
-        'svg',
-        { viewBox: "0 0 120 120", className: "w-11 h-11 select-none", fill: "none", xmlns: "http://www.w3.org/2000/svg" },
-        React.createElement('rect', { x: "12", y: "34", width: "4", height: "52", rx: "1.5", fill: "#FFFFFF" }),
-        React.createElement('rect', { x: "19", y: "40", width: "4", height: "40", rx: "1.5", fill: "#CBD5E1" }),
-        React.createElement('rect', { x: "97", y: "40", width: "4", height: "40", rx: "1.5", fill: "#CBD5E1" }),
-        React.createElement('rect', { x: "104", y: "34", width: "4", height: "52", rx: "1.5", fill: "#FFFFFF" }),
-        React.createElement('path', { d: "M 27 72 L 39 34 L 51 72 L 44 72 L 39 56 L 34 72 Z", fill: "#FF9900" }),
-        React.createElement('text', { x: "47", y: "66", fill: "#FFFFFF", fontSize: "19", fontWeight: "900", fontFamily: "Impact, system-ui, sans-serif", letterSpacing: "-0.5" }, "THLETIC"),
-        React.createElement('text', { x: "60", y: "85", textAnchor: "middle", fill: "#FFB800", fontSize: "7.5", fontWeight: "900", fontFamily: "system-ui, sans-serif", letterSpacing: "0.4" }, "FITNESS CLUB GEORGIA")
-      )
-    ),
+    logoSrc: '/logo/client logo/athletic-fitness.jpg',
+    url: 'https://www.facebook.com/p/Athletic%E1%83%90%E1%83%97%E1%83%9A%E1%83%94%E1%83%A2%E1%83%98%E1%83%99%E1%83%98-61582720707292/',
+    badge: createLogoBadge('/logo/client logo/athletic-fitness.jpg', 'ATHLETIC FITNESS', '#FF9900'),
   },
   {
-    id: 'fencing-federation',
-    name: 'საქართველოს ფარიკაობის ფედერაცია',
-    subtitleKa: 'ეროვნული ფედერაცია · Since 1992',
-    subtitleEn: 'Georgian Fencing Federation · Since 1992',
-    subtitleRu: 'Федерация фехтования Грузии · С 1992',
+    id: 'bazadze-fencing',
+    name: 'ბაზაძის ფარიკაობის აკადემია',
+    subtitleKa: 'ჩემპიონთა აკადემია · Bazadze Fencing Academy',
+    subtitleEn: 'Champions Academy · Bazadze Fencing Academy',
+    subtitleRu: 'Академия фехтования Базадзе',
     followers: '—',
-    tags: ['ფედერაცია', 'CRM პანელი', 'სპორტსმენები', 'IoT ტურნიკეტები'],
-    descKa: 'საქართველოს ფარიკაობის ფედერაციის ცენტრალიზებული სპორტსმენთა მართვა და წვდომის კონტროლი.',
-    descEn: 'Centralized athlete management and IoT access control for Georgian Fencing Federation.',
-    descRu: 'Централизованное управление спортсменами и контроль доступа для Федерации фехтования Грузии.',
+    tags: ['ფარიკაობის აკადემია', 'CRM პანელი', 'სპორტსმენები', 'IoT ტურნიკეტები'],
+    descKa: 'მ. ბაზაძის სახელობის ჩემპიონთა ფარიკაობის აკადემიის ცენტრალიზებული სპორტსმენთა მართვა და IoT წვდომის კონტროლი.',
+    descEn: 'Centralized athlete management and IoT access control for Bazadze Fencing Academy.',
+    descRu: 'Централизованное управление спортсменами и IoT контроль доступа для Академии фехтования Базадзе.',
     brandColor: '#1E3A5F',
     regionName: 'თბილისი',
     regionCity: 'თბილისი',
-    logoSrc: '/logo/client logo/fencing-federation.png',
-    badge: React.createElement(
-      'div',
-      { className: "w-12 h-12 rounded-full bg-white border-2 border-[#1E3A5F]/40 flex items-center justify-center relative shadow-lg shrink-0 overflow-hidden" },
-      React.createElement('div', { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -bottom-0.5 -right-0.5 border-2 border-[#0B0F17] animate-pulse z-10" }),
-      React.createElement('img', { src: '/logo/client logo/fencing-federation.png', alt: 'საქართველოს ფარიკაობის ფედერაცია', className: 'w-10 h-10 object-contain' })
-    ),
+    logoSrc: '/logo/client logo/bazadze-fencing-academy.png',
+    url: 'https://www.facebook.com/georgianfencing/',
+    badge: createLogoBadge('/logo/client logo/bazadze-fencing-academy.png', 'ბაზაძის ფარიკაობის აკადემია', '#1E3A5F', true),
+  },
+  {
+    id: 'corpus-fitness',
+    name: 'Corpus Fitness Centre',
+    subtitleKa: 'მოძრაობისა & რეაბილიტაციის სივრცე',
+    subtitleEn: 'Movement & Recovery Centre',
+    subtitleRu: 'Центр движения и реабилитации',
+    followers: '1,200+',
+    tags: ['რეაბილიტაცია', 'მოძრაობის თერაპია', 'CRM პანელი', 'IoT ტურნიკეტები'],
+    descKa: 'სწორი მოძრაობის მექანიკა, რეაბილიტაცია, პილატესი და წევრების პერსონალური აღრიცხვა ართრონის პლატფორმით.',
+    descEn: 'Posture alignment, functional rehabilitation, Pilates and personalized member tracking via Artron.',
+    descRu: 'Механика движения, реабилитация, пилатес и персонализированный учет клиентов на платформе Artron.',
+    brandColor: '#38BDF8',
+    regionName: 'თბილისი',
+    regionCity: 'თბილისი',
+    logoSrc: '/logo/client logo/corpus-fitness-centre.jpg',
+    url: 'https://www.facebook.com/p/Corpus-Fitness-Centre-61572591784418/?locale=ka_GE',
+    badge: createLogoBadge('/logo/client logo/corpus-fitness-centre.jpg', 'Corpus Fitness Centre', '#38BDF8'),
   },
 ];
 

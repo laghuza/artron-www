@@ -357,14 +357,12 @@ export function useMobileShowcaseLogic() {
     }, 1000);
 
     window.addEventListener('resize', measure);
-    window.addEventListener('scroll', measure, true);
     const initialMeasure = setTimeout(measure, 300);
 
     return () => {
       clearInterval(interval);
       clearTimeout(initialMeasure);
       window.removeEventListener('resize', measure);
-      window.removeEventListener('scroll', measure, true);
     };
   }, [measure]);
 

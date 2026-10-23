@@ -33,7 +33,20 @@ When reviewing any agent's output, you MUST run a strict 5-point verification:
    - Is Google Consent Mode v2 supported?
    - Does the root landing page (`/`) clearly feature **BOTH** the B2B Admin Infrastructure and the **B2C Mobile App advantages** (QR entry, online subscriptions, multi-language KA/EN/RU)?
 
+6. **Next.js 15 & React 19 Modern Architecture Guardrails:**
+   - Are `params` and `searchParams` properly awaited (`await params`)?
+   - Is `getUser()` strictly enforced on the server instead of `getSession()`?
+   - Are Server Actions validated with strict Zod schemas and typed results?
+   - Are waterfalls eliminated in async fetches?
+   - Is the 400-line hard ceiling (Soft target: 250–300 lines) strictly respected?
+
+7. **MCP Tools Execution & Real-Time Verification Protocol:**
+   - **`chrome-devtools` MCP:** Check live pages for console errors, A11y violations, and Layout Shifts (CLS = 0).
+   - **`artron-backend-knowledge` MCP:** Validate API signatures and DTO parity against backend services.
+   - **Compiler Gate:** Execute `npx tsc --noEmit` and reject any code with TypeScript or compilation errors.
+
 ---
 
 ### 🚨 ACTION ON VIOLATION
 If any requirement is missing or violated, **REJECT** the code/output, point out the exact rule violation, and provide the corrected code snippet.
+

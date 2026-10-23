@@ -7,7 +7,6 @@ import { useDualCoreSync } from './dual-core/useDualCoreSync';
 import { B2BConsoleCard } from './dual-core/B2BConsoleCard';
 import { SyntaxBridgeCanvas } from './dual-core/SyntaxBridgeCanvas';
 import { B2CMobilePass } from './dual-core/B2CMobilePass';
-import { RoleIntentSelector } from './RoleIntentSelector';
 
 export const DualCoreShowcase: React.FC = () => {
   const { locale } = useLanguage();
@@ -41,10 +40,10 @@ export const DualCoreShowcase: React.FC = () => {
 
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 leading-tight">
             {locale === 'ka'
-              ? 'კლუბის მართვის პანელი და წევრის ციფრული საშვი'
+              ? 'მართვის პლატფორმა მფლობელებისთვის, ჭკვიანი აპლიკაცია წევრებისთვის'
               : locale === 'ru'
-              ? 'Панель управления клубом и цифровой пропуск резидента'
-              : 'Club Management Console & Athlete Digital Pass'}
+              ? 'Платформа управления для владельцев, умное приложение для резидентов'
+              : 'Management Platform for Owners, Smart App for Members'}
           </h2>
           <p className="text-xs sm:text-base text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
             {locale === 'ka' ? (
@@ -66,8 +65,6 @@ export const DualCoreShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* B2B vs B2C Role Intent Selector */}
-        <RoleIntentSelector className="mb-10 sm:mb-14" />
 
         {/* 3D Perspective Stage Container */}
         <div

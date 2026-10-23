@@ -4,7 +4,7 @@
 
 1. **COMPONENT LINE LIMIT & MODULARITY LAW:**
    - **Soft Target:** 250–300 lines of code per file.
-   - **HARD MAXIMUM CEILING:** 400 lines of code per file across all TypeScript/JSX files in `sports-os/src/`.
+   - **HARD MAXIMUM CEILING:** 400 lines of code per file across all TypeScript/JSX files in `sports-os/src/` and `src/`.
    - **Single Responsibility Principle (SRP):** Even with a 400-line ceiling, keep state logic modular, extract reusable hooks/sub-components, and maintain clean architecture.
 
 2. **NEXT.JS `@/` PATH ALIAS LAW:**
@@ -12,13 +12,13 @@
    - Relative imports (`../`, `../../`) are strictly FORBIDDEN.
 
 3. **STRICT COMPILATION CHECK LAW:**
-   - Run `npx tsc --noEmit` inside `sports-os` before submitting code or making git commits.
+   - Run `npx tsc --noEmit` before submitting code or making git commits.
    - Zero compilation errors, missing type declarations, or unhandled imports allowed.
 
 4. **VISUAL IDENTITY & DESIGN SYSTEM LAW:**
    - **Obsidian Dark Background:** `#05070a`
    - **Emerald Neon Primary Accent:** `#00ff87`
-   - **Cyan Teal Secondary Accent:** `#00e5ff`
+   - **Cyan Teal Secondary Accent:** `#00e5ff` / `#00A3FF`
    - **Zero Stock Photos Policy:** Use interactive SVG vector maps, HUD diagnostic grids, Canvas telemetry visualizers, and code micro-demos instead of generic photos.
 
 5. **MULTI-TENANT ISOLATION LAW:**
@@ -34,7 +34,7 @@
      * **Master Registries & Types** -> MUST be placed in `sports-os/src/core/`
 
 7. **DUAL-LANGUAGE i18n AUTO-SYNC LAW:**
-   - Whenever a new text, label, or UI feature is requested in Georgian, the AI agent MUST simultaneously generate its corresponding English translation in `sports-os/src/dictionaries/en.json` and Georgian key in `sports-os/src/dictionaries/ge.json` using consistent key naming (`domain.feature.label`).
+   - Whenever a new text, label, or UI feature is requested in Georgian, the AI agent MUST simultaneously generate its corresponding English translation in `sports-os/src/dictionaries/en.json` (and `ru.json` where applicable) and Georgian key in `sports-os/src/dictionaries/ge.json` using consistent key naming (`domain.feature.label`).
 
 8. **SAFE FEATURE OVERWRITE & MIGRATION PROTOCOL:**
    - Enforce strict rules for when a node's domain logic is replaced with a NEW user task:
@@ -43,4 +43,30 @@
      * **Step C:** Remove or cleanly deprecate stale/unused narrative files to prevent dead code or orphan imports.
      * **Step D:** Replace dictionary keys in `sports-os/src/dictionaries/ge.json` and `en.json` with new Georgian and English translations.
 
+9. **NEXT.JS 15 ASYNC PARAMS & ROUTE PROMISE LAW:**
+   - In Next.js 15, `params` and `searchParams` in Page components and Route Handlers are `Promise` types.
+   - Synchronous access (`const { id } = params;`) compiles under loose types but throws a fatal TypeError at runtime.
+   - ALWAYS await params: `const { id } = await params;` or `const search = await searchParams;`.
 
+10. **SERVER-SIDE AUTHENTICATION SECURITY LAW (`getUser` vs `getSession`):**
+    - In Server Components, Server Actions, and Route Handlers, NEVER rely on `getSession()`.
+    - `getSession()` reads the JWT cookie without cryptographically verifying it against the auth provider.
+    - ALWAYS verify identity on the server using `getUser()`. Unauthenticated requests MUST immediately redirect or reject.
+
+11. **SERVER ACTIONS ZOD VALIDATION & TENANT RBAC LAW:**
+    - Every Server Action (`'use server'`) MUST:
+      * Validate all input parameters using a strict `zod` schema before executing queries.
+      * Verify authenticated user identity and enforce tenant isolation (`tenantId`, `federationId`).
+      * Return explicit typed response contracts (`{ success: true, data } | { success: false, error: string }`).
+
+12. **SERVER SECRETS ZERO-LEAKAGE LAW:**
+    - Strictly FORBID importing or reading server secrets (`DATABASE_URL`, private Stripe/SMS API keys, JWT secrets) inside `'use client'` files.
+    - Client components may only consume public configuration exposed via `NEXT_PUBLIC_*` or sanitized props passed from Server Components.
+
+13. **WATERFALL ELIMINATION & SUSPENSE STREAMING LAW:**
+    - Eliminate sequential async waterfalls in data fetching. Use `Promise.all([fetchA(), fetchB()])` for independent queries.
+    - Wrap data-heavy server components in React `<Suspense fallback={<LoadingState />}>` to unlock progressive streaming and preserve instant navigation.
+
+14. **DEPRECATED LIBRARIES & RUNTIME PATTERNS PROHIBITION:**
+    - Strictly FORBID deprecated helper packages (e.g. `@supabase/auth-helpers-nextjs`, legacy Pages router hooks in App router).
+    - Be aware that in Next.js 15, `fetch` requests are `no-store` by default. Define explicit cache revalidation (`revalidatePath`, `revalidateTag`) where caching is needed.

@@ -81,6 +81,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <link rel="preload" href="/video/dark-minimalist-4k.mp4" as="video" type="video/mp4" />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#0B0F17] text-white">
         {/* Google Consent Mode v2 Defaults */}
         <Script
           id="google-consent-mode-v2"
@@ -98,8 +100,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             `,
           }}
         />
-      </head>
-      <body className="min-h-full flex flex-col bg-[#0B0F17] text-white">
         <LanguageProvider>
           <PortalIgnitionProvider>
             <KineticElevatorDock />

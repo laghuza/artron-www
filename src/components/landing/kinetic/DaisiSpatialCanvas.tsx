@@ -45,10 +45,10 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     let w = 0, h = 0, dpr = 1;
     function resize() {
       if (!canvas) return;
-      const isMobile = window.innerWidth < 768;
       dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
       w = window.innerWidth;
       h = window.innerHeight;
@@ -61,7 +61,7 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
     window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    const TOTAL = 3000, FOV = 850, TAU = Math.PI * 2;
+    const TOTAL = isMobile ? 1200 : 3000, FOV = 850, TAU = Math.PI * 2;
     const pS = new Uint8Array(TOTAL), pU = new Float32Array(TOTAL), pOX = new Float32Array(TOTAL);
     const pOY = new Float32Array(TOTAL), pOZ = new Float32Array(TOTAL), pR = new Float32Array(TOTAL);
     const pA = new Float32Array(TOTAL), pCol = new Uint8Array(TOTAL), pB = new Uint8Array(TOTAL), pMI = new Uint16Array(TOTAL);

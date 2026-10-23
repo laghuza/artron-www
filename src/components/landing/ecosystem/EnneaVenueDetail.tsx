@@ -171,14 +171,25 @@ export const EnneaVenueDetail: React.FC<EnneaVenueDetailProps> = ({ venue, t }) 
       )}
 
       {/* ── Venue External Link ── */}
-      <button
-        type="button"
-        onClick={() => soundEngine.cue("click")}
-        className="mt-1 flex items-center justify-center gap-2 py-2.5 border border-white/10 bg-white/[0.03] hover:border-[#7FD4FF]/40 text-[#8AA3B2] hover:text-white font-mono text-[10.5px] tracking-wider rounded-lg transition-all cursor-pointer"
-      >
-        <ExternalLink className="w-3 h-3 text-[#7FD4FF]" />
-        <span>{t.siteLink}</span>
-      </button>
+      {venue.url ? (
+        <a
+          href={venue.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => soundEngine.cue("click")}
+          className="mt-1 flex items-center justify-center gap-2 py-2.5 border border-[#7FD4FF]/30 bg-[#7FD4FF]/[0.05] hover:bg-[#7FD4FF]/[0.12] hover:border-[#7FD4FF]/60 text-[#EAF4FF] font-mono text-[10.5px] tracking-wider rounded-lg transition-all cursor-pointer group shadow-[0_0_12px_rgba(127,212,255,0.15)]"
+        >
+          <ExternalLink className="w-3.5 h-3.5 text-[#7FD4FF] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <span className="font-semibold">{t.siteLink}</span>
+        </a>
+      ) : (
+        <div
+          className="mt-1 flex items-center justify-center gap-2 py-2.5 border border-white/5 bg-white/[0.02] text-[#8AA3B2]/50 font-mono text-[10.5px] tracking-wider rounded-lg select-none cursor-default"
+        >
+          <ExternalLink className="w-3 h-3 text-[#8AA3B2]/40" />
+          <span>{t.siteLink}</span>
+        </div>
+      )}
     </div>
   );
 };

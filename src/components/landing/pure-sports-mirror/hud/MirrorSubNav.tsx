@@ -22,10 +22,33 @@ export const MirrorSubNav: React.FC<MirrorSubNavProps> = ({
   const { locale } = useLanguage();
   const itemRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
 
+  const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const isFirstRender = React.useRef(true);
+
   React.useEffect(() => {
+    // Avoid running on initial mount if already at index 0 to avoid any container layout shifts
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (activeModuleIndex === 0) return;
+    }
+
+    const container = scrollContainerRef.current;
     const el = itemRefs.current[activeModuleIndex];
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    if (container && el) {
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+
+      if (elRect.left < containerRect.left) {
+        container.scrollTo({
+          left: container.scrollLeft + (elRect.left - containerRect.left) - 16,
+          behavior: 'smooth',
+        });
+      } else if (elRect.right > containerRect.right) {
+        container.scrollTo({
+          left: container.scrollLeft + (elRect.right - containerRect.right) + 16,
+          behavior: 'smooth',
+        });
+      }
     }
   }, [activeModuleIndex]);
 
@@ -58,7 +81,10 @@ export const MirrorSubNav: React.FC<MirrorSubNavProps> = ({
       </div>
 
       {/* 2. Sub-module buttons (No NEXT button, fluid container) */}
-      <div className="w-full max-w-full overflow-x-auto scrollbar-none py-0.5 scroll-smooth px-1 sm:px-2">
+      <div
+        ref={scrollContainerRef}
+        className="w-full max-w-full overflow-x-auto scrollbar-none py-0.5 scroll-smooth px-1 sm:px-2"
+      >
         <div className="flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 w-max min-w-full mx-auto">
           {modules.map((m, i) => {
             const isActive = i === activeModuleIndex;
