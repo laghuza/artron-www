@@ -53,3 +53,5 @@ export const SPEC_TILE_CATEGORIES: SpecTileCategory[] = [
   { title: 'საკვანძო ტექნოლოგია', subtitle: 'TELEMETRY / RFID / BIO' },
   { title: 'სტანდარტები & უსაფრთხოება', subtitle: 'COMPLIANCE & AUDIT' },
 ];
+
+

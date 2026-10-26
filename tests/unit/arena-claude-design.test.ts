@@ -13,8 +13,8 @@ describe('Phase 46: Arena & Stadiums Claude Design Compliance', () => {
       'TECH CLOSE-UP',
       'STANDARD SWEEP',
     ]);
-    expect(arenaMod?.specRows[0][2].value).toBe('180+ საერთაშორისო ივენთი');
-    expect(arenaMod?.specRows[3][2].label).toBe('ჰაერის ხარისხი & HVAC');
+    expect(arenaMod?.specRows[0][2].value).toBe('VIP, მედია, გულშემატკივარი, გუნდები');
+    expect(arenaMod?.specRows[3][2].label).toBe('ფინანსური აუდიტი & დღგ');
   });
 
   it('should have all 4 camera focus poses defined for arena matching Claude Design', () => {

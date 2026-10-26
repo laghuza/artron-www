@@ -13,11 +13,11 @@ describe('Olympic Pool Claude Design Compliance', () => {
       'TECH CLOSE-UP',
       'STANDARD SWEEP',
     ]);
-    expect(poolMod?.specRows[0][0].value).toBe('50 m · 8 ბილიკი');
-    expect(poolMod?.specRows[0][1].value).toBe('2 500 m³');
-    expect(poolMod?.specRows[0][2].value).toBe('1 100 მოცურავე');
-    expect(poolMod?.specRows[2][0].value).toBe('pH · Cl · ORP Realtime');
-    expect(poolMod?.specRows[3][0].value).toBe('FR 2 სტანდარტი');
+    expect(poolMod?.specRows[0][0].value).toBe('RFID გასახდელის ავტო-მინიჭება');
+    expect(poolMod?.specRows[0][1].value).toBe('გადაცდენილი წუთების ავტო-ტარიფი');
+    expect(poolMod?.specRows[0][2].value).toBe('მოცურავეთა ლიმიტის ავტო-დაცვა');
+    expect(poolMod?.specRows[2][0].value).toBe('pH, Cl & ტემპერატურის ციფრული ლოგი');
+    expect(poolMod?.specRows[3][0].value).toBe('შემოწმებებისას 100% დაცვა');
   });
 
   it('should have all 4 camera focus poses defined for pool matching Claude Design', () => {

@@ -23,25 +23,25 @@ describe('Group Fitness Leaders (HC-03) System Mirror Implementation', () => {
     expect(groupMod.specRows[3]).toHaveLength(4);
 
     // Verify specific key metrics matching Claude handoff and screenshot
-    expect(groupMod.specRows[0][0]).toEqual({ label: 'ჯგუფური სესიები', value: '180 კვირაში' });
-    expect(groupMod.specRows[0][1]).toEqual({ label: 'საშუალო დასწრება', value: '82% დატვირთვა' });
-    expect(groupMod.specRows[0][2]).toEqual({ label: 'ინსტრუქტორთა ბაზა', value: '46 სერტიფიცირებული პირი' });
-    expect(groupMod.specRows[0][3]).toEqual({ label: 'სლოტის ავტო-შევსება', value: '< 15 წუთი ლოდინის სიიდან' });
+    expect(groupMod.specRows[0][0]).toEqual({ label: 'სლოტების 100% შევსება', value: 'No-Show-ს ავტო-ჩანაცვლება Waitlist-იდან' });
+    expect(groupMod.specRows[0][1]).toEqual({ label: 'დარბაზის ოპტიმალური ტევადობა', value: 'გადატვირთვის პრევენცია 1 კლიკით' });
+    expect(groupMod.specRows[0][2]).toEqual({ label: 'ინსტრუქტორთა რეიტინგი', value: 'ეფექტურობის გაზომვა რეალური დასწრებით' });
+    expect(groupMod.specRows[0][3]).toEqual({ label: 'სლოტის ავტო-შევსება', value: '< 15 წთ ლოდინის სიიდან' });
 
-    expect(groupMod.specRows[1][0]).toEqual({ label: 'ცეკვა და კარდიო', value: 'Zumba · Step · Cycle' });
-    expect(groupMod.specRows[1][1]).toEqual({ label: 'გონება და სხეული', value: 'Yoga · Pilates · Stretch' });
-    expect(groupMod.specRows[1][2]).toEqual({ label: 'ფუნქციური ტრენინგი', value: 'TRX · Kettlebell · Circuit' });
-    expect(groupMod.specRows[1][3]).toEqual({ label: 'ახალი ფორმატი', value: '4-კვირიანი სატესტო პილოტი' });
+    expect(groupMod.specRows[1][0]).toEqual({ label: 'პოპულარული კლასების ანალიზი', value: 'Yoga, Pilates, HIIT, Cycle, TRX' });
+    expect(groupMod.specRows[1][1]).toEqual({ label: 'არარენტაბელური სლოტები', value: 'ცარიელი საათების ოპტიმიზაცია' });
+    expect(groupMod.specRows[1][2]).toEqual({ label: 'ახალი მიმართულებები', value: '4-კვირიანი საპილოტე პაკეტები' });
+    expect(groupMod.specRows[1][3]).toEqual({ label: 'კარდიო & ფუნქციური', value: 'Step · Kettlebell · Circuit' });
 
-    expect(groupMod.specRows[2][0]).toEqual({ label: 'ჯავშნის მოდული', value: 'B2C აპლიკაცია + Waitlist' });
-    expect(groupMod.specRows[2][1]).toEqual({ label: 'დასწრების დაფიქსირება', value: 'NFC Check-in' });
-    expect(groupMod.specRows[2][2]).toEqual({ label: 'გულისცემის ზონები', value: 'Live HR ეკრანი დარბაზში' });
-    expect(groupMod.specRows[2][3]).toEqual({ label: 'სესიის შეფასება', value: '1 შეხებით გასვლისას' });
+    expect(groupMod.specRows[2][0]).toEqual({ label: 'B2C მობილური ჯავშანი', value: 'ადგილის დაჯავშნა და გაუქმება აპიდან' });
+    expect(groupMod.specRows[2][1]).toEqual({ label: 'NFC / QR Check-in', value: 'სესიაზე შემსვლელთა წამობრივი ფიქსაცია' });
+    expect(groupMod.specRows[2][2]).toEqual({ label: 'სესიის შეფასება', value: 'მომხმარებელთა უკუკავშირი გასვლისას' });
+    expect(groupMod.specRows[2][3]).toEqual({ label: 'გულისცემის ზონები', value: 'Live HR ეკრანი დარბაზში' });
 
-    expect(groupMod.specRows[3][0]).toEqual({ label: 'ინსტრუქტორის სერტიფიკატი', value: 'EREPS დონე 3+' });
-    expect(groupMod.specRows[3][1]).toEqual({ label: 'დარბაზის ნორმა', value: '≥ 4 m² ერთ მონაწილეზე' });
-    expect(groupMod.specRows[3][2]).toEqual({ label: 'ჯანმრთელობის კითხვარი', value: 'PAR-Q პირველ ვიზიტზე' });
-    expect(groupMod.specRows[3][3]).toEqual({ label: 'პირველადი დახმარება', value: 'CPR ყოველ ცვლაში' });
+    expect(groupMod.specRows[3][0]).toEqual({ label: 'ინსტრუქტორის ბონუსი', value: 'ჰონორარის ავტო-დათვლა დამსწრეთა რაოდენობით' });
+    expect(groupMod.specRows[3][1]).toEqual({ label: 'სივრცის ნორმატივი', value: '≥ 4 m² ერთ მოვარჯიშეზე უსაფრთხოებისთვის' });
+    expect(groupMod.specRows[3][2]).toEqual({ label: 'პირველადი დახმარების სტანდარტი', value: 'CPR სერტიფიკატის უწყვეტი მონიტორინგი' });
+    expect(groupMod.specRows[3][3]).toEqual({ label: 'ჯანმრთელობის კითხვარი', value: 'PAR-Q ციფრული ფორმა პირველ ვიზიტზე' });
 
     // Verify notes match offline handoff specifications
     expect(groupMod.notes?.[0]).toContain('ინსტრუქტორი სარკის წინ');

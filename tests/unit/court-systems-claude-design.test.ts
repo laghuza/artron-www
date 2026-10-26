@@ -26,27 +26,27 @@ describe('Phase 49: Court Systems (Tennis & Padel) Claude Design Parity', () => 
     expect(courtMod?.specRows).toHaveLength(4);
     // Tile 0: Scale
     expect(courtMod?.specRows[0]).toEqual([
-      { label: 'კორტების რაოდენობა', value: '4 ჩოგბურთი · 6 პადელი' },
-      { label: 'სლოტების შევსება', value: '87% საშუალო დატვირთვა' },
-      { label: 'წინასწარი ჯავშანი', value: '30 დღის ფანჯარა' },
+      { label: 'ავტონომიური შესვლა', value: 'დინამიური QR / SMS PIN კოდი' },
+      { label: 'თამაშის დროის ფიქსაცია', value: 'სინათლე და კარი იხსნება სლოტზე' },
+      { label: '24/7 უპერსონალო რეჟიმი', value: 'რეცეფციის გარეშე მართვადი კორტი' },
     ]);
     // Tile 1: Disciplines
     expect(courtMod?.specRows[1]).toEqual([
-      { label: 'ჩოგბურთის საფარი', value: 'Hard · Clay · Indoor' },
-      { label: 'პადელის კორტები', value: 'Panoramic Glass' },
-      { label: 'სკვოში / ბადმინტონი', value: 'მულტიფუნქციური ბლოკი' },
+      { label: 'სლოტების ონლაინ გაყიდვა', value: '100% წინასწარი გადახდა აპში' },
+      { label: 'ცარიელი საათების შევსება', value: 'დინამიური ფასდაკლება Off-peak' },
+      { label: 'ლოდინის სია (Waitlist)', value: 'გაუქმებისას სლოტი იყიდება წამებში' },
     ]);
     // Tile 2: Telemetry
     expect(courtMod?.specRows[2]).toEqual([
-      { label: 'ჭკვიანი განათება', value: 'ყოფნის სენსორით (Presence LED)' },
-      { label: 'მატჩის ანალიტიკა', value: 'Court Cam · Dwell Time' },
-      { label: 'ავტონომიური წვდომა', value: 'დინამიური QR · PIN კოდი' },
+      { label: 'ჭკვიანი განათება (Presence LED)', value: 'მხოლოდ თამაშისას (-35% ხარჯი)' },
+      { label: 'მოთამაშეთა მატჩ-მეიკინგი', value: 'პარტნიორის პოვნა რეიტინგით' },
+      { label: 'ინვენტარის გაქირავება', value: 'ჩოგნების/ბურთების ავტო-ჩამოწერა' },
     ]);
     // Tile 3: Compliance
     expect(courtMod?.specRows[3]).toEqual([
-      { label: 'ITF / FIP სტანდარტი', value: 'საერთაშორისო გეომეტრია' },
-      { label: 'განათების ინტენსივობა', value: '500–750 lux (ტურნირის რეჟიმი)' },
-      { label: 'დაზღვევა', value: 'პასუხისმგებლობის პოლისი' },
+      { label: 'გაუქმების პოლიტიკა', value: '24 სთ-მდე თანხის შენარჩუნების წესი' },
+      { label: 'მწვრთნელის კორტის საათები', value: 'ინდივიდუალური გაკვეთილების ლოგი' },
+      { label: 'ფინანსური რეპორტინგი', value: 'შემოსავალი თითოეულ კორტზე ცალკე' },
     ]);
   });
 

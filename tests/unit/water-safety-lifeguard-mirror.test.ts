@@ -15,33 +15,33 @@ describe('Lifeguard Corps & Water Safety (HC-05) System Mirror Implementation', 
     expect(guardMod.specRows).toHaveLength(4);
 
     // Verify key metrics across 4 categories
-    expect(guardMod.specRows[0][0].label).toBe('მაშველთა კორპუსი');
-    expect(guardMod.specRows[0][0].value).toBe('28 პროფესიონალი');
-    expect(guardMod.specRows[0][1].label).toBe('დაფარვის ზონა');
-    expect(guardMod.specRows[0][1].value).toBe('4 აუზი · 1 აკვაპარკი');
-    expect(guardMod.specRows[0][2].label).toBe('როტაციის ინტერვალი');
-    expect(guardMod.specRows[0][2].value).toBe('20 წუთი (ავტო-განგაში)');
+    expect(guardMod.specRows[0][0].label).toBe('წყლის ზონის 100% დაფარვა');
+    expect(guardMod.specRows[0][0].value).toBe('მაშველთა საათობრივი როტაციის ავტო-გრაფიკი');
+    expect(guardMod.specRows[0][1].label).toBe('დაღლილობის პრევენცია');
+    expect(guardMod.specRows[0][1].value).toBe('20-წუთიანი პერიმეტრული ცვლა (ავტო-განგაში)');
+    expect(guardMod.specRows[0][2].label).toBe('მრავალზონიანი კონტროლი');
+    expect(guardMod.specRows[0][2].value).toBe('ოლიმპიური აუზი, საბავშვო ზონა, აკვაპარკი');
 
-    expect(guardMod.specRows[1][0].label).toBe('ზედაპირის მეთვალყურეობა');
+    expect(guardMod.specRows[1][0].label).toBe('ზედაპირის სკანირება');
     expect(guardMod.specRows[1][0].value).toBe('Scan-10/20 საერთაშორისო პროტოკოლი');
-    expect(guardMod.specRows[1][1].label).toBe('წყალქვეშა სამაშველო');
-    expect(guardMod.specRows[1][1].value).toBe('Deep-Water Rescue აღჭურვილობა');
-    expect(guardMod.specRows[1][2].label).toBe('პირველადი დახმარება');
-    expect(guardMod.specRows[1][2].value).toBe('CPR · AED · Spinal Board');
+    expect(guardMod.specRows[1][1].label).toBe('პირველადი დახმარების მზადყოფნა');
+    expect(guardMod.specRows[1][1].value).toBe('AED და სამაშველო აღჭურვილობის შემოწმება');
+    expect(guardMod.specRows[1][2].label).toBe('სასწავლო განგაშები');
+    expect(guardMod.specRows[1][2].value).toBe('თვეში ერთხელ პრაქტიკული სიმულაციის ლოგი');
 
-    expect(guardMod.specRows[2][0].label).toBe('რეაგირების ტაიმერი');
-    expect(guardMod.specRows[2][0].value).toBe('Alarm-to-Contact ციფრული ლოგი');
-    expect(guardMod.specRows[2][1].label).toBe('ხედვის კონტროლი');
-    expect(guardMod.specRows[2][1].value).toBe('Underwater Detection სენსორები');
-    expect(guardMod.specRows[2][2].label).toBe('საგანგაშო ღილაკი');
-    expect(guardMod.specRows[2][2].value).toBe('Poolside Panic Mesh სისტემა');
+    expect(guardMod.specRows[2][0].label).toBe('რეაგირების ციფრული ტაიმერი');
+    expect(guardMod.specRows[2][0].value).toBe('Alarm-to-Contact დროის ავტო-აღრიცხვა');
+    expect(guardMod.specRows[2][1].label).toBe('Poolside Panic ღილაკები');
+    expect(guardMod.specRows[2][1].value).toBe('მყისიერი ხმოვანი და ვიზუალური განგაში');
+    expect(guardMod.specRows[2][2].label).toBe('ინციდენტების ელექტრონული ჟურნალი');
+    expect(guardMod.specRows[2][2].value).toBe('სადაზღვევო შემთხვევების სრული დოსიე');
 
-    expect(guardMod.specRows[3][0].label).toBe('ILS სტანდარტი');
-    expect(guardMod.specRows[3][0].value).toBe('საერთაშორისო რეკომენდაცია');
-    expect(guardMod.specRows[3][1].label).toBe('სერტიფიცირება');
-    expect(guardMod.specRows[3][1].value).toBe('ყოველწლიური რე-აკრედიტაცია');
-    expect(guardMod.specRows[3][2].label).toBe('პრაქტიკული წვრთნა');
-    expect(guardMod.specRows[3][2].value).toBe('თვეში ერთხელ');
+    expect(guardMod.specRows[3][0].label).toBe('საერთაშორისო ILS სტანდარტი');
+    expect(guardMod.specRows[3][0].value).toBe('შემოწმებებისას ჯარიმებისგან 100% დაცვა');
+    expect(guardMod.specRows[3][1].label).toBe('სერტიფიკატების ვადის კონტროლი');
+    expect(guardMod.specRows[3][1].value).toBe('ვადაგასული მაშველის ცვლაში დაშვების ბლოკირება');
+    expect(guardMod.specRows[3][2].label).toBe('სამართლებრივი პასუხისმგებლობა');
+    expect(guardMod.specRows[3][2].value).toBe('ობიექტის სრული იურიდიული დაცულობა');
   });
 
   it('should match the 4 spec tile category titles and subtitles', () => {

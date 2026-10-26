@@ -21,11 +21,11 @@ describe('Coaching Staff (HC-01) System Mirror Implementation', () => {
     expect(coachMod.specRows[3]).toHaveLength(4);
 
     // Verify specific key metrics
-    expect(coachMod.specRows[0][0].label).toBe('შტაბის შემადგენლობა');
-    expect(coachMod.specRows[0][1].label).toBe('მწვრთნელი / ათლეტი');
-    expect(coachMod.specRows[2][0].label).toBe('დატვირთვის მართვა');
-    expect(coachMod.specRows[2][1].label).toBe('ოპტიმალური დიაპაზონი');
-    expect(coachMod.specRows[3][0].label).toBe('მწვრთნელის ლიცენზია');
+    expect(coachMod.specRows[0][0].label).toBe('პერსონალური ვარჯიშები');
+    expect(coachMod.specRows[0][1].label).toBe('კლიენტების ბალანსი');
+    expect(coachMod.specRows[2][0].label).toBe('დატვირთვის ელექტრონული ლოგი');
+    expect(coachMod.specRows[2][1].label).toBe('დარბაზში Check-in');
+    expect(coachMod.specRows[3][0].label).toBe('შრომის აღრიცხვა (№01-15/ნ)');
 
     // Verify notes match offline handoff specifications
     expect(coachMod.notes[0]).toContain('მაგიდა ტაქტიკური დაფაა');

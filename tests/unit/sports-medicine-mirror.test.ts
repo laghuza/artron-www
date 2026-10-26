@@ -23,19 +23,19 @@ describe('Sports Medicine & Rehabilitation (HC-02) System Mirror Implementation'
     expect(medMod.specRows[3]).toHaveLength(4);
 
     // Verify specific key metrics matching Claude handoff and screenshot
-    expect(medMod.specRows[0][0]).toEqual({ label: 'სამედიცინო შტაბი', value: '9 ექიმი · 12 რეაბილიტოლოგი' });
-    expect(medMod.specRows[0][1]).toEqual({ label: 'ათლეტის ბარათი', value: '1 400 აქტიური პროფილი' });
-    expect(medMod.specRows[0][2]).toEqual({ label: 'სკრინინგი', value: 'კვარტალური სრული შემოწმება' });
-    expect(medMod.specRows[0][3]).toEqual({ label: 'ექიმი ↔ მწვრთნელი', value: 'ერთიანი ელექტრონული ბარათი' });
+    expect(medMod.specRows[0][0]).toEqual({ label: 'ელექტრონული სამედიცინო ბარათი', value: '100% უქაღალდო სკრინინგი' });
+    expect(medMod.specRows[0][1]).toEqual({ label: 'ექიმი ↔ მწვრთნელის კავშირი', value: 'დატვირთვის საერთო ობიექტური სურათი' });
+    expect(medMod.specRows[0][2]).toEqual({ label: 'პაციენტთა ისტორია', value: 'წლების განმავლობაში დაგროვილი დოსიე' });
+    expect(medMod.specRows[0][3]).toEqual({ label: 'სამედიცინო შტაბი', value: 'მრავალპროფილური სპეციალისტები' });
 
-    expect(medMod.specRows[1][0]).toEqual({ label: 'ორთოპედია', value: 'სახსრებისა და იოგების დიაგნოსტიკა' });
-    expect(medMod.specRows[1][1]).toEqual({ label: 'ფიზიოთერაპია', value: 'Manual · Instrumental თერაპია' });
+    expect(medMod.specRows[1][0]).toEqual({ label: 'რეაბილიტაციის ეტაპები (RTP)', value: 'მოედანზე/დარბაზში უსაფრთხო დაბრუნება' });
+    expect(medMod.specRows[1][1]).toEqual({ label: 'დატვირთვის შეზღუდვა', value: 'აკრძალული ვარჯიშების ავტო-მონიშვნა' });
 
-    expect(medMod.specRows[2][0]).toEqual({ label: 'დილის მონიტორინგი', value: 'HRV · ძილი · SpO₂' });
-    expect(medMod.specRows[2][1]).toEqual({ label: 'რისკის ქულა', value: 'ყოველდღიური ინდექსი (0–100)' });
+    expect(medMod.specRows[2][0]).toEqual({ label: 'ტურნიკეტის ავტო-ბლოკირება', value: 'ვადაგასულ ცნობაზე დაშვების შეზღუდვა' });
+    expect(medMod.specRows[2][1]).toEqual({ label: 'ტრავმის რისკის ალერტი', value: 'გადაღლისა და ასიმეტრიის ადრეული სიგნალი' });
 
-    expect(medMod.specRows[3][0]).toEqual({ label: 'სამედიცინო მონაცემები', value: 'GDPR Art. 9 სპეციალური რეჟიმი' });
-    expect(medMod.specRows[3][1]).toEqual({ label: 'წვდომის კონტროლი', value: 'მხოლოდ ექიმი + ათლეტი' });
+    expect(medMod.specRows[3][0]).toEqual({ label: 'სამართლებრივი დაცვა', value: 'ობიექტის 100% დაზღვევა პასუხისმგებლობისგან' });
+    expect(medMod.specRows[3][1]).toEqual({ label: 'GDPR Art. 9 მონაცემთა დაცვა', value: 'AES-256-GCM დაშიფრული წვდომა' });
 
     // Verify notes match offline handoff specifications
     expect(medMod.notes?.[0]).toContain('წითელი ჯვარი — სამედიცინო ბლოკი');

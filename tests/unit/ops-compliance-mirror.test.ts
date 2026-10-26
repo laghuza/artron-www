@@ -14,27 +14,27 @@ describe('Administration & Operations (HC-04) System Mirror Implementation', () 
     expect(opsMod.specRows).toHaveLength(4);
 
     // Verify key metrics across 4 categories
-    expect(opsMod.specRows[0][0].label).toBe('პერსონალის რაოდენობა');
-    expect(opsMod.specRows[0][0].value).toBe('210 თანამშრომელი');
-    expect(opsMod.specRows[0][1].label).toBe('ცვლების დაფარვა');
-    expect(opsMod.specRows[0][1].value).toBe('24/7 · 3-ცვლიანი რეჟიმი');
+    expect(opsMod.specRows[0][0].label).toBe('რეცეფციის ხარჯის 60%-ით შემცირება');
+    expect(opsMod.specRows[0][0].value).toBe('თვითმომსახურების კიოსკები და აპი');
+    expect(opsMod.specRows[0][1].label).toBe('24/7 უწყვეტი ოპერაციები');
+    expect(opsMod.specRows[0][1].value).toBe('ცვლების ავტომატური დაგეგმვა (Auto-Rota)');
 
-    expect(opsMod.specRows[1][0].label).toBe('რეცეფცია და გაყიდვები');
-    expect(opsMod.specRows[1][0].value).toBe('Front Desk · CRM მოდული');
-    expect(opsMod.specRows[1][1].label).toBe('ტექნიკური სამსახური');
-    expect(opsMod.specRows[1][1].value).toBe('Maintenance · HVAC კონტროლი');
-    expect(opsMod.specRows[1][2].label).toBe('სისუფთავე და უსაფრთხოება');
-    expect(opsMod.specRows[1][2].value).toBe('Housekeeping · Security');
+    expect(opsMod.specRows[1][0].label).toBe('დეპარტამენტების კავშირი');
+    expect(opsMod.specRows[1][0].value).toBe('გაყიდვები, ადმინისტრაცია, დასუფთავება, ტექ-სერვისი');
+    expect(opsMod.specRows[1][1].label).toBe('ინვენტარისა და ბარის გაყიდვები');
+    expect(opsMod.specRows[1][1].value).toBe('საწყობის ავტომატური ჩამოწერა (Stock-Sync)');
+    expect(opsMod.specRows[1][2].label).toBe('კლიენტთა უკუკავშირი');
+    expect(opsMod.specRows[1][2].value).toBe('CRM ინტეგრირებული საჩივრების ჟურნალი');
 
-    expect(opsMod.specRows[2][0].label).toBe('ცვლების ჭკვიანი გრაფიკი');
-    expect(opsMod.specRows[2][1].label).toBe('დროის აღრიცხვა');
-    expect(opsMod.specRows[2][1].value).toBe('ბიომეტრიული Clock-in');
+    expect(opsMod.specRows[2][0].label).toBe('ბიომეტრიული Clock-in / Clock-out');
+    expect(opsMod.specRows[2][1].label).toBe('სალაროს ავტო-შერიგება');
+    expect(opsMod.specRows[2][1].value).toBe('0 ფინანსური გადაცდენა ცვლის ბოლოს');
 
-    expect(opsMod.specRows[3][0].label).toBe('ბრძანება №01-15/ნ');
-    expect(opsMod.specRows[3][0].value).toBe('შრომის ტაბელის 100% შესაბამისობა');
-    expect(opsMod.specRows[3][1].label).toBe('შრომის უსაფრთხოება');
-    expect(opsMod.specRows[3][2].label).toBe('აუდიტის კვალი');
-    expect(opsMod.specRows[3][2].value).toBe('უცვლელი ციფრული ჟურნალი');
+    expect(opsMod.specRows[3][0].label).toBe('ბრძანება №01-15/ნ-ის 100% დაცვა');
+    expect(opsMod.specRows[3][0].value).toBe('შრომის ინსპექციისთვის უნაკლო ტაბელი');
+    expect(opsMod.specRows[3][1].label).toBe('სახელფასო უწყისის გენერაცია');
+    expect(opsMod.specRows[3][2].label).toBe('აუდიტის უცვლელი ჟურნალი');
+    expect(opsMod.specRows[3][2].value).toBe('საეჭვო ოპერაციების მყისიერი ალერტი');
   });
 
   it('should match the 4 spec tile category titles and subtitles', () => {
