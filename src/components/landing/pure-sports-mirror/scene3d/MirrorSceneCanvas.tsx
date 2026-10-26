@@ -13,6 +13,7 @@ interface MirrorSceneCanvasProps {
   accent: string;
   focusTileIndex: number | null;
   shift?: number;
+  is3DFocus?: boolean;
 }
 
 export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
@@ -20,6 +21,7 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
   accent,
   focusTileIndex,
   shift = 0.42,
+  is3DFocus = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<{
@@ -162,11 +164,19 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       state.camera.aspect = w / h;
 
       const isMobileNow = window.innerWidth < 768;
-      const frac = isMobileNow ? 0 : Math.max(0, Math.min(0.5, shift));
-      if (frac < 0.01) {
-        state.camera.clearViewOffset();
+      if (isMobileNow) {
+        if (is3DFocus) {
+          state.camera.clearViewOffset();
+        } else {
+          state.camera.setViewOffset(w, h, 0, Math.min(200, Math.round(h * 0.16)), w, h);
+        }
       } else {
-        state.camera.setViewOffset(w, h, -w * frac * 0.5, 0, w, h);
+        const frac = Math.max(0, Math.min(0.5, shift));
+        if (frac < 0.01) {
+          state.camera.clearViewOffset();
+        } else {
+          state.camera.setViewOffset(w, h, -w * frac * 0.5, 0, w, h);
+        }
       }
       state.camera.updateProjectionMatrix();
     };
@@ -222,13 +232,8 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
             p.traverse((o) => {
               const mesh = o as THREE.Mesh;
               if (mesh.material) {
-                const mat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.Material & {
-                  opacity: number;
-                  userData: { o0?: number };
-                };
-                if (mat.userData.o0 === undefined) {
-                  mat.userData.o0 = mat.opacity;
-                }
+                const mat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.Material & { opacity: number; userData: { o0?: number } };
+                if (mat.userData.o0 === undefined) mat.userData.o0 = mat.opacity;
                 mat.opacity = mat.userData.o0 * w;
               }
             });
@@ -241,11 +246,7 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
 
       // Orbit sweep light around scene for dynamic reflections
       if (state.sweepLight) {
-        state.sweepLight.position.set(
-          Math.cos(t * 0.5) * 4.2,
-          2.4 + Math.sin(t * 0.7) * 1.2,
-          Math.sin(t * 0.5) * 4.2
-        );
+        state.sweepLight.position.set(Math.cos(t * 0.5) * 4.2, 2.4 + Math.sin(t * 0.7) * 1.2, Math.sin(t * 0.5) * 4.2);
       }
 
       state.renderer.render(state.scene, state.camera);
@@ -279,16 +280,12 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       io.disconnect();
       ro.disconnect();
       container.removeEventListener('pointermove', onPointerMove);
-      if (state.activeModel && state.scene) {
-        disposeGroup(state.activeModel.group, state.scene);
-      }
+      if (state.activeModel && state.scene) disposeGroup(state.activeModel.group, state.scene);
       ambient.dispose();
       rays.dispose();
       glowTex.dispose();
       renderer.dispose();
-      if (renderer.domElement.parentElement) {
-        renderer.domElement.parentElement.removeChild(renderer.domElement);
-      }
+      if (renderer.domElement.parentElement) renderer.domElement.parentElement.removeChild(renderer.domElement);
     };
   }, [shift]);
 
@@ -368,6 +365,25 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
     state.camGoal.set(0, Math.sin(elevation) * dist + 1.2, Math.cos(elevation) * dist);
     state.tgtGoal.set(0, 0, 0);
   }, [variant, focusTileIndex, shift]);
+
+  // 4. Update camera projection offset on 3D Focus mode change
+  useEffect(() => {
+    const state = stateRef.current;
+    if (!state.camera || !state.renderer || !containerRef.current) return;
+    const w = containerRef.current.clientWidth;
+    const h = containerRef.current.clientHeight;
+    if (!w || !h) return;
+
+    const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isMobileNow) {
+      if (is3DFocus) {
+        state.camera.clearViewOffset();
+      } else {
+        state.camera.setViewOffset(w, h, 0, Math.min(200, Math.round(h * 0.16)), w, h);
+      }
+    }
+    state.camera.updateProjectionMatrix();
+  }, [is3DFocus]);
 
   return (
     <div

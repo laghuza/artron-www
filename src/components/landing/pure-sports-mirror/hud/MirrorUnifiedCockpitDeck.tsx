@@ -17,6 +17,8 @@ interface MirrorUnifiedCockpitDeckProps {
   activeModuleIndex: number;
   activeTileIndex: number | null;
   accentColor: string;
+  is3DFocus?: boolean;
+  onToggle3DFocus?: () => void;
   onSelectDimension: (index: number) => void;
   onSelectModule: (index: number) => void;
   onNextModule: () => void;
@@ -31,6 +33,8 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
   activeModuleIndex,
   activeTileIndex,
   accentColor,
+  is3DFocus = false,
+  onToggle3DFocus,
   onSelectDimension,
   onSelectModule,
   onNextModule,
@@ -94,11 +98,8 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
                 totalCount={currentDimension.modules.length}
               />
 
-              <p className="text-xs sm:text-[12.5px] leading-[1.6] text-[#E6EFF6]/85 mb-2.5 font-normal max-w-[62ch]">
-                {currentModule.description}
-              </p>
-
               <MirrorSpecAccordion
+                description={currentModule.description}
                 specRows={currentModule.specRows}
                 cameraTags={currentModule.cameraTags}
                 notes={currentModule.notes}
@@ -110,21 +111,21 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
           </div>
         </div>
       </div>
-      {/* ── MOBILE & TABLET SCREENS (< lg): COMPACT INTEGRATED COLUMN ── */}
-      <div className="flex lg:hidden flex-col gap-3 w-full pointer-events-auto">
+
+      {/* ── MOBILE & TABLET SCREENS (< lg): DUAL-STAGE ARCHITECTURE ── */}
+      <div className="flex lg:hidden flex-col gap-2.5 w-full pointer-events-auto">
+        {/* Stage 1: Floating Navigation Canopy (Pills & Liquid Glass Lens) */}
         <div
-          className="w-full rounded-[24px] p-3.5 border border-white/[0.10] backdrop-blur-[12px] shadow-xl transition-all duration-300 flex flex-col gap-3"
+          className="w-full rounded-[22px] p-2.5 sm:p-3 border border-white/[0.10] backdrop-blur-[14px] shadow-lg flex flex-col gap-2 transition-all duration-300 z-20"
           style={{
-            background: `radial-gradient(140% 100% at 50% 0%, ${accentColor}10 0%, rgba(6,10,18,0.30) 80%)`,
+            background: `radial-gradient(130% 100% at 50% 0%, ${accentColor}12 0%, rgba(6,10,18,0.45) 85%)`,
           }}
         >
-          <div className="w-full">
-            <MirrorDimensionPills
-              dimensions={dimensions}
-              activeDimensionIndex={activeDimensionIndex}
-              onSelectDimension={onSelectDimension}
-            />
-          </div>
+          <MirrorDimensionPills
+            dimensions={dimensions}
+            activeDimensionIndex={activeDimensionIndex}
+            onSelectDimension={onSelectDimension}
+          />
 
           <MirrorMobileSubNavLens
             modules={currentDimension.modules}
@@ -132,36 +133,96 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
             accentColor={accentColor}
             onSelectModule={onSelectModule}
           />
-
-          <div
-            className="w-full h-px my-1"
-            style={{
-              background: `linear-gradient(90deg, transparent, ${accentColor}44, transparent)`,
-            }}
-          />
-
-          <MirrorKineticHeader
-            headline={currentModule.headline}
-            kicker={currentModule.kicker}
-            accentColor={accentColor}
-            currentIndex={activeModuleIndex}
-            totalCount={currentDimension.modules.length}
-          />
-
-          <p className="text-xs leading-[1.55] text-[#E6EFF6]/80 font-normal">
-            {currentModule.description}
-          </p>
-
-          <MirrorSpecAccordion
-            specRows={currentModule.specRows}
-            cameraTags={currentModule.cameraTags}
-            notes={currentModule.notes}
-            accentColor={accentColor}
-            activeTileIndex={activeTileIndex}
-            onToggleTile={onToggleTile}
-          />
         </div>
+
+        {/* Stage 2: Visual 3D Spotlight Stage Window (Dedicated Unobstructed Viewport for 3D Model) */}
+        <div className="relative w-full h-[210px] xs:h-[240px] sm:h-[270px] flex items-end justify-between px-2 py-1.5 pointer-events-none select-none">
+          {/* Subtle live indicator badge on left */}
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[8.5px] font-mono tracking-wider backdrop-blur-md pointer-events-auto"
+            style={{
+              borderColor: `${accentColor}33`,
+              backgroundColor: 'rgba(6, 10, 18, 0.6)',
+              color: accentColor,
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full animate-pulse"
+              style={{ backgroundColor: accentColor }}
+            />
+            <span>3D LIVE MIRROR</span>
+          </div>
+
+          {/* 3D Focus Toggle button on right */}
+          {onToggle3DFocus && (
+            <button
+              type="button"
+              onClick={onToggle3DFocus}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[9.5px] font-medium tracking-wide backdrop-blur-md transition-all duration-200 pointer-events-auto active:scale-95 cursor-pointer shadow-lg"
+              style={{
+                borderColor: is3DFocus ? accentColor : 'rgba(255, 255, 255, 0.18)',
+                backgroundColor: is3DFocus ? `${accentColor}25` : 'rgba(6, 10, 18, 0.7)',
+                color: is3DFocus ? '#FFFFFF' : '#EAF2F8',
+                boxShadow: is3DFocus ? `0 0 16px ${accentColor}44` : 'none',
+              }}
+            >
+              <span>{is3DFocus ? '✕ მართვის პანელი' : '⛶ 3D სრული ხედი'}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Stage 3: Bottom Cockpit Sheet (Foldable in 3D Focus mode) */}
+        {!is3DFocus && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.25 }}
+            className="w-full rounded-[24px] p-3.5 sm:p-4 border border-white/[0.10] backdrop-blur-[14px] shadow-xl transition-all duration-300 flex flex-col gap-2.5"
+            style={{
+              background: `radial-gradient(140% 100% at 50% 0%, ${accentColor}10 0%, rgba(6,10,18,0.55) 85%)`,
+            }}
+          >
+            <MirrorKineticHeader
+              headline={currentModule.headline}
+              kicker={currentModule.kicker}
+              accentColor={accentColor}
+              currentIndex={activeModuleIndex}
+              totalCount={currentDimension.modules.length}
+            />
+
+            <MirrorSpecAccordion
+              description={currentModule.description}
+              specRows={currentModule.specRows}
+              cameraTags={currentModule.cameraTags}
+              notes={currentModule.notes}
+              accentColor={accentColor}
+              activeTileIndex={activeTileIndex}
+              onToggleTile={onToggleTile}
+            />
+          </motion.div>
+        )}
+
+        {/* Floating Restore Button when in 3D Fullscreen Focus mode */}
+        {is3DFocus && onToggle3DFocus && (
+          <div className="w-full flex justify-center py-3 pointer-events-auto">
+            <button
+              type="button"
+              onClick={onToggle3DFocus}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold backdrop-blur-xl shadow-2xl transition-all duration-200 active:scale-95 cursor-pointer"
+              style={{
+                borderColor: accentColor,
+                backgroundColor: 'rgba(6, 10, 18, 0.88)',
+                color: '#FFFFFF',
+                boxShadow: `0 0 24px ${accentColor}44`,
+              }}
+            >
+              <span>✕ მართვის პანელის დაბრუნება</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
