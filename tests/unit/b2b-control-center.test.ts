@@ -1,9 +1,11 @@
 import { LOGICS, FAC, HOURS, COACHES, LAYERS, MIG, OKR, MONTHS, MRR, MEMBERS, DAYS, BANDS, LOAD, tier, SEGS } from '@/components/landing/b2b-suite/constants';
 import { B2BControlCenterSection } from '@/components/landing/b2b-suite';
+import { B2BMobileLogicSelector } from '@/components/landing/b2b-suite/B2BMobileLogicSelector';
 
 describe('B2BControlCenterSection & Constants Parity', () => {
-  it('should export B2BControlCenterSection component', () => {
+  it('should export B2BControlCenterSection and B2BMobileLogicSelector', () => {
     expect(B2BControlCenterSection).toBeDefined();
+    expect(B2BMobileLogicSelector).toBeDefined();
   });
 
   it('should have 10 standard B2B logics defined with code and stage labels', () => {

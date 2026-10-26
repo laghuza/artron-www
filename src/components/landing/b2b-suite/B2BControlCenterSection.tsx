@@ -15,6 +15,7 @@ import { MrrGrowthStage } from './stages/MrrGrowthStage';
 import { ChurnRadarStage } from './stages/ChurnRadarStage';
 import { LoadHeatmapStage } from './stages/LoadHeatmapStage';
 import { WinbackMatrixStage } from './stages/WinbackMatrixStage';
+import { B2BMobileLogicSelector } from './B2BMobileLogicSelector';
 import { soundEngine } from '@/core';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -70,6 +71,22 @@ export const B2BControlCenterSection: React.FC = () => {
   const goToNode = useCallback((n: number) => {
     soundEngine.playPulseNode();
     setNode((n + 10) % 10);
+  }, []);
+
+  // On mobile initial load, start at node 4 (05 ეკონომია) unless a specific B2B tab hash is provided
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      const hash = window.location.hash.replace('#', '');
+      const b2bTabs = [
+        'iot', 'turnstile', 'booking', 'schedules', 'sports_os',
+        'security', 'enterprise-security', 'staff-access-roles',
+        'migration', 'data-migration', 'roi', 'analytics-showcase',
+        'okr', 'kpi', 'churn', 'heatmap', 'winback'
+      ];
+      if (!b2bTabs.includes(hash)) {
+        setNode(4);
+      }
+    }
   }, []);
 
   // Pass trigger logic
@@ -166,26 +183,27 @@ export const B2BControlCenterSection: React.FC = () => {
 
   // Hash listener & Custom Event sync with Header
   useEffect(() => {
+    const mapping: Record<string, number> = {
+      iot: 0,
+      turnstile: 0,
+      booking: 1,
+      schedules: 1,
+      sports_os: 1,
+      security: 2,
+      'enterprise-security': 2,
+      'staff-access-roles': 2,
+      migration: 3,
+      'data-migration': 3,
+      roi: 4,
+      'analytics-showcase': 4,
+      okr: 5,
+      kpi: 6,
+      churn: 7,
+      heatmap: 8,
+      winback: 9,
+    };
+
     const handleRouteTab = (tab: string) => {
-      const mapping: Record<string, number> = {
-        iot: 0,
-        turnstile: 0,
-        booking: 1,
-        schedules: 1,
-        sports_os: 1,
-        security: 2,
-        'enterprise-security': 2,
-        'staff-access-roles': 2,
-        migration: 3,
-        'data-migration': 3,
-        roi: 4,
-        'analytics-showcase': 4,
-        okr: 5,
-        kpi: 6,
-        churn: 7,
-        heatmap: 8,
-        winback: 9,
-      };
       if (typeof mapping[tab] === 'number') {
         setNode(mapping[tab]);
       }
@@ -193,7 +211,11 @@ export const B2BControlCenterSection: React.FC = () => {
 
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      if (hash) handleRouteTab(hash);
+      if (hash && typeof mapping[hash] === 'number') {
+        handleRouteTab(hash);
+      } else if (typeof window !== 'undefined' && window.innerWidth < 640) {
+        setNode(4);
+      }
     };
 
     handleHash();
@@ -378,10 +400,14 @@ export const B2BControlCenterSection: React.FC = () => {
           </p>
         </div>
 
+        {/* Mobile Navigation (Centered Focused Snapping Carousel) */}
+        <B2BMobileLogicSelector node={node} goToNode={goToNode} logics={LOGICS} />
+
+        {/* Desktop Navigation (Top Rail Grid) */}
         <nav
           ref={navRef}
           aria-label="ARTRON B2B Suite ლოგიკები"
-          className="grid grid-flow-col auto-cols-[104px] sm:auto-cols-[minmax(0,1fr)] gap-3.5 overflow-x-auto scrollbar-none py-1 -mx-2 px-2"
+          className="hidden sm:grid sm:grid-flow-col sm:auto-cols-[minmax(0,1fr)] gap-3.5 overflow-x-auto scrollbar-none py-1 -mx-2 px-2"
         >
           {LOGICS.map((l, i) => {
             const isSelected = node === i;
