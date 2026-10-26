@@ -41,6 +41,7 @@ export interface MirrorDimension {
   id: 'venues' | 'workforce' | 'mastery';
   numeral: string;
   name: string;
+  shortName?: string;
   subtitle: string;
   accentColor: string;
   modules: MirrorModule[];

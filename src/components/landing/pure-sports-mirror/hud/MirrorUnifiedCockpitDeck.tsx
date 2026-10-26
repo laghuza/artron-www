@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { MirrorDimension, MirrorModule } from '../data/mirrorDataTypes';
 import { MirrorDimensionPills } from './MirrorDimensionPills';
 import { MirrorSubNav } from './MirrorSubNav';
+import { MirrorMobileSubNavLens } from './MirrorMobileSubNavLens';
 import { MirrorKineticHeader } from './MirrorKineticHeader';
 import { MirrorSpecAccordion } from './MirrorSpecAccordion';
 
@@ -117,7 +118,7 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
             background: `radial-gradient(140% 100% at 50% 0%, ${accentColor}10 0%, rgba(6,10,18,0.30) 80%)`,
           }}
         >
-          <div className="w-full overflow-x-auto scrollbar-none pb-1">
+          <div className="w-full">
             <MirrorDimensionPills
               dimensions={dimensions}
               activeDimensionIndex={activeDimensionIndex}
@@ -125,12 +126,11 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
             />
           </div>
 
-          <MirrorSubNav
+          <MirrorMobileSubNavLens
             modules={currentDimension.modules}
             activeModuleIndex={activeModuleIndex}
             accentColor={accentColor}
             onSelectModule={onSelectModule}
-            onNextModule={onNextModule}
           />
 
           <div
