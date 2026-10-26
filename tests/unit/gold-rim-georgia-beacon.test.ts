@@ -5,7 +5,7 @@ describe('Gold Rim Georgia Network Badge & Button Integration', () => {
   const globalsCssPath = path.resolve(__dirname, '../../src/app/globals.css');
   const enneaCanvasPath = path.resolve(
     __dirname,
-    '../../src/components/landing/ecosystem/EnneaSceneCanvas.tsx'
+    '../../src/components/landing/ecosystem/EnneaCanvasOverlays.tsx'
   );
   const enneaDockPath = path.resolve(
     __dirname,

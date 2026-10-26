@@ -73,7 +73,7 @@ export const PureSportsMirror: React.FC = () => {
     <section
       id="pure-sports-mirror"
       aria-label="SPORT-OS Infrastructure Matrix"
-      className="relative w-full min-h-[560px] lg:min-h-[640px] xl:min-h-[720px] h-auto lg:h-[calc(100vh-88px)] max-h-[1080px] bg-[#060911] text-[#EAF2F8] overflow-hidden select-none scroll-mt-[88px] flex flex-col justify-between p-3 sm:p-4 lg:p-5"
+      className="relative w-full min-h-[560px] lg:min-h-[640px] xl:min-h-[720px] h-auto lg:h-[calc(100vh-88px)] max-h-none lg:max-h-[1080px] bg-[#060911] text-[#EAF2F8] overflow-hidden select-none scroll-mt-[88px] flex flex-col justify-between p-3 sm:p-4 lg:p-5"
     >
       {/* Layer 1: Procedural WebGL 3D Canvas (Preserved 3D visual dominance) */}
       <MirrorSceneCanvas
@@ -107,8 +107,18 @@ export const PureSportsMirror: React.FC = () => {
         onToggleTile={handleToggleTile}
       />
 
-      {/* Layer 4: Right Watermark - ARTRON Brand & Localized Slogan */}
-      <div className="absolute right-4 bottom-4 lg:right-6 lg:bottom-5 z-10 flex flex-col items-end gap-1.5 text-right pointer-events-none select-none">
+      {/* Layer 4: Mobile Flow Slogan - Naturally positioned below the cockpit deck to prevent overlapping with accordion cards */}
+      <div className="flex lg:hidden flex-col items-center justify-center text-center gap-1 pt-3 pb-1 px-2 z-10 pointer-events-none select-none">
+        <span className="text-[11px] sm:text-xs font-light tracking-[0.01em] text-[#EEF6FC]/70 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+          {currentSlogan}
+        </span>
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-[#EEF6FC]/40">
+          ARTRON
+        </span>
+      </div>
+
+      {/* Layer 5: Desktop Watermark - Preserved absolute positioning in bottom-right corner */}
+      <div className="hidden lg:flex absolute right-6 bottom-5 z-10 flex-col items-end gap-1.5 text-right pointer-events-none select-none">
         <span className="text-[11px] sm:text-xs font-light tracking-[0.01em] text-[#EEF6FC]/70 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
           {currentSlogan}
         </span>

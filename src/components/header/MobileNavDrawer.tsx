@@ -1,11 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, Cpu, Sparkles } from 'lucide-react';
-import PS5LanguageSelector from '@/components/navigation/PS5LanguageSelector';
+import {
+  ChevronDown,
+  ChevronRight,
+  Send,
+  MessageCircle,
+  Phone,
+} from 'lucide-react';
 import { NavLinkItem, SubMenuItem } from './headerNavData';
+import { CONTACT_CONFIG } from '@/config/contact';
 
 interface MobileNavDrawerProps {
   isOpen: boolean;
@@ -36,36 +42,38 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = React.memo(({
   locale,
   onClose,
 }) => {
+  // Lock body scroll and notify floating widgets to suppress background bleed/clash
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalTouchAction = document.body.style.touchAction;
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('artron-mobile-menu-state', { detail: { isOpen: true } }));
+      }
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.touchAction = originalTouchAction;
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('artron-mobile-menu-state', { detail: { isOpen: false } }));
+        }
+      };
+    }
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {!showBackToHome && isOpen && (
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="xl:hidden overflow-hidden border-t border-white/[0.06] bg-[#0B0E14]/98 backdrop-blur-2xl max-h-[85vh] overflow-y-auto"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="xl:hidden w-full h-[calc(100vh-57px)] h-[calc(100dvh-57px)] bg-[#080B10] border-t border-white/[0.08] flex flex-col overflow-hidden select-none"
         >
-          <div className="px-4 pb-4 pt-2 flex flex-col gap-1">
-            {/* Quick Role Switcher for Mobile Navigation */}
-            <div className="grid grid-cols-2 gap-2 mb-2 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-              <button
-                type="button"
-                onClick={(e) => handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, '/#dashboard-features')}
-                className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg bg-[#00A3FF]/15 border border-[#00A3FF]/30 text-[#00E5FF] text-[11px] font-bold cursor-pointer active:scale-95 transition-transform"
-              >
-                <Cpu className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate">{locale === 'ka' ? 'დარბაზი (B2B)' : locale === 'ru' ? 'Клуб (B2B)' : 'Gym (B2B)'}</span>
-              </button>
-              <button
-                type="button"
-                onClick={(e) => handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, '/#mobile-app')}
-                className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg bg-[#10B981]/15 border border-[#10B981]/30 text-[#34D399] text-[11px] font-bold cursor-pointer active:scale-95 transition-transform"
-              >
-                <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate">{locale === 'ka' ? 'წევრი (B2C)' : locale === 'ru' ? 'Член (B2C)' : 'Member (B2C)'}</span>
-              </button>
-            </div>
+          <div className="flex-1 overflow-y-auto overscroll-contain px-4 pt-3 pb-12 flex flex-col justify-between">
+            <div className="flex flex-col gap-1">
 
             {navLinks.map((link, i) => {
               const isControlPanelLink = link.dropdown === 'control';
@@ -196,13 +204,60 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = React.memo(({
                 </motion.div>
               );
             })}
+            </div>
 
-            {/* Mobile PS5 Language Selector */}
-            <div className="mt-2 pt-2 border-t border-white/[0.08]">
-              <PS5LanguageSelector
-                variant="mobile"
-                onSelectCallback={onClose}
-              />
+            {/* ══ MOBILE ACTION FOOTER (Dark-Futurist Direct Contact Dock) ══ */}
+            <div className="mt-4 pt-3.5 border-t border-white/[0.08] flex flex-col gap-2.5">
+              {/* Subtle HUD Label */}
+              <div className="flex items-center justify-between text-[10px] font-mono tracking-wider text-[#64748B] px-1 uppercase">
+                <span className="flex items-center gap-1.5 text-[#94A3B8]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse" />
+                  {locale === 'ka' ? 'პირდაპირი კავშირი' : locale === 'ru' ? 'Прямой контакт' : 'Direct Line'}
+                </span>
+                <span className="text-[9px] text-[#475569] font-mono">24/7 ENCRYPTED</span>
+              </div>
+
+              {/* Direct Communication Channels (Telegram, WhatsApp, Phone) */}
+              <div className="grid grid-cols-3 gap-2">
+                <a
+                  href={CONTACT_CONFIG.telegram.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-[#0F141C]/90 border border-white/[0.08] hover:border-[#00A3FF]/50 active:scale-[0.97] transition-all duration-200 min-h-[50px] shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_0_16px_rgba(0,163,255,0.15)]"
+                >
+                  <Send className="w-4 h-4 text-[#00A3FF] mb-1 group-hover:scale-110 transition-transform" />
+                  <span className="text-[11px] font-semibold text-white/90 group-hover:text-white">Telegram</span>
+                </a>
+
+                <a
+                  href={CONTACT_CONFIG.whatsapp.getUrl(locale)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-[#0F141C]/90 border border-white/[0.08] hover:border-[#10B981]/50 active:scale-[0.97] transition-all duration-200 min-h-[50px] shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_0_16px_rgba(16,185,129,0.15)]"
+                >
+                  <MessageCircle className="w-4 h-4 text-[#10B981] mb-1 group-hover:scale-110 transition-transform" />
+                  <span className="text-[11px] font-semibold text-white/90 group-hover:text-white">WhatsApp</span>
+                </a>
+
+                <a
+                  href={CONTACT_CONFIG.phone.dialUrl}
+                  className="group relative flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-[#0F141C]/90 border border-white/[0.08] hover:border-[#F59E0B]/50 active:scale-[0.97] transition-all duration-200 min-h-[50px] shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_0_16px_rgba(245,158,11,0.15)]"
+                >
+                  <Phone className="w-4 h-4 text-[#F59E0B] mb-1 group-hover:scale-110 transition-transform" />
+                  <span className="text-[11px] font-semibold text-white/90 group-hover:text-white">
+                    {locale === 'ka' ? 'ზარი' : locale === 'ru' ? 'Звонок' : 'Call'}
+                  </span>
+                </a>
+              </div>
+
+              {/* Live Status and System Version Badge */}
+              <div className="flex items-center justify-between px-1 pt-0.5 text-[10px] font-mono text-[#64748B]">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse" />
+                  <span className="text-[#34D399] font-bold tracking-wider">ECOSYSTEM LIVE</span>
+                </div>
+                <span className="text-[#475569]">ARTRON OS • v2.6.4</span>
+              </div>
             </div>
           </div>
         </motion.div>

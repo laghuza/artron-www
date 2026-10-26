@@ -238,7 +238,9 @@ export const Header: React.FC<HeaderProps> = ({
   const subBrandLabel = locale === 'ka' ? 'სპორტული ეკოსისტემა' : locale === 'ru' ? 'Спортивная Экосистема' : 'SPORTS ECOSYSTEM';
 
   /* ── Glass header surface ── */
-  const glassClass = kinematics.isScrolledPast
+  const glassClass = isMobileMenuOpen
+    ? 'bg-[#080B10] border-b border-white/[0.08]'
+    : kinematics.isScrolledPast
     ? 'bg-[#080B10]/95 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_32px_rgba(0,0,0,0.6)]'
     : 'bg-[#0B0E14]/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_2px_20px_rgba(0,0,0,0.3)]';
 
@@ -247,9 +249,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <motion.header
       style={{
-        y: kinematics.headerY,
-        opacity: kinematics.headerAlpha,
-        pointerEvents: kinematics.isInteractive ? 'auto' : 'none',
+        y: isMobileMenuOpen ? 0 : kinematics.headerY,
+        opacity: isMobileMenuOpen ? 1 : kinematics.headerAlpha,
+        pointerEvents: isMobileMenuOpen ? 'auto' : (kinematics.isInteractive ? 'auto' : 'none'),
       }}
       className={`${positionClass} z-50 w-full ${glassClass} ${className}`}
     >
