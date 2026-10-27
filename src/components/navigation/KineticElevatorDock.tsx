@@ -121,11 +121,11 @@ export const KineticElevatorDock: React.FC = () => {
             <div
               className="absolute top-3 w-[1.5px] bg-gradient-to-b from-[#00A3FF] to-[#00E5FF] shadow-[0_0_8px_#00E5FF] -z-10 transition-[height] duration-100 ease-out will-change-[height]"
               style={{
-                height: `${Math.max(12, 10 + Math.min(Math.max(sectionProgress, 0), 7) * 42)}px`,
+                height: `${Math.max(12, 10 + Math.min(Math.max(sectionProgress, 0), SECTION_NODES.length - 1) * 42)}px`,
               }}
             />
 
-            {/* 8 Section Nodes with Floating Glow Capsule */}
+            {/* Section Nodes with Floating Glow Capsule */}
             <nav className="flex flex-col items-center gap-2.5">
               {SECTION_NODES.map((node, i) => {
                 const isActive = activeNodeIndex === i;

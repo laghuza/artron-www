@@ -93,22 +93,22 @@ test.describe('Phase 3: B2B Conversion Engine & B2C Experience E2E', () => {
     // Check advantage section header is visible
     await expect(b2cSection.locator('h2')).toBeVisible();
 
-    // Switch to Renewal Tab (Index 1)
-    const renewalCard = page.locator('[data-testid="b2c-adv-card-1"]');
+    // Switch to Mentor Tab (Index 1)
+    const mentorCard = page.locator('[data-testid="b2c-adv-card-1"]');
+    await mentorCard.scrollIntoViewIfNeeded();
+    await mentorCard.click();
+    await expect(b2cSection.getByText('მწვრთნელის განრიგი და ჯავშნები').first()).toBeVisible();
+
+    // Switch to Shield Tab (Index 2)
+    const shieldCard = page.locator('[data-testid="b2c-adv-card-2"]');
+    await shieldCard.scrollIntoViewIfNeeded();
+    await shieldCard.click();
+    await expect(b2cSection.getByText('14-დღიანი გარანტია').first()).toBeVisible();
+
+    // Switch to Renewal Tab (Index 3)
+    const renewalCard = page.locator('[data-testid="b2c-adv-card-3"]');
     await renewalCard.scrollIntoViewIfNeeded();
     await renewalCard.click();
-    await expect(b2cSection.getByText('1-Click Renew')).toBeVisible();
-
-    // Switch to Trainers Tab (Index 2)
-    const trainersCard = page.locator('[data-testid="b2c-adv-card-2"]');
-    await trainersCard.scrollIntoViewIfNeeded();
-    await trainersCard.click();
-    await expect(b2cSection.getByText('COACH')).toBeVisible();
-
-    // Switch to Guarantee Tab (Index 3)
-    const guaranteeCard = page.locator('[data-testid="b2c-adv-card-3"]');
-    await guaranteeCard.scrollIntoViewIfNeeded();
-    await guaranteeCard.click();
-    await expect(b2cSection.getByText('Money-Back Guarantee')).toBeVisible();
+    await expect(b2cSection.getByText('აბონემენტის ონლაინ განახლება').first()).toBeVisible();
   });
 });

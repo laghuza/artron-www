@@ -12,7 +12,6 @@ import { soundEngine } from '@/core';
 interface MobileFeatureDeckProps {
   activeId: number;
   onSelect: (id: number) => void;
-  flips: number;
   bridgeW: number;
   wide: boolean;
   cardsRef: React.RefObject<HTMLDivElement | null>;
@@ -29,7 +28,6 @@ const SLOTS_PAIR: [number, number][] = [
 export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
   activeId,
   onSelect,
-  flips,
   bridgeW,
   wide,
   cardsRef,
@@ -45,9 +43,9 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
     }
   };
 
-  const flipTf = `rotateX(${flips * 180}deg)`;
-  const peF = flips % 2 ? 'none' : 'auto';
-  const peB = flips % 2 ? 'auto' : 'none';
+  const flipTf = isGroup2 ? 'rotateX(180deg)' : 'rotateX(0deg)';
+  const peF = isGroup2 ? 'none' : 'auto';
+  const peB = isGroup2 ? 'auto' : 'none';
 
   return (
     <div className="flex-1 min-w-[320px] max-w-[560px] flex flex-col gap-3.5 relative z-10">
@@ -184,8 +182,8 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
                   style={{
                     padding: '21px 26px',
                     pointerEvents: peF as any,
-                    opacity: flips % 2 === 0 ? 1 : 0,
-                    visibility: flips % 2 === 0 ? 'visible' : 'hidden',
+                    opacity: isGroup2 ? 0 : 1,
+                    visibility: isGroup2 ? 'hidden' : 'visible',
                     WebkitBackfaceVisibility: 'hidden',
                     backfaceVisibility: 'hidden',
                     boxShadow: isFrontActive
@@ -266,8 +264,8 @@ export const MobileFeatureDeck: React.FC<MobileFeatureDeckProps> = ({
                   style={{
                     padding: '21px 26px',
                     pointerEvents: peB as any,
-                    opacity: flips % 2 !== 0 ? 1 : 0,
-                    visibility: flips % 2 !== 0 ? 'visible' : 'hidden',
+                    opacity: isGroup2 ? 1 : 0,
+                    visibility: isGroup2 ? 'visible' : 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
                     backfaceVisibility: 'hidden',
                     boxShadow: isBackActive

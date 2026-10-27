@@ -5,6 +5,8 @@ import { MobileFeatureDeck } from './MobileFeatureDeck';
 import { MobilePhoneChassis } from './MobilePhoneChassis';
 import { MobileScreenViews } from './MobileScreenViews';
 import { MobileShowcaseFooter } from './MobileShowcaseFooter';
+import { MobileSlimCardCarousel } from './MobileSlimCardCarousel';
+import { soundEngine } from '@/core';
 import { useMobileShowcaseLogic } from './useMobileShowcaseLogic';
 
 export const ArtronMobileShowcase: React.FC = () => {
@@ -22,7 +24,6 @@ export const ArtronMobileShowcase: React.FC = () => {
     >
       {/* Anchor targets */}
       <span id="b2c-mobile" className="absolute -top-24 left-0 pointer-events-none" />
-      <span id="b2c-experience" className="absolute -top-24 left-0 pointer-events-none" />
 
       {/* Sacred Geometry Background Grid & Golden Ratio Lines */}
       <div
@@ -80,9 +81,12 @@ export const ArtronMobileShowcase: React.FC = () => {
         <span className="absolute left-[calc(2.1%+14px)] top-[calc(61.8%+9px)] font-mono text-[11px] tracking-wider text-cyan-100/[0.24]">1 : 1.618</span>
       </div>
 
-      <div className="max-w-[1280px] mx-auto relative px-4 sm:px-8 py-[89px] flex flex-col gap-[55px] box-border">
+      <div
+        id="b2c-experience"
+        className="max-w-[1280px] mx-auto relative px-4 sm:px-8 py-10 sm:py-[89px] flex flex-col gap-5 sm:gap-[55px] box-border"
+      >
         {/* Left-Aligned Master Header */}
-        <header className="flex flex-col items-start gap-5 max-w-[860px]">
+        <header className="flex flex-col items-start gap-3 sm:gap-5 max-w-[860px]">
           <div className="flex items-center gap-3.5">
             <span className="w-7 h-[1px] bg-gradient-to-r from-transparent to-[#E0F2FE]" />
             <span className="font-mono text-xs tracking-[0.16em] text-[#A8B4C4]">
@@ -100,18 +104,25 @@ export const ArtronMobileShowcase: React.FC = () => {
           </p>
         </header>
 
-        {/* Main 2-Column Showcase Row */}
+        {/* Mobile-Only Slim Horizontal Cards Carousel */}
+        <div className="block lg:hidden w-full -mt-2">
+          <MobileSlimCardCarousel
+            activeId={logic.activeId}
+            onSelect={logic.handleSelect}
+          />
+        </div>
+
+        {/* Main Showcase Row: Desktop 2-column flex, Mobile single-column flex */}
         <div
           ref={logic.rowRef}
           onMouseMove={logic.handleMouseMove}
           onMouseLeave={logic.handleMouseLeave}
-          className="relative flex flex-wrap gap-[34px] items-start"
+          className="relative flex flex-col lg:flex-row gap-2 sm:gap-6 lg:gap-[34px] items-start w-full"
         >
-          {/* Column A: 3D Feature Deck */}
-          <div className="flex-[1.272_1_420px] min-w-0">
+          {/* Column A: Desktop-Only 3D Feature Deck */}
+          <div className="hidden lg:block flex-[1.272_1_420px] min-w-0">
             <MobileFeatureDeck
               activeId={logic.activeId}
-              flips={logic.flips}
               onSelect={logic.handleSelect}
               cardsRef={logic.cardsRef}
               wide={logic.wide}
@@ -119,10 +130,10 @@ export const ArtronMobileShowcase: React.FC = () => {
             />
           </div>
 
-          {/* Column B: 3D Smartphone Chassis & ƒ · LOGIC panel directly underneath */}
+          {/* Column B: 3D Smartphone Chassis & ƒ · LOGIC panel */}
           <div
             ref={logic.phoneColRef}
-            className="flex-[1_1_440px] min-w-0 sticky top-3 self-start flex flex-col items-center gap-[18px]"
+            className="w-full lg:flex-[1_1_440px] min-w-0 lg:sticky lg:top-3 self-start flex flex-col items-center gap-4 lg:gap-[18px]"
           >
             <MobilePhoneChassis
               activeId={logic.activeId}
@@ -133,6 +144,14 @@ export const ArtronMobileShowcase: React.FC = () => {
               ry={logic.ry}
               onTilt={logic.handleMouseMove}
               onTiltLeave={logic.handleMouseLeave}
+              onSwipeLeft={() => {
+                soundEngine.playPulseNode();
+                logic.handleSelect((logic.activeId + 1) % 8);
+              }}
+              onSwipeRight={() => {
+                soundEngine.playPulseNode();
+                logic.handleSelect((logic.activeId - 1 + 8) % 8);
+              }}
               inner={logic.inner}
               notif={logic.notif}
               notifTilt={logic.notifTilt}

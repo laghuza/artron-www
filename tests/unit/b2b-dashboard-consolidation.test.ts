@@ -64,11 +64,12 @@ describe('B2B Dashboard Consolidation (Approach B: 2 Categories, 6 Master Nodes)
     expect(ruDict['dashboardFeatures_feat6_title']).toContain('Защита панели управления');
   });
 
-  test('Elevator navigation nodes must cleanly transition from B2B Control Hub (03) to B2C Mobile App (04) to Multimodal AI (05) to Pricing (06)', () => {
+  test('Elevator navigation nodes must cleanly transition from B2B Control Hub (03) to B2C Mobile App (04) to Multimodal AI (05) to Partners (06)', () => {
     const hubNode = SECTION_NODES.find((node) => node.index === '03');
     const mobileNode = SECTION_NODES.find((node) => node.index === '04');
     const aiNode = SECTION_NODES.find((node) => node.index === '05');
-    const pricingNode = SECTION_NODES.find((node) => node.index === '06');
+    const partnerNode = SECTION_NODES.find((node) => node.index === '06');
+    const faqNode = SECTION_NODES.find((node) => node.index === '07');
 
     expect(hubNode).toBeDefined();
     expect(hubNode?.id).toBe('dashboard-features');
@@ -79,8 +80,11 @@ describe('B2B Dashboard Consolidation (Approach B: 2 Categories, 6 Master Nodes)
     expect(aiNode).toBeDefined();
     expect(aiNode?.id).toBe('ai-intelligence');
 
-    expect(pricingNode).toBeDefined();
-    expect(pricingNode?.id).toBe('pricing');
+    expect(partnerNode).toBeDefined();
+    expect(partnerNode?.id).toBe('partner-ecosystem');
+
+    expect(faqNode).toBeDefined();
+    expect(faqNode?.id).toBe('faq');
   });
 
   test('Multimodal AI nav title is localized across all 3 languages', () => {

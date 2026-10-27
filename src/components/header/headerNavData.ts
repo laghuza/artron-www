@@ -142,7 +142,6 @@ export function getNavLinks(locale: string, t: (k: string) => string): NavLinkIt
     { href: '/#dashboard-features', label: t('nav_control_panel') || (locale === 'ka' ? 'მართვის ცენტრი' : locale === 'ru' ? 'Центр управления' : 'Control Hub'),  dropdown: 'control' },
     { href: '/#mobile-app',         label: t('nav_athlete_freedom') || (locale === 'ka' ? 'მობილური აპი' : locale === 'ru' ? 'Мобильное приложение' : 'Mobile App'), dropdown: 'none' },
     { href: '/#ai-intelligence',    label: t('nav_ai') || (locale === 'ka' ? 'AI ასისტენტი' : locale === 'ru' ? 'AI Ассистент' : 'AI Assistant'), dropdown: 'none' },
-    { href: '/#pricing',            label: t('nav_pricing'),   dropdown: 'none' },
     { href: '/#partner-ecosystem',  label: t('nav_partners'),  dropdown: 'none' },
     { href: '/#faq',                label: t('nav_faq'),       dropdown: 'none' },
     { href: '/about',               label: t('nav_about'),     dropdown: 'none' },

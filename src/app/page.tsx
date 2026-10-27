@@ -1,7 +1,6 @@
 import { PureSportsMirror } from '@/components/landing/pure-sports-mirror/PureSportsMirror';
 import { B2BControlCenterSection } from '@/components/landing/b2b-suite';
 import { ArtronAiSection } from '@/components/landing/ArtronAiSection';
-import { PricingSection } from '@/components/landing/PricingSection';
 import { PartnerEcosystem } from '@/components/landing/PartnerEcosystem';
 import { FaqSection } from '@/components/landing/FaqSection';
 import { Header } from '@/components/Header';
@@ -57,11 +56,7 @@ export default function Home() {
         <ArtronAiSection />
         <SectionTransition variant="laser" />
 
-        {/* 6. Pricing Matrix */}
-        <PricingSection />
-        <SectionTransition variant="laser" />
-
-        {/* 7. Partner Ecosystem & Live Coverage Network */}
+        {/* 6. Partner Ecosystem & Live Coverage Network */}
         <PartnerEcosystem />
         <SectionTransition variant="laser" />
 

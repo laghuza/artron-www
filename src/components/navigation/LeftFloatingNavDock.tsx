@@ -8,7 +8,6 @@ import {
   Home,
   Layers,
   Calculator,
-  CreditCard,
   Handshake,
   HelpCircle,
   Calendar,
@@ -53,13 +52,6 @@ export const LeftFloatingNavDock: React.FC = () => {
       icon: Calculator,
     },
     {
-      id: 'pricing',
-      href: '#pricing',
-      labelKey: 'nav_pricing',
-      fallbackLabel: { ka: 'ტარიფები', en: 'Pricing', ru: 'Тарифы' },
-      icon: CreditCard,
-    },
-    {
       id: 'partner-ecosystem',
       href: '#partner-ecosystem',
       labelKey: 'nav_partners',
@@ -97,7 +89,7 @@ export const LeftFloatingNavDock: React.FC = () => {
     // Show dock once user starts scrolling down
     setIsVisible(scrollY > 80);
 
-    const sectionIds = ['hero', 'services', 'roi', 'pricing', 'partner-ecosystem', 'faq'];
+    const sectionIds = ['hero', 'services', 'roi', 'partner-ecosystem', 'faq'];
     const scrollPosition = scrollY + 240;
 
     for (let i = sectionIds.length - 1; i >= 0; i--) {

@@ -16,12 +16,12 @@ export const GeorgianId3DMockup: React.FC<GeorgianId3DMockupProps> = ({
   locale
 }) => {
   return (
-    <div className="relative flex flex-col items-center select-none w-full my-2">
+    <div className="relative flex flex-col items-center select-none w-full my-1 sm:my-2">
       {/* Ambient background glow behind the 3D ID Card */}
       <div className="absolute -inset-2 bg-gradient-to-tr from-[#0066FF]/20 via-[#00A3FF]/15 to-[#00ff87]/15 rounded-3xl blur-2xl opacity-60 pointer-events-none" />
 
       {/* 3D Tilt Wrapper with Card Perspective */}
-      <TiltCard className="w-full max-w-[360px] sm:max-w-[400px]" maxDeg={14}>
+      <TiltCard className="w-full max-w-[270px] xs:max-w-[310px] sm:max-w-[400px]" maxDeg={14}>
         {/* Physical ID-1 Card Chassis (Plastic Card Bevel & Border Glow) */}
         <div className="relative aspect-[1.586/1] rounded-2xl p-[2.5px] bg-gradient-to-br from-white/40 via-[#00A3FF]/50 to-white/15 shadow-[0_20px_50px_rgba(0,163,255,0.3),0_0_0_1px_rgba(255,255,255,0.18),inset_0_1px_2px_rgba(255,255,255,0.4)] overflow-hidden">
           

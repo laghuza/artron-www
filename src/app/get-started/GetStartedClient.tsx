@@ -37,7 +37,7 @@ export default function GetStartedClient() {
     } else if (activeMode === 'DEMO') {
       router.push('/sports-os');
     } else {
-      router.push('/#pricing');
+      router.push('/');
     }
   };
 

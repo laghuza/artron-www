@@ -58,18 +58,8 @@ export const SECTION_NODES: SectionNode[] = [
   },
   {
     index: '06',
-    id: 'pricing',
-    label: { ka: '06 • ტარიფები & პაკეტები', en: '06 • Pricing & Plans', ru: '06 • Тарифы и пакеты' },
-    aiPrompt: {
-      ka: 'გსურთ გაეცნოთ ართრონის სატარიფო პაკეტებს ან გაიაროთ 15-წუთიანი ინდივიდუალური ონლაინ დემო-პრეზენტაცია?',
-      en: 'Would you like to explore Artron pricing tiers or book a 15-minute live demo presentation for your facility?',
-      ru: 'Хотите ознакомиться с тарифами Artron или забронировать 15-минутную демо-презентацию для вашего комплекса?',
-    },
-  },
-  {
-    index: '07',
     id: 'partner-ecosystem',
-    label: { ka: '07 • პარტნიორები & დარბაზები', en: '07 • Partners & Client Gyms', ru: '07 • Партнеры и клубы' },
+    label: { ka: '06 • პარტნიორები & დარბაზები', en: '06 • Partners & Client Gyms', ru: '06 • Партнеры и клубы' },
     aiPrompt: {
       ka: 'გაინტერესებთ ართრონის პარტნიორი სპორტული ობიექტები და ტექნოლოგიური ინტეგრაციები (გადახდები, ტურნიკეტები, ბანკები)?',
       en: 'Interested in Artron partner sports facilities and technology integrations (payments, turnstiles, banks)?',
@@ -77,9 +67,9 @@ export const SECTION_NODES: SectionNode[] = [
     },
   },
   {
-    index: '08',
+    index: '07',
     id: 'faq',
-    label: { ka: '08 • ხშირად დასმული კითხვები', en: '08 • FAQ & Knowledge Base', ru: '08 • Часто задаваемые вопросы' },
+    label: { ka: '07 • ხშირად დასმული კითხვები', en: '07 • FAQ & Knowledge Base', ru: '07 • Часто задаваемые вопросы' },
     aiPrompt: {
       ka: 'გაქვთ კითხვები ართრონის დანერგვასთან, მონაცემთა მიგრაციასთან ან უსაფრთხოებასთან დაკავშირებით?',
       en: 'Do you have questions regarding Artron deployment, data migration, or enterprise security?',

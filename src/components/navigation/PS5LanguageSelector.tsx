@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronDown, Sparkles } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import { useLanguage, Locale } from '@/context/LanguageContext';
 import { MiniEcosystemGlobe } from './MiniEcosystemGlobe';
 
@@ -198,7 +198,7 @@ export const PS5LanguageSelector: React.FC<PS5LanguageSelectorProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: -8 }}
             transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-            className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-2rem)] rounded-2xl border border-white/[0.14] bg-[#070B14]/96 p-3 backdrop-blur-3xl shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(0,163,255,0.15)] z-[85] overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-2rem)] rounded-2xl border border-white/[0.14] bg-[#070B14]/96 p-2 sm:p-2.5 backdrop-blur-3xl shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(0,163,255,0.15)] z-[85] overflow-hidden"
           >
             {/* Cinematic Floating Bokeh / Dust Aura (PS5 signature) */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
@@ -209,19 +209,6 @@ export const PS5LanguageSelector: React.FC<PS5LanguageSelectorProps> = ({
               <div className="absolute top-4 left-1/4 w-1 h-1 rounded-full bg-amber-200/40 blur-[0.5px] animate-pulse" />
               <div className="absolute top-1/2 right-6 w-1.5 h-1.5 rounded-full bg-white/30 blur-[1px] animate-ping" />
               <div className="absolute bottom-8 left-8 w-1 h-1 rounded-full bg-[#00E5FF]/40 blur-[0.5px]" />
-            </div>
-
-            {/* Top HUD Header */}
-            <div className="px-2 pb-2.5 mb-1 border-b border-white/[0.08] flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-3 h-3 text-[#00E5FF]" />
-                <span className="text-[9.5px] font-mono font-black uppercase tracking-[0.18em] text-[#00A3FF]">
-                  SYSTEM LANGUAGE
-                </span>
-              </div>
-              <span className="text-[8.5px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 uppercase tracking-wider">
-                ● LIVE HOT-SWAP
-              </span>
             </div>
 
             {/* Language Options List */}

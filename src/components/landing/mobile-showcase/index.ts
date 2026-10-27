@@ -6,4 +6,7 @@ export * from './MobilePhoneChassis';
 export * from './MobileScreenViews';
 export * from './DynamicIslandNotif';
 export * from './MobileLogicPanel';
+export * from './MobileTopControls';
+export * from './MobileActiveCardRail';
+export * from './MobileSlimCardCarousel';
 export * from './ArtronMobileShowcase';

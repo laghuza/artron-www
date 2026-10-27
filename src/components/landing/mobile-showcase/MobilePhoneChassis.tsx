@@ -26,6 +26,8 @@ interface MobilePhoneChassisProps {
   pickedSlot?: number;
   renewStage?: 'idle' | 'scan' | 'done';
   selectedPlan?: number;
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
   children: React.ReactNode;
 }
 
@@ -48,6 +50,8 @@ export const MobilePhoneChassis: React.FC<MobilePhoneChassisProps> = ({
   pickedSlot = 2,
   renewStage = 'idle',
   selectedPlan = 0,
+  onSwipeLeft,
+  onSwipeRight,
   children,
 }) => {
   const rgb = SHOWCASE_RGB[activeId];
@@ -102,11 +106,32 @@ export const MobilePhoneChassis: React.FC<MobilePhoneChassisProps> = ({
   const [hdrLabel, hdrVal, hdrRatio] = currentHd;
   const hdrDeg = hdrRatio * 360;
 
+  const touchStartX = React.useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(deltaX) > 42) {
+      if (deltaX < 0) {
+        onSwipeLeft?.();
+      } else {
+        onSwipeRight?.();
+      }
+    }
+    touchStartX.current = null;
+  };
+
   return (
     <div
       onMouseMove={onTilt}
       onMouseLeave={onTiltLeave}
-      className="relative w-full flex justify-center py-6 sm:py-8 [perspective:1600px] select-none"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative w-full flex justify-center py-2 sm:py-8 [perspective:1600px] select-none overflow-hidden sm:overflow-visible"
     >
       {/* Geometric Blueprint Grid Behind Smartphone */}
       <div
@@ -160,12 +185,12 @@ export const MobilePhoneChassis: React.FC<MobilePhoneChassisProps> = ({
         style={{ background: castSh }}
       />
 
-      {/* PHYSICAL SMARTPHONE CONTAINER (300px x 620px with zoom: 1.22 for prominent 3D presence) */}
+      {/* PHYSICAL SMARTPHONE CONTAINER (300px x 620px with responsive zoom) */}
       <div
         ref={phoneRef}
-        className="relative w-[300px] h-[620px] [transform-style:preserve-3d] transition-transform"
+        className="relative w-[300px] h-[620px] [transform-style:preserve-3d] transition-transform origin-top [--phone-zoom:0.86] sm:[--phone-zoom:1] lg:[--phone-zoom:1.22]"
         style={{
-          zoom: 1.22,
+          zoom: 'var(--phone-zoom, 1.22)' as any,
           transform: phoneTransform,
           transitionDuration: notifTilt ? '1100ms' : '250ms',
           transitionTimingFunction: notifTilt

@@ -40,7 +40,6 @@ export function useMobileShowcaseLogic() {
   // Navigation & Selection state
   const [activeId, setActiveId] = useState<number>(0);
   const [shownId, setShownId] = useState<number>(0);
-  const [flips, setFlips] = useState<number>(0);
   const [bridgeW, setBridgeW] = useState<number>(120);
   const [wide, setWide] = useState<boolean>(true);
   const [inner, setInner] = useState<InnerBeamCoords | null>(null);
@@ -104,6 +103,7 @@ export function useMobileShowcaseLogic() {
   const occRef = useRef<HTMLDivElement | null>(null);
 
   const lastInteractRef = useRef<number>(0);
+  const tickRef = useRef<number>(0);
 
   // Show 3D notification helper
   const triggerNotification = useCallback(
@@ -205,10 +205,8 @@ export function useMobileShowcaseLogic() {
   // Selection change
   const handleSelect = (id: number) => {
     lastInteractRef.current = Date.now();
+    tickRef.current = 0;
     setActiveId(id);
-    if ((id >= 4) !== (activeId >= 4)) {
-      setFlips((prev) => prev + 1);
-    }
   };
 
   useEffect(() => {
@@ -343,16 +341,23 @@ export function useMobileShowcaseLogic() {
         return prev - 1;
       });
 
-      // Auto cycle when idle for > 10s
-      if (Date.now() - lastInteractRef.current > 10000) {
-        setActiveId((prev) => {
-          const nextIdx = (SCREEN_ORDER.indexOf(prev) + 1) % SCREEN_ORDER.length;
-          const nextId = SCREEN_ORDER[nextIdx];
-          if ((nextId >= 4) !== (prev >= 4)) {
-            setFlips((f) => f + 1);
-          }
-          return nextId;
-        });
+      // Auto cycle when idle for > 10s (every 7 seconds) ONLY IF section is in viewport
+      tickRef.current += 1;
+      if (Date.now() - lastInteractRef.current > 10000 && tickRef.current >= 7) {
+        tickRef.current = 0;
+        const isVisible = rowRef.current
+          ? (() => {
+              const r = rowRef.current.getBoundingClientRect();
+              return r.bottom > 0 && r.top < window.innerHeight;
+            })()
+          : true;
+
+        if (isVisible) {
+          setActiveId((prev) => {
+            const nextIdx = (SCREEN_ORDER.indexOf(prev) + 1) % SCREEN_ORDER.length;
+            return SCREEN_ORDER[nextIdx];
+          });
+        }
       }
     }, 1000);
 
@@ -435,7 +440,6 @@ export function useMobileShowcaseLogic() {
   return {
     activeId,
     shownId,
-    flips,
     bridgeW,
     wide,
     inner,
