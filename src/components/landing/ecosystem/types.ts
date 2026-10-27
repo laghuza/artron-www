@@ -113,6 +113,8 @@ export interface EnneaStrings {
     acquiring: string;
     installments: string;
   };
+  mobileViewMap?: string;
+  mobileViewList?: string;
 }
 
 export interface ArtronEnneaEcosystemProps {

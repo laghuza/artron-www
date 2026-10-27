@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo } from "react";
-import Image from "next/image";
 import { ChevronRight, ArrowLeft, X, Building2, Handshake } from "lucide-react";
+import { VenueLogoBadge } from "./VenueLogoBadge";
 import { EnneaVenue, EnneaRegion, EnneaStrings, HeroStat, ViewMode } from "./types";
 import { soundEngine } from "./EnneaAudioEngine";
 import { EnneaVenueFilterList } from "./EnneaVenueFilterList";
@@ -91,7 +91,7 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
   // Collapsed rail view
   if (isCollapsed) {
     return (
-      <div className="flex-none w-14 bg-[#0D1117] border-r border-white/10 flex flex-col items-center justify-between py-5 z-20 select-none">
+      <div className="hidden md:flex flex-none w-14 bg-[#0D1117] border-r border-white/10 flex-col items-center justify-between py-5 z-20 select-none">
         <span className="w-2 h-2 rounded-full bg-[#7FD4FF] shadow-[0_0_12px_#7FD4FF] animate-pulse" />
         <span className="font-mono text-[10px] tracking-[0.28em] text-[#8AA3B2] uppercase [writing-mode:vertical-rl]">
           {isGlobe ? t.breadcrumbWorld : selectedVenue ? selectedVenue.name : t.breadcrumbCountry}
@@ -125,7 +125,7 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
   }
 
   return (
-    <div className="flex-none w-full md:w-[380px] lg:w-[440px] bg-[#0D1117] border-r border-white/[0.07] flex flex-col justify-between z-20 select-none overflow-hidden">
+    <div className="flex-none w-full md:w-[380px] lg:w-[440px] bg-[#0D1117] border-r border-white/[0.07] flex flex-col justify-between z-20 select-none overflow-hidden pt-14 md:pt-0">
       {/* ── Top Bar: Kicker + Breadcrumbs + Collapse ── */}
       <div className="flex flex-col gap-2.5 p-3.5 sm:p-4 border-b border-white/[0.07]">
         <div className="flex items-center justify-between">
@@ -135,11 +135,12 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
               {t.kicker}
             </span>
           </div>
+          {/* Collapse button: only on desktop */}
           <button
             type="button"
             onClick={onToggleCollapse}
             aria-label="Collapse panel"
-            className="w-7 h-7 flex items-center justify-center border border-white/10 text-[#6E8DA0] hover:text-white hover:border-[#7FD4FF]/40 transition-colors cursor-pointer"
+            className="hidden md:flex w-7 h-7 items-center justify-center border border-white/10 text-[#6E8DA0] hover:text-white hover:border-[#7FD4FF]/40 transition-colors cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -154,6 +155,9 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
               onSelectVenue(null);
               onSelectRegion(null);
               onExitToGlobe();
+              if (typeof window !== "undefined" && window.innerWidth < 768) {
+                onToggleCollapse();
+              }
             }}
             className={`transition-colors hover:text-white ${
               isGlobe ? "text-[#7FD4FF] font-semibold" : "text-[#6E8DA0] cursor-pointer"
@@ -200,17 +204,13 @@ export const EnneaDataDock: React.FC<EnneaDataDockProps> = ({
             /* Selected Venue Header */
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-3 min-w-0">
-                {selectedVenue.logoSrc ? (
-                  <Image
-                    src={selectedVenue.logoSrc}
-                    alt={selectedVenue.name}
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-white/20 shadow-md"
-                  />
-                ) : (
-                  <span className="w-3 h-3 rounded-full bg-[#00A3FF] shrink-0 shadow-[0_0_8px_#00A3FF]" />
-                )}
+                <VenueLogoBadge
+                  logoSrc={selectedVenue.logoSrc}
+                  name={selectedVenue.name}
+                  accent={selectedVenue.accent}
+                  size={36}
+                  className="w-9 h-9"
+                />
                 <div className="flex flex-col min-w-0">
                   <h1 className="text-lg font-bold text-[#F4FAFF] truncate font-mono">
                     {selectedVenue.name}

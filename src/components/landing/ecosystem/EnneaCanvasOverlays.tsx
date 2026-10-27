@@ -142,7 +142,7 @@ export const EnneaCanvasOverlays: React.FC<EnneaCanvasOverlaysProps> = ({
       })}
 
       {/* Glass Top-Right Controls (Zoom, Reset, Sound) */}
-      <div className="absolute right-5 top-5 z-[15] flex flex-col items-end gap-2.5">
+      <div className="absolute right-3 sm:right-5 top-16 md:top-5 z-[15] flex flex-col items-end gap-2.5">
         <div className="flex flex-col gap-px border border-white/[0.08] bg-white/[0.07] backdrop-blur-xl shadow-2xl">
           <button
             type="button"

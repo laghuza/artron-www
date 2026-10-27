@@ -3,6 +3,7 @@
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { ArtronEnneaEcosystem } from './ecosystem/ArtronEnneaEcosystem';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export const PartnerEcosystem: React.FC = () => {
   const { t } = useLanguage();
@@ -15,16 +16,18 @@ export const PartnerEcosystem: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Unified Clean Compact Header */}
-        <div className="text-center max-w-4xl mx-auto mb-5 sm:mb-7">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] font-extrabold tracking-tight leading-snug">
+        <SectionHeader
+          size="compact"
+          className="max-w-4xl mb-5 sm:mb-7"
+          title={
             <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
               {t('partner_title')}
             </span>
-          </h2>
-          <p className="mt-2 sm:mt-2.5 text-xs sm:text-sm md:text-base text-[#94A3B8] font-normal leading-relaxed max-w-2xl mx-auto">
-            {t('partner_subtitle')}
-          </p>
-        </div>
+          }
+          titleClassName="text-xl sm:text-2xl md:text-3xl lg:text-[34px] font-extrabold tracking-tight leading-snug"
+          subtitle={t('partner_subtitle')}
+          subtitleClassName="mt-2 sm:mt-2.5 text-xs sm:text-sm md:text-base text-[#94A3B8] font-normal leading-relaxed max-w-2xl mx-auto"
+        />
 
         {/* 3D Dynamic Ecosystem: Globe + Live Georgia Map + Shuffled Clients + FinTech Partners */}
         <ArtronEnneaEcosystem />

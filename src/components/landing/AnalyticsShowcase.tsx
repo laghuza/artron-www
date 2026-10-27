@@ -10,6 +10,7 @@ import { AnalyticsKpiTab } from './AnalyticsKpiTab';
 import { AnalyticsChurnTab } from './AnalyticsChurnTab';
 import { AnalyticsHeatmapTab } from './AnalyticsHeatmapTab';
 import { AnalyticsWinbackTab } from './AnalyticsWinbackTab';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 type AnalyticsSubTab = 'roi' | 'okr' | 'kpi' | 'churn' | 'heatmap' | 'winback';
 
@@ -130,17 +131,14 @@ export const AnalyticsShowcase: React.FC = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00e5ff]/10 border border-[#00e5ff]/20 text-xs font-mono font-bold text-[#00e5ff] mb-4 tracking-wider uppercase">
-            <Cpu className="w-3.5 h-3.5" /> [SYS: ANALYTICS_&_ROI_ENGINE]
-          </div>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
-            {t('analytics_showcase_title')}
-          </h2>
-          <p className="text-[#94A3B8] text-base md:text-lg font-medium">
-            {t('analytics_showcase_subtitle')}
-          </p>
-        </div>
+        <SectionHeader
+          badge="[SYS: ANALYTICS_&_ROI_ENGINE]"
+          badgeIcon={Cpu}
+          badgeClassName="bg-[#00e5ff]/10 border-[#00e5ff]/20 text-[#00e5ff]"
+          title={t('analytics_showcase_title')}
+          subtitle={t('analytics_showcase_subtitle')}
+          className="mb-16"
+        />
 
         {/* HUD Sub-Tabs (6 Interactive Tabs) */}
         <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12">

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import Image from "next/image";
 import { MapPin, Search, ChevronDown } from "lucide-react";
+import { VenueLogoBadge } from "./VenueLogoBadge";
 import { EnneaVenue, EnneaRegion, EnneaStrings } from "./types";
 import { soundEngine } from "./EnneaAudioEngine";
 
@@ -198,17 +198,13 @@ export const EnneaVenueFilterList: React.FC<EnneaVenueFilterListProps> = ({
             >
               <span className="absolute left-0 top-0 bottom-0 w-[2px] opacity-0 group-hover:opacity-100 transition-opacity bg-[#00A3FF] shadow-[0_0_10px_#00A3FF]" />
               <div className="flex items-center gap-3 min-w-0">
-                {venue.logoSrc ? (
-                  <Image
-                    src={venue.logoSrc}
-                    alt={venue.name}
-                    width={28}
-                    height={28}
-                    className="w-7 h-7 rounded-full object-cover shrink-0 border border-white/20"
-                  />
-                ) : (
-                  <span className="w-2.5 h-2.5 rounded-full shrink-0 bg-[#00A3FF] shadow-[0_0_8px_#00A3FF]" />
-                )}
+                <VenueLogoBadge
+                  logoSrc={venue.logoSrc}
+                  name={venue.name}
+                  accent={venue.accent}
+                  size={28}
+                  className="w-7 h-7"
+                />
                 <div className="flex flex-col min-w-0">
                   <span className="font-mono text-[12.5px] font-semibold text-[#EAF4FF] group-hover:text-[#7FD4FF] truncate">
                     {venue.name}

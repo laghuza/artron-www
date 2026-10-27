@@ -16,7 +16,7 @@ const translations: Record<Locale, Record<string, string>> = {
 interface LanguageContextProps {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: string) => string;
+  t: (key: string, fallback?: string) => any;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
@@ -28,6 +28,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const saved = localStorage.getItem('artron_lang');
     if (saved === 'ka' || saved === 'en' || saved === 'ru') {
       setLocaleState(saved);
+    } else if (saved === 'GE') {
+      setLocaleState('ka');
+    } else if (saved === 'EN') {
+      setLocaleState('en');
+    } else if (saved === 'RU') {
+      setLocaleState('ru');
     } else {
       const browserLang = navigator.language.substring(0, 2);
       if (browserLang === 'ru') {
@@ -45,11 +51,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('artron_lang', newLocale);
   };
 
-  const t = (key: string, fallback?: string): string => {
+  const t = (key: string, fallback?: string): any => {
     const resolveFromDict = (dict: Record<string, any> | undefined) => {
       if (!dict) return undefined;
       // 1. Direct top-level match
-      if (key in dict && typeof dict[key] === 'string') return dict[key];
+      if (key in dict && dict[key] !== undefined) return dict[key];
 
       // 2. Dot-separated path match (e.g. 'ps5_onboarding.hud_step1' or 'audit.title')
       const parts = key.split('.');
@@ -62,19 +68,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           break;
         }
       }
-      if (typeof current === 'string') return current;
+      if (current !== undefined) return current;
 
       // 3. Fallback search across nested section dictionaries (e.g. 'ps5_onboarding', 'audit', etc.)
       for (const sectionKey of Object.keys(dict)) {
         const section = dict[sectionKey];
         if (section && typeof section === 'object' && !Array.isArray(section)) {
-          if (key in section && typeof section[key] === 'string') {
+          if (key in section && section[key] !== undefined) {
             return section[key];
           }
           // If key has prefix like 'audit_title', check if 'title' or 'audit_title' exists inside section
           if (key.startsWith(`${sectionKey}_`)) {
             const subKey = key.slice(sectionKey.length + 1);
-            if (subKey in section && typeof section[subKey] === 'string') {
+            if (subKey in section && section[subKey] !== undefined) {
               return section[subKey];
             }
           }

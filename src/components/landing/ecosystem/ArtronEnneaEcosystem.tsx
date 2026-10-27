@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { EnneaDataDock } from "./EnneaDataDock";
 import { EnneaSceneCanvas } from "./EnneaSceneCanvas";
 import { EnneaVenueRibbon } from "./EnneaVenueRibbon";
+import { EnneaMobileViewSwitcher } from "./EnneaMobileViewSwitcher";
 import {
   ArtronEnneaEcosystemProps,
   EnneaRegion,
@@ -514,6 +515,8 @@ export const ArtronEnneaEcosystem: React.FC<ArtronEnneaEcosystemProps> = ({
           acquiring: "Эквайринг",
           installments: "Рассрочка 0%",
         },
+        mobileViewMap: "3D Карта",
+        mobileViewList: "Список & Партнеры",
       };
     }
 
@@ -576,6 +579,8 @@ export const ArtronEnneaEcosystem: React.FC<ArtronEnneaEcosystemProps> = ({
           acquiring: "Acquiring",
           installments: "0% Installments",
         },
+        mobileViewMap: "3D Map",
+        mobileViewList: "List & Partners",
       };
     }
 
@@ -627,7 +632,7 @@ export const ArtronEnneaEcosystem: React.FC<ArtronEnneaEcosystemProps> = ({
       monSatLabel: "ორშ – შაბ",
       sunLabel: "კვირა",
       closedLabel: "დასვენება",
-      verifiedVenue: "დამოწმებული ობიექტი",
+      verifiedVenue: "დამოწმებული ობიექტები",
       stats: {
         hubs: "აქტიური ჰაბი",
         venues: "ობიექტი",
@@ -638,6 +643,8 @@ export const ArtronEnneaEcosystem: React.FC<ArtronEnneaEcosystemProps> = ({
         acquiring: "ექვაირინგი",
         installments: "განვადება 0%",
       },
+      mobileViewMap: "3D რუკა",
+      mobileViewList: "სია & პარტნიორები",
     };
   }, [locale]);
 
@@ -680,6 +687,20 @@ export const ArtronEnneaEcosystem: React.FC<ArtronEnneaEcosystemProps> = ({
     <div
       className={`relative w-full rounded-3xl overflow-hidden border border-white/10 bg-[#0A0D12] shadow-[0_24px_70px_rgba(0,0,0,0.85)] flex flex-col md:flex-row items-stretch h-[780px] lg:h-[840px] ${className}`}
     >
+      {/* Mobile Floating Liquid Glass Lens Switcher (Top Centered) */}
+      <div className="md:hidden absolute top-2.5 inset-x-0 z-30 flex justify-center px-3 pointer-events-none">
+        <div className="pointer-events-auto w-full max-w-[320px]">
+          <EnneaMobileViewSwitcher
+            mode={isDockCollapsed ? "map" : "list"}
+            onSelectMode={(m) => {
+              setIsDockCollapsed(m === "map");
+            }}
+            t={strings}
+            accentColor={accent}
+          />
+        </div>
+      </div>
+
       {/* Left Glassmorphic Dock */}
       <EnneaDataDock
         viewMode={viewMode}

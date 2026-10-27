@@ -136,7 +136,7 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
         </div>
 
         {/* Stage 2: Visual 3D Spotlight Stage Window (Dedicated Unobstructed Viewport for 3D Model) */}
-        <div className="relative w-full h-[210px] xs:h-[240px] sm:h-[270px] flex items-end justify-between px-2 py-1.5 pointer-events-none select-none">
+        <div className="relative w-full h-[210px] xs:h-[240px] sm:h-[270px] flex items-end justify-start px-2 py-1.5 pointer-events-none select-none">
           {/* Subtle live indicator badge on left */}
           <div
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[8.5px] font-mono tracking-wider backdrop-blur-md pointer-events-auto"
@@ -152,23 +152,6 @@ export const MirrorUnifiedCockpitDeck: React.FC<MirrorUnifiedCockpitDeckProps> =
             />
             <span>3D LIVE MIRROR</span>
           </div>
-
-          {/* 3D Focus Toggle button on right */}
-          {onToggle3DFocus && (
-            <button
-              type="button"
-              onClick={onToggle3DFocus}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[9.5px] font-medium tracking-wide backdrop-blur-md transition-all duration-200 pointer-events-auto active:scale-95 cursor-pointer shadow-lg"
-              style={{
-                borderColor: is3DFocus ? accentColor : 'rgba(255, 255, 255, 0.18)',
-                backgroundColor: is3DFocus ? `${accentColor}25` : 'rgba(6, 10, 18, 0.7)',
-                color: is3DFocus ? '#FFFFFF' : '#EAF2F8',
-                boxShadow: is3DFocus ? `0 0 16px ${accentColor}44` : 'none',
-              }}
-            >
-              <span>{is3DFocus ? '✕ მართვის პანელი' : '⛶ 3D სრული ხედი'}</span>
-            </button>
-          )}
         </div>
 
         {/* Stage 3: Bottom Cockpit Sheet (Foldable in 3D Focus mode) */}

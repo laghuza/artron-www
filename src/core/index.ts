@@ -22,7 +22,6 @@ export * from './utils/audio';
 
 export * from './hooks/useSportsTaxonomy';
 export * from './hooks/useTelemetryProcessor';
-export * from '../components/ui/CyberButton';
 export * from '../components/ui/SportsSelect';
 export * from '../components/ui/CyberErrorBoundary';
 

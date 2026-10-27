@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { AppStoreBadges } from '@/components/ui/AppStoreBadges';
 import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export const ServicesShowcase: React.FC = () => {
   const { t } = useLanguage();
@@ -93,17 +94,13 @@ export const ServicesShowcase: React.FC = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00A3FF]/10 border border-[#00A3FF]/20 text-xs font-mono font-bold text-[#00A3FF] mb-4 tracking-wider uppercase">
-            <Zap className="w-3.5 h-3.5 text-[#00A3FF]" /> {t('logo_text')} Ecosystem
-          </div>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
-            {t('services_section_title')}
-          </h2>
-          <p className="text-[#94A3B8] text-base md:text-lg font-medium">
-            {t('services_section_subtitle')}
-          </p>
-        </div>
+        <SectionHeader
+          badge={`${t('logo_text')} Ecosystem`}
+          badgeIcon={Zap}
+          title={t('services_section_title')}
+          subtitle={t('services_section_subtitle')}
+          className="mb-12"
+        />
 
         {/* Tab Buttons */}
         <div className="flex justify-center mb-12">

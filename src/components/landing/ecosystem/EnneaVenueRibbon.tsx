@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useState, useCallback, useEffect } from "react";
-import Image from "next/image";
+import React, { useRef, useState, useCallback } from "react";
+import { VenueLogoBadge } from "./VenueLogoBadge";
 import { EnneaVenue, EnneaStrings } from "./types";
 import { soundEngine } from "./EnneaAudioEngine";
 import { CreditCard } from "lucide-react";
@@ -170,20 +170,13 @@ export const EnneaVenueRibbon: React.FC<EnneaVenueRibbonProps> = ({
                       : "gold-rim-ribbon-card"
                   }`}
                 >
-                  {venue.logoSrc ? (
-                    <Image
-                      src={venue.logoSrc}
-                      alt={venue.name}
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 rounded-full object-cover shrink-0 border border-white/20"
-                      draggable={false}
-                    />
-                  ) : (
-                    <span
-                      className="w-2.5 h-2.5 rounded-full shrink-0 transition-transform group-hover:scale-125 bg-[#00A3FF] shadow-[0_0_8px_#00A3FF]"
-                    />
-                  )}
+                  <VenueLogoBadge
+                    logoSrc={venue.logoSrc}
+                    name={venue.name}
+                    accent={venue.accent}
+                    size={20}
+                    className="w-5 h-5"
+                  />
                   <div className="flex flex-col text-left">
                     <span
                       className={`font-mono text-[11px] sm:text-xs font-bold leading-tight truncate max-w-[110px] sm:max-w-[130px] transition-colors ${

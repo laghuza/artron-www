@@ -7,6 +7,7 @@ import { PricingVerticalSelector } from './pricing/PricingVerticalSelector';
 import { PricingTiersView } from './pricing/PricingTiersView';
 import { PricingCustomBuilder } from './pricing/PricingCustomBuilder';
 import { PricingDemoModal } from './pricing/PricingDemoModal';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export const PricingSection: React.FC = () => {
   const { t, locale } = useLanguage();
@@ -45,15 +46,11 @@ export const PricingSection: React.FC = () => {
 
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
-
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-            {t('pricing_title')}
-          </h2>
-          <p className="mt-2.5 sm:mt-3 text-xs sm:text-base text-gray-400 font-normal">
-            {t('pricing_subtitle')}
-          </p>
-        </div>
+        <SectionHeader
+          title={t('pricing_title')}
+          subtitle={t('pricing_subtitle')}
+          className="mb-10"
+        />
 
         {/* 1. Main Vertical & Mode Selector */}
         <PricingVerticalSelector
