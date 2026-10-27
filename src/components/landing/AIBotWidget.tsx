@@ -2,12 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { MessageSquare, X, Send, Bot, User, Sparkles, HelpCircle } from 'lucide-react';
+import { X, Send, Bot, User, Sparkles, RotateCcw } from 'lucide-react';
+import { getArtronAiReply, BotAction, SupportedLocale } from './ai-bot/artronAiKnowledgeBase';
 
 interface Message {
   id: string;
   sender: 'bot' | 'user';
   text: string;
+  actions?: BotAction[];
 }
 
 export const AIBotWidget: React.FC = () => {
@@ -25,14 +27,24 @@ export const AIBotWidget: React.FC = () => {
       setIsOpen(true);
       if (customEvent.detail?.prompt) {
         const promptText = customEvent.detail.prompt;
+        // Start fresh with the current section's prompt, preventing previous sections from piling up
+        setMessages([
+          {
+            id: `bot-context-${Date.now()}`,
+            sender: 'bot',
+            text: promptText,
+          },
+        ]);
+      } else {
+        // If opened generally without prompt and no user conversation exists, reset to clean welcome
         setMessages((prev) => {
-          if (prev.length === 0 || prev[prev.length - 1].text !== promptText) {
+          const hasUserMessages = prev.some((m) => m.sender === 'user');
+          if (!hasUserMessages) {
             return [
-              ...prev,
               {
-                id: `bot-context-${Date.now()}`,
+                id: 'welcome',
                 sender: 'bot',
-                text: promptText,
+                text: t('ai_widget_welcome'),
               },
             ];
           }
@@ -40,14 +52,44 @@ export const AIBotWidget: React.FC = () => {
         });
       }
     };
-    const handleToggle = () => setIsOpen((prev) => !prev);
+    const handleToggle = () => {
+      setIsOpen((prev) => {
+        const next = !prev;
+        if (next) {
+          setMessages((cur) => {
+            const hasUserMessages = cur.some((m) => m.sender === 'user');
+            if (!hasUserMessages) {
+              return [
+                {
+                  id: 'welcome',
+                  sender: 'bot',
+                  text: t('ai_widget_welcome'),
+                },
+              ];
+            }
+            return cur;
+          });
+        }
+        return next;
+      });
+    };
     window.addEventListener('artron-open-chatbot', handleOpen);
     window.addEventListener('artron-toggle-chatbot', handleToggle);
     return () => {
       window.removeEventListener('artron-open-chatbot', handleOpen);
       window.removeEventListener('artron-toggle-chatbot', handleToggle);
     };
-  }, []);
+  }, [t]);
+
+  const handleResetChat = () => {
+    setMessages([
+      {
+        id: `welcome-${Date.now()}`,
+        sender: 'bot',
+        text: t('ai_widget_welcome'),
+      },
+    ]);
+  };
 
   // Initialize with welcome message when opened
   useEffect(() => {
@@ -73,6 +115,18 @@ export const AIBotWidget: React.FC = () => {
     window.dispatchEvent(event);
   }, [isOpen]);
 
+  const handleActionClick = (act: BotAction) => {
+    if (act.actionType === 'omnichannel') {
+      window.dispatchEvent(new CustomEvent('artron-open-omnichannel'));
+    } else if (act.actionType === 'whatsapp' && act.href) {
+      window.open(act.href, '_blank', 'noopener,noreferrer');
+    } else if (act.actionType === 'phone' && act.href) {
+      window.location.href = act.href;
+    } else if (act.actionType === 'email' && act.href) {
+      window.location.href = act.href;
+    }
+  };
+
   const handleSend = (text: string) => {
     if (!text.trim()) return;
 
@@ -82,52 +136,30 @@ export const AIBotWidget: React.FC = () => {
       text,
     };
 
+    // Capture the last bot prompt before adding user message for context-aware replies
+    const lastBotPrompt = [...messages].reverse().find((m) => m.sender === 'bot')?.text;
+
     setMessages((prev) => [...prev, userMsg]);
     setInputValue('');
     setIsTyping(true);
 
-    // Contextual bot reply logic
+    // Contextual ARTRON AI reasoning & domain reply logic
     setTimeout(() => {
-      let botText = '';
-      const query = text.toLowerCase();
-
-      if (query.includes('ტურნიკეტი') || query.includes('turnstile') || query.includes('турникет') || query.includes('მონტაჟ')) {
-        botText = t('faq_a1');
-      } else if (query.includes('უსაფრთხო') || query.includes('security') || query.includes('безопасн') || query.includes('ტენანტ') || query.includes('tenancy')) {
-        botText = t('faq_a2');
-      } else if (query.includes('ტაბელ') || query.includes('ჯანდაცვ') || query.includes('01-15') || query.includes('შრომის') || query.includes('приказ') || query.includes('order')) {
-        botText = t('faq_a3');
-      } else if (query.includes('დაბრუნება') || query.includes('refund') || query.includes('возврат') || query.includes('14 დღ')) {
-        botText = t('faq_a5');
-      } else if (query.includes('qr') || query.includes('საშვი') || query.includes('пропуск')) {
-        botText = t('faq_a6');
-      } else if (query.includes('offline') || query.includes('ინტერნეტ') || query.includes('ავტონომ')) {
-        botText = t('faq_a7');
-      } else {
-        // Fallback default messages
-        if (locale === 'ka') {
-          botText = 'გმადლობთ შეკითხვისთვის. ჩვენი გუნდი მზად არის დაგეხმაროთ. დამატებითი საინჟინრო ან კომერციული დეტალებისთვის შეგიძლიათ მოგვწეროთ info@artron.ge-ზე ან დაჯავშნოთ უფასო B2B დემო პრეზენტაცია.';
-        } else if (locale === 'ru') {
-          botText = 'Спасибо за ваш вопрос. Наша команда готова помочь вам. Для получения дополнительных технических или коммерческих подробностей напишите нам на info@artron.ge или закажите B2B демо-презентацию.';
-        } else {
-          botText = 'Thank you for your question. Our team is ready to assist you. For more technical or commercial details, please write to us at info@artron.ge or book a free B2B demo presentation.';
-        }
-      }
+      const activeLocale: SupportedLocale =
+        locale === 'en' || locale === 'ru' ? locale : 'ka';
+      const reply = getArtronAiReply(text, activeLocale, lastBotPrompt);
 
       setMessages((prev) => [
         ...prev,
         {
           id: `bot-${Date.now()}`,
           sender: 'bot',
-          text: botText,
+          text: reply.text,
+          actions: reply.actions,
         },
       ]);
       setIsTyping(false);
-    }, 1000);
-  };
-
-  const handleQuickQuestion = (key: string, text: string) => {
-    handleSend(text);
+    }, 700);
   };
 
   if (!isOpen) return null;
@@ -150,14 +182,25 @@ export const AIBotWidget: React.FC = () => {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-1 rounded-lg hover:bg-slate-950/15 text-slate-950/80 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center"
-            style={{ minHeight: '36px', minWidth: '36px' }}
-            aria-label="Close Chat"
-          >
-            <X className="w-5 h-5 mx-auto" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleResetChat}
+              className="p-1 rounded-lg hover:bg-slate-950/15 text-slate-950/80 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center"
+              style={{ minHeight: '36px', minWidth: '36px' }}
+              title={locale === 'en' ? 'Reset chat' : locale === 'ru' ? 'Очистить чат' : 'ჩატის გასუფთავება'}
+              aria-label="Reset chat"
+            >
+              <RotateCcw className="w-4 h-4 mx-auto" />
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1 rounded-lg hover:bg-slate-950/15 text-slate-950/80 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center"
+              style={{ minHeight: '36px', minWidth: '36px' }}
+              aria-label="Close Chat"
+            >
+              <X className="w-5 h-5 mx-auto" />
+            </button>
+          </div>
         </div>
 
         {/* Messages Area */}
@@ -181,7 +224,25 @@ export const AIBotWidget: React.FC = () => {
                     ? 'bg-white/5 border border-white/5 text-[#E2E8F0] rounded-tl-none' 
                     : 'bg-gradient-to-r from-[#00A3FF] to-[#00E5FF] text-slate-950 font-bold rounded-tr-none shadow-[0_0_12px_rgba(0,229,255,0.3)]'
                 }`}>
-                  {msg.text}
+                  <p className="whitespace-pre-line">{msg.text}</p>
+
+                  {/* Smart Lead Bridge Actions (Variant 1) */}
+                  {isBot && msg.actions && msg.actions.length > 0 && (
+                    <div className="mt-3 pt-2.5 border-t border-white/10 flex flex-col gap-1.5">
+                      {msg.actions.map((act) => (
+                        <button
+                          key={act.id}
+                          type="button"
+                          onClick={() => handleActionClick(act)}
+                          className="w-full text-left py-1.5 px-2.5 rounded-lg bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 hover:border-[#00E5FF]/60 text-xs font-medium text-[#00E5FF] transition-all cursor-pointer flex items-center justify-between group/act"
+                          style={{ minHeight: '36px' }}
+                        >
+                          <span className="truncate">{act.label}</span>
+                          <span className="text-[#00E5FF]/60 group-hover/act:text-[#00E5FF] group-hover/act:translate-x-0.5 transition-all text-xs font-mono ml-1">→</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -200,36 +261,6 @@ export const AIBotWidget: React.FC = () => {
           )}
           <div ref={messagesEndRef} />
         </div>
-
-        {/* Quick suggestions */}
-        {messages.length === 1 && !isTyping && (
-          <div className="px-4 py-2 border-t border-white/5 bg-white/2 flex flex-col gap-1.5 shrink-0">
-            <button
-              onClick={() => handleQuickQuestion('setup', t('ai_widget_quick_1'))}
-              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
-              style={{ minHeight: '36px' }}
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-[#00e5ff] shrink-0" />
-              <span className="truncate">{t('ai_widget_quick_1')}</span>
-            </button>
-            <button
-              onClick={() => handleQuickQuestion('labor', t('ai_widget_quick_2'))}
-              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
-              style={{ minHeight: '36px' }}
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-[#00e5ff] shrink-0" />
-              <span className="truncate">{t('ai_widget_quick_2')}</span>
-            </button>
-            <button
-              onClick={() => handleQuickQuestion('refund', t('ai_widget_quick_3'))}
-              className="w-full text-left py-1.5 px-3 rounded-lg bg-white/5 border border-white/5 text-xs text-[#E2E8F0] hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 transition-all text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex items-center gap-2"
-              style={{ minHeight: '36px' }}
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-[#00e5ff] shrink-0" />
-              <span className="truncate">{t('ai_widget_quick_3')}</span>
-            </button>
-          </div>
-        )}
 
         {/* Input form */}
         <form

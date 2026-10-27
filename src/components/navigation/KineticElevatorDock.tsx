@@ -165,14 +165,14 @@ export const KineticElevatorDock: React.FC = () => {
 
           <div className="w-6 h-[1px] bg-white/10 my-2" />
 
-          {/* ARTRON AI Co-Pilot [AI] (Brand Cyan Ennea Core) */}
+          {/* ARTRON AI [AI] (Brand Cyan Ennea Core) */}
           <button
             onClick={handleAiTrigger}
             onMouseEnter={() => { setHoveredNode('ai-trigger'); playTactileFeedback(); }}
             onMouseLeave={() => setHoveredNode(null)}
             className="relative w-8 h-8 mt-1 rounded-xl flex items-center justify-center bg-[#00E5FF]/10 border border-[#00E5FF]/40 text-[#00E5FF] hover:border-[#00E5FF] hover:shadow-[0_0_16px_rgba(0,229,255,0.4)] transition-all focus:outline-none group"
-            title="ARTRON AI Co-Pilot"
-            aria-label="Open Contextual AI Assistant"
+            title="ARTRON AI"
+            aria-label="Open Contextual ARTRON AI"
           >
             <div className="relative w-4 h-4 flex items-center justify-center">
               <span className="absolute inset-0 rounded-full border border-[#00E5FF]/50 animate-ping opacity-40 pointer-events-none" />
@@ -184,7 +184,7 @@ export const KineticElevatorDock: React.FC = () => {
             </div>
             <LeftGlassTooltip isVisible={hoveredNode === 'ai-trigger'}>
               <span className="text-[#00E5FF] font-mono font-bold">[AI]</span>
-              <span>{lang === 'ka' ? 'ARTRON AI Co-Pilot' : 'Contextual AI Co-Pilot'}</span>
+              <span>ARTRON AI</span>
             </LeftGlassTooltip>
           </button>
 

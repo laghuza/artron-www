@@ -10,7 +10,6 @@ import {
   Calculator,
   Handshake,
   HelpCircle,
-  Calendar,
   Info,
   ChevronUp,
 } from 'lucide-react';
@@ -64,14 +63,6 @@ export const LeftFloatingNavDock: React.FC = () => {
       labelKey: 'nav_faq',
       fallbackLabel: { ka: 'FAQ', en: 'FAQ', ru: 'FAQ' },
       icon: HelpCircle,
-    },
-    {
-      id: 'demo-booking',
-      href: '/get-started?mode=demo',
-      labelKey: 'nav_booking',
-      fallbackLabel: { ka: 'დემო ჯავშანი', en: 'Book Demo', ru: 'Демо запись' },
-      icon: Calendar,
-      isPage: true,
     },
     {
       id: 'about',

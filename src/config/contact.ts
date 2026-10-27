@@ -13,9 +13,9 @@ export const CONTACT_CONFIG = {
     number: '995599528155',
     display: '+995 599 52 81 55',
     messages: {
-      ka: 'გამარჯობა, მაინტერესებს ARTRON SaaS პლატფორმის დემო ვერსია.',
-      en: 'Hello, I am interested in a live demo of the ARTRON SaaS platform.',
-      ru: 'Здравствуйте, меня интересует демо-версия SaaS платформы ARTRON.',
+      ka: 'გამარჯობა, მაინტერესებს ARTRON SaaS პლატფორმა და კონსულტაცია.',
+      en: 'Hello, I am interested in ARTRON SaaS platform consultation.',
+      ru: 'Здравствуйте, меня интересует консультация по SaaS платформе ARTRON.',
     },
     getUrl: (locale: string = 'ka') => {
       const lang = locale === 'en' || locale === 'ru' ? locale : 'ka';
