@@ -22,6 +22,17 @@ const DEFAULT_ENV: EnvConfig = {
 };
 
 export function validateEnv(): EnvConfig {
+  // If running in browser/client bundle, do not execute server env validation or expose secrets
+  if (typeof window !== "undefined") {
+    return {
+      DATABASE_URL: "",
+      JWT_SECRET: "",
+      PII_AES256_KEY: "",
+      MQTT_BROKER_URL: "",
+      NODE_ENV: process.env.NODE_ENV || "development",
+    };
+  }
+
   const missingKeys: string[] = [];
   const envConfig: Partial<EnvConfig> = {};
 

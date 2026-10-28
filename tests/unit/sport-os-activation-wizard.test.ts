@@ -70,7 +70,7 @@ describe('Stage 2 & 3: 5-Step Sport OS Activation Wizard & i18n Copywriting Test
   test('Step 5 implements 3-stage progressive terminal initialization and CRM direct jump', () => {
     const content = fs.readFileSync(step5Path, 'utf-8');
     expect(content).toContain('SYSTEM STATUS: SPORT OS ONLINE');
-    expect(content).toContain('/sports-os');
+    expect(content).toContain('https://app.artron.ge');
     expect(geDict.ps5_onboarding.step5_init_stage1).toContain('ბაზები ინიციალიზებულია');
     expect(geDict.ps5_onboarding.step5_init_stage2).toContain('ტურნიკეტების TCP/MQTT პროტოკოლი მზადაა');
     expect(geDict.ps5_onboarding.step5_init_stage3).toContain('Sport OS გააქტიურებულია');

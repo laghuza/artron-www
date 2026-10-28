@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Outfit, JetBrains_Mono, Noto_Sans_Georgian } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageContext";
-import { PortalIgnitionProvider } from "@/components/ui/GlobalPortalIgnition";
 import { FloatingContactWidget } from "@/components/FloatingContactWidget";
 import { AIBotWidget } from "@/components/landing/AIBotWidget";
 import { KineticElevatorDock } from "@/components/navigation/KineticElevatorDock";
+import { ScrollRestorationHandler } from "@/components/navigation/ScrollRestorationHandler";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -80,9 +80,27 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${outfit.variable} ${jetbrainsMono.variable} ${notoGeorgian.variable} h-full antialiased dark`}
     >
       <head>
-        <link rel="preload" href="/video/dark-minimalist-4k.mp4" as="video" type="video/mp4" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+                var p = window.performance;
+                var nav = p && p.getEntriesByType ? p.getEntriesByType('navigation')[0] : null;
+                var isRel = (nav && nav.type === 'reload') || (p && p.navigation && p.navigation.type === 1);
+                if (isRel) {
+                  if (window.location.hash) {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                  }
+                  window.scrollTo(0, 0);
+                }
+              } catch(e) {}
+            `,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-[#0B0F17] text-white">
+        <ScrollRestorationHandler />
         {/* Google Consent Mode v2 Defaults */}
         <Script
           id="google-consent-mode-v2"
@@ -101,12 +119,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
         <LanguageProvider>
-          <PortalIgnitionProvider>
-            <KineticElevatorDock />
-            {children}
-            <FloatingContactWidget />
-            <AIBotWidget />
-          </PortalIgnitionProvider>
+          <KineticElevatorDock />
+          {children}
+          <FloatingContactWidget />
+          <AIBotWidget />
         </LanguageProvider>
       </body>
     </html>

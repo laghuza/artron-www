@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import LanguageToggle from "@/components/ui/LanguageToggle";
-import MuteAudioButton from "@/components/features/dashboard/MuteAudioButton";
+import MuteAudioButton from "@/components/ui/MuteAudioButton";
 import { audioManager } from "@/lib/audioManager";
 import { useI18n } from "@/context/I18nContext";
 

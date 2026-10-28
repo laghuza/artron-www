@@ -793,6 +793,31 @@
   - [x] **ეტაპი 3: `EnneaDataDock.tsx` და `ArtronEnneaEcosystem.tsx`-ის ინტეგრაცია** — მობილურზე `[ ✕ ]`-ის მოხსნა, სინქრონული ორმხრივი მდგომარეობის მართვა (`isDockCollapsed`), მცურავი პოზიციონირება 3D ტილოს თავზე და `[ მსოფლიო ]` ბრედკრამბის სინქრონიზაცია.
   - [x] **ეტაპი 4: სრული სისტემური შემოწმება & ვერიფიკაცია** — TypeScript (`npx tsc --noEmit`), ავტომატური ტესტები (`npm test` 53/53 მწვანე), საწარმოო ბილდი (`npm run build`) და ნულოვანი რეგრესიის უზრუნველყოფა.
 
+- [x] **Phase 95: Security Hardening & Secret Isolation (უსაფრთხოების ფარი & საიდუმლოებების იზოლაცია - ეტაპი 1)**
+  - [x] **ეტაპი 1: `src/core/index.ts`-დან სერვერული `env`-ის ექსპორტის ამოღება & იზოლაცია** — Client JS Bundle-ში `DATABASE_URL`, `JWT_SECRET` და `PII_AES256_KEY`-ის გაჟონვის სრული აღკვეთა.
+  - [x] **ეტაპი 2: `next.config.ts`-ში Enterprise HTTP Security Headers დამატება** — HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy და `poweredByHeader: false`.
+  - [x] **ეტაპი 3: სრული სისტემური შემოწმება & ვერიფიკაცია** — TypeScript (`npx tsc --noEmit`), Jest ტესტები (`npm test` 51/51 მწვანე) და Next.js 16 საწარმოო ბილდი (`npm run build`).
+  - [x] **ეტაპი 4: Chrome DevTools & Network Header აუდიტი** — დამოწმდა: კლიენტის ბრაუზერის კონსოლიდან სრულად გაქრა `[ARTRON ENV DEV_WARNING]`, ჰედერები აქტიურია.
+
+- [x] **Phase 96: Bloatware, Dead Code & Asset Optimization (ეტაპი 2)**
+  - [x] **ეტაპი 1: `MuteAudioButton` გადატანა `src/components/ui/`-ში & `ArtronCyberMenu`-ს განახლება** — გამორიცხა დამოკიდებულება მკვდარ `dashboard/` მოდულზე.
+  - [x] **ეტაპი 2: Root სატესტო PNG-ებისა და `test-results 2`-ის გასუფთავება (~25MB)** — წაიშალა 14 სატესტო სქრინშოტი და დროებითი საქაღალდე.
+  - [x] **ეტაპი 3: `sports-os/node_modules` & `sports-os/.next` გასუფთავება (~830MB)** — გათავისუფლდა 830MB გამოუყენებელი ბილდ არტეფაქტები.
+  - [x] **ეტაპი 4: `public/` დოკუმენტებისა და დრაფტების რეორგანიზაცია** — `backend_services_analysis.md` უსაფრთხოდ გადავიდა `docs/backend/`-ში, MCP სერვერი გადაერთო, წაიშალა ძველი დრაფტები და დუბლიკატი სურათები.
+  - [x] **ეტაპი 5: მკვდარი კომპონენტების გასუფთავება (`src/components/features/` & `src/features/`)** — ამოღებულია 40+ გამოუყენებელი ფაილი (`narratives/`, ძველი dashboard-ი და core section-ები).
+  - [x] **ეტაპი 6: სრული ვერიფიკაცია (`npx tsc --noEmit`, `npm test`, `npm run build`)** — 51/51 Test Suite მწვანეა (237/237 ტესტი), საწარმოო ბილდი უნაკლოა.
+
+- [x] **Phase 97: DDoS & Bot Shield: Next.js Edge Middleware & Edge Guard (ეტაპი 3)**
+  - [x] **ეტაპი 1: `src/middleware.ts`-ის შექმნა** — Edge Guard, მავნე ბოტებისა და Scraper-ების ბლოკირება (403), Path-traversal/SQLi პატერნების ფილტრაცია (400), Edge Rate Limiting (429) და `x-artron-trace-id` აუდიტი.
+  - [x] **ეტაპი 2: Edge Middleware Unit ტესტირება (`tests/unit/edge-middleware.test.ts`)** — ბოტების, შეტევის პატერნებისა და ლეგიტიმური ტრაფიკის ტესტირება.
+  - [x] **ეტაპი 3: სრული სისტემური შემოწმება & ვერიფიკაცია** — TypeScript (`npx tsc --noEmit`), Jest ტესტები (`npm test` 52/52 მწვანე, 243 ტესტი), Next.js 16 საწარმოო ბილდი (`npm run build`).
+  - [x] **ეტაპი 4: Chrome DevTools & ცოცხალი Edge ტესტირება (`curl`)** — დამოწმდა: `sqlmap` იბლოკება 403-ით, SQLi იბლოკება 400-ით, ლეგიტიმური ტრაფიკი გადის 200-ით Trace ID-ით.
+
+
+
+
+
+
 
 
 

@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { X, Send, Bot, User, Sparkles, RotateCcw } from 'lucide-react';
+import { X, Send, User, Sparkles, RotateCcw } from 'lucide-react';
+import ArtronLogo from '@/components/ui/ArtronLogo';
 import { getArtronAiReply, BotAction, SupportedLocale } from './ai-bot/artronAiKnowledgeBase';
 
 interface Message {
@@ -167,25 +168,35 @@ export const AIBotWidget: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex flex-col items-end">
       {/* Chat Dialog Window */}
-      <div className="w-[320px] sm:w-[380px] h-[480px] md:h-[520px] bg-[#05070a]/95 border border-[#00E5FF]/20 backdrop-blur-xl rounded-2xl shadow-[0_16px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(0,229,255,0.2)] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
-        {/* Header */}
-        <div className="p-4 bg-gradient-to-r from-[#00E5FF] via-[#00A3FF] to-[#0066FF] text-slate-950 flex items-center justify-between shadow-md">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-slate-950/15 flex items-center justify-center border border-slate-950/20 shadow-inner">
-              <Bot className="w-5 h-5 text-slate-950" />
+      <div className="w-[320px] sm:w-[380px] h-[480px] md:h-[520px] bg-[#05070a]/95 border border-white/15 backdrop-blur-2xl rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_35px_rgba(0,163,255,0.15)] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+        {/* Header - Sleek Dark Futurist Artron Core Style */}
+        <div className="relative p-4 bg-[#0B0F17]/95 border-b border-white/10 flex items-center justify-between shadow-lg overflow-hidden shrink-0">
+          {/* Subtle ambient brand glow behind header */}
+          <div className="pointer-events-none absolute -top-12 -left-12 w-44 h-32 bg-[#00A3FF]/15 rounded-full blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-10 right-0 w-36 h-24 bg-[#00FF87]/10 rounded-full blur-2xl" />
+
+          <div className="relative z-10 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0F172A] to-[#050811] border border-emerald-500/35 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,135,0.25)] shrink-0 group">
+              <ArtronLogo className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" vivid />
             </div>
             <div>
-              <h4 className="text-sm font-black leading-tight text-slate-950">{t('ai_widget_title')}</h4>
-              <p className="text-[10px] text-slate-950/85 font-mono flex items-center gap-1 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-pulse"></span>
-                {t('ai_widget_subtitle')}
+              <div className="flex items-center gap-1.5">
+                <h4 className="text-sm font-black leading-tight text-white tracking-wide">{t('ai_widget_title')}</h4>
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-[#00FF87] border border-emerald-500/30">
+                  CORE
+                </span>
+              </div>
+              <p className="text-[10px] text-[#94A3B8] font-mono flex items-center gap-1.5 mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00FF87] animate-pulse shadow-[0_0_8px_#00FF87]" />
+                <span>{t('ai_widget_subtitle')}</span>
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1">
+
+          <div className="relative z-10 flex items-center gap-1">
             <button
               onClick={handleResetChat}
-              className="p-1 rounded-lg hover:bg-slate-950/15 text-slate-950/80 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-[#94A3B8] hover:text-white transition-all cursor-pointer flex items-center justify-center"
               style={{ minHeight: '36px', minWidth: '36px' }}
               title={locale === 'en' ? 'Reset chat' : locale === 'ru' ? 'Очистить чат' : 'ჩატის გასუფთავება'}
               aria-label="Reset chat"
@@ -194,7 +205,7 @@ export const AIBotWidget: React.FC = () => {
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg hover:bg-slate-950/15 text-slate-950/80 hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-[#94A3B8] hover:text-white transition-all cursor-pointer flex items-center justify-center"
               style={{ minHeight: '36px', minWidth: '36px' }}
               aria-label="Close Chat"
             >
@@ -215,14 +226,16 @@ export const AIBotWidget: React.FC = () => {
                 }`}
               >
                 <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs ${
-                  isBot ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30 font-mono' : 'bg-white/10 text-white'
+                  isBot 
+                    ? 'bg-[#0B1528] border border-emerald-500/30 shadow-[0_0_10px_rgba(0,255,135,0.2)]' 
+                    : 'bg-white/10 text-white border border-white/15'
                 }`}>
-                  {isBot ? <Bot className="w-4.5 h-4.5" /> : <User className="w-4.5 h-4.5" />}
+                  {isBot ? <ArtronLogo className="w-4 h-4" vivid /> : <User className="w-4 h-4" />}
                 </div>
                 <div className={`p-3 rounded-xl text-xs md:text-sm leading-relaxed ${
                   isBot 
                     ? 'bg-white/5 border border-white/5 text-[#E2E8F0] rounded-tl-none' 
-                    : 'bg-gradient-to-r from-[#00A3FF] to-[#00E5FF] text-slate-950 font-bold rounded-tr-none shadow-[0_0_12px_rgba(0,229,255,0.3)]'
+                    : 'bg-gradient-to-r from-[#0052D4] via-[#0066FF] to-[#00A3FF] text-white font-medium rounded-tr-none shadow-[0_0_14px_rgba(0,163,255,0.3)]'
                 }`}>
                   <p className="whitespace-pre-line">{msg.text}</p>
 
@@ -234,7 +247,7 @@ export const AIBotWidget: React.FC = () => {
                           key={act.id}
                           type="button"
                           onClick={() => handleActionClick(act)}
-                          className="w-full text-left py-1.5 px-2.5 rounded-lg bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 hover:border-[#00E5FF]/60 text-xs font-medium text-[#00E5FF] transition-all cursor-pointer flex items-center justify-between group/act"
+                          className="w-full text-left py-1.5 px-2.5 rounded-lg bg-[#00A3FF]/10 hover:bg-[#00A3FF]/20 border border-[#00A3FF]/30 hover:border-[#00A3FF]/60 text-xs font-medium text-[#00E5FF] transition-all cursor-pointer flex items-center justify-between group/act"
                           style={{ minHeight: '36px' }}
                         >
                           <span className="truncate">{act.label}</span>
@@ -250,8 +263,8 @@ export const AIBotWidget: React.FC = () => {
 
           {isTyping && (
             <div className="flex gap-2.5 max-w-[85%] self-start">
-              <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30 text-xs font-mono">
-                <Bot className="w-4.5 h-4.5" />
+              <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center bg-[#0B1528] border border-emerald-500/30 shadow-[0_0_10px_rgba(0,255,135,0.2)] text-xs">
+                <ArtronLogo className="w-4 h-4 animate-pulse" vivid />
               </div>
               <div className="p-3 bg-white/5 border border-white/5 text-[#94A3B8] rounded-xl rounded-tl-none text-xs flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#00E5FF] drop-shadow-[0_0_8px_#00E5FF] animate-spin" />
@@ -268,14 +281,14 @@ export const AIBotWidget: React.FC = () => {
             e.preventDefault();
             handleSend(inputValue);
           }}
-          className="p-3 border-t border-white/10 bg-[#121722]/98 flex items-center gap-2"
+          className="p-3 border-t border-white/10 bg-[#0B0F17]/98 flex items-center gap-2"
         >
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={t('ai_widget_placeholder')}
-            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm text-white placeholder-[#94A3B8] focus:outline-none focus:border-[#00E5FF] focus:ring-1 focus:ring-[#00E5FF]"
+            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs md:text-sm text-white placeholder-[#94A3B8] focus:outline-none focus:border-[#00A3FF] focus:ring-1 focus:ring-[#00A3FF]"
             style={{ minHeight: '40px' }}
           />
           <button
@@ -283,7 +296,7 @@ export const AIBotWidget: React.FC = () => {
             disabled={!inputValue.trim()}
             className={`p-2.5 rounded-xl transition-all flex items-center justify-center shrink-0 cursor-pointer ${
               inputValue.trim()
-                ? 'bg-[#00E5FF] text-slate-950 hover:brightness-110 shadow-[0_0_12px_rgba(0,229,255,0.4)]'
+                ? 'bg-gradient-to-r from-[#0066FF] to-[#00A3FF] hover:from-[#0052cc] hover:to-[#008fe0] text-white shadow-[0_0_15px_rgba(0,163,255,0.35)]'
                 : 'bg-white/5 text-[#94A3B8] cursor-not-allowed border border-white/5'
             }`}
             style={{ minWidth: '40px', minHeight: '40px' }}

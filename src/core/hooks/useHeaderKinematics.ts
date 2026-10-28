@@ -30,9 +30,18 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
     // Check if navigating directly to a section anchor or cross-page target
     let hasTargetAnchor = false;
     try {
-      hasTargetAnchor = Boolean(
-        window.location.hash || sessionStorage.getItem('artron_target_nav')
-      );
+      const navEntries = typeof performance !== 'undefined' ? performance.getEntriesByType('navigation') : [];
+      const isReload =
+        navEntries.length > 0
+          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
+          : (typeof performance !== 'undefined' &&
+            (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1);
+
+      if (!isReload) {
+        hasTargetAnchor = Boolean(
+          window.location.hash || sessionStorage.getItem('artron_target_nav')
+        );
+      }
     } catch {}
 
     if (!isDynamic || hasTargetAnchor) {

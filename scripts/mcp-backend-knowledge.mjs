@@ -13,10 +13,15 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ANALYSIS_PATH = path.resolve(
+const DOCS_PATH = path.resolve(
+  __dirname,
+  '../docs/backend/backend_services_analysis.md'
+);
+const LEGACY_PATH = path.resolve(
   __dirname,
   '../public/back end service analis/backend_services_analysis.md'
 );
+const ANALYSIS_PATH = fs.existsSync(DOCS_PATH) ? DOCS_PATH : LEGACY_PATH;
 
 // In-memory indexed database
 let modules = [];

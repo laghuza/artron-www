@@ -14,7 +14,7 @@ export interface TelemetryDashboardLayoutProps {
 export const TelemetryDashboardLayout: React.FC<TelemetryDashboardLayoutProps> = ({
   nodeBadge,
   title,
-  backHref = "/sports-os",
+  backHref = "/",
   backLabel = "← Terminate Connection",
   children,
 }) => {

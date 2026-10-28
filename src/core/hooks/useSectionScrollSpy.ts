@@ -252,31 +252,52 @@ export function useSectionScrollSpy(trackProgress = true) {
     // Initial check on mount: check URL hash or target nav from sessionStorage
     let initialTargetHandled = false;
     try {
-      let stored = sessionStorage.getItem('artron_target_nav');
-      if (!stored && window.location.hash) {
-        stored = `/#${window.location.hash.replace(/^#/, '')}`;
-      }
-      if (stored) {
-        const id = stored.replace(/^\/?#/, '').split('?')[0];
-        const primaryId = SECTION_IDS.includes(id)
-          ? id
-          : (id === 'ai' || id === 'multimodal-ai' ? 'ai-intelligence' : (id === 'roi' ? 'dashboard-features' : ''));
-        const index = SECTION_IDS.indexOf(primaryId);
-        if (index !== -1) {
-          isManualNavRef.current = true;
-          if (manualNavTimerRef.current) clearTimeout(manualNavTimerRef.current);
-          manualNavTimerRef.current = setTimeout(() => {
-            isManualNavRef.current = false;
-          }, 3500);
+      const navEntries = typeof performance !== 'undefined' ? performance.getEntriesByType('navigation') : [];
+      const isReload =
+        navEntries.length > 0
+          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
+          : (typeof performance !== 'undefined' &&
+            (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1);
 
-          setState({
-            activeId: primaryId,
-            activeIndex: index,
-            sectionProgress: index,
-            isVisible: true,
-            isHero: false,
-          });
-          initialTargetHandled = true;
+      if (isReload) {
+        try {
+          sessionStorage.removeItem('artron_target_nav');
+        } catch {}
+        if (typeof window !== 'undefined') {
+          if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }
+        setState(INITIAL_SCROLL_STATE);
+        initialTargetHandled = true;
+      } else {
+        let stored = sessionStorage.getItem('artron_target_nav');
+        if (!stored && window.location.hash) {
+          stored = `/#${window.location.hash.replace(/^#/, '')}`;
+        }
+        if (stored) {
+          const id = stored.replace(/^\/?#/, '').split('?')[0];
+          const primaryId = SECTION_IDS.includes(id)
+            ? id
+            : (id === 'ai' || id === 'multimodal-ai' ? 'ai-intelligence' : (id === 'roi' ? 'dashboard-features' : ''));
+          const index = SECTION_IDS.indexOf(primaryId);
+          if (index !== -1) {
+            isManualNavRef.current = true;
+            if (manualNavTimerRef.current) clearTimeout(manualNavTimerRef.current);
+            manualNavTimerRef.current = setTimeout(() => {
+              isManualNavRef.current = false;
+            }, 3500);
+
+            setState({
+              activeId: primaryId,
+              activeIndex: index,
+              sectionProgress: index,
+              isVisible: true,
+              isHero: false,
+            });
+            initialTargetHandled = true;
+          }
         }
       }
     } catch {}

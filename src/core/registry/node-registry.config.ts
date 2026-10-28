@@ -1,5 +1,3 @@
-import { SubItemData } from "@/components/features/dashboard/NodeDetailStage";
-
 export type DomainType =
   | "federations"
   | "clubs"

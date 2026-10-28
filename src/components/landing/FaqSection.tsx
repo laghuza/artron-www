@@ -54,7 +54,7 @@ export const FaqSection: React.FC = () => {
   );
 
   // Select FAQ item
-  const selectFaq = useCallback((id: number, skipScroll = false) => {
+  const selectFaq = useCallback((id: number, _skipScroll = false) => {
     setActiveId(id);
     setIsFading(true);
     if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
@@ -62,19 +62,19 @@ export const FaqSection: React.FC = () => {
       setShownId(id);
       setIsFading(false);
     }, 160);
-
-    if (!skipScroll && typeof window !== 'undefined') {
-      try {
-        history.replaceState(null, '', `#faq-0${id}`);
-      } catch {
-        // Safe fallback
-      }
-    }
   }, []);
 
-  // Sync hash on mount
+  // Sync hash on mount (only for intentional direct external links, not on reload)
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const navEntries = typeof performance !== 'undefined' ? performance.getEntriesByType('navigation') : [];
+      const isReload =
+        navEntries.length > 0
+          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
+          : (typeof performance !== 'undefined' &&
+            (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1);
+      if (isReload) return;
+
       const hashMatch = window.location.hash.match(/faq-0?(\d+)/);
       if (hashMatch) {
         const id = Number(hashMatch[1]);

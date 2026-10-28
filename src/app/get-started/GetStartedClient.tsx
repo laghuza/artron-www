@@ -34,8 +34,6 @@ export default function GetStartedClient() {
     ps5Audio.playBack();
     if (typeof window !== 'undefined' && window.history.length > 1) {
       router.back();
-    } else if (activeMode === 'DEMO') {
-      router.push('/sports-os');
     } else {
       router.push('/');
     }

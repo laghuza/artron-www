@@ -15,7 +15,7 @@ import {
   VoiceSpectrumIcon, 
   ChurnRadarIcon 
 } from '@/components/landing/ai/AiTechIcons';
-import { SimplifiedAiShowcase, AiShowcaseTab } from '@/components/gateway/widgets/live/multimodal-ai/SimplifiedAiShowcase';
+import { SimplifiedAiShowcase, AiShowcaseTab } from '@/components/landing/ai/SimplifiedAiShowcase';
 
 export const ArtronAiSection: React.FC = () => {
   const { locale } = useLanguage();

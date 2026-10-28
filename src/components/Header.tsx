@@ -94,6 +94,22 @@ export const Header: React.FC<HeaderProps> = ({
   useEffect(() => {
     if (pathname !== '/') return;
 
+    if (typeof window !== 'undefined') {
+      const navEntries = performance.getEntriesByType('navigation');
+      const isReload =
+        navEntries.length > 0
+          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
+          : (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1;
+
+      if (isReload) {
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        return;
+      }
+    }
+
     let targetHref: string | null = null;
     try {
       targetHref = sessionStorage.getItem('artron_target_nav');
@@ -200,9 +216,6 @@ export const Header: React.FC<HeaderProps> = ({
 
       if (el && pathname === '/') {
         e.preventDefault();
-        try {
-          window.history.replaceState(null, '', href);
-        } catch {}
         const targetPos = el.getBoundingClientRect().top + window.scrollY - 88;
         window.scrollTo({ top: targetPos, behavior: 'smooth' });
       }

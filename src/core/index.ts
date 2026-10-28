@@ -10,7 +10,6 @@ export * from './registry/effects.config';
 export * from './registry/node-registry.config';
 export * from './theme/theme.config';
 export * from './adapters/node-content';
-export * from './security/env';
 export * from './security/audit.logger';
 export * from './schemas/sports.schemas';
 export * from './sports/sports.taxonomy';

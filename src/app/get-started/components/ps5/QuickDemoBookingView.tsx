@@ -125,7 +125,9 @@ export const QuickDemoBookingView: React.FC<QuickDemoBookingViewProps> = ({ onCa
         {/* Action Buttons */}
         <div className="w-full max-w-md flex flex-col gap-2.5">
           <Link
-            href="/sports-os?demo=true"
+            href="https://app.artron.ge"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => soundEngine.playSystemAccess()}
             className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_25px_rgba(52,211,153,0.4)] flex items-center justify-center gap-2"
           >

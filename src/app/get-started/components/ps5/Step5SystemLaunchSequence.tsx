@@ -223,7 +223,9 @@ export const Step5SystemLaunchSequence: React.FC<Step5SystemLaunchSequenceProps>
       {/* Action Buttons: Direct Jump to CRM Control Panel */}
       <div className="flex flex-col sm:flex-row gap-3 w-full">
         <Link
-          href="/sports-os"
+          href="https://app.artron.ge"
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={() => ps5Audio.playSelect()}
           className="flex-1 py-4 px-8 rounded-2xl font-bold text-xs uppercase tracking-wider bg-gradient-to-r from-[#00A3FF] via-[#0066FF] to-[#00D2FF] text-white shadow-[0_0_30px_rgba(0,163,255,0.5)] hover:shadow-[0_0_40px_rgba(0,163,255,0.8)] hover:scale-[1.02] transition-all duration-300 text-center flex items-center justify-center gap-2 cursor-pointer"
         >
