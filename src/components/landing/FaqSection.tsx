@@ -13,6 +13,7 @@ import {
 } from './faq/faqConstants';
 import { FaqDesktopConsole } from './faq/FaqDesktopConsole';
 import { FaqMobileDeck } from './faq/FaqMobileDeck';
+import { isInitialBrowserReload } from '@/components/navigation/ScrollRestorationHandler';
 
 export const FaqSection: React.FC = () => {
   const { locale } = useLanguage();
@@ -67,13 +68,7 @@ export const FaqSection: React.FC = () => {
   // Sync hash on mount (only for intentional direct external links, not on reload)
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const navEntries = typeof performance !== 'undefined' ? performance.getEntriesByType('navigation') : [];
-      const isReload =
-        navEntries.length > 0
-          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
-          : (typeof performance !== 'undefined' &&
-            (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1);
-      if (isReload) return;
+      if (isInitialBrowserReload()) return;
 
       const hashMatch = window.location.hash.match(/faq-0?(\d+)/);
       if (hashMatch) {
@@ -96,11 +91,13 @@ export const FaqSection: React.FC = () => {
     selectFaq(newId);
   };
 
-  // Keyboard navigation
+  // Keyboard navigation (scoped to #faq focus so global ArrowUp/ArrowDown page scrolling is never hijacked)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const activeTag = document.activeElement?.tagName;
-      if (activeTag === 'INPUT' || activeTag === 'TEXTAREA') return;
+      const activeEl = document.activeElement as HTMLElement | null;
+      if (!activeEl || activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') return;
+      const faqSection = document.getElementById('faq');
+      if (!faqSection || !faqSection.contains(activeEl)) return;
 
       const delta =
         e.key === 'ArrowDown' || e.key === 'ArrowRight'

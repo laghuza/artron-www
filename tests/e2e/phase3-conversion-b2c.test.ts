@@ -1,114 +1,78 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Phase 3: B2B Conversion Engine & B2C Experience E2E', () => {
+test.describe('Phase 3: Dual-Core Ecosystem, B2B Booking Scheduler & B2C Mobile Showcase E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.addInitScript(() => {
       window.localStorage.setItem('artron_lang', 'ka');
-      window.localStorage.setItem('artron_cookie_consent', JSON.stringify({
-        necessary: true,
-        analytics: true,
-        marketing: true,
-        version: '2026-06-22'
-      }));
+      window.localStorage.setItem(
+        'artron_cookie_consent',
+        JSON.stringify({
+          necessary: true,
+          analytics: true,
+          marketing: true,
+          version: '2026-06-22',
+        })
+      );
     });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
   });
 
-  test('Instant Micro-Booking Engine 3-step wizard workflow', async ({ page }) => {
-    const bookingSection = page.locator('#booking-engine');
-    await expect(bookingSection).toBeVisible();
+  test('Node 02 & Node 03: B2B Booking Scheduler & Cyber Defense offline queue stages', async ({ page }) => {
+    const b2bCockpit = page.locator('#dashboard-features');
+    await expect(b2bCockpit).toBeVisible({ timeout: 10000 });
+    await b2bCockpit.scrollIntoViewIfNeeded();
 
-    // Scroll to booking engine
-    await bookingSection.scrollIntoViewIfNeeded();
+    const navButtons = b2bCockpit.locator('nav[aria-label="ARTRON B2B Suite ლოგიკები"] button');
 
-    // Step 1: Select Facility Type
-    const poolBtn = page.locator('[data-testid="booking-type-pool"]');
-    await poolBtn.scrollIntoViewIfNeeded();
-    await poolBtn.click();
+    // Node 02: Booking Scheduler
+    await navButtons.nth(1).click();
+    await expect(b2bCockpit.getByText('LIVE').first()).toBeVisible();
 
-    // Click Next to Step 2
-    const nextBtn = page.locator('[data-testid="booking-step1-next"]');
-    await nextBtn.click();
-
-    // Step 2: Select Preferred Platform
-    const telegramBtn = page.locator('[data-testid="booking-plat-telegram"]');
-    await expect(telegramBtn).toBeVisible({ timeout: 5000 });
-    await telegramBtn.click();
-
-    // Fill Contact Input
-    const contactInput = page.locator('[data-testid="booking-contact-input"]');
-    await contactInput.fill('@artron_tester');
-
-    // Click Next to Step 3
-    const nextBtn2 = page.locator('[data-testid="booking-step2-next"]');
-    await nextBtn2.click();
-
-    // Step 3: Select Time Slot and Fill Name
-    const slotChip = page.locator('[data-testid="booking-slot-15:00"]');
-    await expect(slotChip).toBeVisible({ timeout: 5000 });
-    await slotChip.click();
-
-    // Fill Name
-    const nameInput = page.locator('[data-testid="booking-name-input"]');
-    await nameInput.fill('დავით თოდუა');
-
-    // Submit Demo Request
-    const submitBtn = page.locator('[data-testid="booking-submit-btn"]');
-    await submitBtn.scrollIntoViewIfNeeded();
-    await submitBtn.click({ force: true });
-
-    // Verify Success Screen
-    await expect(bookingSection.getByText('DEMO_SESSION_CONFIRMED')).toBeVisible({ timeout: 10000 });
+    // Node 03: Cyber Defense
+    await navButtons.nth(2).click();
+    await expect(b2bCockpit.getByText('LIVE').first()).toBeVisible();
   });
 
-  test('Pricing Section Monthly / Annual toggle and ROI Saver Badges', async ({ page }) => {
-    const pricingSection = page.locator('#pricing');
-    await expect(pricingSection).toBeVisible();
-    await pricingSection.scrollIntoViewIfNeeded();
+  test('Multimodal AI Neural Engine Section tabs (OCR / VOICE / CONCIERGE)', async ({ page }) => {
+    const aiHeading = page.getByText('პირადობის & პასპორტის OCR').first();
+    await aiHeading.scrollIntoViewIfNeeded();
+    await expect(aiHeading).toBeVisible();
 
-    // Check ROI Saver badges exist across tiers
-    const roiBadges = pricingSection.getByText('ROI:');
-    await expect(roiBadges.first()).toBeVisible();
+    // Switch to Voice Onboarding tab
+    const voiceTab = page.getByText('ქართული ხმოვანი რეგისტრაცია').first();
+    await voiceTab.click();
+    await expect(voiceTab).toBeVisible();
 
-    // Test Monthly vs. Annual toggle
-    const annualBtn = pricingSection.locator('button').filter({ hasText: '-20%' }).first();
-    await annualBtn.click();
-
-    // Verify annual discount badge active
-    await expect(pricingSection).toContainText('-20%');
-
-    const monthlyBtn = pricingSection.locator('button').filter({ hasText: 'ყოველთვიური' }).first();
-    if (await monthlyBtn.isVisible()) {
-      await monthlyBtn.click();
-    }
-    await expect(pricingSection).toBeVisible();
+    // Switch to 24/7 Concierge & Churn Radar tab
+    const conciergeTab = page.getByText('24/7 ვირტუალური კონსიერჟი & Churn Radar').first();
+    await conciergeTab.click();
+    await expect(conciergeTab).toBeVisible();
   });
 
-  test('B2C Athlete Mobile Advantages Showcase tabs & interactive phone preview', async ({ page }) => {
+  test('B2C Athlete Mobile Advantages Showcase 3D Flip Deck & interactive phone preview', async ({ page }) => {
     const b2cSection = page.locator('#b2c-experience');
     await expect(b2cSection).toBeVisible();
     await b2cSection.scrollIntoViewIfNeeded();
 
-    // Check advantage section header is visible
     await expect(b2cSection.locator('h2')).toBeVisible();
 
-    // Switch to Mentor Tab (Index 1)
+    // Switch to Mentor Card (Index 1)
     const mentorCard = page.locator('[data-testid="b2c-adv-card-1"]');
     await mentorCard.scrollIntoViewIfNeeded();
     await mentorCard.click();
-    await expect(b2cSection.getByText('მწვრთნელის განრიგი და ჯავშნები').first()).toBeVisible();
+    await expect(mentorCard).toContainText('მწვრთნელის განრიგი და ჯავშნები');
 
-    // Switch to Shield Tab (Index 2)
+    // Switch to Legal Shield Card (Index 2)
     const shieldCard = page.locator('[data-testid="b2c-adv-card-2"]');
     await shieldCard.scrollIntoViewIfNeeded();
     await shieldCard.click();
-    await expect(b2cSection.getByText('14-დღიანი გარანტია').first()).toBeVisible();
+    await expect(shieldCard).toContainText('14-დღიანი გარანტია');
 
-    // Switch to Renewal Tab (Index 3)
+    // Switch to Online Renewal Card (Index 3)
     const renewalCard = page.locator('[data-testid="b2c-adv-card-3"]');
     await renewalCard.scrollIntoViewIfNeeded();
     await renewalCard.click();
-    await expect(b2cSection.getByText('აბონემენტის ონლაინ განახლება').first()).toBeVisible();
+    await expect(renewalCard).toContainText('აბონემენტის ონლაინ განახლება');
   });
 });

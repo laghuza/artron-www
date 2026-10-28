@@ -2,39 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { InnerBeamCoords, DynamicNotifData } from './types';
-import {
-  SCREEN_ORDER,
-  SLOT_INDEX_MAP,
-  PLANS_CONFIG,
-  TRAINING_SLOTS_DATA,
-} from './mobileShowcaseConfig';
+import { SCREEN_ORDER, PLANS_CONFIG, TRAINING_SLOTS_DATA } from './mobileShowcaseConfig';
 import { getNotificationData } from './showcaseNotifHelper';
+import { generateQrCells, computeBeamMeasurement } from './mobileShowcaseLogicHelpers';
 
-// QR generator helper
-export const generateQrCells = (seed: number) => {
-  let a = (seed * 2654435761) >>> 0;
-  const rnd = () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-  const cells: { c: string }[] = [];
-  for (let r = 0; r < 15; r++) {
-    for (let c = 0; c < 15; c++) {
-      let on = false;
-      if (r <= 6 && c <= 6) {
-        if (r === 6 || c === 6) on = false;
-        else if (r === 0 || r === 5 || c === 0 || c === 5) on = true;
-        else on = r >= 2 && r <= 3 && c >= 2 && c <= 3;
-      } else if (r === 0 || c === 0) on = (r + c) % 2 === 0;
-      else on = rnd() > 0.5;
-      cells.push({ c: on ? '#0A1220' : 'transparent' });
-    }
-  }
-  return cells;
-};
+export { generateQrCells };
 
 export function useMobileShowcaseLogic() {
   // Navigation & Selection state
@@ -139,67 +111,21 @@ export function useMobileShowcaseLogic() {
 
   // Measure Bridge Width & Inner Beam
   const measure = useCallback(() => {
-    const c = cardsRef.current;
-    const p = phoneColRef.current;
-    const ph = phoneRef.current;
-    if (!c || !p || !ph) return;
-
-    const cr = c.getBoundingClientRect();
-    const pr = p.getBoundingClientRect();
-    const phoneLeft = pr.left + pr.width / 2 - 183;
-    const w = Math.round(phoneLeft - cr.right - 3);
-    const isWideScreen = pr.left > cr.right && w > 16;
-    setWide(isWideScreen);
-    setBridgeW(Math.max(0, w));
-
-    // Inner beam measurement
-    if (!isWideScreen || shownId !== activeId) {
-      setInner(null);
-      return;
-    }
-
-    const targets = [
-      qrRef.current, // 0: Entry Pass
-      slotsRef.current?.querySelector(`[data-slot="${pickedSlot}"]`) as HTMLElement | null, // 1: Coach
-      sealRef.current, // 2: Shield
-      payRef.current, // 3: Renewal
-      barsRef.current, // 4: Progress
-      freezeRef.current, // 5: Freeze
-      guestRef.current, // 6: Guest Pass
-      occRef.current, // 7: Live Load
-    ];
-
-    const targetEl = targets[shownId];
-    const cardEl = c.children[SLOT_INDEX_MAP[activeId]] as HTMLElement | undefined;
-
-    if (!targetEl || !cardEl) {
-      setInner(null);
-      return;
-    }
-
-    const phr = ph.getBoundingClientRect();
-    const cardRect = cardEl.getBoundingClientRect();
-    const tr = targetEl.getBoundingClientRect();
-
-    const sx = 300 / phr.width;
-    const sy = 620 / phr.height;
-    const by = Math.round((cardRect.top + cardRect.height / 2 - phr.top) * sy);
-
-    if (by < 20 || by > 600) {
-      setInner(null);
-      return;
-    }
-
-    const calculated: InnerBeamCoords = {
-      key: `${shownId}-${pickedSlot}`,
-      by,
-      bx: Math.round((tr.left - phr.left) * sx),
-      bty: Math.round((tr.top - phr.top) * sy),
-      bw: Math.round(tr.width * sx),
-      bh: Math.round(tr.height * sy),
-    };
-
-    setInner(calculated);
+    const res = computeBeamMeasurement(
+      {
+        cards: cardsRef.current, phoneCol: phoneColRef.current, phone: phoneRef.current,
+        targets: [
+          qrRef.current,
+          slotsRef.current?.querySelector(`[data-slot="${pickedSlot}"]`) as HTMLElement | null,
+          sealRef.current, payRef.current, barsRef.current, freezeRef.current, guestRef.current, occRef.current,
+        ],
+      },
+      activeId, shownId, pickedSlot
+    );
+    if (!res) return;
+    setWide(res.isWideScreen);
+    setBridgeW(res.bridgeW);
+    setInner(res.inner);
   }, [activeId, shownId, pickedSlot]);
 
   // Selection change
@@ -242,11 +168,7 @@ export function useMobileShowcaseLogic() {
       );
     } else if (shownId === 1) {
       setBookStage('idle');
-      timers.push(
-        setTimeout(() => {
-          setPickedSlot(3);
-        }, 1200)
-      );
+      timers.push(setTimeout(() => setPickedSlot(3), 1200));
       timers.push(
         setTimeout(() => {
           setBookStage('done');
@@ -326,9 +248,23 @@ export function useMobileShowcaseLogic() {
     return () => clearTimeout(t);
   }, [shownId, measure]);
 
-  // Setup ResizeObserver & 1s Timer
+  // Setup IntersectionObserver, ResizeObserver & 1s Timer (paused when off-screen)
   useEffect(() => {
+    let isSectionVisible = true;
+    let observer: IntersectionObserver | null = null;
+    const targetEl = rowRef.current || document.getElementById('mobile-app');
+    if (targetEl && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          isSectionVisible = entry.isIntersecting;
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(targetEl);
+    }
+
     const interval = setInterval(() => {
+      if (!isSectionVisible || document.hidden) return;
       setSec((prev) => {
         if (prev <= 1) {
           setSeed((s) => {
@@ -345,28 +281,20 @@ export function useMobileShowcaseLogic() {
       tickRef.current += 1;
       if (Date.now() - lastInteractRef.current > 10000 && tickRef.current >= 7) {
         tickRef.current = 0;
-        const isVisible = rowRef.current
-          ? (() => {
-              const r = rowRef.current.getBoundingClientRect();
-              return r.bottom > 0 && r.top < window.innerHeight;
-            })()
-          : true;
-
-        if (isVisible) {
-          setActiveId((prev) => {
-            const nextIdx = (SCREEN_ORDER.indexOf(prev) + 1) % SCREEN_ORDER.length;
-            return SCREEN_ORDER[nextIdx];
-          });
-        }
+        setActiveId((prev) => {
+          const nextIdx = (SCREEN_ORDER.indexOf(prev) + 1) % SCREEN_ORDER.length;
+          return SCREEN_ORDER[nextIdx];
+        });
       }
     }, 1000);
 
-    window.addEventListener('resize', measure);
+    window.addEventListener('resize', measure, { passive: true });
     const initialMeasure = setTimeout(measure, 300);
 
     return () => {
       clearInterval(interval);
       clearTimeout(initialMeasure);
+      observer?.disconnect();
       window.removeEventListener('resize', measure);
     };
   }, [measure]);
@@ -418,79 +346,44 @@ export function useMobileShowcaseLogic() {
     }, 1100);
   };
 
+  const mouseRafRef = useRef<number | null>(null);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (notifTilt) return;
-    const ph = phoneRef.current;
-    if (!ph) return;
-    const r = ph.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width / 2)));
-    const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2)));
-    setRx(dy);
-    setRy(dx);
+    if (notifTilt || (typeof window !== 'undefined' && window.innerWidth < 1024)) return;
+    if (mouseRafRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    mouseRafRef.current = requestAnimationFrame(() => {
+      mouseRafRef.current = null;
+      const ph = phoneRef.current;
+      if (!ph) return;
+      const r = ph.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = Math.max(-1, Math.min(1, (clientX - cx) / (r.width / 2)));
+      const dy = Math.max(-1, Math.min(1, (clientY - cy) / (r.height / 2)));
+      setRx(dy);
+      setRy(dx);
+    });
   };
 
   const handleMouseLeave = () => {
+    if (mouseRafRef.current) {
+      cancelAnimationFrame(mouseRafRef.current);
+      mouseRafRef.current = null;
+    }
     if (notifTilt) return;
     setRx(0);
     setRy(0);
   };
 
   return {
-    activeId,
-    shownId,
-    bridgeW,
-    wide,
-    inner,
-    rx,
-    ry,
-    notifTilt,
-    notif,
-    sec,
-    qrCells,
-    tap,
-    visits,
-    selectedPlan,
-    setSelectedPlan,
-    autoRenew,
-    setAutoRenew,
-    renewStage,
-    pickedSlot,
-    setPickedSlot,
-    bookStage,
-    buyStage,
-    streak,
-    setStreak,
-    todayH,
-    setTodayH,
-    frzDays,
-    setFrzDays,
-    frzDone,
-    guestSent,
-    guestsLeft,
-    occupancy,
-    setOccupancy,
-    cardsRef,
-    phoneColRef,
-    phoneRef,
-    rowRef,
-    qrRef,
-    payRef,
-    slotsRef,
-    sealRef,
-    barsRef,
-    freezeRef,
-    guestRef,
-    occRef,
-    handleSelect,
-    handleTap,
-    handleRenew,
-    handleBook,
-    handleBuy,
-    handleFreeze,
-    handleSendGuest,
-    handleMouseMove,
-    handleMouseLeave,
+    activeId, shownId, bridgeW, wide, inner, rx, ry, notifTilt, notif, sec, qrCells, tap, visits,
+    selectedPlan, setSelectedPlan, autoRenew, setAutoRenew, renewStage, pickedSlot, setPickedSlot,
+    bookStage, buyStage, streak, setStreak, todayH, setTodayH, frzDays, setFrzDays, frzDone,
+    guestSent, guestsLeft, occupancy, setOccupancy,
+    cardsRef, phoneColRef, phoneRef, rowRef, qrRef, payRef, slotsRef, sealRef, barsRef, freezeRef, guestRef, occRef,
+    handleSelect, handleTap, handleRenew, handleBook, handleBuy, handleFreeze, handleSendGuest,
+    handleMouseMove, handleMouseLeave,
   };
 }

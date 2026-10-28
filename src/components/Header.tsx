@@ -9,11 +9,16 @@ import ArtronLogo from '@/components/ui/ArtronLogo';
 import { audioManager } from '@/lib/audioManager';
 import { useHeaderKinematics } from '@/core/hooks/useHeaderKinematics';
 import { useSectionScrollSpy, SECTION_IDS } from '@/core/hooks/useSectionScrollSpy';
+import {
+  isInitialBrowserReload,
+  markInitialBootComplete,
+} from '@/components/navigation/ScrollRestorationHandler';
 import { 
   CONTROL_PANEL_IDS, 
   getControlPanelSubItems, 
   getAnalyticsSubItems, 
-  getNavLinks 
+  getNavLinks,
+  resolveHashTarget,
 } from './header/headerNavData';
 import { DesktopNav } from './header/DesktopNav';
 import { MobileNavDrawer } from './header/MobileNavDrawer';
@@ -94,28 +99,17 @@ export const Header: React.FC<HeaderProps> = ({
   useEffect(() => {
     if (pathname !== '/') return;
 
-    if (typeof window !== 'undefined') {
-      const navEntries = performance.getEntriesByType('navigation');
-      const isReload =
-        navEntries.length > 0
-          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
-          : (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1;
-
-      if (isReload) {
-        if (window.location.hash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-        return;
+    if (typeof window !== 'undefined' && isInitialBrowserReload()) {
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      return;
     }
 
     let targetHref: string | null = null;
     try {
       targetHref = sessionStorage.getItem('artron_target_nav');
-      if (targetHref) {
-        sessionStorage.removeItem('artron_target_nav');
-      }
     } catch {}
 
     if (!targetHref && typeof window !== 'undefined' && window.location.hash) {
@@ -124,50 +118,64 @@ export const Header: React.FC<HeaderProps> = ({
 
     if (!targetHref) return;
 
-    const [pathWithHash, query] = targetHref.split('?');
-    const targetId = pathWithHash.replace('/#', '');
-    const tabMatch = query?.match(/tab=([a-z_]+)/);
-    const tab = tabMatch ? tabMatch[1] : (targetId === 'roi' ? 'roi' : null);
+    const { tab, resolvedTargetId, primaryId } = resolveHashTarget(targetHref, SECTION_IDS);
 
     if (tab && typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('artron-select-analytics-tab', { detail: { tab } }));
       window.dispatchEvent(new CustomEvent('artron-select-b2b-tab', { detail: { tab } }));
     }
 
-    const primaryId = SECTION_IDS.includes(targetId)
-      ? targetId
-      : (targetId === 'ai' || targetId === 'multimodal-ai' ? 'ai-intelligence' : (targetId === 'roi' ? 'dashboard-features' : targetId));
-
     setActiveNav(targetHref);
     setManualActive(primaryId);
 
     let attempts = 0;
     const maxAttempts = 35;
-    const scrollToTarget = () => {
-      attempts++;
-      const resolvedTargetId =
-        targetId === 'ai' || targetId === 'multimodal-ai' ? 'ai-intelligence' :
-        targetId === 'roi' ? 'dashboard-features' :
-        targetId;
+    let cancelled = false;
+    const followUpTimers: number[] = [];
 
-      const el = document.getElementById(resolvedTargetId) || 
-        (resolvedTargetId === 'dashboard-features' ? document.getElementById('analytics-showcase') : null);
+    const cancelOnUserScroll = () => {
+      cancelled = true;
+      followUpTimers.forEach((id) => window.clearTimeout(id));
+    };
+
+    window.addEventListener('wheel', cancelOnUserScroll, { passive: true, once: true });
+    window.addEventListener('touchmove', cancelOnUserScroll, { passive: true, once: true });
+
+    const alignToElement = (el: HTMLElement) => {
+      if (cancelled) return;
+      const adjustedPos = Math.max(0, el.getBoundingClientRect().top + window.scrollY - 88);
+      if (Math.abs(window.scrollY - adjustedPos) > 4) {
+        window.scrollTo({ top: adjustedPos, behavior: 'auto' });
+      }
+    };
+
+    const scrollToTarget = () => {
+      if (cancelled) return;
+      attempts++;
+
+      const el =
+        document.getElementById(resolvedTargetId) ||
+        (resolvedTargetId === 'dashboard-features'
+          ? document.getElementById('analytics-showcase')
+          : null);
 
       if (el) {
-        const targetPos = el.getBoundingClientRect().top + window.scrollY - 88;
-        window.scrollTo({ top: targetPos, behavior: 'auto' });
+        alignToElement(el);
+        requestAnimationFrame(() => alignToElement(el));
 
-        requestAnimationFrame(() => {
-          const adjustedPos = el.getBoundingClientRect().top + window.scrollY - 88;
-          if (Math.abs(window.scrollY - adjustedPos) > 4) {
-            window.scrollTo({ top: adjustedPos, behavior: 'auto' });
-          }
-          try {
-            sessionStorage.removeItem('artron_target_nav');
-          } catch {}
+        [60, 180, 340].forEach((delay, idx) => {
+          const timerId = window.setTimeout(() => {
+            alignToElement(el);
+            if (idx === 2) {
+              try {
+                sessionStorage.removeItem('artron_target_nav');
+              } catch {}
+            }
+          }, delay);
+          followUpTimers.push(timerId);
         });
       } else if (attempts < maxAttempts) {
-        setTimeout(scrollToTarget, 30);
+        followUpTimers.push(window.setTimeout(scrollToTarget, 30));
       } else {
         try {
           sessionStorage.removeItem('artron_target_nav');
@@ -175,13 +183,26 @@ export const Header: React.FC<HeaderProps> = ({
       }
     };
     scrollToTarget();
+
+    return () => {
+      cancelled = true;
+      followUpTimers.forEach((id) => window.clearTimeout(id));
+      window.removeEventListener('wheel', cancelOnUserScroll);
+      window.removeEventListener('touchmove', cancelOnUserScroll);
+    };
   }, [pathname, setManualActive]);
 
   const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    markInitialBootComplete();
     audioManager.playClick();
     setActiveNav(href);
     setIsControlPanelOpen(false);
     setIsMobileMenuOpen(false);
+
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
 
     if (href.startsWith('/#')) {
       if (typeof window !== 'undefined' && pathname !== '/') {
@@ -190,33 +211,24 @@ export const Header: React.FC<HeaderProps> = ({
         } catch {}
       }
 
-      const [pathWithHash, query] = href.split('?');
-      const targetId = pathWithHash.replace('/#', '');
-      const tabMatch = query?.match(/tab=([a-z_]+)/);
-      const tab = tabMatch ? tabMatch[1] : (targetId === 'roi' ? 'roi' : null);
+      const { tab, resolvedTargetId, primaryId } = resolveHashTarget(href, SECTION_IDS);
 
       if (tab && typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('artron-select-analytics-tab', { detail: { tab } }));
         window.dispatchEvent(new CustomEvent('artron-select-b2b-tab', { detail: { tab } }));
       }
 
-      const resolvedTargetId =
-        targetId === 'ai' || targetId === 'multimodal-ai' ? 'ai-intelligence' :
-        targetId === 'roi' ? 'dashboard-features' :
-        targetId;
-
-      const el = document.getElementById(resolvedTargetId) || 
-        (resolvedTargetId === 'dashboard-features' ? document.getElementById('analytics-showcase') : null);
-
-      const primaryId = SECTION_IDS.includes(targetId)
-        ? targetId
-        : (targetId === 'ai' || targetId === 'multimodal-ai' ? 'ai-intelligence' : 'dashboard-features');
+      const el =
+        document.getElementById(resolvedTargetId) ||
+        (resolvedTargetId === 'dashboard-features'
+          ? document.getElementById('analytics-showcase')
+          : null);
 
       setManualActive(primaryId);
 
       if (el && pathname === '/') {
         e.preventDefault();
-        const targetPos = el.getBoundingClientRect().top + window.scrollY - 88;
+        const targetPos = Math.max(0, el.getBoundingClientRect().top + window.scrollY - 88);
         window.scrollTo({ top: targetPos, behavior: 'smooth' });
       }
     }

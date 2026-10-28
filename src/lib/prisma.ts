@@ -1,7 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { encryptPersonalId, decryptPersonalId } from './crypto';
+import { env } from './env';
 
 function createExtendedClient() {
+  if (!process.env.DATABASE_URL && env.DATABASE_URL) {
+    process.env.DATABASE_URL = env.DATABASE_URL;
+  }
   const baseClient = new PrismaClient();
   return baseClient.$extends({
     result: {

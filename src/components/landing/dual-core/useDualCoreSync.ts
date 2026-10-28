@@ -76,12 +76,12 @@ export function useDualCoreSync() {
     const interval = setInterval(() => {
       setState((prev) => {
         if (prev.phase !== 'idle') return prev;
-        if (prev.ttl <= 100) {
+        if (prev.ttl <= 250) {
           return { ...prev, ttl: MAX_TTL, seed: prev.seed + 1 };
         }
-        return { ...prev, ttl: prev.ttl - 100 };
+        return { ...prev, ttl: prev.ttl - 250 };
       });
-    }, 100);
+    }, 250);
 
     return () => clearInterval(interval);
   }, [isVisible]);
@@ -183,8 +183,9 @@ export function useDualCoreSync() {
     }, 2250);
   }, [state.phase, clearTimers, addTimer, commitSync]);
 
-  // Automatic demonstration cycle (matching Claude showcase behavior)
+  // Automatic demonstration cycle (matching Claude showcase behavior, paused when off-screen)
   useEffect(() => {
+    if (!isVisible) return;
     let timer: NodeJS.Timeout;
     if (state.phase === 'idle') {
       timer = setTimeout(() => {
@@ -196,16 +197,31 @@ export function useDualCoreSync() {
       }, 5000);
     }
     return () => clearTimeout(timer);
-  }, [state.phase, run]);
+  }, [state.phase, run, isVisible]);
+
+  const mouseRafRef = useRef<number | null>(null);
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setState((prev) => ({ ...prev, tilt: { x, y } }));
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
+    if (mouseRafRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    const el = e.currentTarget;
+    mouseRafRef.current = requestAnimationFrame(() => {
+      mouseRafRef.current = null;
+      const rect = el.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const x = (clientX - rect.left) / rect.width - 0.5;
+      const y = (clientY - rect.top) / rect.height - 0.5;
+      setState((prev) => ({ ...prev, tilt: { x, y } }));
+    });
   }, []);
 
   const onMouseLeave = useCallback(() => {
+    if (mouseRafRef.current) {
+      cancelAnimationFrame(mouseRafRef.current);
+      mouseRafRef.current = null;
+    }
     setState((prev) => ({ ...prev, tilt: { x: 0, y: 0 } }));
   }, []);
 

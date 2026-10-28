@@ -813,26 +813,9 @@
   - [x] **ეტაპი 3: სრული სისტემური შემოწმება & ვერიფიკაცია** — TypeScript (`npx tsc --noEmit`), Jest ტესტები (`npm test` 52/52 მწვანე, 243 ტესტი), Next.js 16 საწარმოო ბილდი (`npm run build`).
   - [x] **ეტაპი 4: Chrome DevTools & ცოცხალი Edge ტესტირება (`curl`)** — დამოწმდა: `sqlmap` იბლოკება 403-ით, SQLi იბლოკება 400-ით, ლეგიტიმური ტრაფიკი გადის 200-ით Trace ID-ით.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- [x] **Phase 98: Pre-Deployment Zero-Regression Hardening & Final Release Readiness (5-ეტაპიანი გეგმა დიზაინისა და UI ლოგიკის 100%-იანი შენარჩუნებით)**
+  - [x] **ეტაპი 1: ESLint, React 19 Hooks & Three.js Console სისუფთავე (Zero Visual Change)** — `I18nContext.tsx`-ში პირობითი ჰუკის გასწორება, `AIBotWidget.tsx`-ში `window.location` მუტაციის გასწორება, `MirrorSceneCanvas.tsx`-ში dependency warning-ების მოგვარება და Three.js `THREE.Clock` deprecation-ის ჩანაცვლება უსაფრთხო ტაიმერით.
+  - [x] **ეტაპი 2: გაუქმებული რეგისტრაციის (`/get-started`), `sports-os/` და ძველი დაშბორდების სრული გასუფთავება + API დაცვა** — ჩარჩენილი `/get-started`, `sports-os/`, `/club/control`, `/federation/dashboard`, `/financial-audit` და `/api/v1/register` მარშრუტების უსაფრთხო ამოშლა (აქტიური საიტის კოდისა და დიზაინის 100%-იანი ხელშეუხებლობით), და `/api/v1/health` + `/api/v1/telemetry`-ის დაცვა.
+  - [x] **ეტაპი 3: SEO, OpenGraph (`/og-image.png`), Sitemap & გლობალური Cookie Consent** — `public/og-image.png`-ის დამატება სოციალური ქსელების გაზიარებისთვის, `CookieConsentBanner`-ის გადატანა `layout.tsx`-ში ყველა გვერდზე ხელმისაწვდომობისთვის და `KineticElevatorDock`-ის ჰიტ-არეალის გაზრდა (`44x44px`) ვიზუალური ზომის შეუცვლელად.
+  - [x] **ეტაპი 4: დიდი ფაილების (>400 ხაზი) უსაფრთხო, Pure-Extract მოდულარიზაცია (100% იდენტური დიზაინი და ლოგიკა)** — აქტიური გადაჭარბებული ფაილებიდან სტატიკური მონაცემების, 3D გეომეტრიის ბილდერებისა და დამხმარე ჰუკების ცალკე ქვე-მოდულებში გატანა ისე, რომ არცერთი CSS კლასი, ანიმაცია, 3D სცენა და კომპონენტის ლოგიკა არ შეიცვალოს (ყველა ფაილი `src/`-ში `<= 399` ხაზია).
+  - [x] **ეტაპი 5: საბოლოო Production Build & 22-Agent Matrix Verification** — `npx tsc --noEmit` (0 შეცდომა), `npm run lint` (0 შეცდომა, 0 გაფრთხილება), `npm test` (51/51 სიუიტი, 232/232 ტესტი მწვანე) და `chrome-devtools` MCP-ით ყველა გვერდის ცოცხალი გადამოწმება (0 კონსოლის შეცდომა).

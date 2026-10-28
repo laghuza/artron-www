@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { useGoogleConsent } from '@/hooks/useGoogleConsent';
 import { Shield, Settings as SettingsIcon, Check, X, ShieldAlert, ChevronRight, Lock } from 'lucide-react';
@@ -195,16 +196,14 @@ export const CookieConsentBanner: React.FC = () => {
 
           {/* Action Row */}
           <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-white/10 pt-3">
-            <a
-              href="https://artron.ge/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/cookie-policy"
               className="text-[11px] font-mono text-[#00A3FF] hover:underline flex items-center gap-1 min-h-[44px] py-1"
             >
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>{t('cookie_policy_link')}</span>
               <ChevronRight className="w-3 h-3 opacity-60" />
-            </a>
+            </Link>
 
             <div className="flex flex-wrap items-center gap-2">
               {!showSettings ? (

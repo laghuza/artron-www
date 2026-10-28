@@ -35,15 +35,26 @@ export const KineticScrollHero: React.FC = () => {
     offset: ['start start', 'end end'],
   });
 
+  const lastProgressRef = useRef<number>(0);
+
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (shouldReduce) {
-      setScrollProgress(1);
+      if (lastProgressRef.current !== 1) {
+        lastProgressRef.current = 1;
+        setScrollProgress(1);
+      }
       return;
     }
-    setScrollProgress(latest);
+    const clamped = Math.max(0, Math.min(1, latest));
+    const isBoundary = (clamped === 0 && lastProgressRef.current !== 0) || (clamped === 1 && lastProgressRef.current !== 1);
+    if (!isBoundary && Math.abs(clamped - lastProgressRef.current) < 0.0015) {
+      return;
+    }
+    lastProgressRef.current = clamped;
+    setScrollProgress(clamped);
     if (typeof window !== 'undefined') {
       window.dispatchEvent(
-        new CustomEvent('artron-hero-progress', { detail: { progress: latest } })
+        new CustomEvent('artron-hero-progress', { detail: { progress: clamped } })
       );
     }
   });

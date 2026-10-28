@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { SECTION_NODES } from '@/components/navigation/elevatorSections';
+import { isInitialBrowserReload } from '@/components/navigation/ScrollRestorationHandler';
 
 export const SECTION_IDS = SECTION_NODES.map((node) => node.id);
 
@@ -31,17 +32,20 @@ export function useSectionScrollSpy(trackProgress = true) {
   const lastMeasureTimeRef = useRef<number>(0);
 
   const measureSectionTops = useCallback(() => {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === 'undefined' || window.location.pathname !== '/') return [];
     const scrollY = window.scrollY;
     const tops: number[] = [];
+    let foundAny = false;
     for (let i = 0; i < SECTION_IDS.length; i++) {
       const el = document.getElementById(SECTION_IDS[i]);
       if (el) {
+        foundAny = true;
         tops.push(el.getBoundingClientRect().top + scrollY);
       } else {
         tops.push(tops[i - 1] ?? 0);
       }
     }
+    if (!foundAny) return [];
     sectionTopsRef.current = tops;
     lastMeasureTimeRef.current = Date.now();
     return tops;
@@ -55,6 +59,7 @@ export function useSectionScrollSpy(trackProgress = true) {
   }, []);
 
   const updateSectionState = useCallback(() => {
+    if (typeof window === 'undefined' || window.location.pathname !== '/') return;
     if (isManualNavRef.current) return;
 
     const scrollY = window.scrollY;
@@ -252,14 +257,7 @@ export function useSectionScrollSpy(trackProgress = true) {
     // Initial check on mount: check URL hash or target nav from sessionStorage
     let initialTargetHandled = false;
     try {
-      const navEntries = typeof performance !== 'undefined' ? performance.getEntriesByType('navigation') : [];
-      const isReload =
-        navEntries.length > 0
-          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
-          : (typeof performance !== 'undefined' &&
-            (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1);
-
-      if (isReload) {
+      if (isInitialBrowserReload()) {
         try {
           sessionStorage.removeItem('artron_target_nav');
         } catch {}
@@ -280,7 +278,13 @@ export function useSectionScrollSpy(trackProgress = true) {
           const id = stored.replace(/^\/?#/, '').split('?')[0];
           const primaryId = SECTION_IDS.includes(id)
             ? id
-            : (id === 'ai' || id === 'multimodal-ai' ? 'ai-intelligence' : (id === 'roi' ? 'dashboard-features' : ''));
+            : (id === 'ai' || id === 'multimodal-ai'
+                ? 'ai-intelligence'
+                : id === 'roi'
+                ? 'dashboard-features'
+                : id === 'b2c-mobile'
+                ? 'mobile-app'
+                : '');
           const index = SECTION_IDS.indexOf(primaryId);
           if (index !== -1) {
             isManualNavRef.current = true;

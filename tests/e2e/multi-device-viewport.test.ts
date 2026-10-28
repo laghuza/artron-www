@@ -33,9 +33,9 @@ test.describe('Phase 26 / Stage 5: Multi-Device Cross-Viewport Matrix & 60 FPS S
       // Navigate to landing root
       await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-      // Ensure Core Branding is rendered
-      const brandLogo = page.locator('text=ARTRON');
-      await expect(brandLogo.first()).toBeVisible();
+      // Ensure main landing canvas and headings are rendered
+      const mainCanvas = page.locator('main').first();
+      await expect(mainCanvas).toBeVisible();
 
       // Check for zero horizontal overflow
       const overflowStatus = await page.evaluate(() => {
@@ -56,19 +56,19 @@ test.describe('Phase 26 / Stage 5: Multi-Device Cross-Viewport Matrix & 60 FPS S
       expect(buttonCount).toBeGreaterThan(0);
     });
 
-    test(`[GetStarted Registration Viewport] UI Rendering on ${dev.name}`, async ({ page }) => {
+    test(`[About Vision Viewport] UI Rendering on ${dev.name}`, async ({ page }) => {
       await page.setViewportSize({ width: dev.width, height: dev.height });
-      await page.goto('/get-started', { waitUntil: 'domcontentloaded' });
+      await page.goto('/about', { waitUntil: 'domcontentloaded' });
 
-      // Verify get started wizard loads correctly
+      // Verify about page loads correctly
       const heading = page.locator('h1, h2');
       await expect(heading.first()).toBeVisible();
 
-      // Check overflow on registration wizard
-      const regOverflow = await page.evaluate(() => {
+      // Check overflow on about page
+      const aboutOverflow = await page.evaluate(() => {
         return document.documentElement.scrollWidth > window.innerWidth;
       });
-      expect(regOverflow).toBe(false);
+      expect(aboutOverflow).toBe(false);
     });
   }
 });

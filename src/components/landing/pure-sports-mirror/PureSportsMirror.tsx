@@ -63,9 +63,17 @@ export const PureSportsMirror: React.FC = () => {
     setIs3DFocus((prev) => !prev);
   };
 
-  // Keyboard navigation (Arrow keys & Esc)
+  // Keyboard navigation (Arrow keys & Esc, scoped to when section is in viewport)
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
+      const sectionEl = document.getElementById('pure-sports-mirror');
+      if (sectionEl) {
+        const rect = sectionEl.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight * 0.65 && rect.bottom > window.innerHeight * 0.35;
+        if (!inView) return;
+      }
       if (e.key === 'ArrowRight') step(1);
       else if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'Escape') {

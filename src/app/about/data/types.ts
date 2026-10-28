@@ -29,8 +29,6 @@ export interface UnityCTA {
   badge: string;
   title: string;
   desc: string;
-  action: string;
-  href: string;
 }
 
 export interface ManifestoContent {

@@ -147,3 +147,25 @@ export function getNavLinks(locale: string, t: (k: string) => string): NavLinkIt
     { href: '/about',               label: t('nav_about'),     dropdown: 'none' },
   ];
 }
+
+export function resolveHashTarget(href: string, sectionIds: string[]) {
+  const [pathWithHash, query] = href.split('?');
+  const targetId = pathWithHash.replace('/#', '');
+  const tabMatch = query?.match(/tab=([a-z_]+)/);
+  const tab = tabMatch ? tabMatch[1] : targetId === 'roi' ? 'roi' : null;
+
+  const resolvedTargetId =
+    targetId === 'ai' || targetId === 'multimodal-ai'
+      ? 'ai-intelligence'
+      : targetId === 'roi'
+      ? 'dashboard-features'
+      : targetId === 'b2c-mobile'
+      ? 'mobile-app'
+      : targetId;
+
+  const primaryId = sectionIds.includes(targetId)
+    ? targetId
+    : resolvedTargetId;
+
+  return { targetId, tab, resolvedTargetId, primaryId };
+}

@@ -180,22 +180,16 @@ export const ABOUT_VISION_EN: AboutVisionLocaleData = {
       badge: '[ A // CLUBS ]',
       title: 'Sports Organizations & Clubs',
       desc: 'For athletic clubs seeking an unyielding operational backbone and crystal-clear management.',
-      action: 'Request Demo',
-      href: '/#contact',
     },
     {
       badge: '[ B // ATHLETES ]',
       title: 'Athletes, Parents & Enthusiasts',
       desc: 'For whom athletics is an essential rhythm of life and a healthy ecosystem.',
-      action: 'Create Profile',
-      href: '/#mobile-app',
     },
     {
       badge: '[ C // PARTNERS ]',
       title: 'Tech Partners & Visionaries',
       desc: 'For those inspired to contribute to building a world-class sports technology ecosystem.',
-      action: 'Start Dialogue',
-      href: '/#contact',
     },
   ],
 };

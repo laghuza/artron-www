@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { getAboutVisionData } from '../data/aboutVisionData';
 
@@ -32,14 +31,12 @@ export const AboutCallToUnity: React.FC = () => {
           {unity.descP2}
         </p>
 
-        {/* 3 Call to Action Rows */}
+        {/* 3 Ecosystem Pillars */}
         <div className="col-span-full flex flex-col mt-4 border-b border-white/10 vision-rv in">
           {unityCtas.map((cta, i) => (
-            <Link
+            <div
               key={i}
-              href={cta.href}
-              className="relative grid grid-cols-1 md:grid-cols-12 gap-y-3 md:gap-x-6 items-center py-8 sm:py-10 border-t border-white/10 group transition-all duration-500 hover:bg-gradient-to-r hover:from-amber-500/[0.04] hover:to-transparent focus:outline-none"
-              style={{ minHeight: '44px' }}
+              className="relative grid grid-cols-1 md:grid-cols-12 gap-y-3 md:gap-x-6 items-center py-8 sm:py-10 border-t border-white/10 group transition-all duration-500 hover:bg-gradient-to-r hover:from-amber-500/[0.04] hover:to-transparent"
             >
               {/* Expanding Gold Accent Line on Hover */}
               <div className="absolute left-0 top-[-1px] h-px w-full bg-gradient-to-r from-amber-600 via-amber-400 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
@@ -52,17 +49,10 @@ export const AboutCallToUnity: React.FC = () => {
                 {cta.title}
               </h6>
 
-              <p className="col-span-1 md:col-span-3 text-sm sm:text-[15px] leading-relaxed text-slate-400">
+              <p className="col-span-1 md:col-span-5 text-sm sm:text-[15px] leading-relaxed text-slate-400">
                 {cta.desc}
               </p>
-
-              <div className="col-span-1 md:col-span-2 justify-self-start md:justify-self-end flex items-center gap-3 vision-mono text-xs text-slate-200 group-hover:text-amber-400 transition-colors">
-                <span>{cta.action}</span>
-                <div className="relative w-8 group-hover:w-14 h-px bg-current transition-all duration-500">
-                  <div className="absolute right-0 top-[-3px] w-1.5 h-1.5 border-t border-r border-current rotate-45" />
-                </div>
-              </div>
-            </Link>
+            </div>
           ))}
         </div>
 

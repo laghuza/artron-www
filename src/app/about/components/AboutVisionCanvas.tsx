@@ -297,7 +297,7 @@ export const AboutVisionCanvas: React.FC<AboutVisionCanvasProps> = ({ scrollStat
     }, { threshold: 0.05 });
     if (containerRef.current) observer.observe(containerRef.current);
 
-    const clock = new THREE.Clock();
+    let lastTime = performance.now();
     let st = 0;
     let gx = 0;
 
@@ -305,7 +305,9 @@ export const AboutVisionCanvas: React.FC<AboutVisionCanvasProps> = ({ scrollStat
       animId = requestAnimationFrame(frame);
       if (!isVisible) return;
 
-      const dt = Math.min(clock.getDelta(), 0.05);
+      const now = performance.now();
+      const dt = Math.min((now - lastTime) * 0.001, 0.05);
+      lastTime = now;
       uniforms.uTime.value += dt * (reduced ? 0.25 : 1);
       const targetState = scrollStateRef.current.state;
       st += (targetState - st) * Math.min(1, dt * 2.2);

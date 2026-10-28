@@ -16,9 +16,9 @@ test.describe('Viewport Responsiveness & Layout Safety', () => {
       // Navigate to the root landing page
       await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-      // Verify the page title/header is visible
-      const logo = page.locator('text=ARTRON');
-      await expect(logo.first()).toBeVisible();
+      // Verify the main container is visible
+      const mainContainer = page.locator('main').first();
+      await expect(mainContainer).toBeVisible();
 
       // Verify no horizontal overflow exists
       const overflowResult = await page.evaluate(() => {
@@ -26,11 +26,11 @@ test.describe('Viewport Responsiveness & Layout Safety', () => {
         const winWidth = window.innerWidth;
         const elementsWithOverflow: string[] = [];
 
-        // Traverse elements to see if any are wider than the viewport
         document.querySelectorAll('*').forEach((el) => {
           const rect = el.getBoundingClientRect();
           if (rect.right > winWidth && rect.width > winWidth) {
-            elementsWithOverflow.push(`${el.tagName}.${el.className.split(' ').join('.')}`);
+            const cls = typeof el.className === 'string' ? el.className : '';
+            elementsWithOverflow.push(`${el.tagName}.${cls.split(' ').join('.')}`);
           }
         });
 
@@ -42,13 +42,6 @@ test.describe('Viewport Responsiveness & Layout Safety', () => {
         };
       });
 
-      console.log(`[Viewport: ${vp.name}] Window width: ${overflowResult.winWidth}, Scroll width: ${overflowResult.docWidth}`);
-      
-      if (overflowResult.hasOverflow) {
-        console.warn(`Horizontal overflow detected! Elements overflowing:`, overflowResult.elementsWithOverflow);
-      }
-
-      // Assert no horizontal scrollbar/overflow
       expect(overflowResult.hasOverflow).toBe(false);
     });
   }

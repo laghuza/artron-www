@@ -100,8 +100,12 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
       return ray.intersectObjects(T.pickObjects, false).length > 0;
     };
 
+    let vis = true;
+    let raf = 0;
+
     let lastHitCheck = 0;
     const pm = (e: PointerEvent) => {
+      if (!vis || mot === 0) return;
       const b = cachedRect;
       inside = e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
       if (e.pointerType === 'mouse') {
@@ -169,26 +173,21 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
     ro.observe(el);
     fit();
 
-    let vis = true;
-    const io = new IntersectionObserver((es) => {
-      vis = es[es.length - 1].isIntersecting;
-    });
-    io.observe(el);
-
-    let raf: number;
     let t = 0;
     let lastTime = performance.now();
     const base = new THREE.Color();
     const tc = new THREE.Color();
 
     const frame = () => {
+      // Completely pause loop when hidden, scrolled offscreen, or when motion === 0
+      if (destroyed || !vis || document.hidden || mot === 0) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(frame);
       const now = performance.now();
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
-
-      // Completely pause loop when hidden, scrolled offscreen, or when motion === 0
-      if (destroyed || !vis || document.hidden || mot === 0) return;
       t += dt;
 
       const k = K(dt, 0.02);
@@ -261,11 +260,25 @@ export const B2BShowroom3DCanvas: React.FC<B2BShowroom3DCanvasProps> = ({
       r.render(scene, cam);
     };
 
-    frame();
+    const io = new IntersectionObserver((es) => {
+      vis = es[es.length - 1].isIntersecting;
+      if (vis && mot > 0 && !raf && !destroyed) {
+        lastTime = performance.now();
+        raf = requestAnimationFrame(frame);
+      } else if (!vis && raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    });
+    io.observe(el);
+
+    if (mot > 0) {
+      raf = requestAnimationFrame(frame);
+    }
 
     return () => {
       destroyed = true;
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
       window.removeEventListener('pointermove', pm);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   useScroll,
   useTransform,
@@ -8,6 +8,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
 } from 'framer-motion';
+import { isInitialBrowserReload } from '@/components/navigation/ScrollRestorationHandler';
 
 /**
  * Hook for scroll-driven Unified Header Slide-Down Kinematics.
@@ -16,6 +17,7 @@ import {
 export function useHeaderKinematics(hideOnInitialScroll: boolean) {
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
+  const isAnchorSettlingRef = useRef(false);
 
   // Active progress value: dynamic only if hideOnInitialScroll and full motion enabled
   const isDynamic = hideOnInitialScroll && !shouldReduceMotion;
@@ -30,14 +32,7 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
     // Check if navigating directly to a section anchor or cross-page target
     let hasTargetAnchor = false;
     try {
-      const navEntries = typeof performance !== 'undefined' ? performance.getEntriesByType('navigation') : [];
-      const isReload =
-        navEntries.length > 0
-          ? (navEntries[0] as PerformanceNavigationTiming).type === 'reload'
-          : (typeof performance !== 'undefined' &&
-            (performance as unknown as { navigation?: { type?: number } }).navigation?.type === 1);
-
-      if (!isReload) {
+      if (!isInitialBrowserReload()) {
         hasTargetAnchor = Boolean(
           window.location.hash || sessionStorage.getItem('artron_target_nav')
         );
@@ -48,6 +43,13 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
       dockValue.set(1);
       setIsInteractive(true);
       setIsScrolledPast(true);
+      if (hasTargetAnchor) {
+        isAnchorSettlingRef.current = true;
+        const timer = window.setTimeout(() => {
+          isAnchorSettlingRef.current = false;
+        }, 700);
+        return () => window.clearTimeout(timer);
+      }
       return;
     }
 
@@ -83,7 +85,7 @@ export function useHeaderKinematics(hideOnInitialScroll: boolean) {
       dockValue.set(1);
       setIsInteractive(true);
       setIsScrolledPast(true);
-    } else if (latest < 40) {
+    } else if (latest < 40 && !isAnchorSettlingRef.current) {
       dockValue.set(0);
       setIsInteractive(false);
       setIsScrolledPast(false);

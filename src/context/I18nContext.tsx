@@ -40,11 +40,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
  */
 export function useI18n(): I18nContextType {
   const directContext = useContext(I18nContext);
+  const { locale, setLocale, t } = useLanguage();
+
   if (directContext) {
     return directContext;
   }
-
-  const { locale, setLocale, t } = useLanguage();
 
   const lang = localeToLang(locale);
 

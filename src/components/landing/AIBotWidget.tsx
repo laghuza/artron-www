@@ -121,10 +121,8 @@ export const AIBotWidget: React.FC = () => {
       window.dispatchEvent(new CustomEvent('artron-open-omnichannel'));
     } else if (act.actionType === 'whatsapp' && act.href) {
       window.open(act.href, '_blank', 'noopener,noreferrer');
-    } else if (act.actionType === 'phone' && act.href) {
-      window.location.href = act.href;
-    } else if (act.actionType === 'email' && act.href) {
-      window.location.href = act.href;
+    } else if ((act.actionType === 'phone' || act.actionType === 'email') && act.href) {
+      window.open(act.href, '_self');
     }
   };
 

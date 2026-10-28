@@ -89,6 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 var nav = p && p.getEntriesByType ? p.getEntriesByType('navigation')[0] : null;
                 var isRel = (nav && nav.type === 'reload') || (p && p.navigation && p.navigation.type === 1);
                 if (isRel) {
+                  try { sessionStorage.removeItem('artron_target_nav'); } catch(e) {}
                   if (window.location.hash) {
                     history.replaceState(null, '', window.location.pathname + window.location.search);
                   }

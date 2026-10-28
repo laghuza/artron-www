@@ -24,35 +24,15 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
   is3DFocus = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const stateRef = useRef<{
-    renderer: THREE.WebGLRenderer | null;
-    scene: THREE.Scene | null;
-    camera: THREE.PerspectiveCamera | null;
-    activeModel: SceneModelHandle | null;
-    ambient: AmbientParticleSystem | null;
-    rays: VolumetricRaysSystem | null;
-    sweepLight: THREE.PointLight | null;
-    fillLight: THREE.PointLight | null;
-    rafId: number;
-    lastTime: number;
-    startTime: number;
-    pointer: THREE.Vector2;
-    camGoal: THREE.Vector3;
-    tgtGoal: THREE.Vector3;
-    camCurrent: THREE.Vector3;
-    tgtCurrent: THREE.Vector3;
-    camBase: THREE.Vector3;
-    center: THREE.Vector3;
-    isVisible: boolean;
-  }>({
-    renderer: null,
-    scene: null,
-    camera: null,
-    activeModel: null,
-    ambient: null,
-    rays: null,
-    sweepLight: null,
-    fillLight: null,
+  const stateRef = useRef({
+    renderer: null as THREE.WebGLRenderer | null,
+    scene: null as THREE.Scene | null,
+    camera: null as THREE.PerspectiveCamera | null,
+    activeModel: null as SceneModelHandle | null,
+    ambient: null as AmbientParticleSystem | null,
+    rays: null as VolumetricRaysSystem | null,
+    sweepLight: null as THREE.PointLight | null,
+    fillLight: null as THREE.PointLight | null,
     rafId: 0,
     lastTime: 0,
     startTime: 0,
@@ -64,6 +44,9 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
     camBase: new THREE.Vector3(0, 2.5, 7.4),
     center: new THREE.Vector3(0, 0, 0),
     isVisible: true,
+    focusTileIndex: null as number | null,
+    is3DFocus: false,
+    shift: 0.42,
   });
 
   // 1. Initial 3D Scene Bootstrap & IntersectionObserver Lifecycle
@@ -80,7 +63,7 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
     const isMobile = window.innerWidth < 768;
 
     const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(isMobile ? 1.0 : Math.min(2, window.devicePixelRatio || 1));
+    renderer.setPixelRatio(isMobile ? 1.0 : Math.min(1.5, window.devicePixelRatio || 1));
     renderer.setSize(width, height, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
@@ -165,13 +148,13 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
 
       const isMobileNow = window.innerWidth < 768;
       if (isMobileNow) {
-        if (is3DFocus) {
+        if (state.is3DFocus) {
           state.camera.clearViewOffset();
         } else {
           state.camera.setViewOffset(w, h, 0, Math.min(200, Math.round(h * 0.16)), w, h);
         }
       } else {
-        const frac = Math.max(0, Math.min(0.5, shift));
+        const frac = Math.max(0, Math.min(0.5, state.shift));
         if (frac < 0.01) {
           state.camera.clearViewOffset();
         } else {
@@ -198,7 +181,7 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       const t = (now - state.startTime) * 0.001;
 
       // Frame-rate independent smooth camera interpolation matching Claude Design
-      const isFocused = focusTileIndex !== null;
+      const isFocused = state.focusTileIndex !== null;
       const lam = isFocused ? 3.6 : 2.7;
       const k = 1 - Math.exp(-lam * dt);
       state.camCurrent.lerp(state.camGoal, k);
@@ -222,12 +205,13 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       if (state.activeModel) {
         state.activeModel.group.rotation.y = Math.sin(t * 0.11) * 0.16;
         if (state.activeModel.parts) {
-          const fi = focusTileIndex ?? -1;
+          const fi = state.focusTileIndex ?? -1;
           const kp = 1 - Math.exp(-5 * dt);
           state.activeModel.parts.forEach((p, j) => {
             const goal = fi < 0 || j === fi ? 1 : 0.13;
             const cur = (p.userData.w as number | undefined) ?? 1;
-            const w = cur + (goal - cur) * kp;
+            if (Math.abs(goal - cur) < 0.002) return;
+            const w = Math.abs(goal - cur) < 0.01 ? goal : cur + (goal - cur) * kp;
             p.userData.w = w;
             p.traverse((o) => {
               const mesh = o as THREE.Mesh;
@@ -287,7 +271,7 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       renderer.dispose();
       if (renderer.domElement.parentElement) renderer.domElement.parentElement.removeChild(renderer.domElement);
     };
-  }, [shift]);
+  }, []);
 
   // 2. Variant & Accent Switching with Deep Memory Cleanup
   useEffect(() => {
@@ -306,7 +290,7 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
     // Recalculate camera pose immediately for the new model
     if (state.camera) {
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-      const lateralShift = isMobile ? 0 : shift;
+      const lateralShift = isMobile ? 0 : state.shift;
       const view = SCENE_VIEWS[variant] || [0, 0.3, 1.05];
       const fit = computeFitBase(newModel.group, view, state.camera.aspect, lateralShift);
       if (fit) {
@@ -325,6 +309,8 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
   // 3. Camera Pose: Bounding-box fitBase + Focus Target Lerping
   useEffect(() => {
     const state = stateRef.current;
+    state.focusTileIndex = focusTileIndex;
+    state.shift = shift;
     if (!state.camera) return;
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -369,6 +355,8 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
   // 4. Update camera projection offset on 3D Focus mode change
   useEffect(() => {
     const state = stateRef.current;
+    state.is3DFocus = is3DFocus;
+    state.shift = shift;
     if (!state.camera || !state.renderer || !containerRef.current) return;
     const w = containerRef.current.clientWidth;
     const h = containerRef.current.clientHeight;
@@ -381,9 +369,16 @@ export const MirrorSceneCanvas: React.FC<MirrorSceneCanvasProps> = ({
       } else {
         state.camera.setViewOffset(w, h, 0, Math.min(200, Math.round(h * 0.16)), w, h);
       }
+    } else {
+      const frac = Math.max(0, Math.min(0.5, shift));
+      if (frac < 0.01) {
+        state.camera.clearViewOffset();
+      } else {
+        state.camera.setViewOffset(w, h, -w * frac * 0.5, 0, w, h);
+      }
     }
     state.camera.updateProjectionMatrix();
-  }, [is3DFocus]);
+  }, [is3DFocus, shift]);
 
   return (
     <div

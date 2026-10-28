@@ -20,9 +20,9 @@ export const FooterNavGrid: React.FC<FooterNavGridProps> = ({
   const { t } = useLanguage();
   const pathname = usePathname();
 
-  const ecoLinks: { label: string; href?: string }[] = [
-    { label: t('footer_eco_b2b') },
-    { label: t('footer_eco_app'), href: '/#b2c-mobile' },
+  const ecoLinks: { label: string; href: string }[] = [
+    { label: t('footer_eco_b2b'), href: '/#dashboard-features' },
+    { label: t('footer_eco_app'), href: '/#mobile-app' },
   ];
 
   const legalLinks = [

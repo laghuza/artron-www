@@ -2,33 +2,18 @@
 
 import React, { useEffect, useRef } from 'react';
 import {
-  buildDaisiClusters,
-  evaluateTimeline,
-  calculateDaisiAnchor,
-  PAL,
-  PALN,
-  clamp,
-  DaisiCluster,
-  DaisiMeshModel
+  buildDaisiClusters, evaluateTimeline, calculateDaisiAnchor,
+  PAL, PALN, clamp, DaisiMeshModel
 } from './daisi/daisiModels';
 
 interface DaisiSpatialCanvasProps {
   scrollProgress: number;
-  letterBounds?: {
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-    width: number;
-    height: number;
-  };
+  letterBounds?: { left: number; right: number; top: number; bottom: number; width: number; height: number };
   className?: string;
 }
 
 export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
-  scrollProgress,
-  letterBounds,
-  className = '',
+  scrollProgress, letterBounds, className = '',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scrollRef = useRef<number>(scrollProgress);
@@ -49,7 +34,7 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
     let w = 0, h = 0, dpr = 1;
     function resize() {
       if (!canvas) return;
-      dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+      dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;
@@ -96,7 +81,11 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
     let railClock = 0, last = performance.now();
     const T0 = performance.now();
     const mouse = { tx: -9999, ty: -9999, x: -9999, y: -9999, on: 0, ton: 0 };
+    let isVisible = true;
+    let rafId = 0;
+
     const handleMove = (e: PointerEvent) => {
+      if (!isVisible) return;
       mouse.tx = e.clientX; mouse.ty = e.clientY; mouse.ton = 1;
       if (mouse.x < -9000) { mouse.x = mouse.tx; mouse.y = mouse.ty; }
     };
@@ -156,16 +145,12 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
       }
     }
 
-    let isVisible = true;
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
-    }, { threshold: 0.01 });
-    observer.observe(canvas);
-
-    let rafId: number;
     function renderFrame(now: number) {
+      if (!isVisible || !ctx || document.hidden) {
+        rafId = 0;
+        return;
+      }
       rafId = requestAnimationFrame(renderFrame);
-      if (!isVisible || !ctx) return;
       if (w < 10 || h < 10) return;
 
       const dt = Math.min((now - last) / 1000, 0.05); last = now;
@@ -380,10 +365,22 @@ export const DaisiSpatialCanvas: React.FC<DaisiSpatialCanvasProps> = ({
       }
     }
 
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible && !rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(renderFrame);
+      } else if (!isVisible && rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }, { threshold: 0.01 });
+    observer.observe(canvas);
+
     rafId = requestAnimationFrame(renderFrame);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('pointermove', handleMove);
       document.removeEventListener('pointerleave', handleLeave);

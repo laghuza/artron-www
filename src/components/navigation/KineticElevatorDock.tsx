@@ -104,7 +104,7 @@ export const KineticElevatorDock: React.FC = () => {
             onClick={scrollToTop}
             onMouseEnter={() => { setHoveredNode('scroll-top'); playTactileFeedback(); }}
             onMouseLeave={() => setHoveredNode(null)}
-            className="relative w-8 h-8 mb-2 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#00E5FF] hover:bg-[#00E5FF]/15 transition-all focus:outline-none group"
+            className="relative w-8 h-8 mb-2 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#00E5FF] hover:bg-[#00E5FF]/15 transition-all focus:outline-none group before:content-[''] before:absolute before:-inset-1.5"
             title={lang === 'ka' ? 'მწვერვალზე ასვლა' : 'Scroll To Top'}
             aria-label="Scroll to top"
           >
@@ -137,7 +137,7 @@ export const KineticElevatorDock: React.FC = () => {
                     onClick={() => scrollToNode(node.id, i)}
                     onMouseEnter={() => { setHoveredNode(node.id); playTactileFeedback(); }}
                     onMouseLeave={() => setHoveredNode(null)}
-                    className={`relative w-8 h-8 rounded-xl flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-200 focus:outline-none ${
+                    className={`relative w-8 h-8 rounded-xl flex items-center justify-center font-mono text-[11px] font-bold transition-all duration-200 focus:outline-none before:content-[''] before:absolute before:-inset-1.5 ${
                       isActive ? 'text-[#00E5FF] scale-105' : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                     aria-label={node.label[lang]}
@@ -170,7 +170,7 @@ export const KineticElevatorDock: React.FC = () => {
             onClick={handleAiTrigger}
             onMouseEnter={() => { setHoveredNode('ai-trigger'); playTactileFeedback(); }}
             onMouseLeave={() => setHoveredNode(null)}
-            className="relative w-8 h-8 mt-1 rounded-xl flex items-center justify-center bg-[#00E5FF]/10 border border-[#00E5FF]/40 text-[#00E5FF] hover:border-[#00E5FF] hover:shadow-[0_0_16px_rgba(0,229,255,0.4)] transition-all focus:outline-none group"
+            className="relative w-8 h-8 mt-1 rounded-xl flex items-center justify-center bg-[#00E5FF]/10 border border-[#00E5FF]/40 text-[#00E5FF] hover:border-[#00E5FF] hover:shadow-[0_0_16px_rgba(0,229,255,0.4)] transition-all focus:outline-none group before:content-[''] before:absolute before:-inset-1.5"
             title="ARTRON AI"
             aria-label="Open Contextual ARTRON AI"
           >

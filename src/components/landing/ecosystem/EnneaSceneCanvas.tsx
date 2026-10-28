@@ -240,7 +240,8 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
     const resize = () => {
       cachedW = wrap.clientWidth || 1;
       cachedH = wrap.clientHeight || 1;
-      const pixelRatio = Math.min(window.devicePixelRatio, 2);
+      const isMobile = cachedW < 768;
+      const pixelRatio = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
 
       camera.aspect = cachedW / cachedH;
       camera.updateProjectionMatrix();
@@ -263,7 +264,8 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
     resize();
 
     const proj = new THREE.Vector3();
-    const clock = new THREE.Clock();
+    let lastTime = performance.now();
+    let elapsedTime = 0;
     let raf = 0;
     let isVisible = false;
     let isDisposed = false;
@@ -271,8 +273,11 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
     const tick = () => {
       if (isDisposed || !isVisible) return;
       raf = requestAnimationFrame(tick);
-      const dt = Math.min(clock.getDelta(), 0.05);
-      const time = clock.elapsedTime;
+      const now = performance.now();
+      const dt = Math.min((now - lastTime) * 0.001, 0.05);
+      lastTime = now;
+      elapsedTime += dt;
+      const time = elapsedTime;
 
       updateEnneaTick({
         dt,
@@ -309,7 +314,7 @@ export const EnneaSceneCanvas: React.FC<EnneaSceneCanvasProps> = ({
           const wasVisible = isVisible;
           isVisible = entry.isIntersecting;
           if (!wasVisible && isVisible && !isDisposed) {
-            clock.getDelta();
+            lastTime = performance.now();
             cancelAnimationFrame(raf);
             raf = requestAnimationFrame(tick);
           }

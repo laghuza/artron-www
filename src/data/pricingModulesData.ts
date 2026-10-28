@@ -1,0 +1,201 @@
+import { CustomModule, ModuleCategoryInfo } from '@/types/pricing';
+
+export const MODULE_CATEGORIES: ModuleCategoryInfo[] = [
+  {
+    id: 'core',
+    titleKey: 'pricing_cat_core_title',
+    descKey: 'pricing_cat_core_desc',
+    iconName: 'Shield',
+  },
+  {
+    id: 'access',
+    titleKey: 'pricing_cat_access_title',
+    descKey: 'pricing_cat_access_desc',
+    iconName: 'Cpu',
+  },
+  {
+    id: 'mobile',
+    titleKey: 'pricing_cat_mobile_title',
+    descKey: 'pricing_cat_mobile_desc',
+    iconName: 'Smartphone',
+  },
+  {
+    id: 'commerce',
+    titleKey: 'pricing_cat_commerce_title',
+    descKey: 'pricing_cat_commerce_desc',
+    iconName: 'CreditCard',
+  },
+  {
+    id: 'analytics',
+    titleKey: 'pricing_cat_analytics_title',
+    descKey: 'pricing_cat_analytics_desc',
+    iconName: 'TrendingUp',
+  },
+];
+
+export const CUSTOM_MODULES: CustomModule[] = [
+  // 1. Core & Administration
+  {
+    id: 'mod_core_crm',
+    category: 'core',
+    nameKey: 'mod_core_crm_name',
+    descKey: 'mod_core_crm_desc',
+    basePrice: 0,
+    isCore: true,
+    recommendedFor: ['studio', 'gym', 'pool'],
+    iconName: 'Users',
+  },
+  {
+    id: 'mod_staff_hub',
+    category: 'core',
+    nameKey: 'mod_staff_hub_name',
+    descKey: 'mod_staff_hub_desc',
+    basePrice: 35,
+    recommendedFor: ['studio', 'gym', 'pool'],
+    iconName: 'UserCheck',
+  },
+  {
+    id: 'mod_labor_timesheet',
+    category: 'core',
+    nameKey: 'mod_labor_timesheet_name',
+    descKey: 'mod_labor_timesheet_desc',
+    basePrice: 50,
+    recommendedFor: ['gym', 'pool'],
+    iconName: 'FileText',
+  },
+
+  // 2. Access & IoT Hardware Control
+  {
+    id: 'mod_door_qr_pass',
+    category: 'access',
+    nameKey: 'mod_door_qr_pass_name',
+    descKey: 'mod_door_qr_pass_desc',
+    basePrice: 40,
+    recommendedFor: ['studio'],
+    iconName: 'QrCode',
+  },
+  {
+    id: 'mod_turnstile_relay',
+    category: 'access',
+    nameKey: 'mod_turnstile_relay_name',
+    descKey: 'mod_turnstile_relay_desc',
+    basePrice: 90,
+    recommendedFor: ['gym', 'pool'],
+    iconName: 'Cpu',
+  },
+  {
+    id: 'mod_zone_lockers',
+    category: 'access',
+    nameKey: 'mod_zone_lockers_name',
+    descKey: 'mod_zone_lockers_desc',
+    basePrice: 65,
+    recommendedFor: ['pool', 'gym'],
+    iconName: 'Layers',
+  },
+
+  // 3. Mobile & Athlete Experience
+  {
+    id: 'mod_mobile_app',
+    category: 'mobile',
+    nameKey: 'mod_mobile_app_name',
+    descKey: 'mod_mobile_app_desc',
+    basePrice: 70,
+    recommendedFor: ['studio', 'gym', 'pool'],
+    iconName: 'Smartphone',
+  },
+  {
+    id: 'mod_white_label_app',
+    category: 'mobile',
+    nameKey: 'mod_white_label_app_name',
+    descKey: 'mod_white_label_app_desc',
+    basePrice: 160,
+    recommendedFor: ['gym', 'pool'],
+    iconName: 'Sparkles',
+  },
+  {
+    id: 'mod_group_bookings',
+    category: 'mobile',
+    nameKey: 'mod_group_bookings_name',
+    descKey: 'mod_group_bookings_desc',
+    basePrice: 30,
+    recommendedFor: ['studio', 'gym', 'pool'],
+    iconName: 'Calendar',
+  },
+
+  // 4. Commerce & Billing
+  {
+    id: 'mod_pos_bar_inventory',
+    category: 'commerce',
+    nameKey: 'mod_pos_bar_inventory_name',
+    descKey: 'mod_pos_bar_inventory_desc',
+    basePrice: 45,
+    recommendedFor: ['gym', 'pool'],
+    iconName: 'ShoppingBag',
+  },
+  {
+    id: 'mod_rs_ge_fiscal',
+    category: 'commerce',
+    nameKey: 'mod_rs_ge_fiscal_name',
+    descKey: 'mod_rs_ge_fiscal_desc',
+    basePrice: 55,
+    recommendedFor: ['gym', 'pool', 'studio'],
+    iconName: 'Receipt',
+  },
+  {
+    id: 'mod_points_cashback',
+    category: 'commerce',
+    nameKey: 'mod_points_cashback_name',
+    descKey: 'mod_points_cashback_desc',
+    basePrice: 40,
+    recommendedFor: ['studio', 'gym'],
+    iconName: 'Coins',
+  },
+
+  // 5. AI, Marketing & Telemetry Analytics
+  {
+    id: 'mod_ai_churn_prediction',
+    category: 'analytics',
+    nameKey: 'mod_ai_churn_prediction_name',
+    descKey: 'mod_ai_churn_prediction_desc',
+    basePrice: 60,
+    recommendedFor: ['gym', 'pool'],
+    iconName: 'Zap',
+  },
+  {
+    id: 'mod_winback_campaigns',
+    category: 'analytics',
+    nameKey: 'mod_winback_campaigns_name',
+    descKey: 'mod_winback_campaigns_desc',
+    basePrice: 45,
+    recommendedFor: ['gym', 'studio'],
+    iconName: 'Send',
+  },
+  {
+    id: 'mod_heatmap_telemetry',
+    category: 'analytics',
+    nameKey: 'mod_heatmap_telemetry_name',
+    descKey: 'mod_heatmap_telemetry_desc',
+    basePrice: 35,
+    recommendedFor: ['gym', 'pool'],
+    iconName: 'Activity',
+  },
+  {
+    id: 'mod_executive_kpi',
+    category: 'analytics',
+    nameKey: 'mod_executive_kpi_name',
+    descKey: 'mod_executive_kpi_desc',
+    basePrice: 50,
+    recommendedFor: ['studio', 'gym', 'pool'],
+    iconName: 'BarChart3',
+  },
+  {
+    id: 'mod_ai_discord_support',
+    category: 'analytics',
+    nameKey: 'mod_ai_discord_support_name',
+    descKey: 'mod_ai_discord_support_desc',
+    basePrice: 40,
+    recommendedFor: ['studio', 'gym', 'pool'],
+    iconName: 'Bot',
+  },
+];
+

@@ -23,19 +23,31 @@ export const ArtronAiSection: React.FC = () => {
 
   // Interactive Cursor Spotlight Glow state
   const frameRef = useRef<HTMLDivElement>(null);
+  const mouseRafRef = useRef<number | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0, opacity: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!frameRef.current) return;
-    const rect = frameRef.current.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      opacity: 1
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
+    if (mouseRafRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    mouseRafRef.current = requestAnimationFrame(() => {
+      mouseRafRef.current = null;
+      if (!frameRef.current) return;
+      const rect = frameRef.current.getBoundingClientRect();
+      setMousePos({
+        x: clientX - rect.left,
+        y: clientY - rect.top,
+        opacity: 1
+      });
     });
   };
 
   const handleMouseLeave = () => {
+    if (mouseRafRef.current) {
+      cancelAnimationFrame(mouseRafRef.current);
+      mouseRafRef.current = null;
+    }
     setMousePos((prev) => ({ ...prev, opacity: 0 }));
   };
 
